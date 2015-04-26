@@ -1,0 +1,9 @@
+{
+  "name": "tank-anarchy",
+  "version": "0.0.1",
+  "description": "A fun multiplayer game?",
+  "dependencies": {
+    "express": "~4.12.3",
+    "socket.io": "~1.3.5"
+  }
+}
