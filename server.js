@@ -1,11 +1,17 @@
-var PORT_NUMBER = 3000;
+var PORT_NUMBER = process.env.PORT || 5000;
 
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+app.set('port', PORT_NUMBER);
+
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/public/index.html');
+});
+
+app.get('/*', function(req, res) {
+  res.sendFile(__dirname + '/public' + req.path);
 });
 
 io.on('connection', function(socket) {
