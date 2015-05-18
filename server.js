@@ -3,6 +3,11 @@ var PORT_NUMBER = process.env.PORT || 5000;
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var HashMap = require('hashmap');
+
+var Player = require('./server/Player').Player;
+
+var clients = new HashMap();
 
 app.set('port', PORT_NUMBER);
 
@@ -15,8 +20,17 @@ app.get('/*', function(req, res) {
 });
 
 io.on('connection', function(socket) {
-  socket.on('add shit', function(msg) {
-    io.emit('add shit', msg);
+  socket.on('new player', function(data) {
+    clients.set(socket, data);
+  });
+  socket.on('move player', function() {
+  });
+  socket.on('disconnect', function() {
+    if (clients.has(socket)) {
+      clients.remove(socket);
+    }
+  });
+  socket.on('query players', function() {
   });
 });
 

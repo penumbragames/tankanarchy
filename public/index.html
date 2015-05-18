@@ -12,24 +12,19 @@
     </script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js">
     </script>
-    <script src='game/Game.js'>
-    </script>
-    
   </head>
   <body>
-    <p id='test'>TEST TEXT</p>
-    <br />
-    <button id='button'>BUTTON</button>
+    <canvas id='canvas'>
+    </canvas>
+    <button id='button'>Players</button>
+    <script src='requestAnimationFrame.js'></script>
+    <script src='game/Game.js'></script>
+    <script src='game/Player.js'></script>
+    <script src='KeyboardBuffer.js'></script>
+    <script src='client.js'></script>
     <script>
-      var socket = io();
-
-      $('#button').click(function() {
-        socket.emit('add shit', 's');
-      });
-
-      socket.on('add shit', function(input) {
-        $('#test').text("penis");
-      });
+      init();
+      animate();
     </script>
   </body>
 </html>
