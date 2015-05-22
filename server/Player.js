@@ -3,10 +3,11 @@
  * Author: Alvin Lin (alvin.lin@stuypulse.com)
  */
 
-function Player(x, y, name) {
+function Player(x, y, name, id) {
   this.x_ = x;
   this.y_ = y;
   this.name_ = name;
+  this.id_ = id;
 };
 
 Player.VELOCITY = 2;
@@ -36,6 +37,10 @@ Player.prototype.getY = function() {
 
 Player.prototype.getName = function() {
   return this.name_;
+};
+
+Player.prototype.getID = function() {
+  return this.id_;
 };
 
 Player.prototype.setX = function(x) {
