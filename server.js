@@ -28,9 +28,9 @@ io.on('connection', function(socket) {
     io.sockets.emit('update-players', clients.values());
   });
 
-  socket.on('move-up', function(data) {
-    var player = clients.get(data);
-    player.setY(player.getY() - 2);
+  socket.on('move-player', function(data) {
+    var player = clients.get(data.id);
+    player.update(data.keyboardState);
     clients.set(socket.id, player);
 
     io.sockets.emit('update-players', clients.values());

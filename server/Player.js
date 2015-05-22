@@ -1,8 +1,29 @@
+/**
+ * Stores the state of the player on the server.
+ * Author: Alvin Lin (alvin.lin@stuypulse.com)
+ */
 
 function Player(x, y, name) {
   this.x_ = x;
   this.y_ = y;
   this.name_ = name;
+};
+
+Player.VELOCITY = 2;
+
+Player.prototype.update = function(keyboardState) {
+  if (keyboardState.up) {
+    this.y_ -= Player.VELOCITY;
+  }
+  if (keyboardState.right) {
+    this.x_ += Player.VELOCITY;
+  }
+  if (keyboardState.down) {
+    this.y_ += Player.VELOCITY;
+  }
+  if (keyboardState.left) {
+    this.x_ -= Player.VELOCITY;
+  }
 };
 
 Player.prototype.getX = function() {

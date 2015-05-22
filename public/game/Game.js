@@ -31,17 +31,17 @@ Game.prototype.setID = function(id) {
 }
 
 Game.prototype.update = function() {
-  if (KeyboardBuffer.UP) {
-    this.socket_.emit('move-up', this.id_);
-  }
-  if (KeyboardBuffer.RIGHT) {
-    this.socket_.emit('move-right', this.id_);
-  }
-  if (KeyboardBuffer.DOWN) {
-    this.socket_.emit('move-down', this.id_);
-  }
-  if (KeyboardBuffer.LEFT) {
-    this.socket_.emit('move-left', this.id_);
+  if (KeyboardBuffer.UP || KeyboardBuffer.RIGHT ||
+      KeyboardBuffer.DOWN || KeyboardBuffer.LEFT) {
+    this.socket_.emit('move-player', {
+      id: this.id_,
+      keyboardState: {
+        up: KeyboardBuffer.UP,
+        right: KeyboardBuffer.RIGHT,
+        down: KeyboardBuffer.DOWN,
+        left: KeyboardBuffer.LEFT
+      }
+    });
   }
 };
 
