@@ -11,7 +11,6 @@ KeyboardBuffer.RIGHT = false;
 KeyboardBuffer.DOWN = false;
 
 KeyboardBuffer.onKeyDown = function(e) {
-  console.log(e.keyCode);
   switch (e.keyCode) {
     case 65:
       KeyboardBuffer.LEFT = true;

@@ -1,8 +1,41 @@
-html {
-    margin: 0;
-    height: 100%;
-    width: 100%;
+body {
+  text-align: center;
 }
-p {
-    font-size: 100px;
+
+#canvas {
+  width: 600px;
+  height: 600px;
+  border: 5px solid black;
+}
+
+#nickname-prompt-overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(49, 49, 49, 0.5);
+  z-index: 100;
+}
+
+#nickname-prompt-container {
+  position: absolute;
+  width: 490px;
+  height: 100px;
+  top: 50%;
+  right: 0;
+  left: 0;
+
+  margin:  -50px auto;
+  padding: 33px;
+  background: #bbb;
+  z-index: 101;
+
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  border-radius: 10px;
 }

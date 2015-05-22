@@ -1,9 +1,22 @@
-function Game() {
-  this.canvas_ = document.getElementById('canvas');
+/**
+ * Class containing the game, handles drawing and updates.
+ * Author: Alvin Lin (alvin.lin@stuypulse.com)
+ */
+
+function Game(canvas, socket) {
+  this.canvas_ = canvas;
+  this.canvas_.width = Game.WIDTH;
+  this.canvas_.height = Game.HEIGHT;
   this.canvasContext_ = this.canvas_.getContext('2d');
-  this.player_ = null;
-  this.remote_players = [];
+
+  this.socket_ = socket;
+
+  this.id_ = null;
+  this.players_ = [];
 }
+
+Game.WIDTH = 600;
+Game.HEIGHT = 600;
 
 Game.prototype.getCanvas = function() {
   return this.canvas_;
@@ -13,22 +26,35 @@ Game.prototype.getContext = function() {
   return this.canvasContext_;
 }
 
-Game.prototype.getPlayer = function() {
-  return this.player_;
-}
-
-Game.prototype.setPlayer = function(player) {
-  this.player_ = player;
-  return this;
+Game.prototype.setID = function(id) {
+  this.id_ = id;
 }
 
 Game.prototype.update = function() {
-  this.canvasContext_.clearRect(0, 0,
-                                this.canvas_.width, this.canvas_.height);
-  this.player_.update();
+  if (KeyboardBuffer.UP) {
+    this.socket_.emit('move-up', this.id_);
+  }
+  if (KeyboardBuffer.RIGHT) {
+    this.socket_.emit('move-right', this.id_);
+  }
+  if (KeyboardBuffer.DOWN) {
+    this.socket_.emit('move-down', this.id_);
+  }
+  if (KeyboardBuffer.LEFT) {
+    this.socket_.emit('move-left', this.id_);
+  }
+};
+
+Game.prototype.receivePlayers = function(players) {
+  this.players_ = players;
+  console.log(this.players_);
 };
 
 Game.prototype.draw = function() {
-  this.player_.draw(this.canvasContext_);
-}
+  this.canvasContext_.clearRect(0, 0, Game.WIDTH, Game.HEIGHT);
+  for (var i = 0; i < this.players_.length; ++i) {
+    var player = this.players_[i];
+    this.canvasContext_.fillRect(player.x_ - 5, player.y_ - 5, 10, 10);
+  }
+};
 

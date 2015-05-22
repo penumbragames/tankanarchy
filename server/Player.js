@@ -1,31 +1,35 @@
-function Player(startX, startY) {
-  this.x_ = startX;
-  this.y_ = startY;
-  this.id_ = null;
-}
+
+function Player(x, y, name) {
+  this.x_ = x;
+  this.y_ = y;
+  this.name_ = name;
+};
 
 Player.prototype.getX = function() {
-  return x_;
+  return this.x_;
 };
 
 Player.prototype.getY = function() {
-  return y_;
+  return this.y_;
 };
 
-Player.prototype.getID = function() {
-  return id_;
+Player.prototype.getName = function() {
+  return this.name_;
 };
 
 Player.prototype.setX = function(x) {
-  x_ = x;
+  this.x_ = x;
+  return this;
 };
 
 Player.prototype.setY = function(y) {
-  y_ = y;
+  this.y_ = y;
+  return this;
 };
 
-Player.prototype.setID = function(id) {
-  this.id_ = id;
+Player.prototype.setName = function(name) {
+  this.name_ = name;
+  return this;
 };
 
 exports.Player = Player;

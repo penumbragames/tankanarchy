@@ -4,6 +4,8 @@
     <title>Tank Anarchy</title>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"
           rel="stylesheet" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"
+          rel="stylesheet">
     <link href='styles.css' rel='stylesheet' />
     
     <script src='/socket.io/socket.io.js'>
@@ -14,17 +16,29 @@
     </script>
   </head>
   <body>
+    <div id='nickname-prompt-overlay'>
+      <div id='nickname-prompt-container'>
+        <form id='nickname-form'>
+          <div class='input-group'>
+            <input type='text'
+                   class='form-control'
+                   id='nickname'
+                   placeholder='Nickname'
+                   autocomplete='off' />
+            <span class='input-group-addon'
+                  id='nickname-submit'>
+              Chat
+            </span>
+          </div>
+        </form>
+      </div>
+    </div>
     <canvas id='canvas'>
     </canvas>
-    <button id='button'>Players</button>
-    <script src='requestAnimationFrame.js'></script>
+
+    <script src='base.js'></script>
     <script src='game/Game.js'></script>
-    <script src='game/Player.js'></script>
     <script src='KeyboardBuffer.js'></script>
     <script src='client.js'></script>
-    <script>
-      init();
-      animate();
-    </script>
   </body>
 </html>

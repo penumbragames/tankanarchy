@@ -21,16 +21,27 @@ app.get('/*', function(req, res) {
 
 io.on('connection', function(socket) {
   socket.on('new player', function(data) {
-    clients.set(socket, data);
+    var player = new Player(100, 100, data);
+    clients.set(socket.id, player);
+    socket.emit('send-id', socket.id);
+
+    io.sockets.emit('update-players', clients.values());
   });
-  socket.on('move player', function() {
+
+  socket.on('move-up', function(data) {
+    var player = clients.get(data);
+    player.setY(player.getY() - 2);
+    clients.set(socket.id, player);
+
+    io.sockets.emit('update-players', clients.values());
   });
+
   socket.on('disconnect', function() {
-    if (clients.has(socket)) {
-      clients.remove(socket);
+    if (clients.has(socket.id)) {
+      clients.remove(socket.id);
     }
-  });
-  socket.on('query players', function() {
+
+    io.sockets.emit('update-players', clients.values());
   });
 });
 
