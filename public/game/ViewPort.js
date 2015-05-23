@@ -15,13 +15,15 @@ ViewPort.prototype.update = function(x, y) {
   this.selfCoords_ = [x, y];
 }
 
-ViewPort.prototype.getVisiblePlayers = function(players) {
+ViewPort.prototype.getVisiblePlayers = function(game) {
+  var players = game.getPlayers();
   var onScreen = [];
 
   for (var i = 0; i < players.length; i++) {
-    if (Math.abs(players[i].x_ - this.selfCoords_[0]) < 400 &&
-        Math.abs(players[i].y_ - this.selfCoords_[1]) < 300) {
-      onScreen.push(players[i]);
+    var curPlayer = players[i];
+    if (Math.abs(curPlayer.getX() - player.getX()) < 400 &&
+        Math.abs(curPlayer.getY() - player.getY()) < 300) {
+      onScreen.push(curPlayer);
     }
   }
   return onScreen;
@@ -29,11 +31,11 @@ ViewPort.prototype.getVisiblePlayers = function(players) {
 
 ViewPort.prototype.toCanvasCoords = function(object) {
   if (object.id_ == this.selfId_) {
-    object.x_ = 400;
-    object.y_ = 300;
+    return [400, 300];
   } else {
-    object.x_ -= this.selfCoords_[0] - 400;
-    object.y_ -= this.selfCoords_[1] - 300;
+    var translateX = this.selfCoords_[0] - 400;
+    var translateY = this.selfCoords_[1] - 300;
+    return [object.x_ - translateX,
+            object.y_ - translateY];
   }
-  return object;
 };
