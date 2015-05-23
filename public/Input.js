@@ -47,7 +47,6 @@ Input.onKeyUp = function(e) {
 
 Input.onMouseMove = function(e) {
   Input.MOUSE = [e.pageX, e.pageY];
-  console.log(Input.MOUSE);
 };
 
 Input.applyEventHandlers = function() {

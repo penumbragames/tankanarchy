@@ -3,27 +3,35 @@
  * Author: Alvin Lin (alvin.lin@stuypulse.com)
  */
 
-function Player(x, y, name, id) {
+function Player(x, y, orientation, name, id) {
   this.x_ = x;
   this.y_ = y;
+  this.orientation_ = orientation;
+
   this.name_ = name;
   this.id_ = id;
 };
 
-Player.VELOCITY = 2;
+/**
+ * TURN_RATE is in degrees per update.
+ */
+Player.TURN_RATE = 0.05;
+Player.VELOCITY = 2.5;
 
 Player.prototype.update = function(keyboardState) {
   if (keyboardState.up) {
-    this.y_ -= Player.VELOCITY;
-  }
-  if (keyboardState.right) {
-    this.x_ += Player.VELOCITY;
+    this.x_ += Player.VELOCITY * Math.cos(this.orientation_);
+    this.y_ -= Player.VELOCITY * Math.sin(this.orientation_);
   }
   if (keyboardState.down) {
-    this.y_ += Player.VELOCITY;
+    this.x_ -= Player.VELOCITY * Math.cos(this.orientation_);
+    this.y_ += Player.VELOCITY * Math.sin(this.orientation_);
+  }
+  if (keyboardState.right) {
+    this.orientation_ -= Player.TURN_RATE;
   }
   if (keyboardState.left) {
-    this.x_ -= Player.VELOCITY;
+    this.orientation_ += Player.TURN_RATE;
   }
 };
 
@@ -33,6 +41,10 @@ Player.prototype.getX = function() {
 
 Player.prototype.getY = function() {
   return this.y_;
+};
+
+Player.prototype.getOrientation = function() {
+  return this.orientation_;
 };
 
 Player.prototype.getName = function() {
