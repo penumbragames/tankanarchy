@@ -35,7 +35,7 @@ socket.on('update-players', function(data) {
 });
 
 function init() {
-  KeyboardBuffer.applyEventHandlers();
+  Input.applyEventHandlers();
 }
 
 function animate() {

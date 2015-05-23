@@ -31,15 +31,15 @@ Game.prototype.setID = function(id) {
 }
 
 Game.prototype.update = function() {
-  if (KeyboardBuffer.UP || KeyboardBuffer.RIGHT ||
-      KeyboardBuffer.DOWN || KeyboardBuffer.LEFT) {
+  if (Input.UP || Input.RIGHT ||
+      Input.DOWN || Input.LEFT) {
     this.socket_.emit('move-player', {
       id: this.id_,
       keyboardState: {
-        up: KeyboardBuffer.UP,
-        right: KeyboardBuffer.RIGHT,
-        down: KeyboardBuffer.DOWN,
-        left: KeyboardBuffer.LEFT
+        up: Input.UP,
+        right: Input.RIGHT,
+        down: Input.DOWN,
+        left: Input.LEFT
       }
     });
   }
