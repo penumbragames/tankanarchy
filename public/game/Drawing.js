@@ -9,8 +9,9 @@ Drawing.drawSelf = function(context, object) {
   context.save();
   context.translate(object.x_, object.y_);
   context.rotate(object.orientation_);
-  context.fillStyle = 'red';
-  context.fillRect(-4, -6, 8, 12);
+  var img = new Image();
+  img.src = '../data/self_tank.png';
+  context.drawImage(img, -15, -25);
   context.restore();
 };
 
@@ -18,7 +19,8 @@ Drawing.drawOther = function(context, object) {
   context.save();
   context.translate(object.x_, object.y_);
   context.rotate(object.orientation_);
-  context.fillStyle = 'black';
-  context.fillRect(-4, -6, 8, 12);
+  var img = new Image();
+  img.src = '../data/other_tank.png';
+  context.drawImage(img, -15, -25);
   context.restore();
 };
