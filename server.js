@@ -56,7 +56,12 @@ io.on('connection', function(socket) {
 
 setInterval(function() {
   for (var i = 0; i < bullets.length; ++i) {
-    bullets[i].update();
+    if (bullets[i].shouldExist()) {
+      bullets[i].update();
+    } else {
+      bullets.splice(i, 1);
+      i--;
+    }
   }
   io.sockets.emit('update-players', clients.values());
   io.sockets.emit('update-bullets', bullets);
