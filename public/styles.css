@@ -1,4 +1,6 @@
 body {
+  width: 100%;
+  height: 100%;
   text-align: center;
 }
 
@@ -6,6 +8,7 @@ body {
   width: 800px;
   height: 600px;
   border: 5px solid black;
+  background-color: #fff;
 }
 
 #nickname-prompt-overlay {

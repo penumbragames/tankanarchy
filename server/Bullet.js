@@ -12,12 +12,12 @@ function Bullet(x, y, direction, firedBy) {
   this.firedBy_ = firedBy;
 }
 
-Bullet.VELOCITY = 10;
+Bullet.VELOCITY = 15;
 Bullet.TRAVEL_DISTANCE = 800;
 
 Bullet.prototype.update = function() {
-  this.x_ += Bullet.VELOCITY * Math.cos(this.direction_);
-  this.y_ -= Bullet.VELOCITY * Math.sin(this.direction_);
+  this.x_ += Bullet.VELOCITY * Math.sin(this.direction_);
+  this.y_ -= Bullet.VELOCITY * Math.cos(this.direction_);
 }
 
 Bullet.prototype.shouldExist = function() {

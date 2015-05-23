@@ -43,10 +43,10 @@ Drawing.prototype.drawOther = function(coords, orientation, turretAngle) {
   this.context_.restore();
 };
 
-Drawing.prototype.drawBullet = function(coords, orientation) {
+Drawing.prototype.drawBullet = function(coords, direction) {
   this.context_.save();
   this.context_.translate(coords[0], coords[1]);
-  this.context_.rotate(orientation);
+  this.context_.rotate(direction);
   var bullet = new Image();
   bullet.src = '../data/bullet.png';
   this.context_.drawImage(bullet, -15, -15);

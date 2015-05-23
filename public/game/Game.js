@@ -73,7 +73,6 @@ Game.prototype.update = function() {
       this.lastShotTime_ = time;
     }
   }
-  console.log(this.bullets_);
 };
 
 Game.prototype.findSelf = function() {
@@ -104,6 +103,11 @@ Game.prototype.receiveBullets = function(bullets) {
 
 Game.prototype.draw = function() {
   this.canvasContext_.clearRect(0, 0, Game.WIDTH, Game.HEIGHT);
+  for (var i = 0; i < this.bullets_.length; ++i) {
+    this.drawing_.drawBullet(
+      this.viewPort_.toCanvasCoords(this.bullets_[i]),
+      this.bullets_[i].direction_);
+  }
   for (var i = 0; i < this.players_.length; ++i) {
     if (this.players_[i].id_ == this.id_) {
       this.drawing_.drawSelf(
@@ -116,10 +120,5 @@ Game.prototype.draw = function() {
         this.players_[i].orientation_,
         this.players_[i].turretAngle_);
     }
-  }
-  for (var i = 0; i < this.bullets_.length; ++i) {
-    this.drawing_.drawBullet(
-      this.viewPort_.toCanvasCoords(this.bullets_[i]),
-      this.bullets_[i].orientation_);
   }
 };
