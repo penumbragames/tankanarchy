@@ -7,7 +7,6 @@ function Drawing() {}
 
 Drawing.drawSelf = function(context, object) {
   context.save();
-  console.log(object.orientation_);
   context.translate(object.x_, object.y_);
   context.rotate(object.orientation_);
   context.fillStyle = 'red';
@@ -17,7 +16,6 @@ Drawing.drawSelf = function(context, object) {
 
 Drawing.drawOther = function(context, object) {
   context.save();
-  console.log(object.orientation_);
   context.translate(object.x_, object.y_);
   context.rotate(object.orientation_);
   context.fillStyle = 'black';
