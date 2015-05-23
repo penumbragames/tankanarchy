@@ -7,6 +7,10 @@ function ViewPort(selfId) {
   this.selfId_ = selfId;
 }
 
+ViewPort.prototype.setID = function(id) {
+  this.selfId_ = id;
+};
+
 ViewPort.prototype.update = function(x, y) {
   this.selfCoords_ = [x, y];
 }
@@ -29,8 +33,8 @@ ViewPort.prototype.toCanvasCoords = function(object) {
   if (object.id_ == this.selfId_) {
     return [400, 300];
   } else {
-    var translateX = selfCoords[0] - 400;
-    var translateY = selfCoords[1] - 300;
+    var translateX = this.selfCoords_[0] - 400;
+    var translateY = this.selfCoords_[1] - 300;
     return [object.x_ - translateX,
             object.y_ - translateY];
   }

@@ -26,7 +26,7 @@ io.on('connection', function(socket) {
     clients.set(socket.id, player);
     socket.emit('send-id', {
       id: socket.id,
-      players: clients.players()
+      players: clients.values()
     });
   });
 
