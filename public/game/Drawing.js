@@ -7,20 +7,20 @@ function Drawing(context) {
   this.context_ = context;
 };
 
-Drawing.prototype.drawSelf = function(coords, orientation) {
+Drawing.prototype.drawSelf = function(object) {
   this.context_.save();
-  this.context_.translate(coords[0], coords[1]);
-  this.context_.rotate(orientation);
+  this.context_.translate(object.x_, object.y_);
+  this.context_.rotate(object.orientation_);
   var img = new Image();
   img.src = '../data/self_tank.png';
   this.context_.drawImage(img, -15, -25);
   this.context_.restore();
 };
 
-Drawing.prototype.drawOther = function(coords, orientation) {
+Drawing.prototype.drawOther = function(object) {
   this.context_.save();
-  this.context_.translate(coords[0], coords[1]);
-  this.context_.rotate(orientation);
+  this.context_.translate(object.x_, object.y_);
+  this.context_.rotate(object.orientation_);
   var img = new Image();
   img.src = '../data/other_tank.png';
   this.context_.drawImage(img, -15, -25);

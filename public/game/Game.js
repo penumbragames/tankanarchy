@@ -93,15 +93,15 @@ Game.prototype.receivePlayers = function(players) {
 
 Game.prototype.draw = function() {
   this.canvasContext_.clearRect(0, 0, Game.WIDTH, Game.HEIGHT);
-  for (var i = 0; i < this.players_.length; ++i) {
-    if (this.players_[i].id_ == this.id_) {
+
+  var drawnPlayers = this.viewPort_.getVisiblePlayers(this.players_);
+  for (var i = 0; i < drawnPlayers.length; ++i) {
+    if (drawnPlayers[i].id_ == this.id_) {
       this.drawing_.drawSelf(
-        this.viewPort_.toCanvasCoords(this.players_[i]),
-        this.players_[i].orientation_);
+        this.viewPort_.toCanvasCoords(drawnPlayers[i]));
     } else {
       this.drawing_.drawOther(
-        this.viewPort_.toCanvasCoords(this.players_[i]),
-        this.players_[i].orientation_);
+        this.viewPort_.toCanvasCoords(drawnPlayers[i]));
     }
   }
 };
