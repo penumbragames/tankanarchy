@@ -13,25 +13,25 @@ function Player(x, y, orientation, name, id) {
 };
 
 /**
- * TURN_RATE is in degrees per update.
+ * TURN_RATE is in radians per update.
  */
-Player.TURN_RATE = 0.05;
+Player.TURN_RATE = Math.PI / 90;
 Player.VELOCITY = 2.5;
 
 Player.prototype.update = function(keyboardState) {
   if (keyboardState.up) {
-    this.x_ += Player.VELOCITY * Math.cos(this.orientation_);
-    this.y_ -= Player.VELOCITY * Math.sin(this.orientation_);
+    this.x_ += Player.VELOCITY * Math.sin(this.orientation_);
+    this.y_ -= Player.VELOCITY * Math.cos(this.orientation_);
   }
   if (keyboardState.down) {
-    this.x_ -= Player.VELOCITY * Math.cos(this.orientation_);
-    this.y_ += Player.VELOCITY * Math.sin(this.orientation_);
+    this.x_ -= Player.VELOCITY * Math.sin(this.orientation_);
+    this.y_ += Player.VELOCITY * Math.cos(this.orientation_);
   }
   if (keyboardState.right) {
-    this.orientation_ -= Player.TURN_RATE;
+    this.orientation_ = this.orientation_ + Player.TURN_RATE;
   }
   if (keyboardState.left) {
-    this.orientation_ += Player.TURN_RATE;
+    this.orientation_ = this.orientation_ - Player.TURN_RATE;
   }
 };
 

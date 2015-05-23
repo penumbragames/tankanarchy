@@ -6,11 +6,21 @@
 function Drawing() {}
 
 Drawing.drawSelf = function(context, object) {
+  context.save();
+  console.log(object.orientation_);
+  context.translate(object.x_, object.y_);
+  context.rotate(object.orientation_);
   context.fillStyle = 'red';
-  context.fillRect(object.x_ - 5, object.y_ - 5, 10, 10);
+  context.fillRect(-4, -6, 8, 12);
+  context.restore();
 };
 
 Drawing.drawOther = function(context, object) {
+  context.save();
+  console.log(object.orientation_);
+  context.translate(object.x_, object.y_);
+  context.rotate(object.orientation_);
   context.fillStyle = 'black';
-  context.fillRect(object.x_ - 5, object.y_ - 5, 10, 10);
+  context.fillRect(-4, -6, 8, 12);
+  context.restore();
 };
