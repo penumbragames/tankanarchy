@@ -2,9 +2,16 @@
  * Manages the player viewport when they move around.
  */
 
-function ViewPort() {}
+function ViewPort(selfId) {
+  this.selfCoords_ = [];
+  this.selfId_ = selfId;
+}
 
-ViewPort.getVisiblePlayers = function(game) {
+ViewPort.prototype.update = function(x, y) {
+  this.selfCoords_ = [x, y];
+}
+
+ViewPort.prototype.getVisiblePlayers = function(game) {
   var players = game.getPlayers();
   var onScreen = [];
 
@@ -16,16 +23,15 @@ ViewPort.getVisiblePlayers = function(game) {
     }
   }
   return onScreen;
-}
+};
 
-ViewPort.toCanvasCoords = function(game, object) {
-  if (object.id_ == game.getID()) {
+ViewPort.prototype.toCanvasCoords = function(object) {
+  if (object.id_ == this.selfId_) {
     return [400, 300];
   } else {
-    var self = game.findSelf();
-    var translateX = self.x_ - 400;
-    var translateY = self.y_ - 300;
+    var translateX = selfCoords[0] - 400;
+    var translateY = selfCoords[1] - 300;
     return [object.x_ - translateX,
             object.y_ - translateY];
   }
-}
+};
