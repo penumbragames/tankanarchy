@@ -46,8 +46,9 @@ Game.prototype.setID = function(id) {
 Game.prototype.update = function() {
   var self = this.findSelf();
   this.viewPort_.update(self.x_, self.y_);
-  var turretAngle = Math.atan2(Input.MOUSE[1] - self.y_,
-                               Input.MOUSE[0] - self.x_);
+  var turretAngle = Math.atan2(
+    Input.MOUSE[1] - 300,
+    Input.MOUSE[0] - 400) + Math.PI / 2;
 
   this.socket_.emit('move-player', {
     id: this.id_,
@@ -99,12 +100,12 @@ Game.prototype.draw = function() {
       this.drawing_.drawSelf(
         this.viewPort_.toCanvasCoords(this.players_[i]),
         this.players_[i].orientation_,
-        this.players_[i].turretAngle);
+        this.players_[i].turretAngle_);
     } else {
       this.drawing_.drawOther(
         this.viewPort_.toCanvasCoords(this.players_[i]),
         this.players_[i].orientation_,
-        this.players_[i].turretAngle);
+        this.players_[i].turretAngle_);
     }
   }
 };
