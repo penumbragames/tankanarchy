@@ -15,8 +15,9 @@ function Game(canvas, socket) {
   this.socket_ = socket;
 
   this.id_ = null;
-  this.lastShotTime_ = null;
-  this.players_ = [];
+  this.lastShotTime_ = 0;
+  this.players_ = null;
+  this.bullets_ = null;
 };
 
 Game.WIDTH = 800;
@@ -62,11 +63,15 @@ Game.prototype.update = function() {
   });
 
   if (Input.CLICK) {
-    var self = this.findSelf();
-    this.socket_.emit('fire-bullet', {
-      firedBy: this.id_,
-      angle: turretAngle
-    });
+    var time = (new Date()).getTime();
+    if (time > this.lastShotTime_ + 1000) {
+      var self = this.findSelf();
+      this.socket_.emit('fire-bullet', {
+        firedBy: this.id_,
+        angle: turretAngle
+      });
+      this.lastShotTime_ = time;
+    }
   }
 
 };
@@ -91,6 +96,10 @@ Game.prototype.findPlayer = function(id) {
 
 Game.prototype.receivePlayers = function(players) {
   this.players_ = players;
+};
+
+Game.prototype.receiveBullets = function(bullets) {
+  this.bullets_ = bullets;
 };
 
 Game.prototype.draw = function() {

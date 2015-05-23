@@ -35,6 +35,10 @@ socket.on('update-players', function(data) {
   game.receivePlayers(data);
 });
 
+socket.on('update-bullets', function(data) {
+  game.receiveBullets(data);
+});
+
 function init() {
   Input.applyEventHandlers();
 }

@@ -38,28 +38,4 @@ Player.prototype.update = function(keyboardState, turretAngle) {
   this.turretAngle_ = turretAngle;
 };
 
-Player.prototype.getName = function() {
-  return this.name_;
-};
-
-Player.prototype.getID = function() {
-  return this.id_;
-};
-
-Player.prototype.getX = function() {
-  return this.x_;
-};
-
-Player.prototype.getY = function() {
-  return this.y_;
-};
-
-Player.prototype.getOrientation = function() {
-  return this.orientation_;
-};
-
-Player.prototype.getTurretAngle = function() {
-  return this.turretAngle_;
-};
-
 exports.Player = Player;
