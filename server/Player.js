@@ -3,6 +3,12 @@
  * Author: Alvin Lin (alvin.lin@stuypulse.com)
  */
 
+/**
+ * Constructor for a Player.
+ * @param {string} name The display name of the player.
+ * @param {string} id The socket ID of the client associated with this
+ *   player
+ */
 function Player(name, id) {
   this.name_ = name;
   this.id_ = id;
@@ -11,6 +17,8 @@ function Player(name, id) {
   this.y_ = 100;
   this.orientation_ = 0;
   this.turretAngle_ = 0;
+
+  this.health_ = 10;
 };
 
 /**
