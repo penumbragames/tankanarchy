@@ -22,7 +22,6 @@ Drawing.prototype.drawSelf = function(coords, orientation, turretAngle) {
   var turret = new Image();
   turret.src = '../data/self_tank_turret.png';
   this.context_.drawImage(turret, -15, -25);
-  console.log(turretAngle);
   this.context_.restore();
 };
 

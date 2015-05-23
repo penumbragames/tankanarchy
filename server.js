@@ -40,7 +40,11 @@ io.on('connection', function(socket) {
   });
 
   socket.on('fire-bullet', function(data) {
-    var player = clients.get(data.firedBy);
+    try {
+      var player = clients.get(data.firedBy);
+      bullets.push(new Bullet(player.x_, player.y_,
+                              player.turretAngle_, player.id_));
+    } catch (err) {}
   });
 
   socket.on('disconnect', function() {
@@ -51,8 +55,11 @@ io.on('connection', function(socket) {
 });
 
 setInterval(function() {
-
+  for (var i = 0; i < bullets.length; ++i) {
+    bullets[i].update();
+  }
   io.sockets.emit('update-players', clients.values());
+  io.sockets.emit('update-bullets', bullets);
 }, FRAME_RATE);
 
 http.listen(PORT_NUMBER, function() {
