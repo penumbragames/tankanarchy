@@ -1,3 +1,0 @@
-/**
- * Allows smooth game animation.
- */
