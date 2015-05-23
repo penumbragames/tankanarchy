@@ -25,3 +25,5 @@ Bullet.prototype.shouldExist = function() {
                    (this.startY_ - this.y_) * (this.startY_ - this.y_)) <
     Bullet.TRAVEL_DISTANCE;
 }
+
+exports.Bullet = Bullet;

@@ -7,6 +7,7 @@ var io = require('socket.io')(http);
 var HashMap = require('hashmap');
 
 var Player = require('./server/Player').Player;
+var Bullet = require('./server/Bullet').Bullet;
 
 var clients = new HashMap();
 var bullets = [];
@@ -40,11 +41,11 @@ io.on('connection', function(socket) {
   });
 
   socket.on('fire-bullet', function(data) {
-    try {
-      var player = clients.get(data.firedBy);
-      bullets.push(new Bullet(player.x_, player.y_,
-                              player.turretAngle_, player.id_));
-    } catch (err) {}
+    var player = clients.get(data.firedBy);
+    bullets.push(new Bullet(player.x_, player.y_,
+                            player.turretAngle_, player.id_));
+    console.log(bullets);
+
   });
 
   socket.on('disconnect', function() {
