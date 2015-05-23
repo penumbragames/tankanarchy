@@ -47,18 +47,15 @@ Game.prototype.update = function() {
 
 Game.prototype.receivePlayers = function(players) {
   this.players_ = players;
-  console.log(this.players_);
 };
 
 Game.prototype.draw = function() {
   this.canvasContext_.clearRect(0, 0, Game.WIDTH, Game.HEIGHT);
   for (var i = 0; i < this.players_.length; ++i) {
-    var player = this.players_[i];
-    if (player.id_ == this.id_) {
-      this.canvasContext_.fillStyle = 'red';
+    if (this.players_[i].id_ == this.id_) {
+      Drawing.drawSelf(this.canvasContext_, this.players_[i]);
+    } else {
+      Drawing.drawOther(this.canvasContext_, this.players_[i]);
     }
-    this.canvasContext_.fillRect(player.x_ - 5, player.y_ - 5, 10, 10);
-    this.canvasContext_.fillStyle = 'black';
   }
 };
-

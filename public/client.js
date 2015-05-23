@@ -31,7 +31,6 @@ socket.on('send-id', function(data) {
 });
 
 socket.on('update-players', function(data) {
-  console.log('received');
   game.receivePlayers(data);
 });
 
