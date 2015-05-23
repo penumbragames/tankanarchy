@@ -13,7 +13,7 @@ function Bullet(x, y, direction, firedBy) {
 }
 
 Bullet.VELOCITY = 10;
-Bullet.TRAVEL_DISTANCE = 100;
+Bullet.TRAVEL_DISTANCE = 800;
 
 Bullet.prototype.update = function() {
   this.x_ += Bullet.VELOCITY * Math.cos(this.direction_);

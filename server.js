@@ -44,8 +44,6 @@ io.on('connection', function(socket) {
     var player = clients.get(data.firedBy);
     bullets.push(new Bullet(player.x_, player.y_,
                             player.turretAngle_, player.id_));
-    console.log(bullets);
-
   });
 
   socket.on('disconnect', function() {
