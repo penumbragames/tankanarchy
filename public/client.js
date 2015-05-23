@@ -24,7 +24,8 @@ socket.on('send-id', function(data) {
   // This is fired when the server receives the instance of our player.
   // When we receive our ID, we will associate it to our Game object and
   // start the game.
-  game.setID(data);
+  game.setID(data.id);
+  game.receivePlayers(data.players);
   $('#nickname-prompt-overlay').fadeOut(500);
   init();
   animate();

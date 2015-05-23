@@ -24,7 +24,10 @@ io.on('connection', function(socket) {
   socket.on('new player', function(data) {
     var player = new Player(100, 100, 0, data, socket.id);
     clients.set(socket.id, player);
-    socket.emit('send-id', socket.id);
+    socket.emit('send-id', {
+      id: socket.id,
+      players: clients.players()
+    });
   });
 
   socket.on('move-player', function(data) {
