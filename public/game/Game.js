@@ -16,7 +16,7 @@ function Game(canvas, socket) {
   this.players_ = [];
 };
 
-Game.WIDTH = 600;
+Game.WIDTH = 800;
 Game.HEIGHT = 600;
 
 Game.prototype.getCanvas = function() {

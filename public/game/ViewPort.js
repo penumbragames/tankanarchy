@@ -4,7 +4,7 @@
 
 function ViewPort() {}
 
-ViewPort.locate = function(game) {
+ViewPort.getVisiblePlayers = function(game) {
   var players = game.getPlayers();
   var onScreen = [];
 
@@ -17,4 +17,7 @@ ViewPort.locate = function(game) {
   }
   return onScreen;
 }
+
+ViewPort.toCanvasCoords = function(game, object) {
   
+}
