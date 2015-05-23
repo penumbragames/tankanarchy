@@ -9,6 +9,9 @@ function Game(canvas, socket) {
   this.canvas_.height = Game.HEIGHT;
   this.canvasContext_ = this.canvas_.getContext('2d');
 
+  this.drawing_ = new Drawing();
+  this.viewPort_ = new ViewPort();
+
   this.socket_ = socket;
 
   this.id_ = null;
@@ -59,15 +62,31 @@ Game.prototype.update = function() {
       firedBy: this.id_
     });
   }
+
+  var self = this.findSelf();
+  this.viewPort_.update(self.x_, self.y_);
+
 };
 
 Game.prototype.findSelf = function() {
+  console.log(this.id_);
+  console.log(this.players_);
   for (var i = 0; i < this.players_.length; ++i) {
+    console.log(this.players_[i].id_);
     if (this.players_[i].id_ == this.id_) {
       return this.players_[i];
     }
   }
   return null;
+};
+
+Game.prototype.findPlayer = function(id) {
+  for (var i = 0; i < this.players_.length; ++i) {
+    if (this.players_[i].id_ == id) {
+      return this.players_[i];
+    }
+    return null;
+  }
 };
 
 Game.prototype.receivePlayers = function(players) {
@@ -78,9 +97,9 @@ Game.prototype.draw = function() {
   this.canvasContext_.clearRect(0, 0, Game.WIDTH, Game.HEIGHT);
   for (var i = 0; i < this.players_.length; ++i) {
     if (this.players_[i].id_ == this.id_) {
-      Drawing.drawSelf(this, this.canvasContext_, this.players_[i]);
+      Drawing.drawSelf(viewport_.toCanvasCoords(this.players_[i]));
     } else {
-      Drawing.drawOther(this, this.canvasContext_, this.players_[i]);
+      Drawing.drawOther(viewport_.toCanvasCoords(this.players_[i]));
     }
   }
 };
