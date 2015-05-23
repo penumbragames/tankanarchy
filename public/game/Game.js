@@ -44,28 +44,29 @@ Game.prototype.setID = function(id) {
 };
 
 Game.prototype.update = function() {
-  if (Input.UP || Input.RIGHT ||
-      Input.DOWN || Input.LEFT) {
-    this.socket_.emit('move-player', {
-      id: this.id_,
-      keyboardState: {
-        up: Input.UP,
-        right: Input.RIGHT,
-        down: Input.DOWN,
-        left: Input.LEFT
-      }
-    });
-  }
+  var self = this.findSelf();
+  this.viewPort_.update(self.x_, self.y_);
+  var turretAngle = Math.atan2(Input.MOUSE[1] - self.y_,
+                               Input.MOUSE[0] - self.x_);
+
+  this.socket_.emit('move-player', {
+    id: this.id_,
+    keyboardState: {
+      up: Input.UP,
+      right: Input.RIGHT,
+      down: Input.DOWN,
+      left: Input.LEFT
+    },
+    turretAngle: turretAngle
+  });
 
   if (Input.CLICK) {
     var self = this.findSelf();
     this.socket_.emit('fire-bullet', {
-      firedBy: this.id_
+      firedBy: this.id_,
+      angle: turretAngle
     });
   }
-
-  var self = this.findSelf();
-  this.viewPort_.update(self.x_, self.y_);
 
 };
 
@@ -97,11 +98,13 @@ Game.prototype.draw = function() {
     if (this.players_[i].id_ == this.id_) {
       this.drawing_.drawSelf(
         this.viewPort_.toCanvasCoords(this.players_[i]),
-        this.players_[i].orientation_);
+        this.players_[i].orientation_,
+        this.players_[i].turretAngle);
     } else {
       this.drawing_.drawOther(
         this.viewPort_.toCanvasCoords(this.players_[i]),
-        this.players_[i].orientation_);
+        this.players_[i].orientation_,
+        this.players_[i].turretAngle);
     }
   }
 };

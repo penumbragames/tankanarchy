@@ -7,7 +7,7 @@ function Drawing(context) {
   this.context_ = context;
 };
 
-Drawing.prototype.drawSelf = function(coords, orientation) {
+Drawing.prototype.drawSelf = function(coords, orientation, turretAngle) {
   this.context_.save();
   this.context_.translate(coords[0], coords[1]);
   this.context_.rotate(orientation);
@@ -17,7 +17,7 @@ Drawing.prototype.drawSelf = function(coords, orientation) {
   this.context_.restore();
 };
 
-Drawing.prototype.drawOther = function(coords, orientation) {
+Drawing.prototype.drawOther = function(coords, orientation, turretAngle) {
   this.context_.save();
   this.context_.translate(coords[0], coords[1]);
   this.context_.rotate(orientation);

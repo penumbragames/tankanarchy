@@ -9,6 +9,7 @@ var HashMap = require('hashmap');
 var Player = require('./server/Player').Player;
 
 var clients = new HashMap();
+var bullets = [];
 
 app.set('port', PORT_NUMBER);
 
@@ -22,7 +23,7 @@ app.get('/*', function(req, res) {
 
 io.on('connection', function(socket) {
   socket.on('new player', function(data) {
-    var player = new Player(100, 100, 0, data, socket.id);
+    var player = new Player(data, socket.id);
     clients.set(socket.id, player);
     socket.emit('send-id', {
       id: socket.id,
@@ -31,9 +32,15 @@ io.on('connection', function(socket) {
   });
 
   socket.on('move-player', function(data) {
-    var player = clients.get(data.id);
-    player.update(data.keyboardState);
-    clients.set(socket.id, player);
+    try {
+      var player = clients.get(data.id);
+      player.update(data.keyboardState, data.turretAngle);
+      clients.set(socket.id, player);
+    } catch (err) {}
+  });
+
+  socket.on('fire-bullet', function(data) {
+    var player = clients.get(data.firedBy);
   });
 
   socket.on('disconnect', function() {
@@ -44,6 +51,7 @@ io.on('connection', function(socket) {
 });
 
 setInterval(function() {
+
   io.sockets.emit('update-players', clients.values());
 }, FRAME_RATE);
 
