@@ -5,9 +5,10 @@
 
 function Drawing() {}
 
-Drawing.drawSelf = function(context, object) {
+Drawing.drawSelf = function(game, context, object) {
   context.save();
-  context.translate(object.x_, object.y_);
+  var translatedCoords = ViewPort.toCanvasCoords(game, object);
+  context.translate(translatedCoords[0], translatedCoords[1]);
   context.rotate(object.orientation_);
   var img = new Image();
   img.src = '../data/self_tank.png';
@@ -15,9 +16,10 @@ Drawing.drawSelf = function(context, object) {
   context.restore();
 };
 
-Drawing.drawOther = function(context, object) {
+Drawing.drawOther = function(game, context, object) {
   context.save();
-  context.translate(object.x_, object.y_);
+  var translatedCoords = ViewPort.toCanvasCoords(game, object);
+  context.translate(translatedCoords[0], translatedCoords[1]);
   context.rotate(object.orientation_);
   var img = new Image();
   img.src = '../data/other_tank.png';

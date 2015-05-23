@@ -27,6 +27,10 @@ Game.prototype.getContext = function() {
   return this.canvasContext_;
 };
 
+Game.prototype.getID = function() {
+  return this.id_;
+};
+
 Game.prototype.getPlayers = function() {
   return this.players_;
 };
@@ -74,9 +78,9 @@ Game.prototype.draw = function() {
   this.canvasContext_.clearRect(0, 0, Game.WIDTH, Game.HEIGHT);
   for (var i = 0; i < this.players_.length; ++i) {
     if (this.players_[i].id_ == this.id_) {
-      Drawing.drawSelf(this.canvasContext_, this.players_[i]);
+      Drawing.drawSelf(this, this.canvasContext_, this.players_[i]);
     } else {
-      Drawing.drawOther(this.canvasContext_, this.players_[i]);
+      Drawing.drawOther(this, this.canvasContext_, this.players_[i]);
     }
   }
 };
