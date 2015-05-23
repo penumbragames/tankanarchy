@@ -1,10 +1,11 @@
 /**
  * Manages the player viewport when they move around.
+ * Author: Kenneth Li (kennethli.3470@gmail.com)
  */
 
-function ViewPort(selfId) {
+function ViewPort() {
   this.selfCoords_ = [];
-  this.selfId_ = selfId;
+  this.selfId_ = null;
 }
 
 ViewPort.prototype.setID = function(id) {
