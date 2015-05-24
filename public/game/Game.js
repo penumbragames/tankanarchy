@@ -22,7 +22,6 @@ function Game(canvas, socket) {
 
 Game.WIDTH = 800;
 Game.HEIGHT = 600;
-Game.SHOOTING_INTERVAL = 800;
 
 Game.prototype.getCanvas = function() {
   return this.canvas_;
