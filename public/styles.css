@@ -8,13 +8,6 @@ body {
   -ms-user-select: none;
 }
 
-#canvas {
-  width: 800px;
-  height: 600px;
-  border: 5px solid black;
-  background-color: #fff;
-}
-
 #nickname-prompt-overlay {
   position: absolute;
   top: 0;
@@ -46,3 +39,31 @@ body {
   -o-border-radius: 10px;
   border-radius: 10px;
 }
+
+#nickname-submit:hover {
+  cursor: pointer;
+}
+
+#container {
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  border: 0;
+}
+
+#content {
+  margin: auto;
+}
+
+#content td {
+  padding: 10px;
+}
+
+#canvas {
+  width: 800px;
+  height: 600px;
+  border: 5px solid #000;
+  margin: 0;
+  background-color: #fff;
+}
+
