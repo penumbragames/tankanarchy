@@ -8,6 +8,7 @@ var HashMap = require('hashmap');
 
 var Player = require('./server/Player').Player;
 var Bullet = require('./server/Bullet').Bullet;
+var HealthPack = require('./server/HealthPack').HealthPack;
 
 var clients = new HashMap();
 var bullets = [];
@@ -27,7 +28,7 @@ io.on('connection', function(socket) {
   socket.on('new player', function(data) {
     var x = Math.floor(Math.random() * 2441) + 30;
     var y = Math.floor(Math.random() * 2441) + 30;
-    var orientation = Math.random() * 3 * Math.PI
+    var orientation = Math.random() * 3 * Math.PI;
     var player = new Player(x, y, orientation, data, socket.id);
     clients.set(socket.id, player);
     socket.emit('send-id', {
@@ -71,6 +72,9 @@ setInterval(function() {
     }
   }
 
+  while (healthpacks.length < 4) {
+    healthpacks.push(HealthPack.generateRandomHealthPack());
+  }
   for (var i = 0; i < healthpacks.length; ++i) {
     if (healthpacks[i].shouldExist()) {
       healthpacks[i].update(clients.values());

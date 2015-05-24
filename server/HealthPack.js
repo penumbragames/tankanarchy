@@ -16,6 +16,11 @@ function HealthPack(x, y) {
 
 HealthPack.PICKUP_DISTANCE = 40;
 
+HealthPack.generateRandomHealthPack = function() {
+  return new HealthPack(Math.floor(Math.random() * 2441) + 30,
+                        Math.floor(Math.random() * 2441) + 30);
+};
+
 HealthPack.prototype.isValidPickup = function(player) {
   return player.health_ < 10 &&
     Math.abs(player.x_ - this.x_) + Math.abs(player.y_ - this.y_) <

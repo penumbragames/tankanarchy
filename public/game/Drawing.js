@@ -108,11 +108,13 @@ Drawing.prototype.drawTiles = function(coords, edges) {
 
 /**
  * Draws a health pack.
- * @param {[number, number]} coords The coordinates of the center of the pack.
+ * @param {[number, number]} coords The coordinates of the center of the
+ *   pack.
  */
 Drawing.prototype.drawHealthPack = function(coords) {
   var context = this.context_;
   context.save();
+  context.translate(coords[0], coords[1]);
   var healthPack = new Image();
   healthPack.src = '../data/healthPack.png';
   context.drawImage(healthPack, -15, -15);

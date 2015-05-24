@@ -134,6 +134,8 @@ Game.prototype.draw = function() {
   }
 
   for (var i = 0; i < this.healthPacks_.length; ++i) {
+    this.drawing_.drawHealthPack(
+      this.viewPort_.toCanvasCoords(this.healthPacks_[i]));
   }
 
   var visiblePlayers = this.players_;
