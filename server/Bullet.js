@@ -5,8 +5,8 @@
 
 /**
  * Constructor for a bullet.
- * @param {number} x The starting x-coordinate of a bullet (absolute).
- * @param {number} y The starting y-coordinate of a bullet (absolute).
+ * @param {number} x The starting x-coordinate of the bullet (absolute).
+ * @param {number} y The starting y-coordinate of the bullet (absolute).
  * @param {number} direction The direction the bullet will travel in
  *   radians.
  * @param {string} firedBy The socket ID of the client that fired the
@@ -25,18 +25,17 @@ Bullet.VELOCITY = 15;
 Bullet.TRAVEL_DISTANCE = 800;
 Bullet.COLLISION_DISTANCE = 25;
 
+Bullet.prototype.hit = function(player) {
+  return Math.abs(player.x_ - this.x_) + Math.abs(player.y_ - this.y_) <
+    Bullet.COLLISION_DISTANCE;
+};
+
 /**
  * We reverse the coordinate system and apply sin(direction) to x because
  * canvas in HTML will use up as its '0' reference point while JS math uses
  * left as its '0' reference point.
  * this.direction_ always is stored in radians.
  */
-
-Bullet.prototype.hit = function(player) {
-  return Math.abs(player.x_ - this.x_) + Math.abs(player.y_ - this.y_) <
-    Bullet.COLLISION_DISTANCE;
-};
-
 Bullet.prototype.update = function(clients) {
   this.x_ += Bullet.VELOCITY * Math.sin(this.direction_);
   this.y_ -= Bullet.VELOCITY * Math.cos(this.direction_);

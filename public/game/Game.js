@@ -18,6 +18,7 @@ function Game(canvas, socket) {
   this.id_ = null;
   this.players_ = [];
   this.bullets_ = [];
+  this.healthPacks_ = [];
   this.lastShotTime_ = 0;
 };
 
@@ -117,6 +118,10 @@ Game.prototype.receiveBullets = function(bullets) {
   this.bullets_ = bullets;
 };
 
+Game.prototype.receiveHealthPacks = function(healthpacks) {
+  this.healthPacks_ = healthpacks;
+};
+
 Game.prototype.draw = function() {
   this.canvasContext_.clearRect(0, 0, Game.WIDTH, Game.HEIGHT);
 
@@ -126,6 +131,9 @@ Game.prototype.draw = function() {
     this.drawing_.drawBullet(
       this.viewPort_.toCanvasCoords(this.bullets_[i]),
       this.bullets_[i].direction_);
+  }
+
+  for (var i = 0; i < this.healthPacks_.length; ++i) {
   }
 
   var visiblePlayers = this.players_;

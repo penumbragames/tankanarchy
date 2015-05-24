@@ -39,6 +39,10 @@ socket.on('update-bullets', function(data) {
   game.receiveBullets(data);
 });
 
+socket.on('update-healthpacks', function(data) {
+  game.receiveHealthPacks(data);
+});
+
 function init() {
   Input.applyEventHandlers();
 };

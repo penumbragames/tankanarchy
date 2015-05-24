@@ -11,6 +11,7 @@ var Bullet = require('./server/Bullet').Bullet;
 
 var clients = new HashMap();
 var bullets = [];
+var healthpacks = [];
 
 app.set('port', PORT_NUMBER);
 
@@ -66,8 +67,18 @@ setInterval(function() {
       i--;
     }
   }
+
+  for (var i = 0; i < healthpacks.length; ++i) {
+    if (healthpacks[i].shouldExist()) {
+      healthpacks[i].update(clients.values());
+    } else {
+      healthpacks.splice(i, 1);
+      i--;
+    }
+  }
   io.sockets.emit('update-players', clients.values());
   io.sockets.emit('update-bullets', bullets);
+  io.sockets.emit('update-healthpacks', healthpacks);
 }, FRAME_RATE);
 
 http.listen(PORT_NUMBER, function() {
