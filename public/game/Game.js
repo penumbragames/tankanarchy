@@ -108,8 +108,8 @@ Game.prototype.draw = function() {
       this.viewPort_.toCanvasCoords(this.bullets_[i]),
       this.bullets_[i].direction_);
   }
-  var visiblePlayers = getVisiblePlayers(this.players_);
-  for (var i = 0; i < visiblePlayers; ++i) {
+  var visiblePlayers = this.viewPort_.getVisibleObjects(this.players_);
+  for (var i = 0; i < visiblePlayers.length; ++i) {
     if (this.players_[i].id_ == this.id_) {
       this.drawing_.drawSelf(
         this.viewPort_.toCanvasCoords(this.players_[i]),

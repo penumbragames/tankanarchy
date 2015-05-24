@@ -16,14 +16,14 @@ ViewPort.prototype.update = function(x, y) {
   this.selfCoords_ = [x, y];
 }
 
-ViewPort.prototype.getVisiblePlayers = function(players) {
+ViewPort.prototype.getVisibleObjects = function(objects) {
   var onScreen = [];
 
-  for (var i = 0; i < players.length; i++) {
-    var player = players[i];
-    if (Math.abs(player.x_ - selfCoords[0]) < 400 &&
-        Math.abs(player.y_ - selfCoords[1]) < 300) {
-      onScreen.push(player);
+  for (var i = 0; i < objects.length; i++) {
+    var object = objects[i];
+    if (Math.abs(object.x_ - this.selfCoords_[0]) < 400 &&
+        Math.abs(object.y_ - this.selfCoords_[1]) < 300) {
+      onScreen.push(object);
     }
   }
   return onScreen;
