@@ -22,6 +22,7 @@ function Game(canvas, socket) {
 
 Game.WIDTH = 800;
 Game.HEIGHT = 600;
+Game.SHOOTING_INTERVAL = 800;
 
 Game.prototype.getCanvas = function() {
   return this.canvas_;
@@ -48,8 +49,8 @@ Game.prototype.update = function() {
   var self = this.findSelf();
   this.viewPort_.update(self.x_, self.y_);
   var turretAngle = Math.atan2(
-    Input.MOUSE[1] - 300,
-    Input.MOUSE[0] - 400) + Math.PI / 2;
+    Input.MOUSE[1] - Game.HEIGHT / 2,
+    Input.MOUSE[0] - Game.WIDTH / 2) + Math.PI / 2;
 
   this.socket_.emit('move-player', {
     id: this.id_,
@@ -64,7 +65,7 @@ Game.prototype.update = function() {
 
   if (Input.CLICK) {
     var time = (new Date()).getTime();
-    if (time > this.lastShotTime_ + 1000) {
+    if (time > this.lastShotTime_ + Game.SHOOTING_INTERVAL) {
       var self = this.findSelf();
       this.socket_.emit('fire-bullet', {
         firedBy: this.id_,
