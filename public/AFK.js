@@ -5,7 +5,7 @@
 function AFK() {}
 
 AFK.TIMER = 0;
-AFK.KICK_TIME = 300000;
+AFK.KICK_TIME = 120000;
 
 AFK.init = function() {
   AFK.TIMER = (new Date).getTime();
