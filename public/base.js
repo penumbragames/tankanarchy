@@ -28,5 +28,4 @@ function getSign(n) {
   } else {
     return 0;
   }
-}
-
+};

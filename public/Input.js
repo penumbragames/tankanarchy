@@ -14,11 +14,11 @@ Input.DOWN = false;
 
 Input.onMouseDown = function(e) {
   Input.CLICK = true;
-}
+};
 
 Input.onMouseUp = function(e) {
   Input.CLICK = false;
-}
+};
 
 Input.onMouseMove = function(e) {
   var canvas = document.getElementById('canvas');
@@ -66,4 +66,4 @@ Input.applyEventHandlers = function() {
   window.addEventListener('mousemove', Input.onMouseMove);
   window.addEventListener('keyup', Input.onKeyUp);
   window.addEventListener('keydown', Input.onKeyDown);
-}
+};

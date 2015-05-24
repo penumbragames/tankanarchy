@@ -41,10 +41,10 @@ socket.on('update-bullets', function(data) {
 
 function init() {
   Input.applyEventHandlers();
-}
+};
 
 function animate() {
   game.update();
   game.draw();
   window.requestAnimFrame(animate);
-}
+};

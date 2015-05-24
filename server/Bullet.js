@@ -54,10 +54,10 @@ Bullet.prototype.update = function(players) {
       return;
     }
   }
-}
+};
 
 Bullet.prototype.shouldExist = function() {
   return this.shouldExist_;
-}
+};
 
 exports.Bullet = Bullet;
