@@ -48,6 +48,7 @@ Game.prototype.setID = function(id) {
 
 Game.prototype.update = function() {
   var self = this.findSelf();
+  console.log(self.x_, self.y_);
   this.viewPort_.update(self.x_, self.y_);
 
   var turretAngle = Math.atan2(
