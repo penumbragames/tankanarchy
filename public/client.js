@@ -45,9 +45,11 @@ socket.on('update-healthpacks', function(data) {
 
 function init() {
   Input.applyEventHandlers();
+  AFK.init();
 };
 
 function animate() {
+  AFK.check();
   game.update();
   game.draw();
   window.requestAnimFrame(animate);
