@@ -13,16 +13,17 @@
  *   bullet.
  */
 function Bullet(x, y, direction, firedBy) {
-  this.startX_ = x;
-  this.startY_ = y;
   this.x_ = x;
   this.y_ = y;
   this.direction_ = direction;
   this.firedBy_ = firedBy;
+  this.distanceTraveled_ = 0;
+  this.shouldExist_ = true;
 }
 
 Bullet.VELOCITY = 15;
 Bullet.TRAVEL_DISTANCE = 800;
+Bullet.COLLISION_DISTANCE = 15;
 
 /**
  * We reverse the coordinate system and apply sin(direction) to x because
@@ -30,15 +31,33 @@ Bullet.TRAVEL_DISTANCE = 800;
  * left as its '0' reference point.
  * this.direction_ always is stored in radians.
  */
-Bullet.prototype.update = function() {
+
+Bullet.prototype.collidedWith = function(player) {
+  return Math.abs(player.x_ - this.x_) + Math.abs(player.y_ - this.y_) <
+    Bullet.COLLISION_DISTANCE;
+};
+
+Bullet.prototype.update = function(players) {
   this.x_ += Bullet.VELOCITY * Math.sin(this.direction_);
   this.y_ -= Bullet.VELOCITY * Math.cos(this.direction_);
+  this.distanceTraveled_ += Bullet.VELOCITY;
+
+  if (this.distanceTraveled_ > Bullet.TRAVEL_DISTANCE) {
+    this.shouldExist_ = false;
+    return;
+  }
+
+  for (var i = 0; i < players.length; ++i) {
+    if (this.collidedWith(players[i])) {
+      players[i].health_ -= 1;
+      this.shouldExist_ = false;
+      return;
+    }
+  }
 }
 
 Bullet.prototype.shouldExist = function() {
-  return Math.sqrt((this.startX_ - this.x_) * (this.startX_ - this.x_) +
-                   (this.startY_ - this.y_) * (this.startY_ - this.y_)) <
-    Bullet.TRAVEL_DISTANCE;
+  return this.shouldExist_;
 }
 
 exports.Bullet = Bullet;
