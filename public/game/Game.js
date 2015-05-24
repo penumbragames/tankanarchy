@@ -65,6 +65,9 @@ Game.prototype.update = function() {
   });
 
   // Emits an event for the player shooting to the server.
+  // This event is limited to being sent every 800ms. If this breaks
+  // due to people messing with the client, the server acts as a backup
+  // to only allow the player to shoot every 800ms.
   if (Input.CLICK) {
     var time = (new Date).getTime();
     if (time > this.lastShotTime_ + Game.SHOOTING_INTERVAL) {
