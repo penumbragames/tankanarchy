@@ -110,20 +110,13 @@ Game.prototype.draw = function() {
   }
   var visiblePlayers = this.viewPort_.getVisibleObjects(this.players_);
   for (var i = 0; i < visiblePlayers.length; ++i) {
-    if (this.players_[i].id_ == this.id_) {
-      this.drawing_.drawSelf(
-        this.viewPort_.toCanvasCoords(this.players_[i]),
-        this.players_[i].orientation_,
-        this.players_[i].turretAngle_, 
-        this.players_[i].name_,
-        this.players_[i].health_);
-    } else {
-      this.drawing_.drawOther(
-        this.viewPort_.toCanvasCoords(this.players_[i]),
-        this.players_[i].orientation_,
-        this.players_[i].turretAngle_,
-        this.players_[i].name_,
-        this.players_[i].health_);
-    }
+    console.log(visiblePlayers[i])
+    this.drawing_.drawTank(
+      visiblePlayers[i].id_ == this.id_,
+      this.viewPort_.toCanvasCoords(visiblePlayers[i]),
+      visiblePlayers[i].orientation_,
+      visiblePlayers[i].turretAngle_, 
+      visiblePlayers[i].name_,
+      visiblePlayers[i].health_);
   }
 };

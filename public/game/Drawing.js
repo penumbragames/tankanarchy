@@ -7,8 +7,7 @@ function Drawing(context) {
   this.context_ = context;
 };
 
-Drawing.prototype.drawSelf = function(coords, orientation,
-                                      turretAngle, name, health) {
+Drawing.prototype.drawTank = function(isSelf, coords, orientation, turretAngle, name, health) {
 
   var context = this.context_;
 
@@ -16,7 +15,10 @@ Drawing.prototype.drawSelf = function(coords, orientation,
   context.translate(coords[0], coords[1]);
   context.font = '14px Helvetica';
   context.textAlign = 'center';
-  context.fillStyle = 'green';
+  if (isSelf)
+    context.fillStyle = 'green';
+  else
+    context.fillStyle = 'red';
   context.fillText(name, 0, -50);
   context.restore();
 
@@ -37,7 +39,10 @@ Drawing.prototype.drawSelf = function(coords, orientation,
   context.translate(coords[0], coords[1]);
   context.rotate(orientation);
   var tank = new Image();
-  tank.src = '../data/self_tank.png';
+  if (isSelf)
+    tank.src = '../data/self_tank.png';
+  else
+    tank.src = '../data/other_tank.png';
   context.drawImage(tank, -25, -30);
   context.restore();
 
@@ -45,56 +50,17 @@ Drawing.prototype.drawSelf = function(coords, orientation,
   context.translate(coords[0], coords[1]);
   context.rotate(turretAngle);
   var turret = new Image();
-  turret.src = '../data/self_tank_turret.png';
-  context.drawImage(turret, -25, -30);
-  context.restore();
-
-};
-
-Drawing.prototype.drawOther = function(coords, orientation,
-                                       turretAngle, name, health) {
-  var context = this.context_;
-
-  context.save();
-  context.translate(coords[0], coords[1]);
-  context.font = '14px Helvetica';
-  context.textAlign = 'center';
-  context.fillStyle = 'red';
-  context.fillText(name, 0, -50);
-  context.restore();
-
-  context.save();
-  context.translate(coords[0], coords[1]);
-  for (var i = 0; i < 10; i++) {
-    if (i < health) {
-      context.fillStyle = 'green';
-      context.fillRect(-25 + 5 * i, -42, 5, 4);
-    } else {
-      context.fillStyle = 'red';
-      context.fillRect(-25 + 5 * i, -42, 5, 4);
-    }
-  }     
-  context.restore();
-
-  context.save();
-  context.translate(coords[0], coords[1]);
-  context.rotate(orientation);
-  var tank = new Image();
-  tank.src = '../data/other_tank.png';
-  context.drawImage(tank, -25, -30);
-  context.restore();
-
-  context.save();
-  context.translate(coords[0], coords[1]);
-  context.rotate(turretAngle);
-  var turret = new Image();
-  turret.src = '../data/other_tank_turret.png';
+  if (isSelf)
+    turret.src = '../data/self_tank_turret.png';
+  else
+    turret.src = '../data/other_tank_turret.png';
   context.drawImage(turret, -25, -30);
   context.restore();
 
 };
 
 Drawing.prototype.drawBullet = function(coords, direction) {
+ 
   var context = this.context_;
 
   context.save();

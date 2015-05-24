@@ -18,11 +18,10 @@ ViewPort.prototype.update = function(x, y) {
 
 ViewPort.prototype.getVisibleObjects = function(objects) {
   var onScreen = [];
-
   for (var i = 0; i < objects.length; i++) {
     var object = objects[i];
-    if (Math.abs(object.x_ - this.selfCoords_[0]) < 400 &&
-        Math.abs(object.y_ - this.selfCoords_[1]) < 300) {
+    if (Math.abs(object.x_ - this.selfCoords_[0]) < 450 &&
+        Math.abs(object.y_ - this.selfCoords_[1]) < 350) {
       onScreen.push(object);
     }
   }
