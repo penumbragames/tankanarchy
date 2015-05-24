@@ -20,6 +20,7 @@ function Player(name, id) {
 
   this.health_ = 10;
   this.score_ = 0;
+  this.lastShotTime_ = 0;
 };
 
 /**
@@ -29,6 +30,7 @@ Player.TURN_RATE = Math.PI / 45;
 Player.VELOCITY = 5;
 Player.ENVIRONMENT_MIN = 0;
 Player.ENVIRONMENT_MAX = 2500;
+Player.SHOT_COOLDOWN = 800;
 
 Player.prototype.update = function(keyboardState, turretAngle) {
   if (keyboardState.up) {

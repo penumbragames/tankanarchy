@@ -42,8 +42,12 @@ io.on('connection', function(socket) {
 
   socket.on('fire-bullet', function(data) {
     var player = clients.get(data.firedBy);
-    bullets.push(new Bullet(player.x_, player.y_,
-                            player.turretAngle_, player.id_));
+    var time = (new Date()).getTime();
+    if (time > player.lastShotTime_ + Player.SHOT_COOLDOWN) {
+      bullets.push(new Bullet(player.x_, player.y_,
+                              player.turretAngle_, player.id_));
+      player.lastShotTime_ = time;
+    }
   });
 
   socket.on('disconnect', function() {
