@@ -16,15 +16,14 @@ ViewPort.prototype.update = function(x, y) {
   this.selfCoords_ = [x, y];
 }
 
-ViewPort.prototype.getVisiblePlayers = function(game) {
-  var players = game.getPlayers();
+ViewPort.prototype.getVisiblePlayers = function(players) {
   var onScreen = [];
 
   for (var i = 0; i < players.length; i++) {
-    var curPlayer = players[i];
-    if (Math.abs(curPlayer.getX() - player.getX()) < 400 &&
-        Math.abs(curPlayer.getY() - player.getY()) < 300) {
-      onScreen.push(curPlayer);
+    var player = players[i];
+    if (Math.abs(player.x_ - selfCoords[0]) < 400 &&
+        Math.abs(player.y_ - selfCoords[1]) < 300) {
+      onScreen.push(player);
     }
   }
   return onScreen;

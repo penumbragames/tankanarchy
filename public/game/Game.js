@@ -108,17 +108,22 @@ Game.prototype.draw = function() {
       this.viewPort_.toCanvasCoords(this.bullets_[i]),
       this.bullets_[i].direction_);
   }
-  for (var i = 0; i < this.players_.length; ++i) {
+  var visiblePlayers = getVisiblePlayers(this.players_);
+  for (var i = 0; i < visiblePlayers; ++i) {
     if (this.players_[i].id_ == this.id_) {
       this.drawing_.drawSelf(
         this.viewPort_.toCanvasCoords(this.players_[i]),
         this.players_[i].orientation_,
-        this.players_[i].turretAngle_);
+        this.players_[i].turretAngle_, 
+        this.players_[i].name_,
+        this.players_[i].health_);
     } else {
       this.drawing_.drawOther(
         this.viewPort_.toCanvasCoords(this.players_[i]),
         this.players_[i].orientation_,
-        this.players_[i].turretAngle_);
+        this.players_[i].turretAngle_,
+        this.players_[i].name_,
+        this.players_[i].health_);
     }
   }
 };
