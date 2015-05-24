@@ -7,8 +7,19 @@ function Drawing(context) {
   this.context_ = context;
 };
 
-Drawing.prototype.drawTank = function(isSelf, coords, orientation, turretAngle, name, health) {
-
+/**
+ * Draws a tank to the canvas.
+ * @param {boolean} isSelf Tells if I should draw a green tank (self)
+ *   or a red tank (other player).
+ * @param {[number, number]} coords The coordinate of the center of the
+ *   tank.
+ * @param {number} orientation The orientation of the tank from 0 to 2 * PI.
+ * @param {number} turretAngle The angle of the turret from 0 to 2 * PI.
+ * @param {string} name The name of the player associated with this tank.
+ * @param {number} health The current health of the tank.
+ */
+Drawing.prototype.drawTank = function(isSelf, coords, orientation,
+                                      turretAngle, name, health) {
   var context = this.context_;
 
   context.save();

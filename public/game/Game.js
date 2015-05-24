@@ -11,6 +11,7 @@ function Game(canvas, socket) {
 
   this.drawing_ = new Drawing(this.canvasContext_);
   this.viewPort_ = new ViewPort();
+  this.environment_ = new Environment(this.viewPort_, this.drawing_);
 
   this.socket_ = socket;
 
@@ -48,6 +49,8 @@ Game.prototype.setID = function(id) {
 Game.prototype.update = function() {
   var self = this.findSelf();
   this.viewPort_.update(self.x_, self.y_);
+  this.environment_.update();
+
   var turretAngle = Math.atan2(
     Input.MOUSE[1] - Game.HEIGHT / 2,
     Input.MOUSE[0] - Game.WIDTH / 2) + Math.PI / 2;
