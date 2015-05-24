@@ -12,7 +12,8 @@ function Drawing(context) {
  * Draws a tank to the canvas.
  * @param {boolean} isSelf Tells if I should draw a green tank (self)
  *   or a red tank (other player).
- * @param {[number, number]} coords The coordinates of the center of the tank.
+ * @param {[number, number]} coords The coordinates of the center of the
+ *   tank.
  * @param {number} orientation The orientation of the tank from 0 to 2 * PI.
  * @param {number} turretAngle The angle of the turret from 0 to 2 * PI.
  * @param {string} name The name of the player associated with this tank.
@@ -26,10 +27,11 @@ Drawing.prototype.drawTank = function(isSelf, coords, orientation,
   context.translate(coords[0], coords[1]);
   context.font = '14px Helvetica';
   context.textAlign = 'center';
-  if (isSelf)
+  if (isSelf) {
     context.fillStyle = 'green';
-  else
+  } else {
     context.fillStyle = 'red';
+  }
   context.fillText(name, 0, -50);
   context.restore();
 
@@ -50,10 +52,11 @@ Drawing.prototype.drawTank = function(isSelf, coords, orientation,
   context.translate(coords[0], coords[1]);
   context.rotate(orientation);
   var tank = new Image();
-  if (isSelf)
+  if (isSelf) {
     tank.src = '../data/self_tank.png';
-  else
+  } else {
     tank.src = '../data/other_tank.png';
+  }
   context.drawImage(tank, -25, -30);
   context.restore();
 
@@ -61,21 +64,21 @@ Drawing.prototype.drawTank = function(isSelf, coords, orientation,
   context.translate(coords[0], coords[1]);
   context.rotate(turretAngle);
   var turret = new Image();
-  if (isSelf)
+  if (isSelf) {
     turret.src = '../data/self_tank_turret.png';
-  else
+  } else {
     turret.src = '../data/other_tank_turret.png';
+  }
   context.drawImage(turret, -25, -30);
   context.restore();
-
 };
 
 /** 
  * Draws a bullet.
- * @param {[number, number]} coords The coordinates of the center of the bullet.
+ * @param {[number, number]} coords The coordinates of the center of the
+ *   bullet.
  * @param {number} direction The direction of the bullet from 0 to 2 * PI
  */
-
 Drawing.prototype.drawBullet = function(coords, direction) {
  
   var context = this.context_;
@@ -87,16 +90,14 @@ Drawing.prototype.drawBullet = function(coords, direction) {
   bullet.src = '../data/bullet.png';
   context.drawImage(bullet, -15, -15);
   context.restore();
-
 }
 
 /**
  * Draws a texture tile.
- * @param {[number, number]} coords The coordinates of the top left corner of 
- * the tile.
-
+ * @param {[number, number]} coords The coordinates of the top left corner
+ *   of the tile.
+ */
 Drawing.prototype.drawTile = function(coords) {
-  
   var context = this.context_;
   
   context.save();
@@ -105,6 +106,5 @@ Drawing.prototype.drawTile = function(coords) {
   tile.src = '../data/tile.png';
   context.drawImage(tile, 0, 0);
   context.restore();
-
 }
 

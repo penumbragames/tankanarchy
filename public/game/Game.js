@@ -117,7 +117,6 @@ Game.prototype.draw = function() {
 
   var visiblePlayers = this.players_;
   for (var i = 0; i < visiblePlayers.length; ++i) {
-    console.log(visiblePlayers[i])
     this.drawing_.drawTank(
       visiblePlayers[i].id_ == this.id_,
       this.viewPort_.toCanvasCoords(visiblePlayers[i]),
