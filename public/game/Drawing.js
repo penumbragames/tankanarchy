@@ -16,7 +16,20 @@ Drawing.prototype.drawSelf = function(coords, orientation, turretAngle, name, he
   context.font = '14px Helvetica';
   context.textAlign = 'center';
   context.fillStyle = 'green';
-  context.fillText(name, 0, -40);
+  context.fillText(name, 0, -50);
+  context.restore();
+
+  context.save();
+  context.translate(coords[0], coords[1]);
+  for (var i = 0; i < 10; i++) {
+    if (i < health) {
+      context.fillStyle = 'green';
+      context.fillRect(-25 + 5 * i, -42, 5, 4);
+    } else {
+      context.fillStyle = 'red';
+      context.fillRect(-25 + 5 * i, -42, 5, 4);
+    }
+  }     
   context.restore();
 
   context.save();
@@ -46,7 +59,20 @@ Drawing.prototype.drawOther = function(coords, orientation, turretAngle, name, h
   context.font = '14px Helvetica';
   context.textAlign = 'center';
   context.fillStyle = 'red';
-  context.fillText(name, -25, -40);
+  context.fillText(name, 0, -50);
+  context.restore();
+
+  context.save();
+  context.translate(coords[0], coords[1]);
+  for (var i = 0; i < 10; i++) {
+    if (i < health) {
+      context.fillStyle = 'green';
+      context.fillRect(-25 + 5 * i, -42, 5, 4);
+    } else {
+      context.fillStyle = 'red';
+      context.fillRect(-25 + 5 * i, -42, 5, 4);
+    }
+  }     
   context.restore();
 
   context.save();
