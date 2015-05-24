@@ -32,7 +32,7 @@ Bullet.COLLISION_DISTANCE = 25;
  * this.direction_ always is stored in radians.
  */
 
-Bullet.prototype.collidedWith = function(player) {
+Bullet.prototype.hit = function(player) {
   return Math.abs(player.x_ - this.x_) + Math.abs(player.y_ - this.y_) <
     Bullet.COLLISION_DISTANCE;
 };
@@ -48,7 +48,7 @@ Bullet.prototype.update = function(players) {
   }
 
   for (var i = 0; i < players.length; ++i) {
-    if (this.collidedWith(players[i])) {
+    if (this.firedBy_ != players[i].id_ && this.hit(players[i])) {
       players[i].health_ -= 1;
       this.shouldExist_ = false;
       return;
