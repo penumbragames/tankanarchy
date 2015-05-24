@@ -92,7 +92,7 @@ Drawing.prototype.drawTile = function(coords) {
   context.translate(coords[0], coords[1]);
   var tile = new Image();
   tile.src = '../data/tile.png';
-  conext.drawImage(tile, 0, 0);
+  context.drawImage(tile, 0, 0);
   context.restore();
 
 }

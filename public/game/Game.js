@@ -49,7 +49,6 @@ Game.prototype.setID = function(id) {
 Game.prototype.update = function() {
   var self = this.findSelf();
   this.viewPort_.update(self.x_, self.y_);
-  this.environment_.update();
 
   var turretAngle = Math.atan2(
     Input.MOUSE[1] - Game.HEIGHT / 2,
@@ -107,11 +106,15 @@ Game.prototype.receiveBullets = function(bullets) {
 
 Game.prototype.draw = function() {
   this.canvasContext_.clearRect(0, 0, Game.WIDTH, Game.HEIGHT);
+
+  this.environment_.draw();
+
   for (var i = 0; i < this.bullets_.length; ++i) {
     this.drawing_.drawBullet(
       this.viewPort_.toCanvasCoords(this.bullets_[i]),
       this.bullets_[i].direction_);
   }
+
   var visiblePlayers = this.players_;
   for (var i = 0; i < visiblePlayers.length; ++i) {
     console.log(visiblePlayers[i])
