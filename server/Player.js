@@ -28,7 +28,7 @@ function Player(name, id) {
 Player.TURN_RATE = Math.PI / 45;
 Player.VELOCITY = 5;
 Player.ENVIRONMENT_MIN = 0;
-Player.ENVIRONMENT_MAX = 10000;
+Player.ENVIRONMENT_MAX = 2500;
 
 Player.prototype.update = function(keyboardState, turretAngle) {
   if (keyboardState.up) {
