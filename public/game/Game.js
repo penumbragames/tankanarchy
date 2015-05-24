@@ -54,6 +54,7 @@ Game.prototype.update = function() {
     Input.MOUSE[1] - Game.HEIGHT / 2,
     Input.MOUSE[0] - Game.WIDTH / 2) + Math.PI / 2;
 
+  // Emits an event for the player's movement to the server.
   this.socket_.emit('move-player', {
     id: this.id_,
     keyboardState: {
@@ -65,6 +66,7 @@ Game.prototype.update = function() {
     turretAngle: turretAngle
   });
 
+  // Emits an event for the player shooting to the server.
   if (Input.CLICK) {
     var time = (new Date()).getTime();
     if (time > this.lastShotTime_ + Game.SHOOTING_INTERVAL) {
@@ -76,6 +78,16 @@ Game.prototype.update = function() {
       this.lastShotTime_ = time;
     }
   }
+
+  // Updates the leaderboard.
+  this.players_.sort(function(o1, o2) {
+    return o2.score_ > o1.score_;
+  });
+  $('#leaderboard').empty();
+  for (var i = 0; i < Math.min(this.players_.length, 10); ++i) {
+    $('#leaderboard').append($('<li>').text(
+      this.players_[i].name_ + ": " + this.players_[i].score_))
+  };
 };
 
 Game.prototype.findSelf = function() {

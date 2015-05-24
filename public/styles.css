@@ -67,3 +67,21 @@ body {
   background-color: #fff;
 }
 
+#leaderboard {
+  width: 100%;
+  min-width: 120px;
+  margin: 0;
+  padding: 0;
+}
+
+#leaderboard li {
+  margin: 5px;
+  list-style-type: none;
+  background-color: #b9b9b9;
+
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+}
