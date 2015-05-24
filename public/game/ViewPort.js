@@ -6,7 +6,7 @@
 function ViewPort() {
   this.selfCoords_ = [];
   this.selfId_ = null;
-}
+};
 
 ViewPort.prototype.setID = function(id) {
   this.selfId_ = id;
@@ -14,7 +14,7 @@ ViewPort.prototype.setID = function(id) {
 
 ViewPort.prototype.update = function(x, y) {
   this.selfCoords_ = [x, y];
-}
+};
 
 ViewPort.prototype.getVisibleObjects = function(objects) {
   var onScreen = [];

@@ -7,7 +7,8 @@ function Drawing(context) {
   this.context_ = context;
 };
 
-Drawing.prototype.drawSelf = function(coords, orientation, turretAngle, name, health) {
+Drawing.prototype.drawSelf = function(coords, orientation,
+                                      turretAngle, name, health) {
 
   var context = this.context_;
 
@@ -50,8 +51,8 @@ Drawing.prototype.drawSelf = function(coords, orientation, turretAngle, name, he
 
 };
 
-Drawing.prototype.drawOther = function(coords, orientation, turretAngle, name, health) {
-
+Drawing.prototype.drawOther = function(coords, orientation,
+                                       turretAngle, name, health) {
   var context = this.context_;
 
   context.save();
@@ -94,7 +95,6 @@ Drawing.prototype.drawOther = function(coords, orientation, turretAngle, name, h
 };
 
 Drawing.prototype.drawBullet = function(coords, direction) {
-
   var context = this.context_;
 
   context.save();
