@@ -69,7 +69,7 @@ Game.prototype.update = function() {
   // This event is limited to being sent every 800ms. If this breaks
   // due to people messing with the client, the server acts as a backup
   // to only allow the player to shoot every 800ms.
-  if (Input.CLICK) {
+  if (Input.LEFT_CLICK) {
     var time = (new Date).getTime();
     if (time > this.lastShotTime_ + Game.SHOOTING_INTERVAL) {
       var self = this.findSelf();
@@ -80,6 +80,7 @@ Game.prototype.update = function() {
       this.lastShotTime_ = time;
     }
   }
+
 
   // Updates the leaderboard.
   this.players_.sort(function(o1, o2) {

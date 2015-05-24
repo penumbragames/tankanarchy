@@ -19,7 +19,7 @@ function Bullet(x, y, direction, firedBy) {
   this.firedBy_ = firedBy;
   this.distanceTraveled_ = 0;
   this.shouldExist_ = true;
-}
+};
 
 Bullet.VELOCITY = 15;
 Bullet.TRAVEL_DISTANCE = 800;
@@ -51,10 +51,6 @@ Bullet.prototype.update = function(clients) {
     if (this.firedBy_ != players[i].id_ && this.hit(players[i])) {
       players[i].health_ -= 1;
       if (players[i].health_ <= 0) {
-        players[i].x_ = 100;
-        players[i].y_ = 100;
-        players[i].health_ = 10;
-        players[i].score_--;
         var killingPlayer = clients.get(this.firedBy_);
         killingPlayer.score_++;
         clients.set(this.firedBy_, killingPlayer);

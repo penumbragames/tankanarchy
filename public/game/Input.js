@@ -5,7 +5,8 @@
 
 function Input() {}
 
-Input.CLICK = false;
+Input.LEFT_CLICK = false;
+Input.RIGHT_CLICK = false;
 Input.MOUSE = [];
 Input.LEFT = false;
 Input.UP = false;
@@ -13,11 +14,11 @@ Input.RIGHT = false;
 Input.DOWN = false;
 
 Input.onMouseDown = function(e) {
-  Input.CLICK = true;
+  Input.LEFT_CLICK = true;
 };
 
 Input.onMouseUp = function(e) {
-  Input.CLICK = false;
+  Input.LEFT_CLICK = false;
 };
 
 Input.onMouseMove = function(e) {

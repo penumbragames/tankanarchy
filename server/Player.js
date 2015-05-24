@@ -33,6 +33,13 @@ Player.ENVIRONMENT_MAX = 2500;
 Player.SHOT_COOLDOWN = 800;
 
 Player.prototype.update = function(keyboardState, turretAngle) {
+  if (this.health_ <= 0) {
+    this.x_ = Math.random() * 2500;
+    this.y_ = Math.random() * 2500;
+    this.health_ = 10;
+    this.score_--;
+  }
+
   if (keyboardState.up) {
     this.x_ += Player.VELOCITY * Math.sin(this.orientation_);
     this.y_ -= Player.VELOCITY * Math.cos(this.orientation_);
