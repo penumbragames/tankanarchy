@@ -23,7 +23,7 @@ function Bullet(x, y, direction, firedBy) {
 
 Bullet.VELOCITY = 15;
 Bullet.TRAVEL_DISTANCE = 800;
-Bullet.COLLISION_DISTANCE = 15;
+Bullet.COLLISION_DISTANCE = 25;
 
 /**
  * We reverse the coordinate system and apply sin(direction) to x because

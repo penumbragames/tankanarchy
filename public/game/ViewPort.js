@@ -30,10 +30,10 @@ ViewPort.prototype.getVisibleObjects = function(objects) {
 
 ViewPort.prototype.toCanvasCoords = function(object) {
   if (object.id_ == this.selfId_) {
-    return [400, 300];
+    return [Game.WIDTH / 2, Game.HEIGHT / 2];
   } else {
-    var translateX = this.selfCoords_[0] - 400;
-    var translateY = this.selfCoords_[1] - 300;
+    var translateX = this.selfCoords_[0] - Game.WIDTH / 2;
+    var translateY = this.selfCoords_[1] - Game.HEIGHT / 2;
     return [object.x_ - translateX,
             object.y_ - translateY];
   }
