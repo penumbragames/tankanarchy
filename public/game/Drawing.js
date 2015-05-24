@@ -97,15 +97,13 @@ Drawing.prototype.drawBullet = function(coords, direction) {
  * @param {[number, number]} coords The coordinates of the top left corner
  *   of the tile.
  */
-Drawing.prototype.drawTiles = function(coords) {
+Drawing.prototype.drawTiles = function(coords, edges) {
   var context = this.context_;
-  
   context.save();
   var tile = new Image();
   tile.src = '../data/tile.png';
-
-  for (var x = Math.min(coords[0], 0); x < Math.max(coords[0] + Game.WIDTH + 100, 10000); x += 100) {
-    for (var y = Math.min(coords[1], 0); y < Math.max(coords[1] + Game.HEIGHT + 100, 10000); y += 100) {
+  for (var x = coords[0]; x < edges[0]; x += 100) {
+    for (var y = coords[1]; y < edges[1]; y += 100) {
       context.drawImage(tile, x, y);
     }
   }
