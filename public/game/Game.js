@@ -18,10 +18,12 @@ function Game(canvas, socket) {
   this.id_ = null;
   this.players_ = [];
   this.bullets_ = [];
+  this.lastShotTime_ = 0;
 };
 
 Game.WIDTH = 800;
 Game.HEIGHT = 600;
+Game.SHOOTING_INTERVAL = 800;
 
 Game.prototype.getCanvas = function() {
   return this.canvas_;
@@ -64,11 +66,15 @@ Game.prototype.update = function() {
 
   // Emits an event for the player shooting to the server.
   if (Input.CLICK) {
-    var self = this.findSelf();
-    this.socket_.emit('fire-bullet', {
-      firedBy: this.id_,
-      angle: turretAngle
-    });
+    var time = (new Date).getTime();
+    if (time > this.lastShotTime_ + Game.SHOOTING_INTERVAL) {
+      var self = this.findSelf();
+      this.socket_.emit('fire-bullet', {
+        firedBy: this.id_,
+        angle: turretAngle
+      });
+      this.lastShotTime_ = time;
+    }
   }
 
   // Updates the leaderboard.
