@@ -72,3 +72,17 @@ Drawing.prototype.drawBullet = function(coords, direction) {
   context.restore();
 
 }
+
+Drawing.prototype.drawTile = function(coords) {
+  
+  var context = this.context_;
+  
+  context.save();
+  context.translate(coords[0], coords[1]);
+  var tile = new Image();
+  tile.src = '../data/tile.png';
+  conext.drawImage(tile, 0, 0);
+  context.restore();
+
+}
+
