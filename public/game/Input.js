@@ -17,8 +17,6 @@ Input.onMouseDown = function(e) {
   if (e.which == 1) {
     Input.LEFT_CLICK = true;
   } else if (e.which == 3) {
-    event.preventDefault();
-    event.stopPropagation();
     Input.RIGHT_CLICK = true;
   }
 };
