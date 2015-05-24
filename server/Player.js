@@ -9,14 +9,14 @@
  * @param {string} id The socket ID of the client associated with this
  *   player
  */
-function Player(name, id) {
+function Player(x, y, orientation, name, id) {
   this.name_ = name;
   this.id_ = id;
 
-  this.x_ = 100;
-  this.y_ = 100;
-  this.orientation_ = 0;
-  this.turretAngle_ = 0;
+  this.x_ = x;
+  this.y_ = y;
+  this.orientation_ = orientation;
+  this.turretAngle_ = orientation;
 
   this.health_ = 10;
   this.score_ = 0;
