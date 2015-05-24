@@ -1,6 +1,7 @@
 /**
  * Methods for drawing all the sprites onto the HTML5 canvas.
- * Author: Alvin Lin (alvin.lin@stuypulse.com)
+ * Author: Kenneth Li (kennethli.3470@gmail.com)
+ * Subordinate: Alvin Lin (alvin.lin@stuypulse.com)
  */
 
 function Drawing(context) {
@@ -11,8 +12,7 @@ function Drawing(context) {
  * Draws a tank to the canvas.
  * @param {boolean} isSelf Tells if I should draw a green tank (self)
  *   or a red tank (other player).
- * @param {[number, number]} coords The coordinate of the center of the
- *   tank.
+ * @param {[number, number]} coords The coordinates of the center of the tank.
  * @param {number} orientation The orientation of the tank from 0 to 2 * PI.
  * @param {number} turretAngle The angle of the turret from 0 to 2 * PI.
  * @param {string} name The name of the player associated with this tank.
@@ -70,6 +70,12 @@ Drawing.prototype.drawTank = function(isSelf, coords, orientation,
 
 };
 
+/** 
+ * Draws a bullet.
+ * @param {[number, number]} coords The coordinates of the center of the bullet.
+ * @param {number} direction The direction of the bullet from 0 to 2 * PI
+ */
+
 Drawing.prototype.drawBullet = function(coords, direction) {
  
   var context = this.context_;
@@ -83,6 +89,11 @@ Drawing.prototype.drawBullet = function(coords, direction) {
   context.restore();
 
 }
+
+/**
+ * Draws a texture tile.
+ * @param {[number, number]} coords The coordinates of the top left corner of 
+ * the tile.
 
 Drawing.prototype.drawTile = function(coords) {
   
