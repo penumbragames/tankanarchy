@@ -107,4 +107,3 @@ Drawing.prototype.drawTile = function(coords) {
   context.drawImage(tile, 0, 0);
   context.restore();
 }
-
