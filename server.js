@@ -56,7 +56,7 @@ io.on('connection', function(socket) {
 setInterval(function() {
   for (var i = 0; i < bullets.length; ++i) {
     if (bullets[i].shouldExist()) {
-      bullets[i].update(clients.values());
+      bullets[i].update(clients);
     } else {
       bullets.splice(i, 1);
       i--;

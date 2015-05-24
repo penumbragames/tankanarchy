@@ -34,16 +34,36 @@
       </div>
     </div>
 
-    <div class='container'>
-      <h1>
-        Tank Anarchy
-      </h1>
-      <canvas id='canvas'>
-      </canvas>
+    <div id='container'>
+      <table id='content' border='1'>
+        <tr>
+          <td colspan='3'>
+            <h1>
+              Tank Anarchy
+            </h1>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            text
+          </td>
+          <td>
+            <canvas id='canvas'>
+            </canvas>
+          </td>
+          <td>
+            <h5>
+              Leaderboard:
+            </h5>
+            <ul id='leaderboard'>
+            </ul>
+          </td>
+        </tr>
+      </table>
     </div>
 
     <script src='base.js'></script>
-    <script src='Input.js'></script>
+    <script src='game/Input.js'></script>
     <script src='game/ViewPort.js'></script>
     <script src='game/Drawing.js'></script>
     <script src='game/Environment.js'></script>

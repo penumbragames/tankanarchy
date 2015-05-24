@@ -37,7 +37,7 @@ Bullet.prototype.hit = function(player) {
     Bullet.COLLISION_DISTANCE;
 };
 
-Bullet.prototype.update = function(players) {
+Bullet.prototype.update = function(clients) {
   this.x_ += Bullet.VELOCITY * Math.sin(this.direction_);
   this.y_ -= Bullet.VELOCITY * Math.cos(this.direction_);
   this.distanceTraveled_ += Bullet.VELOCITY;
@@ -47,9 +47,19 @@ Bullet.prototype.update = function(players) {
     return;
   }
 
+  var players = clients.values();
   for (var i = 0; i < players.length; ++i) {
     if (this.firedBy_ != players[i].id_ && this.hit(players[i])) {
       players[i].health_ -= 1;
+      if (players[i].health_ <= 0) {
+        players[i].x_ = 100;
+        players[i].y_ = 100;
+        players[i].health_ = 10;
+        players[i].score_--;
+        var killingPlayer = clients.get(this.firedBy_);
+        killingPlayer.score_++;
+        clients.set(this.firedBy_, killingPlayer);
+      }
       this.shouldExist_ = false;
       return;
     }

@@ -27,11 +27,7 @@ Drawing.prototype.drawTank = function(isSelf, coords, orientation,
   context.translate(coords[0], coords[1]);
   context.font = '14px Helvetica';
   context.textAlign = 'center';
-  if (isSelf) {
-    context.fillStyle = 'green';
-  } else {
-    context.fillStyle = 'red';
-  }
+  context.fillStyle = 'white';
   context.fillText(name, 0, -50);
   context.restore();
 

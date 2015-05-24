@@ -19,7 +19,7 @@ function Player(name, id) {
   this.turretAngle_ = 0;
 
   this.health_ = 10;
-  this.kills_ = 0;
+  this.score_ = 0;
 };
 
 /**
