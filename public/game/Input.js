@@ -14,11 +14,19 @@ Input.RIGHT = false;
 Input.DOWN = false;
 
 Input.onMouseDown = function(e) {
-  Input.LEFT_CLICK = true;
+  if (e.which == 1) {
+    Input.LEFT_CLICK = true;
+  } else if (e.which == 3) {
+    Input.RIGHT_CLICK = true;
+  }
 };
 
 Input.onMouseUp = function(e) {
-  Input.LEFT_CLICK = false;
+  if (e.which == 1) {
+    Input.LEFT_CLICK = false;
+  } else if (e.which == 3) {
+    Input.RIGHT_CLICK = false;
+  }
 };
 
 Input.onMouseMove = function(e) {
