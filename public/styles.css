@@ -68,9 +68,7 @@ body {
 }
 
 #leaderboard {
-  width: 100%;
-  min-width: 120px;
-  max-width: 200px;
+  width: 200px;
   margin: 0;
   padding: 0;
 }
