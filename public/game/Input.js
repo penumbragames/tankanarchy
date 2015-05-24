@@ -22,8 +22,9 @@ Input.onMouseUp = function(e) {
 
 Input.onMouseMove = function(e) {
   var canvas = document.getElementById('canvas');
-  Input.MOUSE = [e.pageX - canvas.offsetLeft,
-                 e.pageY - canvas.offsetTop];
+  var rect = canvas.getBoundingClientRect();
+  Input.MOUSE = [e.pageX - rect.left,
+                 e.pageY - rect.top];
 };
 
 Input.onKeyDown = function(e) {

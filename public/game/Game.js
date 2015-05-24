@@ -49,11 +49,9 @@ Game.prototype.setID = function(id) {
 Game.prototype.update = function() {
   var self = this.findSelf();
   this.viewPort_.update(self.x_, self.y_);
-
   var turretAngle = Math.atan2(
     Input.MOUSE[1] - Game.HEIGHT / 2,
     Input.MOUSE[0] - Game.WIDTH / 2) + Math.PI / 2;
-
   // Emits an event for the player's movement to the server.
   this.socket_.emit('move-player', {
     id: this.id_,
