@@ -28,7 +28,8 @@ Drawing.TILE = '../data/tile.png';
  *   or a red tank (other player).
  * @param {[number, number]} coords The coordinates of the center of the
  *   tank.
- * @param {number} orientation The orientation of the tank from 0 to 2 * PI.
+ * @param {number} orientation The orientation of the tank from 0 to
+ *   2 * PI.
  * @param {number} turretAngle The angle of the turret from 0 to 2 * PI.
  * @param {string} name The name of the player associated with this tank.
  * @param {number} health The current health of the tank.

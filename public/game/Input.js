@@ -1,5 +1,5 @@
 /**
- * A bunch of static variables to track the state of the keyboard.
+ * This class keeps track of the user input in global variables.
  * Author: Alvin Lin (alvin.lin@stuypulse.com)
  */
 

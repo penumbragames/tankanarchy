@@ -87,15 +87,6 @@ Game.prototype.findSelf = function() {
   return null;
 };
 
-Game.prototype.findPlayer = function(id) {
-  for (var i = 0; i < this.players.length; ++i) {
-    if (this.players[i].id == id) {
-      return this.players[i];
-    }
-    return null;
-  }
-};
-
 Game.prototype.receivePlayers = function(players) {
   this.players = players;
 };
