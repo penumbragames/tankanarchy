@@ -3,12 +3,12 @@ var game = new Game(document.getElementById('canvas'), socket);
 
 function send_nickname() {
   nickname = $('#nickname').val();
-  if (verifyNickname(nickname)) {
+  if (nickname != '' && nickname != null) {
     // Create an instance of the user's player and sends it.
     // The server will associate our socket id with this player and
     // any move commands will be sent with our ID after the server
     // sends back our ID.
-    socket.emit('new player', nickname);
+    socket.emit('new-player', nickname);
     $('#nickname-prompt-container').empty();
     $('#nickname-prompt-container').append(
       $('<span>').addClass('fa fa-2x fa-spinner fa-pulse'));

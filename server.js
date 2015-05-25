@@ -24,8 +24,13 @@ app.get('/*', function(req, res) {
   res.sendFile(__dirname + '/public' + req.path);
 });
 
+// Server side input handler, modifies the state of the players and the
+// game based on the input it receives. Everything runs synchronously with
+// the game loop.
 io.on('connection', function(socket) {
-  socket.on('new player', function(data) {
+  // When a new player joins, the server sends his/her unique ID back so
+  // for future identification purposes.
+  socket.on('new-player', function(data) {
     var x = Math.floor(Math.random() * 2441) + 30;
     var y = Math.floor(Math.random() * 2441) + 30;
     var orientation = Math.random() * 3 * Math.PI;
@@ -38,11 +43,9 @@ io.on('connection', function(socket) {
   });
 
   socket.on('move-player', function(data) {
-    try {
-      var player = clients.get(data.id);
-      player.update(data.keyboardState, data.turretAngle);
-      clients.set(socket.id, player);
-    } catch (err) {}
+    var player = clients.get(data.id);
+    player.update(data.keyboardState, data.turretAngle);
+    clients.set(socket.id, player);
   });
 
   socket.on('fire-bullet', function(data) {
@@ -55,6 +58,7 @@ io.on('connection', function(socket) {
     }
   });
 
+  // TODO: player disconnect explosion animation?
   socket.on('disconnect', function() {
     if (clients.has(socket.id)) {
       clients.remove(socket.id);
@@ -62,6 +66,8 @@ io.on('connection', function(socket) {
   });
 });
 
+// Server side game loop, runs at 60Hz and sends out update packets to all
+// clients every tick.
 setInterval(function() {
   for (var i = 0; i < bullets.length; ++i) {
     if (bullets[i].shouldExist) {
@@ -72,7 +78,7 @@ setInterval(function() {
     }
   }
 
-  while (healthpacks.length < 4) {
+  while (healthpacks.length < 3) {
     healthpacks.push(HealthPack.generateRandomHealthPack());
   }
   for (var i = 0; i < healthpacks.length; ++i) {

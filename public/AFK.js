@@ -1,5 +1,8 @@
 /**
  * Reloads the page if the player has been afk for more than 1 minute.
+ * This essential kicks them from the game since it will fire the socket
+ * disconnect event.
+ * Author: Alvin Lin (alvin.lin@stuypulse.com)
  */
 
 function AFK() {}

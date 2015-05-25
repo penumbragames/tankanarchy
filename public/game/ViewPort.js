@@ -16,6 +16,7 @@ ViewPort.prototype.update = function(x, y) {
   this.selfCoords = [x, y];
 };
 
+// TODO: This might need to be fixed.
 ViewPort.prototype.getVisibleObjects = function(objects) {
   var onScreen = [];
   for (var i = 0; i < objects.length; i++) {

@@ -124,6 +124,7 @@ Game.prototype.draw = function() {
       this.viewPort.toCanvasCoords(this.healthPacks[i]));
   }
 
+  // TODO: only render visible players
   var visiblePlayers = this.players;
   for (var i = 0; i < visiblePlayers.length; ++i) {
     this.drawing.drawTank(

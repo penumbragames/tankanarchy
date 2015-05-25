@@ -3,6 +3,7 @@
  * Author: Kenneth Li (kennethli.3470@gmail.com)
  */
 
+// TODO: implement this in heatseeker branch
 function HeatSeeker(x, y, direction, target, firedBy) {
   this.x = x;
   this.y = y;
