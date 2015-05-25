@@ -58,6 +58,7 @@ Bullet.prototype.update = function(clients) {
     if (this.firedBy != players[i].id && this.hit(players[i])) {
       players[i].health -= 1;
       if (players[i].health <= 0) {
+        players[i].respawn();
         var killingPlayer = clients.get(this.firedBy);
         killingPlayer.score++;
         clients.set(this.firedBy, killingPlayer);

@@ -41,17 +41,21 @@ io.on('connection', function(socket) {
 
   socket.on('move-player', function(data) {
     var player = clients.get(data.id);
-    player.update(data.keyboardState, data.turretAngle);
-    clients.set(socket.id, player);
+    if (player != undefined && player != null) {
+      player.update(data.keyboardState, data.turretAngle);
+      clients.set(socket.id, player);
+    }
   });
 
   socket.on('fire-bullet', function(data) {
     var player = clients.get(data.firedBy);
-    var time = (new Date()).getTime();
-    if (time > player.lastShotTime + Player.SHOT_COOLDOWN) {
-      bullets.push(new Bullet(player.x, player.y,
-                              player.turretAngle, player.id));
-      player.lastShotTime = time;
+    if (player != undefined && player != null) {
+      var time = (new Date()).getTime();
+      if (time > player.lastShotTime + Player.SHOT_COOLDOWN) {
+        bullets.push(new Bullet(player.x, player.y,
+                                player.turretAngle, player.id));
+        player.lastShotTime = time;
+      }
     }
   });
 

@@ -54,14 +54,6 @@ Player.generateNewPlayer = function(name, id) {
  * for setting the tank turret.
  */
 Player.prototype.update = function(keyboardState, turretAngle) {
-  if (this.health <= 0) {
-    var point = Util.getRandomWorldPoint();
-    this.x = point[0];
-    this.y = point[1];
-    this.health = Player.MAX_HEALTH;
-    this.score--;
-  }
-
   if (keyboardState.up) {
     this.x += Player.VELOCITY * Math.sin(this.orientation);
     this.y -= Player.VELOCITY * Math.cos(this.orientation);
@@ -82,6 +74,17 @@ Player.prototype.update = function(keyboardState, turretAngle) {
   this.y = boundedCoord[1];
 
   this.turretAngle = turretAngle;
+};
+
+/**
+ * Handles the respawning of the player when killed.
+ */
+Player.prototype.respawn = function() {
+  var point = Util.getRandomWorldPoint();
+  this.x = point[0];
+  this.y = point[1];
+  this.health = Player.MAX_HEALTH;
+  this.score--;
 };
 
 exports.Player = Player;

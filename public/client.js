@@ -1,6 +1,10 @@
 var socket = io();
 var game = new Game(document.getElementById('canvas'), socket);
 
+$(document).ready(function() {
+  $('#name-input').focus();
+});;
+
 function send_name() {
   name = $('#name-input').val();
   if (name != '' && name != null) {
