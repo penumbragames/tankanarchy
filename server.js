@@ -48,10 +48,10 @@ io.on('connection', function(socket) {
   socket.on('fire-bullet', function(data) {
     var player = clients.get(data.firedBy);
     var time = (new Date()).getTime();
-    if (time > player.lastShotTime_ + Player.SHOT_COOLDOWN) {
-      bullets.push(new Bullet(player.x_, player.y_,
-                              player.turretAngle_, player.id_));
-      player.lastShotTime_ = time;
+    if (time > player.lastShotTime + Player.SHOT_COOLDOWN) {
+      bullets.push(new Bullet(player.x, player.y,
+                              player.turretAngle, player.id));
+      player.lastShotTime = time;
     }
   });
 
@@ -64,7 +64,7 @@ io.on('connection', function(socket) {
 
 setInterval(function() {
   for (var i = 0; i < bullets.length; ++i) {
-    if (bullets[i].shouldExist()) {
+    if (bullets[i].shouldExist) {
       bullets[i].update(clients);
     } else {
       bullets.splice(i, 1);
@@ -76,7 +76,7 @@ setInterval(function() {
     healthpacks.push(HealthPack.generateRandomHealthPack());
   }
   for (var i = 0; i < healthpacks.length; ++i) {
-    if (healthpacks[i].shouldExist()) {
+    if (healthpacks[i].shouldExist) {
       healthpacks[i].update(clients.values());
     } else {
       healthpacks.splice(i, 1);

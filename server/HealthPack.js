@@ -9,9 +9,9 @@
  * @param {number} y The starting y-coordinate of the health pack (absolute).
  */
 function HealthPack(x, y) {
-  this.x_ = x;
-  this.y_ = y;
-  this.shouldExist_ = true;
+  this.x = x;
+  this.y = y;
+  this.shouldExist = true;
 };
 
 HealthPack.PICKUP_DISTANCE = 40;
@@ -22,23 +22,19 @@ HealthPack.generateRandomHealthPack = function() {
 };
 
 HealthPack.prototype.isValidPickup = function(player) {
-  return player.health_ < 10 &&
-    Math.abs(player.x_ - this.x_) + Math.abs(player.y_ - this.y_) <
+  return player.health < 10 &&
+    Math.abs(player.x - this.x) + Math.abs(player.y - this.y) <
     HealthPack.PICKUP_DISTANCE;
 };
 
 HealthPack.prototype.update = function(players) {
   for (var i = 0; i < players.length; ++i) {
     if (this.isValidPickup(players[i])) {
-      players[i].health_ = Math.min(players[i].health_ + 2, 10);
-      this.shouldExist_ = false;
+      players[i].health = Math.min(players[i].health + 2, 10);
+      this.shouldExist = false;
       return;
     }
   }
-};
-
-HealthPack.prototype.shouldExist = function() {
-  return this.shouldExist_;
 };
 
 exports.HealthPack = HealthPack;

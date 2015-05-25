@@ -4,17 +4,22 @@
  */
 
 function Environment(viewPort, drawing) {
-  this.viewPort_ = viewPort;
-  this.drawing_ = drawing;
+  this.viewPort = viewPort;
+  this.drawing = drawing;
 };
 
+Environment.MIN = 0;
+Environment.MAX = 2500;
+
 Environment.prototype.draw = function() {
-  var center = this.viewPort_.selfCoords_;
-  this.drawing_.drawTiles(
-    this.viewPort_.toCanvasCoords({
-      x_: Math.max(Math.floor((center[0] - Game.WIDTH / 2) / 100) * 100, 0),
-      y_: Math.max(Math.floor((center[1] - Game.HEIGHT / 2) / 100) * 100, 0)
+  var center = this.viewPort.selfCoords;
+  this.drawing.drawTiles(
+    this.viewPort.toCanvasCoords({
+      x: Math.max(Math.floor((center[0] - Game.WIDTH / 2) / 100) * 100, 0),
+      y: Math.max(Math.floor((center[1] - Game.HEIGHT / 2) / 100) * 100, 0)
     }),
-    this.viewPort_.toCanvasCoords({x_: 2500, y_: 2500})
+    this.viewPort.toCanvasCoords(
+      {x: Environment.MAX, y: Environment.MAX}
+    )
   );
 };

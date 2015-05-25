@@ -5,8 +5,16 @@
  */
 
 function Drawing(context) {
-  this.context_ = context;
+  this.context = context;
 };
+
+Drawing.SELF_TANK = '../data/self_tank.png';
+Drawing.SELF_TURRET = '../data/self_turret.png';
+Drawing.OTHER_TANK = '../data/other_tank.png';
+Drawing.OTHER_TURRET = '../data/other_turret.png';
+Drawing.BULLET = '../data/bullet.png';
+Drawing.HEALTHPACK = '../data/healthPack.png';
+Drawing.TILE = '../data/tile.png';
 
 /**
  * Draws a tank to the canvas.
@@ -21,52 +29,50 @@ function Drawing(context) {
  */
 Drawing.prototype.drawTank = function(isSelf, coords, orientation,
                                       turretAngle, name, health) {
-  var context = this.context_;
+  this.context.save();
+  this.context.translate(coords[0], coords[1]);
+  this.context.font = '14px Helvetica';
+  this.context.textAlign = 'center';
+  this.context.fillStyle = 'black';
+  this.context.fillText(name, 0, -50);
+  this.context.restore();
 
-  context.save();
-  context.translate(coords[0], coords[1]);
-  context.font = '14px Helvetica';
-  context.textAlign = 'center';
-  context.fillStyle = 'black';
-  context.fillText(name, 0, -50);
-  context.restore();
-
-  context.save();
-  context.translate(coords[0], coords[1]);
+  this.context.save();
+  this.context.translate(coords[0], coords[1]);
   for (var i = 0; i < 10; i++) {
     if (i < health) {
-      context.fillStyle = 'green';
-      context.fillRect(-25 + 5 * i, -42, 5, 4);
+      this.context.fillStyle = 'green';
+      this.context.fillRect(-25 + 5 * i, -42, 5, 4);
     } else {
-      context.fillStyle = 'red';
-      context.fillRect(-25 + 5 * i, -42, 5, 4);
+      this.context.fillStyle = 'red';
+      this.context.fillRect(-25 + 5 * i, -42, 5, 4);
     }
   }     
-  context.restore();
+  this.context.restore();
 
-  context.save();
-  context.translate(coords[0], coords[1]);
-  context.rotate(orientation);
+  this.context.save();
+  this.context.translate(coords[0], coords[1]);
+  this.context.rotate(orientation);
   var tank = new Image();
   if (isSelf) {
-    tank.src = '../data/self_tank.png';
+    tank.src = Drawing.SELF_TANK;
   } else {
-    tank.src = '../data/other_tank.png';
+    tank.src = Drawing.OTHER_TANK;
   }
-  context.drawImage(tank, -25, -30);
-  context.restore();
+  this.context.drawImage(tank, -25, -30);
+  this.context.restore();
 
-  context.save();
-  context.translate(coords[0], coords[1]);
-  context.rotate(turretAngle);
+  this.context.save();
+  this.context.translate(coords[0], coords[1]);
+  this.context.rotate(turretAngle);
   var turret = new Image();
   if (isSelf) {
-    turret.src = '../data/self_tank_turret.png';
+    turret.src = Drawing.SELF_TURRET;
   } else {
-    turret.src = '../data/other_tank_turret.png';
+    turret.src = Drawing.OTHER_TURRET;
   }
-  context.drawImage(turret, -25, -30);
-  context.restore();
+  this.context.drawImage(turret, -25, -30);
+  this.context.restore();
 };
 
 /** 
@@ -76,34 +82,13 @@ Drawing.prototype.drawTank = function(isSelf, coords, orientation,
  * @param {number} direction The direction of the bullet from 0 to 2 * PI
  */
 Drawing.prototype.drawBullet = function(coords, direction) {
- 
-  var context = this.context_;
-
-  context.save();
-  context.translate(coords[0], coords[1]);
-  context.rotate(direction);
+  this.context.save();
+  this.context.translate(coords[0], coords[1]);
+  this.context.rotate(direction);
   var bullet = new Image();
-  bullet.src = '../data/bullet.png';
-  context.drawImage(bullet, -15, -15);
-  context.restore();
-}
-
-/**
- * Draws a texture tile.
- * @param {[number, number]} coords The coordinates of the top left corner
- *   of the tile.
- */
-Drawing.prototype.drawTiles = function(coords, edges) {
-  var context = this.context_;
-  context.save();
-  var tile = new Image();
-  tile.src = '../data/tile.png';
-  for (var x = coords[0]; x < edges[0]; x += 100) {
-    for (var y = coords[1]; y < edges[1]; y += 100) {
-      context.drawImage(tile, x, y);
-    }
-  }
-  context.restore();
+  bullet.src = Drawing.BULLET;
+  this.context.drawImage(bullet, -15, -15);
+  this.context.restore();
 }
 
 /**
@@ -112,11 +97,27 @@ Drawing.prototype.drawTiles = function(coords, edges) {
  *   pack.
  */
 Drawing.prototype.drawHealthPack = function(coords) {
-  var context = this.context_;
-  context.save();
-  context.translate(coords[0], coords[1]);
+  this.context.save();
+  this.context.translate(coords[0], coords[1]);
   var healthPack = new Image();
-  healthPack.src = '../data/healthPack.png';
-  context.drawImage(healthPack, -15, -15);
-  context.restore();
+  healthPack.src = Drawing.HEALTHPACK;
+  this.context.drawImage(healthPack, -15, -15);
+  this.context.restore();
+}
+
+/**
+ * Draws a background tile.
+ * @param {[number, number]} coords The coordinates of the top left corner
+ *   of the tile.
+ */
+Drawing.prototype.drawTiles = function(coords, edges) {
+  this.context.save();
+  var tile = new Image();
+  tile.src = Drawing.TILE;
+  for (var x = coords[0]; x < edges[0]; x += 100) {
+    for (var y = coords[1]; y < edges[1]; y += 100) {
+      this.context.drawImage(tile, x, y);
+    }
+  }
+  this.context.restore();
 }

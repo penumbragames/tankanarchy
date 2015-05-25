@@ -4,24 +4,24 @@
  */
 
 function ViewPort() {
-  this.selfCoords_ = [];
-  this.selfId_ = null;
+  this.selfCoords = [];
+  this.selfId = null;
 };
 
 ViewPort.prototype.setID = function(id) {
-  this.selfId_ = id;
+  this.selfId = id;
 };
 
 ViewPort.prototype.update = function(x, y) {
-  this.selfCoords_ = [x, y];
+  this.selfCoords = [x, y];
 };
 
 ViewPort.prototype.getVisibleObjects = function(objects) {
   var onScreen = [];
   for (var i = 0; i < objects.length; i++) {
     var object = objects[i];
-    if (Math.abs(object.x_ - this.selfCoords_[0]) < 450 &&
-        Math.abs(object.y_ - this.selfCoords_[1]) < 350) {
+    if (Math.abs(object.x - this.selfCoords[0]) < 450 &&
+        Math.abs(object.y - this.selfCoords[1]) < 350) {
       onScreen.push(object);
     }
   }
@@ -29,12 +29,12 @@ ViewPort.prototype.getVisibleObjects = function(objects) {
 };
 
 ViewPort.prototype.toCanvasCoords = function(object) {
-  if (object.id_ == this.selfId_) {
+  if (object.id == this.selfId) {
     return [Game.WIDTH / 2, Game.HEIGHT / 2];
   } else {
-    var translateX = this.selfCoords_[0] - Game.WIDTH / 2;
-    var translateY = this.selfCoords_[1] - Game.HEIGHT / 2;
-    return [object.x_ - translateX,
-            object.y_ - translateY];
+    var translateX = this.selfCoords[0] - Game.WIDTH / 2;
+    var translateY = this.selfCoords[1] - Game.HEIGHT / 2;
+    return [object.x - translateX,
+            object.y - translateY];
   }
 };
