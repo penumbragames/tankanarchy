@@ -3,6 +3,9 @@
  * Author: Kenneth Li (kennethli.3470@gmail.com)
  */
 
+var Util = require('./Util').Util;
+var Constants = require('./Constants').Constants;
+
 // TODO: implement this in heatseeker branch
 function HeatSeeker(x, y, direction, target, firedBy) {
   this.x = x;
@@ -19,14 +22,15 @@ HeatSeeker.TRAVEL_DISTANCE = 600;
 HeatSeeker.COLLISION_DISTANCE = 25;
 
 HeatSeeker.prototype.hit = function(player) {
-  return Math.abs(player.x - this.x) + Math.abs(player.y - this.y) <
+  return Util.getManhattanDistance(this.x, this.y, player.x, player.y) <
     HeatSeeker.COLLISION_DISTANCE;
 };
 
 HeatSeeker.prototype.update = function(clients) {
   var delta_direction = this.direction - Math.atan2(this.target.y - this.y,
                                                      this.target.x - this.x);
-  this.direction += Math.min(Math.PI * 0.5, Math.max(Math.PI * 0.25, delta_direction / 2));
+  this.direction += Math.min(Math.PI * 0.5,
+                             Math.max(Math.PI * 0.25, delta_direction / 2));
   
   this.x += Bullet.VELOCITY * Math.sin(this.direction);
   this.y += Bullet.VELOCITY * Math.cos(this.direction);

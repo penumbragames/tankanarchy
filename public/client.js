@@ -1,24 +1,26 @@
 var socket = io();
 var game = new Game(document.getElementById('canvas'), socket);
 
-function send_nickname() {
-  nickname = $('#nickname').val();
-  if (nickname != '' && nickname != null) {
+function send_name() {
+  name = $('#name-input').val();
+  if (name != '' && name != null) {
     // Create an instance of the user's player and sends it.
     // The server will associate our socket id with this player and
     // any move commands will be sent with our ID after the server
     // sends back our ID.
-    socket.emit('new-player', nickname);
-    $('#nickname-prompt-container').empty();
-    $('#nickname-prompt-container').append(
+    socket.emit('new-player', {
+      name: name
+    });
+    $('#name-prompt-container').empty();
+    $('#name-prompt-container').append(
       $('<span>').addClass('fa fa-2x fa-spinner fa-pulse'));
   } else {
-    window.alert('Invalid nickname.');
+    window.alert('Invalid name.');
   }
   return false;
 };
-$('#nickname-form').submit(send_nickname);
-$('#nickname-submit').click(send_nickname);
+$('#name-form').submit(send_name);
+$('#name-submit').click(send_name);
 
 socket.on('send-id', function(data) {
   // This is fired when the server receives the instance of our player.
@@ -26,7 +28,7 @@ socket.on('send-id', function(data) {
   // start the game.
   game.setID(data.id);
   game.receivePlayers(data.players);
-  $('#nickname-prompt-overlay').fadeOut(500);
+  $('#name-prompt-overlay').fadeOut(500);
   init();
   animate();
 });

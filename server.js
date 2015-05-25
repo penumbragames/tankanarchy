@@ -31,10 +31,7 @@ io.on('connection', function(socket) {
   // When a new player joins, the server sends his/her unique ID back so
   // for future identification purposes.
   socket.on('new-player', function(data) {
-    var x = Math.floor(Math.random() * 2441) + 30;
-    var y = Math.floor(Math.random() * 2441) + 30;
-    var orientation = Math.random() * 3 * Math.PI;
-    var player = new Player(x, y, orientation, data, socket.id);
+    var player = Player.generateNewPlayer(data.name, socket.id);
     clients.set(socket.id, player);
     socket.emit('send-id', {
       id: socket.id,

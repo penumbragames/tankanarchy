@@ -8,6 +8,12 @@ function Drawing(context) {
   this.context = context;
 };
 
+Drawing.NAME_FONT = '14px Helvetica';
+Drawing.NAME_COLOR = 'black';
+
+Drawing.HP_COLOR = 'green';
+Drawing.HP_MISSING_COLOR = 'red';
+
 Drawing.SELF_TANK = '../data/self_tank.png';
 Drawing.SELF_TURRET = '../data/self_turret.png';
 Drawing.OTHER_TANK = '../data/other_tank.png';
@@ -31,9 +37,9 @@ Drawing.prototype.drawTank = function(isSelf, coords, orientation,
                                       turretAngle, name, health) {
   this.context.save();
   this.context.translate(coords[0], coords[1]);
-  this.context.font = '14px Helvetica';
   this.context.textAlign = 'center';
-  this.context.fillStyle = 'black';
+  this.context.font = Drawing.NAME_FONT;
+  this.context.fillStyle = Drawing.NAME_COLOR;
   this.context.fillText(name, 0, -50);
   this.context.restore();
 
@@ -41,10 +47,10 @@ Drawing.prototype.drawTank = function(isSelf, coords, orientation,
   this.context.translate(coords[0], coords[1]);
   for (var i = 0; i < 10; i++) {
     if (i < health) {
-      this.context.fillStyle = 'green';
+      this.context.fillStyle = Drawing.HP_COLOR;
       this.context.fillRect(-25 + 5 * i, -42, 5, 4);
     } else {
-      this.context.fillStyle = 'red';
+      this.context.fillStyle = Drawing.HP_MISSING_COLOR;
       this.context.fillRect(-25 + 5 * i, -42, 5, 4);
     }
   }     

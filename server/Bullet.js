@@ -3,6 +3,9 @@
  * Author: Alvin Lin (alvin.lin@stuypulse.com)
  */
 
+var Util = require('./Util').Util;
+var Constants = require('./Constants').Constants;
+
 /**
  * Constructor for a bullet.
  * @param {number} x The starting x-coordinate of the bullet (absolute).
@@ -21,12 +24,15 @@ function Bullet(x, y, direction, firedBy) {
   this.shouldExist = true;
 };
 
-Bullet.VELOCITY = 15;
+Bullet.VELOCITY = 20;
 Bullet.TRAVEL_DISTANCE = 800;
 Bullet.COLLISION_DISTANCE = 25;
 
+/**
+ * Returns true if this bullet has collided with the given player.
+ */
 Bullet.prototype.hit = function(player) {
-  return Math.abs(player.x - this.x) + Math.abs(player.y - this.y) <
+  return Util.getManhattanDistance(this.x, this.y, player.x, player.y) <
     Bullet.COLLISION_DISTANCE;
 };
 

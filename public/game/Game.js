@@ -37,7 +37,9 @@ Game.prototype.update = function() {
   var turretAngle = Math.atan2(
     Input.MOUSE[1] - Game.HEIGHT / 2,
     Input.MOUSE[0] - Game.WIDTH / 2) + Math.PI / 2;
-  // Emits an event for the player's movement to the server.
+
+  // Emits an event for the containing the player's intention to move
+  // to the server.
   this.socket.emit('move-player', {
     id: this.id,
     keyboardState: {
@@ -56,11 +58,9 @@ Game.prototype.update = function() {
   if (Input.LEFT_CLICK) {
     var time = (new Date).getTime();
     if (time > this.lastShotTime + Game.SHOOTING_INTERVAL) {
-
       var self = this.findSelf();
       this.socket.emit('fire-bullet', {
-        firedBy: this.id,
-        angle: turretAngle
+        firedBy: this.id
       });
       this.lastShotTime = time;
     }
