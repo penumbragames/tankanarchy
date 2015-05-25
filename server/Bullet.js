@@ -37,6 +37,7 @@ Bullet.prototype.hit = function(player) {
 };
 
 /**
+ * Updates this bullet and checks for collision with any player.
  * We reverse the coordinate system and apply sin(direction) to x because
  * canvas in HTML will use up as its '0' reference point while JS math uses
  * left as its '0' reference point.

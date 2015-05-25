@@ -5,6 +5,9 @@
  * Author: Alvin Lin (alvin.lin@stuypulse.com)
  */
 
+/**
+ * Empty constructor for the Constants class.
+ */
 function Constants() {}
 
 /**

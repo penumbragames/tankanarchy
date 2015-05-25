@@ -10,10 +10,10 @@ var Constants = require('./Constants').Constants;
  * Constructor for a Player.
  * @param {number} x X-coordinate to generate the player at.
  * @param {number} y Y-coordinate to generate the player at.
- * @param {number} orientation Direction to face the player from 0 to 2PI.
+ * @param {number} orientation Direction to face the player from 0 to 2 * PI.
  * @param {string} name The display name of the player.
  * @param {string} id The socket ID of the client associated with this
- *   player
+ *   player.
  */
 function Player(x, y, orientation, name, id) {
   this.x = x;
@@ -39,6 +39,9 @@ Player.MAX_HEALTH = 10;
 
 /**
  * Returns a new Player object given a name and id.
+ * @param {string} name The display name of the player.
+ * @param {string} id The socket ID of the client associated with this
+ *   player.
  */
 Player.generateNewPlayer = function(name, id) {
   var point = Util.getRandomWorldPoint();
@@ -46,6 +49,10 @@ Player.generateNewPlayer = function(name, id) {
   return new Player(point[0], point[1], orientation, name, id);
 };
 
+/**
+ * Updates this player given the the client's keyboard state and mouse angle
+ * for setting the tank turret.
+ */
 Player.prototype.update = function(keyboardState, turretAngle) {
   if (this.health <= 0) {
     var point = Util.getRandomWorldPoint();

@@ -18,17 +18,27 @@ function HealthPack(x, y) {
 
 HealthPack.PICKUP_DISTANCE = 40;
 
+/**
+ * Generates and returns a randomly placed health pack.
+ */
 HealthPack.generateRandomHealthPack = function() {
   var point = Util.getRandomWorldPoint();
   return new HealthPack(point[0], point[1]);
 };
 
+/**
+ * Returns true if the given player can pick up this health pack.
+ */
 HealthPack.prototype.isValidPickup = function(player) {
   return player.health < 10 &&
     Util.getManhattanDistance(this.x, this.y, player.x, player.y) <
     HealthPack.PICKUP_DISTANCE;
 };
 
+/**
+ * Updates this health pack based on the position of all the players on the
+ * server.
+ */
 HealthPack.prototype.update = function(players) {
   for (var i = 0; i < players.length; ++i) {
     if (this.isValidPickup(players[i])) {
