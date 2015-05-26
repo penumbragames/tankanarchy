@@ -5,8 +5,8 @@ in a single large world. Anyone who logs on can battle anyone else that's online
 
 Technical:
   - Made with NodeJS and Socket.IO
-  - No game information is stored client-side. All calculations are managed on 
-  the server.
+  - Only positional information for rendering is stored client-side. All
+  calculations are managed on the server.
   - The states of all the objects are all instantiated, updated, and managed
   server side.
   - The client merely sends intents to the server, which are processed. The
