@@ -92,6 +92,8 @@ setInterval(function() {
       i--;
     }
   }
+
+  // Sends update packets every client.
   io.sockets.emit('update-players', clients.values());
   io.sockets.emit('update-bullets', bullets);
   io.sockets.emit('update-healthpacks', healthpacks);
