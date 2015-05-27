@@ -1,6 +1,6 @@
 /**
  * Stores the state of a heat-seeking projectile on the server.
- * Author: Kenneth Li (kennethli.3470@gmail.com)
+ * @author Kenneth Li <kennethli.3470@gmail.com>
  */
 
 var Util = require('./Util').Util;

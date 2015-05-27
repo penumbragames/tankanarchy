@@ -1,12 +1,13 @@
 /**
  * A class encapsulating a health pack.
- * Author: Alvin Lin (alvin.lin@stuypulse.com)
+ * @author Alvin Lin <alvin.lin@stuypulse.com>
  */
 
 var Util = require('./Util').Util;
 
 /**
  * Constructor for a health pack.
+ * @constructor
  * @param {number} x The starting x-coordinate of the health pack (absolute).
  * @param {number} y The starting y-coordinate of the health pack (absolute).
  */
@@ -23,6 +24,7 @@ HealthPack.PICKUP_DISTANCE = 30;
 
 /**
  * Generates and returns a randomly placed health pack.
+ * @return {HealthPack}
  */
 HealthPack.generateRandomHealthPack = function() {
   var point = Util.getRandomWorldPoint();
@@ -33,6 +35,7 @@ HealthPack.generateRandomHealthPack = function() {
  * Returns true if the given player can pick up this health pack.
  * We square the pickup distance to avoid doing a square root operation
  * when calculating the distance.
+ * @return {boolean}
  */
 HealthPack.prototype.isValidPickup = function(player) {
   return player.health < 10 &&
@@ -43,6 +46,7 @@ HealthPack.prototype.isValidPickup = function(player) {
 /**
  * Updates this health pack based on the position of all the players on the
  * server.
+ * @param {[Player]} players An array of currently active players.
  */
 HealthPack.prototype.update = function(players) {
   for (var i = 0; i < players.length; ++i) {

@@ -7,6 +7,7 @@ var Util = require('./Util').Util;
 
 /**
  * Constructor for a bullet.
+ * @constructor
  * @param {number} x The starting x-coordinate of the bullet (absolute).
  * @param {number} y The starting y-coordinate of the bullet (absolute).
  * @param {number} direction The direction the bullet will travel in
@@ -37,6 +38,8 @@ Bullet.COLLISION_DISTANCE = 30;
  * Returns true if this bullet has collided with the given player.
  * We square the collision distance to avoid using any square roots
  * for the distance formula.
+ * @param {Object} player The player to check collision against.
+ * @return {boolean}
  */
 Bullet.prototype.hit = function(player) {
   return Util.getEuclideanDistance2(this.x, this.y, player.x, player.y) <
@@ -49,6 +52,8 @@ Bullet.prototype.hit = function(player) {
  * canvas in HTML will use up as its '0' reference point while JS math uses
  * left as its '0' reference point.
  * this.direction always is stored in radians.
+ * @param {Hashmap} clients The Hashmap of active IDs and players stored on
+ *   the server.
  */
 Bullet.prototype.update = function(clients) {
   this.x += Bullet.VELOCITY * Math.sin(this.direction);
