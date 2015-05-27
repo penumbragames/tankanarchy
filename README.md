@@ -5,12 +5,10 @@ in a single large world. Anyone who logs on can battle anyone else that's online
 
 Technical:
   - Made with NodeJS and Socket.IO
-  - Only positional information for rendering is stored client-side. All
-  calculations are managed on the server.
   - The states of all the objects are all instantiated, updated, and managed
-  server side.
+  server side. All calculations are done server side.
   - The client merely sends intents to the server, which are processed. The
-  server returns a series of JSON Objects that preserve the state of the world
-  to each client.
+  server returns a series of JSON Objects that hold the state of the world to
+  the client for rendering.
 
 &copy; 2015 Kenneth Li and Alvin Lin
