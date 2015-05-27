@@ -55,7 +55,8 @@ Bullet.prototype.update = function(clients) {
   this.y -= Bullet.VELOCITY * Math.cos(this.direction);
   this.distanceTraveled += Bullet.VELOCITY;
 
-  if (this.distanceTraveled > Bullet.MAX_TRAVEL_DISTANCE) {
+  if (this.distanceTraveled > Bullet.MAX_TRAVEL_DISTANCE ||
+      !Util.inWorld(this.x, this.y)) {
     this.shouldExist = false;
     return;
   }

@@ -80,9 +80,8 @@ Util.bound = function(val, min, max) {
  * @param {number] y The y-coordinate of the given point.
  */
 Util.inWorld = function(x, y) {
-  return
-    Util.inBound(x, Constants.WORLD_MIN, Constants.WORLD_MAX) &&
-    Util.inBound(y, Constants.WORLD_MIN, Constants.WORLD_MAX);
+  return Util.inBound(x, Constants.WORLD_MIN, Constants.WORLD_MAX) &&
+      Util.inBound(y, Constants.WORLD_MIN, Constants.WORLD_MAX);
 };
 
 /**
