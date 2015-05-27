@@ -37,16 +37,21 @@ Input.onMouseMove = function(e) {
 };
 
 Input.onKeyDown = function(e) {
+  console.log(e.keyCode);
   switch (e.keyCode) {
+    case 37:
     case 65:
       Input.LEFT = true;
       break;
+    case 38:
     case 87:
       Input.UP = true;
       break;
+    case 39:
     case 68:
       Input.RIGHT = true;
       break;
+    case 40:
     case 83:
       Input.DOWN = true;
       break;
@@ -55,15 +60,19 @@ Input.onKeyDown = function(e) {
 
 Input.onKeyUp = function(e) {
   switch (e.keyCode) {
+    case 37:
     case 65:
       Input.LEFT = false;
       break;
+    case 38:
     case 87:
       Input.UP = false;
       break;
+    case 39:
     case 68:
       Input.RIGHT = false;
       break;
+    case 40:
     case 83:
       Input.DOWN = false;
       break;
