@@ -3,6 +3,7 @@
  * Author: Alvin Lin (alvin.lin@stuypulse.com)
  */
 
+var Bullet = require('./Bullet').Bullet;
 var Util = require('./Util').Util;
 
 /**
@@ -24,6 +25,10 @@ function Player(x, y, orientation, name, id) {
   this.id = id;
 
   this.health = Player.MAX_HEALTH;
+  /**
+   * this.powerups is a JSON Object of the format:
+   * { 'powerup' : expires; 'powerup' : expires }
+   */
   this.powerups = {};
   this.score = 0;
   this.lastShotTime = 0;
@@ -54,7 +59,8 @@ Player.generateNewPlayer = function(name, id) {
 
 /**
  * Updates this player given the the client's keyboard state and mouse angle
- * for setting the tank turret.
+ * for setting the tank turret. Also updates the state of the powerups and
+ * expires them if necessary.
  */
 Player.prototype.update = function(keyboardState, turretAngle) {
   if (keyboardState.up) {
@@ -77,10 +83,54 @@ Player.prototype.update = function(keyboardState, turretAngle) {
   this.y = boundedCoord[1];
 
   this.turretAngle = turretAngle;
+
+  for (var powerup in this.powerups) {
+    if ((new Date()).getTime() > this.powerups[powerup]) {
+      delete this.powerups[powerup];
+    }
+  }
+};
+
+/**
+ * Applies a powerup to this player.
+ * @param {string} name The name of the powerup to apply.
+ * @param {number} duration The amount of time in milliseconds to apply the
+ *   powerup for.
+ */
+Player.prototype.applyPowerup = function(name, duration) {
+  this.powerups[name] = (new Date()).getTime() + duration;
+};
+
+/**
+ * Returns a boolean indicating if the player's shot cooldown has passed and
+ * the player can shoot.
+ */
+Player.prototype.canShoot = function() {
+  return (new Date()).getTime() > this.lastShotTime;
+};
+
+/**
+ * Returns an array containing bullets that the player has fired, factoring
+ * in all powerups. Assumes the shot cooldown has passed and the player CAN
+ * shoot. Resets lastShotTime.
+ */
+Player.prototype.getBulletsShot = function() {
+  bullets = [new Bullet(this.x, this.y, this.turretAngle, this.id)];
+  if (this.powerups.shotgun3 != null ||
+      this.powerups.shotgun3 != undefined) {
+    bullets.push(
+      new Bullet(this.x, this.y, this.turretAngle - Math.PI / 6, this.id));
+    bullets.push(
+      new Bullet(this.x, this.y, this.turretAngle + Math.PI / 6, this.id));
+  }
+  this.lastShotTime = (new Date()).getTime();
+  return bullets;
 };
 
 /**
  * Handles the respawning of the player when killed.
+ * TODO: player respawn explosion animation.
+ * TODO: smarter respawn
  */
 Player.prototype.respawn = function() {
   var point = Util.getRandomWorldPoint();

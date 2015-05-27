@@ -37,7 +37,6 @@ Input.onMouseMove = function(e) {
 };
 
 Input.onKeyDown = function(e) {
-  console.log(e.keyCode);
   switch (e.keyCode) {
     case 37:
     case 65:

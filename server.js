@@ -47,15 +47,11 @@ io.on('connection', function(socket) {
     }
   });
 
+  // TODO: player shooting sound and explosion animations
   socket.on('fire-bullet', function(data) {
     var player = clients.get(data.firedBy);
-    if (player != undefined && player != null) {
-      var time = (new Date()).getTime();
-      if (time > player.lastShotTime + Player.SHOT_COOLDOWN) {
-        bullets.push(new Bullet(player.x, player.y,
-                                player.turretAngle, player.id));
-        player.lastShotTime = time;
-      }
+    if (player != undefined && player != null && player.canShoot()) {
+      bullets = bullets.concat(player.getBulletsShot());
     }
   });
 
