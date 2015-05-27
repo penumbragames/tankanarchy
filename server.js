@@ -55,6 +55,11 @@ io.on('connection', function(socket) {
     }
   });
 
+  socket.on('hack shotgun', function(data) {
+    var player = clients.get(socket.id);
+    player.applyPowerup('shotgun3', 10000);
+  });
+
   // TODO: player disconnect explosion animation?
   socket.on('disconnect', function() {
     if (clients.has(socket.id)) {
@@ -75,6 +80,7 @@ setInterval(function() {
     }
   }
 
+  // Ensure that there are always 3 healthpacks on the map.
   while (healthpacks.length < 3) {
     healthpacks.push(HealthPack.generateRandomHealthPack());
   }

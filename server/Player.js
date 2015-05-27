@@ -119,9 +119,9 @@ Player.prototype.getBulletsShot = function() {
   if (this.powerups.shotgun3 != null ||
       this.powerups.shotgun3 != undefined) {
     bullets.push(
-      new Bullet(this.x, this.y, this.turretAngle - Math.PI / 6, this.id));
+      new Bullet(this.x, this.y, this.turretAngle - Math.PI / 9, this.id));
     bullets.push(
-      new Bullet(this.x, this.y, this.turretAngle + Math.PI / 6, this.id));
+      new Bullet(this.x, this.y, this.turretAngle + Math.PI / 9, this.id));
   }
   this.lastShotTime = (new Date()).getTime();
   return bullets;
