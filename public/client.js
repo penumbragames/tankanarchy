@@ -19,7 +19,7 @@ function send_name() {
     $('#name-prompt-container').append(
       $('<span>').addClass('fa fa-2x fa-spinner fa-pulse'));
   } else {
-    window.alert('Invalid name.');
+    window.alert('Your name cannot be blank or over 20 characters.');
   }
   return false;
 };
