@@ -4,7 +4,6 @@
  */
 
 var Util = require('./Util').Util;
-var Constants = require('./Constants').Constants;
 
 /**
  * Constructor for a Player.
@@ -25,12 +24,16 @@ function Player(x, y, orientation, name, id) {
   this.id = id;
 
   this.health = Player.MAX_HEALTH;
+  this.powerups = {};
   this.score = 0;
   this.lastShotTime = 0;
 };
 
 /**
  * TURN_RATE is in radians per update.
+ * VELOCITY is in pixels per update.
+ * SHOT_COOLDOWN is in milliseconds.
+ * MAX_HEALTH is in health units.
  */
 Player.TURN_RATE = Math.PI / 45;
 Player.VELOCITY = 5;

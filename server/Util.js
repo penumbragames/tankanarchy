@@ -23,6 +23,30 @@ Util.getManhattanDistance = function(x1, y1, x2, y2) {
 };
 
 /**
+ * Returns the squared Euclidean distance between two points given their
+ * x and y coordinates.
+ * @param {number} x1 The x-coordinate of the first point.
+ * @param {number} y1 The y-coordinate of the first point.
+ * @param {number} x2 The x-coordinate of the second point.
+ * @param {number} y2 The y-coordinate of the second point.
+ */
+Util.getEuclideanDistance2 = function(x1, y1, x2, y2) {
+  return ((x1 - x2) * (x1 - x2)) + ((y1 - y2) * (y1 - y2));
+};
+
+/**
+ * Returns the true Euclidean distance between two points given their
+ * x and y coordinates.
+ * @param {number} x1 The x-coordinate of the first point.
+ * @param {number} y1 The y-coordinate of the first point.
+ * @param {number} x2 The x-coordinate of the second point.
+ * @param {number} y2 The y-coordinate of the second point.
+ */
+Util.getEuclideanDistance = function(x1, y1, x2, y2) {
+  return Math.sqrt(Util.getEuclideanDistance2(x1, x2, y1, y2));
+};
+
+/**
  * Given a value, a minimum, and a maximum, returns true if value is
  * between the minimum and maximum, inclusive of both bounds.
  * @param {number} val The value to check.

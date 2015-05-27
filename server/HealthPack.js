@@ -16,7 +16,10 @@ function HealthPack(x, y) {
   this.shouldExist = true;
 };
 
-HealthPack.PICKUP_DISTANCE = 40;
+/**
+ * PICKUP_DISTANCE is in pixels.
+ */
+HealthPack.PICKUP_DISTANCE = 30;
 
 /**
  * Generates and returns a randomly placed health pack.
@@ -28,11 +31,13 @@ HealthPack.generateRandomHealthPack = function() {
 
 /**
  * Returns true if the given player can pick up this health pack.
+ * We square the pickup distance to avoid doing a square root operation
+ * when calculating the distance.
  */
 HealthPack.prototype.isValidPickup = function(player) {
   return player.health < 10 &&
-    Util.getManhattanDistance(this.x, this.y, player.x, player.y) <
-    HealthPack.PICKUP_DISTANCE;
+    Util.getEuclideanDistance2(this.x, this.y, player.x, player.y) <
+    (HealthPack.PICKUP_DISTANCE * HealthPack.PICKUP_DISTANCE);
 };
 
 /**

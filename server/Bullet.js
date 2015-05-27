@@ -4,7 +4,6 @@
  */
 
 var Util = require('./Util').Util;
-var Constants = require('./Constants').Constants;
 
 /**
  * Constructor for a bullet.
@@ -20,20 +19,28 @@ function Bullet(x, y, direction, firedBy) {
   this.y = y;
   this.direction = direction;
   this.firedBy = firedBy;
+
   this.distanceTraveled = 0;
   this.shouldExist = true;
 };
 
+/**
+ * VELOCITY is in pixels per update.
+ * MAX_TRAVEL_DISTANCE is in pixels.
+ * COLLISION_DISTANCE is in pixels.
+ */
 Bullet.VELOCITY = 20;
-Bullet.TRAVEL_DISTANCE = 800;
-Bullet.COLLISION_DISTANCE = 25;
+Bullet.MAX_TRAVEL_DISTANCE = 1000;
+Bullet.COLLISION_DISTANCE = 30;
 
 /**
  * Returns true if this bullet has collided with the given player.
+ * We square the collision distance to avoid using any square roots
+ * for the distance formula.
  */
 Bullet.prototype.hit = function(player) {
-  return Util.getManhattanDistance(this.x, this.y, player.x, player.y) <
-    Bullet.COLLISION_DISTANCE;
+  return Util.getEuclideanDistance2(this.x, this.y, player.x, player.y) <
+    (Bullet.COLLISION_DISTANCE * Bullet.COLLISION_DISTANCE);
 };
 
 /**
@@ -48,7 +55,8 @@ Bullet.prototype.update = function(clients) {
   this.y -= Bullet.VELOCITY * Math.cos(this.direction);
   this.distanceTraveled += Bullet.VELOCITY;
 
-  if (this.distanceTraveled > Bullet.TRAVEL_DISTANCE) {
+  if (this.distanceTraveled > Bullet.MAX_TRAVEL_DISTANCE ||
+      !Util.inWorld(this.x, this.y)) {
     this.shouldExist = false;
     return;
   }

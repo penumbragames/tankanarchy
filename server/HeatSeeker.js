@@ -4,7 +4,6 @@
  */
 
 var Util = require('./Util').Util;
-var Constants = require('./Constants').Constants;
 
 // TODO: implement this in heatseeker branch
 function HeatSeeker(x, y, direction, target, firedBy) {
