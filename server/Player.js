@@ -79,12 +79,12 @@ Player.generateNewPlayer = function(name, id) {
  */
 Player.prototype.update = function(keyboardState, turretAngle) {
   if (keyboardState.up) {
-    this.x += Player.VELOCITY * Math.sin(this.orientation);
-    this.y -= Player.VELOCITY * Math.cos(this.orientation);
+    this.x += this.velocity * Math.sin(this.orientation);
+    this.y -= this.velocity * Math.cos(this.orientation);
   }
   if (keyboardState.down) {
-    this.x -= Player.VELOCITY * Math.sin(this.orientation);
-    this.y += Player.VELOCITY * Math.cos(this.orientation);
+    this.x -= this.velocity * Math.sin(this.orientation);
+    this.y += this.velocity * Math.cos(this.orientation);
   }
   if (keyboardState.right) {
     this.orientation = this.orientation + Player.TURN_RATE;
@@ -104,7 +104,7 @@ Player.prototype.update = function(keyboardState, turretAngle) {
       case Powerup.HEALTHPACK:
         this.health += this.powerups[powerup].data;
         delete this.powerups[powerup];
-        break;
+        continue;
       case Powerup.SHOTGUN:
         break;
       case Powerup.RAPIDFIRE:

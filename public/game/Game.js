@@ -19,7 +19,6 @@ function Game(canvas, socket) {
   this.players = [];
   this.bullets = [];
   this.powerups = [];
-  this.lastShotTime = 0;
 };
 
 Game.WIDTH = 800;
@@ -56,14 +55,10 @@ Game.prototype.update = function() {
   // due to people messing with the client, the server acts as a backup
   // to only allow the player to shoot every 800ms.
   if (Input.LEFT_CLICK) {
-    var time = (new Date).getTime();
-    if (time > this.lastShotTime + Game.SHOOTING_INTERVAL) {
-      var self = this.findSelf();
-      this.socket.emit('fire-bullet', {
-        firedBy: this.id
-      });
-      this.lastShotTime = time;
-    }
+    var self = this.findSelf();
+    this.socket.emit('fire-bullet', {
+      firedBy: this.id
+    });
   }
 
 

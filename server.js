@@ -75,8 +75,8 @@ setInterval(function() {
     }
   }
 
-  // Ensure that there are always 3 powerups on the map.
-  while (powerups.length < 3) {
+  // Ensure that there are always 6 powerups on the map.
+  while (powerups.length < 6) {
     powerups.push(Powerup.generateRandomPowerup());
   }
   for (var i = 0; i < powerups.length; ++i) {
