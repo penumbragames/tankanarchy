@@ -8,11 +8,11 @@ var HashMap = require('hashmap');
 
 var Player = require('./server/Player').Player;
 var Bullet = require('./server/Bullet').Bullet;
-var HealthPack = require('./server/HealthPack').HealthPack;
+var Powerup = require('./server/Powerup').Powerup;
 
 var clients = new HashMap();
 var bullets = [];
-var healthpacks = [];
+var powerups = [];
 
 app.set('port', PORT_NUMBER);
 
@@ -55,11 +55,6 @@ io.on('connection', function(socket) {
     }
   });
 
-  socket.on('hack shotgun', function(data) {
-    var player = clients.get(socket.id);
-    player.applyPowerup('shotgun3', 10000);
-  });
-
   // TODO: player disconnect explosion animation?
   socket.on('disconnect', function() {
     if (clients.has(socket.id)) {
@@ -80,15 +75,15 @@ setInterval(function() {
     }
   }
 
-  // Ensure that there are always 3 healthpacks on the map.
-  while (healthpacks.length < 3) {
-    healthpacks.push(HealthPack.generateRandomHealthPack());
+  // Ensure that there are always 3 powerups on the map.
+  while (powerups.length < 3) {
+    powerups.push(Powerup.generateRandomPowerup());
   }
-  for (var i = 0; i < healthpacks.length; ++i) {
-    if (healthpacks[i].shouldExist) {
-      healthpacks[i].update(clients.values());
+  for (var i = 0; i < powerups.length; ++i) {
+    if (powerups[i].shouldExist) {
+      powerups[i].update(clients.values());
     } else {
-      healthpacks.splice(i, 1);
+      powerups.splice(i, 1);
       i--;
     }
   }
@@ -96,7 +91,7 @@ setInterval(function() {
   // Sends update packets every client.
   io.sockets.emit('update-players', clients.values());
   io.sockets.emit('update-bullets', bullets);
-  io.sockets.emit('update-healthpacks', healthpacks);
+  io.sockets.emit('update-powerups', powerups);
 }, FRAME_RATE);
 
 http.listen(PORT_NUMBER, function() {

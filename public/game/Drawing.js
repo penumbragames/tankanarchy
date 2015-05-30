@@ -19,7 +19,6 @@ Drawing.SELF_TURRET = '../data/self_turret.png';
 Drawing.OTHER_TANK = '../data/other_tank.png';
 Drawing.OTHER_TURRET = '../data/other_turret.png';
 Drawing.BULLET = '../data/bullet.png';
-Drawing.HEALTHPACK = '../data/healthPack.png';
 Drawing.TILE = '../data/tile.png';
 
 /**
@@ -99,15 +98,15 @@ Drawing.prototype.drawBullet = function(coords, direction) {
 }
 
 /**
- * Draws a health pack.
+ * Draws a powerup.
  * @param {[number, number]} coords The coordinates of the center of the
- *   pack.
+ *   powerup
  */
-Drawing.prototype.drawHealthPack = function(coords) {
+Drawing.prototype.drawPowerup = function(coords, name) {
   this.context.save();
   this.context.translate(coords[0], coords[1]);
   var healthPack = new Image();
-  healthPack.src = Drawing.HEALTHPACK;
+  healthPack.src = '../data/' + name + '.png';
   this.context.drawImage(healthPack, -15, -15);
   this.context.restore();
 }

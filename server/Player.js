@@ -4,6 +4,7 @@
  */
 
 var Bullet = require('./Bullet').Bullet;
+var Powerup = require('./Powerup').Powerup;
 var Util = require('./Util').Util;
 
 /**
@@ -24,11 +25,18 @@ function Player(x, y, orientation, name, id) {
   this.name = name;
   this.id = id;
 
+  this.velocity = Player.DEFAULT_VELOCITY;
   this.shotCooldown = Player.DEFAULT_SHOT_COOLDOWN;
   this.health = Player.MAX_HEALTH;
   /**
    * this.powerups is a JSON Object of the format:
-   * { 'powerup' : { 'data' : data ; 'expirationTime' : expirationTime } }
+   * { 'powerup' : { 'name' : name,
+   *                 'data' : data,
+   *                 'expirationTime' : expirationTime },
+   *   'powerup' : { 'name' : name,
+   *                 'data' : data,
+   *                 'expirationTime' : expirationTime }
+   * }
    */
   this.powerups = {};
   this.debuffs = {};
@@ -43,7 +51,7 @@ function Player(x, y, orientation, name, id) {
  * MAX_HEALTH is in health units.
  */
 Player.TURN_RATE = Math.PI / 45;
-Player.VELOCITY = 5;
+Player.DEFAULT_VELOCITY = 5;
 Player.DEFAULT_SHOT_COOLDOWN = 800;
 Player.MAX_HEALTH = 10;
 
@@ -92,8 +100,36 @@ Player.prototype.update = function(keyboardState, turretAngle) {
   this.turretAngle = turretAngle;
 
   for (var powerup in this.powerups) {
+    switch (powerup) {
+      case Powerup.HEALTHPACK:
+        this.health += this.powerups[powerup].data;
+        delete this.powerups[powerup];
+        break;
+      case Powerup.SHOTGUN:
+        break;
+      case Powerup.RAPIDFIRE:
+        this.shotCooldown = Player.DEFAULT_SHOT_COOLDOWN /
+                            this.powerups[powerup].data;
+        break;
+      case Powerup.SPEEDBOOST:
+        this.velocity = Player.DEFAULT_VELOCITY *
+                        this.powerups[powerup].data;
+        break;
+    }
     if ((new Date()).getTime() > this.powerups[powerup].expirationTime) {
-      delete this.powerups[powerup];
+      switch (powerup) {
+        case Powerup.HEALTHPACK:
+          break;
+        case Powerup.SHOTGUN:
+          break;
+        case Powerup.RAPIDFIRE:
+          this.shotCooldown = Player.DEFAULT_SHOT_COOLDOWN;
+          break;
+        case Powerup.SPEEDBOOST:
+          this.velocity = Player.DEFAULT_VELOCITY;
+          break;
+      }
+      delete this.powerups[powerup];    
     }
   }
 };
@@ -115,7 +151,7 @@ Player.prototype.applyPowerup = function(name, powerup) {
  */
 Player.prototype.canShoot = function() {
   return (new Date()).getTime() >
-    this.lastShotTime + Player.DEFAULT_SHOT_COOLDOWN;
+    this.lastShotTime + this.shotCooldown;
 };
 
 /**
@@ -126,12 +162,16 @@ Player.prototype.canShoot = function() {
  */
 Player.prototype.getBulletsShot = function() {
   bullets = [new Bullet(this.x, this.y, this.turretAngle, this.id)];
-  if (this.powerups['shotgun'] != null ||
-      this.powerups['shotgun'] != undefined) {
-    bullets.push(
-      new Bullet(this.x, this.y, this.turretAngle - Math.PI / 9, this.id));
-    bullets.push(
-      new Bullet(this.x, this.y, this.turretAngle + Math.PI / 9, this.id));
+  if (this.powerups[Powerup.SHOTGUN] != null ||
+      this.powerups[Powerup.SHOTGUN] != undefined) {
+    for (var i = 1; i < this.powerups[Powerup.SHOTGUN].data + 1; ++i) {
+      bullets.push(
+        new Bullet(this.x, this.y, this.turretAngle - (i * Math.PI / 9),
+                   this.id));
+      bullets.push(
+        new Bullet(this.x, this.y, this.turretAngle + (i * Math.PI / 9),
+                   this.id));
+    }
   }
   this.lastShotTime = (new Date()).getTime();
   return bullets;

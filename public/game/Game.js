@@ -18,7 +18,7 @@ function Game(canvas, socket) {
   this.id = null;
   this.players = [];
   this.bullets = [];
-  this.healthPacks = [];
+  this.powerups = [];
   this.lastShotTime = 0;
 };
 
@@ -95,8 +95,8 @@ Game.prototype.receiveBullets = function(bullets) {
   this.bullets = bullets;
 };
 
-Game.prototype.receiveHealthPacks = function(healthpacks) {
-  this.healthPacks = healthpacks;
+Game.prototype.receivePowerups = function(powerups) {
+  this.powerups = powerups;
 };
 
 Game.prototype.draw = function() {
@@ -110,9 +110,10 @@ Game.prototype.draw = function() {
       this.bullets[i].direction);
   }
 
-  for (var i = 0; i < this.healthPacks.length; ++i) {
-    this.drawing.drawHealthPack(
-      this.viewPort.toCanvasCoords(this.healthPacks[i]));
+  for (var i = 0; i < this.powerups.length; ++i) {
+    this.drawing.drawPowerup(
+      this.viewPort.toCanvasCoords(this.powerups[i]),
+      this.powerups[i].name);
   }
 
   // TODO: only render visible players
