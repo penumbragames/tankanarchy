@@ -10,6 +10,7 @@ var Player = require('./server/Player').Player;
 var Bullet = require('./server/Bullet').Bullet;
 var Powerup = require('./server/Powerup').Powerup;
 
+// TODO: refactor to server-side Game class.
 var clients = new HashMap();
 var bullets = [];
 var powerups = [];

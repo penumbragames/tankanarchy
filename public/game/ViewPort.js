@@ -32,6 +32,7 @@ ViewPort.prototype.update = function(x, y) {
 /**
  * Given an array of objects, returns only the objects that are visible
  * within this player's viewport.
+ * @todo Implement and possibly fix if bugged. Refactor to constants.
  * @param {Array.<Object>} objects A list of the objects to check.
  * @return {Array.<Object>}
  */
