@@ -103,7 +103,7 @@ Util.boundWorld = function(x, y) {
 
 /**
  * Returns a random point inside the game environment world.
- * @param {?number} padding Optional argument specifying how much
+ * @param {number=} padding Optional argument specifying how much
  *   padding from the edge of the world this function should apply.
  *   Defaults to 30;
  * @return {[number, number]}
@@ -148,7 +148,7 @@ Util.randRangeInt = function(min, max) {
 
 /**
  * Returns a random element in a given array.
- * @param {Object[]}
+ * @param {Array.<Object>}
  * @return {Object}
  */
 Util.choiceArray = function(array) {

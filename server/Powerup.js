@@ -104,7 +104,7 @@ Powerup.prototype.isValidPickup = function(player) {
 /**
  * Updates this health pack based on the position of all the players on the
  * server.
- * @param {[Player]} players An array of currently active players.
+ * @param {Array.<Player>} players An array of currently active players.
  */
 Powerup.prototype.update = function(players) {
   for (var i = 0; i < players.length; ++i) {

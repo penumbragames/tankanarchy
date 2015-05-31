@@ -49,6 +49,10 @@ socket.on('update-powerups', function(data) {
   game.receivePowerups(data);
 });
 
+socket.on('explosion', function(data) {
+  game.createExplosion(data);
+});
+
 function init() {
   Input.applyEventHandlers();
   AFK.init();

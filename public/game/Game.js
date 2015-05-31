@@ -3,6 +3,13 @@
  * Author: Alvin Lin (alvin.lin@stuypulse.com)
  */
 
+/**
+ * Creates a game on the client side to manage and render the players,
+ * projectiles, and powerups.
+ * @constructor
+ * @param {Element} canvas The HTML5 canvas to render the game on.
+ * @param {Socket} socket The socket connected to the server.
+ */
 function Game(canvas, socket) {
   this.canvas = canvas;
   this.canvas.width = Game.WIDTH;
@@ -25,11 +32,19 @@ Game.WIDTH = 800;
 Game.HEIGHT = 600;
 Game.SHOOTING_INTERVAL = 800;
 
+/**
+ * Stores this client's socket ID after getting it back from the server.
+ * @param {string} id This client's socket ID.
+ */
 Game.prototype.setID = function(id) {
   this.id = id;
   this.viewPort.setID(id);
 };
 
+/**
+ * Updates the state of the game client side and relays intents to the
+ * server.
+ */
 Game.prototype.update = function() {
   var self = this.findSelf();
   this.viewPort.update(self.x, self.y);
@@ -51,9 +66,6 @@ Game.prototype.update = function() {
   });
 
   // Emits an event for the player shooting to the server.
-  // This event is limited to being sent every 800ms. If this breaks
-  // due to people messing with the client, the server acts as a backup
-  // to only allow the player to shoot every 800ms.
   if (Input.LEFT_CLICK) {
     var self = this.findSelf();
     this.socket.emit('fire-bullet', {
@@ -73,6 +85,11 @@ Game.prototype.update = function() {
   };
 };
 
+/**
+ * Returns the object in the players array that represents this client's
+ * player instance.
+ * @return {Object}
+ */
 Game.prototype.findSelf = function() {
   for (var i = 0; i < this.players.length; ++i) {
     if (this.players[i].id == this.id) {
@@ -82,18 +99,46 @@ Game.prototype.findSelf = function() {
   return null;
 };
 
+/**
+ * Updates the game's storage of all the players, called each time
+ * the server sends a packet.
+ * @param {Array.<Object>}
+ */
 Game.prototype.receivePlayers = function(players) {
   this.players = players;
 };
 
+/**
+ * Updates the game's storage of all the bullets, called each time
+ * the server sends a packet.
+ * @param {Array.<Object>}
+ */
 Game.prototype.receiveBullets = function(bullets) {
   this.bullets = bullets;
 };
 
+/**
+ * Updates the game's storage of all the powerups, called each time
+ * the server sends packet.
+ * @param {Array.<Object>}
+ */
 Game.prototype.receivePowerups = function(powerups) {
   this.powerups = powerups;
 };
 
+/**
+ * Starts an explosion animation given an object representing a bullet that
+ * has reached the end of it's path or collided with a player.
+ * @param {Object]
+ */
+Game.prototype.createExplosion = function(object) {
+  var point = [object.x, object.y];
+  
+};
+
+/**
+ * Draws the state of the game onto the HTML5 canvas.
+ */
 Game.prototype.draw = function() {
   this.canvasContext.clearRect(0, 0, Game.WIDTH, Game.HEIGHT);
 

@@ -78,6 +78,11 @@ Input.onKeyUp = function(e) {
   };
 };
 
+/**
+ * This is the only function that needs to be called in the client-side
+ * script. This should be called during initialization to allow the Input
+ * class to track user input.
+ */
 Input.applyEventHandlers = function() {
   window.addEventListener('mousedown', Input.onMouseDown);
   window.addEventListener('mouseup', Input.onMouseUp);

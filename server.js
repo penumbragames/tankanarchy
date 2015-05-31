@@ -70,7 +70,7 @@ setInterval(function() {
     if (bullets[i].shouldExist) {
       bullets[i].update(clients);
     } else {
-      bullets.splice(i, 1);
+      io.sockets.emit('explosion', bullets.splice(i, 1));
       i--;
     }
   }
