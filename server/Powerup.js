@@ -3,7 +3,7 @@
  * Author: Alvin Lin (alvin.lin@stuypulse.com)
  */
 
-var Util = require('./Util').Util;
+var Util = require('./Util');
 
 /**
  * Constructor for a powerup.
@@ -21,6 +21,8 @@ function Powerup(x, y, name, data, duration) {
   this.duration = duration;
   
   this.shouldExist = true;
+
+  return this;
 };
 
 /**
@@ -116,4 +118,4 @@ Powerup.prototype.update = function(players) {
   }
 };
 
-modules.export = Powerup;
+module.exports = Powerup;

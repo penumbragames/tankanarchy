@@ -5,9 +5,9 @@
  */
 
 var HashMap = require('hashmap');
-var Player = require('./server/Player');
-var Bullet = require('./server/Bullet');
-var Powerup = require('./server/Powerup');
+var Player = require('./Player');
+var Bullet = require('./Bullet');
+var Powerup = require('./Powerup');
 
 /**
  * Constructor for the server side game class.
@@ -19,6 +19,8 @@ function Game() {
   this.clients = new HashMap();
   this.projectiles = [];
   this.powerups = [];
+
+  return this;
 };
 
 /**
@@ -27,7 +29,7 @@ function Game() {
  * @param {string} The socket ID of the player.
  */
 Game.prototype.addNewPlayer = function(name, id) {
-  this.clients.set(id, new Player(name, id));
+  this.clients.set(id, Player.generateNewPlayer(name, id));
 };
 
 /**
@@ -124,3 +126,5 @@ Game.prototype.update = function(io) {
   io.sockets.emit('update-projectiles', this.getProjectiles());
   io.sockets.emit('update-powerups', this.getPowerups());
 };
+
+module.exports = Game;

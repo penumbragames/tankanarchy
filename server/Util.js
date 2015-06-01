@@ -155,4 +155,4 @@ Util.choiceArray = function(array) {
   return array[Util.randRangeInt(0, array.length)];
 };
 
-modules.export = Util;
+module.exports = Util;

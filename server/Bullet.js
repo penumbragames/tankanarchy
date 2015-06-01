@@ -23,6 +23,8 @@ function Bullet(x, y, direction, firedBy) {
 
   this.distanceTraveled = 0;
   this.shouldExist = true;
+
+  return this;
 };
 
 /**
@@ -82,4 +84,4 @@ Bullet.prototype.update = function(clients) {
   }
 };
 
-modules.exports = Bullet;
+module.exports = Bullet;

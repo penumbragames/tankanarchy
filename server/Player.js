@@ -3,9 +3,9 @@
  * @author Alvin Lin <alvin.lin@stuypulse.com>
  */
 
-var Bullet = require('./Bullet').Bullet;
-var Powerup = require('./Powerup').Powerup;
-var Util = require('./Util').Util;
+var Bullet = require('./Bullet');
+var Powerup = require('./Powerup');
+var Util = require('./Util');
 
 /**
  * Constructor for a Player.
@@ -42,6 +42,8 @@ function Player(x, y, orientation, name, id) {
   this.debuffs = {};
   this.score = 0;
   this.lastShotTime = 0;
+
+  return this;
 };
 
 /**
@@ -190,4 +192,4 @@ Player.prototype.respawn = function() {
   this.score--;
 };
 
-modules.export = Player;
+module.exports = Player;

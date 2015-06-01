@@ -4,9 +4,9 @@ var FRAME_RATE = 1000.0 / 60.0;
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var HashMap = require('hashmap');
+var Game = require('./server/Game');
 
-var game = require('./server/Game')();
+var game = new Game();
 
 app.set('port', PORT_NUMBER);
 
@@ -25,10 +25,11 @@ io.on('connection', function(socket) {
   // When a new player joins, the server sends his/her unique ID back so
   // for future identification purposes.
   socket.on('new-player', function(data) {
-    game.addNewPlayer(data.name, data.id);
+    game.addNewPlayer(data.name, socket.id);
+    console.log(game.getPlayers());
     socket.emit('send-id', {
       id: socket.id,
-      players: clients.values()
+      players: game.getPlayers()
     });
   });
 

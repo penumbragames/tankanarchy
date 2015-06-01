@@ -11,9 +11,12 @@ function HeatSeeker(x, y, direction, target, firedBy) {
   this.y = y;
   this.direction = direction;
   this.target = target;
+
   this.firedBy = firedBy;
   this.distanceTraveled = 0;
   this.shouldExist = true;
+
+  return this;
 };
 
 HeatSeeker.VELOCITY = 10;
@@ -58,4 +61,4 @@ HeatSeeker.prototype.shouldExist = function() {
   return this.shouldExist;
 };
 
-modules.export = HeatSeeker;
+module.exports = HeatSeeker;
