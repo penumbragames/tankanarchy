@@ -78,7 +78,8 @@ Powerup.generateRandomPowerup = function() {
                             Powerup.SPEEDBOOST_MAX_BOOST);
       break;
   }
-  var duration = Util.randRange(Power.MIN_DURATION, Powerup.MAX_DURATION);
+  var duration = Util.randRange(Powerup.MIN_DURATION,
+                                Powerup.MAX_DURATION);
   return new Powerup(point[0], point[1], name, data, duration);
 };
 
