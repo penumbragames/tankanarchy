@@ -51,11 +51,13 @@ function Player(x, y, orientation, name, id) {
  * VELOCITY is in pixels per update.
  * DEFAULT_SHOT_COOLDOWN is in milliseconds.
  * MAX_HEALTH is in health units.
+ * MINIMUM_RESPAWN_BUFFER is a distance in pixels.
  */
 Player.TURN_RATE = Math.PI / 45;
 Player.DEFAULT_VELOCITY = 5;
 Player.DEFAULT_SHOT_COOLDOWN = 800;
 Player.MAX_HEALTH = 10;
+Player.MINIMUM_RESPAWN_BUFFER = 1000;
 
 /**
  * Returns a new Player object given a name and id.
@@ -183,11 +185,27 @@ Player.prototype.getProjectilesShot = function() {
 
 /**
  * Handles the respawning of the player when killed.
- * @todo player respawn explosion animation.
- * @todo smarter respawn
+ * @param {Array.<Player>} players An array of players to check against for
+ *   smart respawning.
  */
-Player.prototype.respawn = function() {
+Player.prototype.respawn = function(players) {
   var point = Util.getRandomWorldPoint();
+  var isValidSpawn = false;
+  var iter = 0;
+  while (!isValidSpawn || iter < 15) {
+    isValidSpawn = true;
+    for (var i = 0; i < players; ++i) {
+      if (Util.getEuclideanDistance2(point[0], point[1],
+                                     players[i].x, players[i].y) <
+          Player.MINIMUM_RESPAWN_BUFFER * Player.MINIMUM_RESPAWN_BUFFER) {
+        isValidSpawn = false;
+        continue;
+      }
+    }
+    point = Util.getRandomWorldPoint();
+    iter++;
+  }
+
   this.x = point[0];
   this.y = point[1];
   this.health = Player.MAX_HEALTH;
