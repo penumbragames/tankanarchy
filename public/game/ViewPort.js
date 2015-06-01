@@ -14,6 +14,8 @@ function ViewPort() {
   this.selfId = null;
 };
 
+ViewPort.VISIBILITY_THRESHOLD = 50;
+
 /**
  * Stores the ID of this client's socket after it is returned by the
  * server.
@@ -39,10 +41,11 @@ ViewPort.prototype.update = function(x, y) {
 ViewPort.prototype.getVisibleObjects = function(objects) {
   var onScreen = [];
   for (var i = 0; i < objects.length; i++) {
-    var object = objects[i];
-    if (Math.abs(object.x - this.selfCoords[0]) < 450 &&
-        Math.abs(object.y - this.selfCoords[1]) < 350) {
-      onScreen.push(object);
+    if (Math.abs(objects[i].x - this.selfCoords[0]) <
+        Game.WIDTH / 2 + ViewPort.VISIBILITY_THRESHOLD &&
+        Math.abs(objects[i].y - this.selfCoords[1]) <
+        Game.HEIGHT / 2 + ViewPort.VISIBILITY_THRESHOLD) {
+      onScreen.push(objects[i]);
     }
   }
   return onScreen;
@@ -50,7 +53,8 @@ ViewPort.prototype.getVisibleObjects = function(objects) {
 
 /**
  * Given an object, returns an array containing the object's converted
- * coordinates.
+ * coordinates. Assumes the object is a valid data structure sent by the
+ * server with an x and y value.
  * @param {Object}
  * @return {[number, number]}
  */

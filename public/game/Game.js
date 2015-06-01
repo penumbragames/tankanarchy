@@ -148,14 +148,17 @@ Game.prototype.draw = function() {
       this.bullets[i].direction);
   }
 
-  for (var i = 0; i < this.powerups.length; ++i) {
+  var visiblePowerups = this.viewPort.getVisibleObjects(this.powerups);
+  console.log(visiblePowerups);
+  for (var i = 0; i < visiblePowerups.length; ++i) {
     this.drawing.drawPowerup(
-      this.viewPort.toCanvasCoords(this.powerups[i]),
-      this.powerups[i].name);
+      this.viewPort.toCanvasCoords(visiblePowerups[i]),
+      visiblePowerups[i].name);
   }
 
   // TODO: only render visible players
-  var visiblePlayers = this.players;
+  var visiblePlayers = this.viewPort.getVisibleObjects(this.players);
+  console.log(visiblePlayers);
   for (var i = 0; i < visiblePlayers.length; ++i) {
     this.drawing.drawTank(
       visiblePlayers[i].id == this.id,
