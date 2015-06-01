@@ -26,7 +26,6 @@ io.on('connection', function(socket) {
   // for future identification purposes.
   socket.on('new-player', function(data) {
     game.addNewPlayer(data.name, socket.id);
-    console.log(game.getPlayers());
     socket.emit('send-id', {
       id: socket.id,
       players: game.getPlayers()
