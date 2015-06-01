@@ -127,10 +127,10 @@ Game.prototype.receivePowerups = function(powerups) {
  * Starts an explosion animation given an object representing a bullet that
  * has reached the end of it's path or collided with a player.
  * @param {Object]
+ * @todo Finish this method
  */
 Game.prototype.createExplosion = function(object) {
   var point = [object.x, object.y];
-  
 };
 
 /**
@@ -141,6 +141,7 @@ Game.prototype.draw = function() {
 
   this.environment.draw();
 
+  // @todo refactor bullets to projectiles
   for (var i = 0; i < this.bullets.length; ++i) {
     this.drawing.drawBullet(
       this.viewPort.toCanvasCoords(this.bullets[i]),
