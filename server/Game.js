@@ -23,6 +23,8 @@ function Game() {
   return this;
 };
 
+Game.MAX_MAP_POWERUPS = 10;
+
 /**
  * Creates a new player with the given name and ID.
  * @param {string} The display name of the player.
@@ -108,8 +110,8 @@ Game.prototype.update = function(io) {
     }
   }
 
-  // Ensure that there are always 6 powerups on the map.
-  while (this.powerups.length < 6) {
+  // Ensure that there are always 10 powerups on the map.
+  while (this.powerups.length < Game.MAX_MAP_POWERUPS) {
     this.powerups.push(Powerup.generateRandomPowerup());
   }
   for (var i = 0; i < this.powerups.length; ++i) {
