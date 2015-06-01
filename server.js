@@ -6,14 +6,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var HashMap = require('hashmap');
 
-var Player = require('./server/Player').Player;
-var Bullet = require('./server/Bullet').Bullet;
-var Powerup = require('./server/Powerup').Powerup;
-
-// TODO: refactor to server-side Game class.
-var clients = new HashMap();
-var bullets = [];
-var powerups = [];
+var game = require('./server/Game')();
 
 app.set('port', PORT_NUMBER);
 
@@ -32,8 +25,7 @@ io.on('connection', function(socket) {
   // When a new player joins, the server sends his/her unique ID back so
   // for future identification purposes.
   socket.on('new-player', function(data) {
-    var player = Player.generateNewPlayer(data.name, socket.id);
-    clients.set(socket.id, player);
+    game.addNewPlayer(data.name, data.id);
     socket.emit('send-id', {
       id: socket.id,
       players: clients.values()
@@ -41,58 +33,24 @@ io.on('connection', function(socket) {
   });
 
   socket.on('move-player', function(data) {
-    var player = clients.get(data.id);
-    if (player != undefined && player != null) {
-      player.update(data.keyboardState, data.turretAngle);
-      clients.set(socket.id, player);
-    }
+    game.updatePlayer(socket.id, data.keyboardState, data.turretAngle);
   });
 
   // TODO: player shooting sound and explosion animations
-  socket.on('fire-bullet', function(data) {
-    var player = clients.get(data.firedBy);
-    if (player != undefined && player != null && player.canShoot()) {
-      bullets = bullets.concat(player.getBulletsShot());
-    }
+  socket.on('fire-bullet', function() {
+    game.addProjectile(socket.id);
   });
 
   // TODO: player disconnect explosion animation?
   socket.on('disconnect', function() {
-    if (clients.has(socket.id)) {
-      clients.remove(socket.id);
-    }
+    game.removePlayer(socket.id);
   });
 });
 
 // Server side game loop, runs at 60Hz and sends out update packets to all
 // clients every tick.
 setInterval(function() {
-  for (var i = 0; i < bullets.length; ++i) {
-    if (bullets[i].shouldExist) {
-      bullets[i].update(clients);
-    } else {
-      io.sockets.emit('explosion', bullets.splice(i, 1));
-      i--;
-    }
-  }
-
-  // Ensure that there are always 6 powerups on the map.
-  while (powerups.length < 6) {
-    powerups.push(Powerup.generateRandomPowerup());
-  }
-  for (var i = 0; i < powerups.length; ++i) {
-    if (powerups[i].shouldExist) {
-      powerups[i].update(clients.values());
-    } else {
-      powerups.splice(i, 1);
-      i--;
-    }
-  }
-
-  // Sends update packets every client.
-  io.sockets.emit('update-players', clients.values());
-  io.sockets.emit('update-bullets', bullets);
-  io.sockets.emit('update-powerups', powerups);
+  game.update(io);
 }, FRAME_RATE);
 
 http.listen(PORT_NUMBER, function() {

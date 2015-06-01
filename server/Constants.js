@@ -17,4 +17,4 @@ Constants.WORLD_MIN = 0;
 Constants.WORLD_MAX = 2500;
 Constants.WORLD_PADDING = 30;
 
-exports.Constants = Constants;
+module.exports = Constants;

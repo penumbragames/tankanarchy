@@ -82,4 +82,4 @@ Bullet.prototype.update = function(clients) {
   }
 };
 
-exports.Bullet = Bullet;
+modules.exports = Bullet;

@@ -3,7 +3,7 @@
  * Author: Alvin Lin (alvin.lin@stuypulse.com)
  */
 
-var Constants = require('./Constants').Constants;
+var Constants = require('./Constants');
 
 /**
  * Empty constructor for the Util class, all functions will be static.
@@ -155,4 +155,4 @@ Util.choiceArray = function(array) {
   return array[Util.randRangeInt(0, array.length)];
 };
 
-exports.Util = Util;
+modules.export = Util;

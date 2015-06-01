@@ -58,4 +58,4 @@ HeatSeeker.prototype.shouldExist = function() {
   return this.shouldExist;
 };
 
-exports.HeatSeeker = HeatSeeker;
+modules.export = HeatSeeker;

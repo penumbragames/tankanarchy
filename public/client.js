@@ -41,8 +41,8 @@ socket.on('update-players', function(data) {
   game.receivePlayers(data);
 });
 
-socket.on('update-bullets', function(data) {
-  game.receiveBullets(data);
+socket.on('update-projectiles', function(data) {
+  game.receiveProjectiles(data);
 });
 
 socket.on('update-powerups', function(data) {

@@ -55,7 +55,6 @@ Game.prototype.update = function() {
   // Emits an event for the containing the player's intention to move
   // to the server.
   this.socket.emit('move-player', {
-    id: this.id,
     keyboardState: {
       up: Input.UP,
       right: Input.RIGHT,
@@ -68,11 +67,8 @@ Game.prototype.update = function() {
   // Emits an event for the player shooting to the server.
   if (Input.LEFT_CLICK) {
     var self = this.findSelf();
-    this.socket.emit('fire-bullet', {
-      firedBy: this.id
-    });
+    this.socket.emit('fire-bullet');
   }
-
 
   // Updates the leaderboard.
   this.players.sort(function(o1, o2) {
@@ -109,12 +105,13 @@ Game.prototype.receivePlayers = function(players) {
 };
 
 /**
- * Updates the game's storage of all the bullets, called each time
+ * Updates the game's storage of all the projectiles, called each time
  * the server sends a packet.
  * @param {Array.<Object>}
+ * @todo Update nomenclature
  */
-Game.prototype.receiveBullets = function(bullets) {
-  this.bullets = bullets;
+Game.prototype.receiveProjectiles = function(projectiles) {
+  this.bullets = projectiles;
 };
 
 /**

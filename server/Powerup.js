@@ -116,4 +116,4 @@ Powerup.prototype.update = function(players) {
   }
 };
 
-exports.Powerup = Powerup;
+modules.export = Powerup;
