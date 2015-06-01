@@ -1,6 +1,6 @@
 {
   "name": "tank-anarchy",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "A fun multiplayer game",
   "main": "server.js",
   "scripts": {
