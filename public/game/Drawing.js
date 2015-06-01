@@ -20,6 +20,7 @@ Drawing.OTHER_TANK = '../data/other_tank.png';
 Drawing.OTHER_TURRET = '../data/other_turret.png';
 Drawing.BULLET = '../data/bullet.png';
 Drawing.TILE = '../data/tile.png';
+Drawing.TILE_SIZE = 100;
 
 /**
  * Draws a tank to the canvas.
@@ -120,8 +121,8 @@ Drawing.prototype.drawTiles = function(coords, edges) {
   this.context.save();
   var tile = new Image();
   tile.src = Drawing.TILE;
-  for (var x = coords[0]; x < edges[0]; x += 100) {
-    for (var y = coords[1]; y < edges[1]; y += 100) {
+  for (var x = coords[0]; x < edges[0]; x += Drawing.TILE_SIZE) {
+    for (var y = coords[1]; y < edges[1]; y += Drawing.TILE_SIZE) {
       this.context.drawImage(tile, x, y);
     }
   }

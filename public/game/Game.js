@@ -16,15 +16,15 @@ function Game(canvas, socket) {
   this.canvas.height = Game.HEIGHT;
   this.canvasContext = this.canvas.getContext('2d');
 
+  this.socket = socket;
+
   this.drawing = new Drawing(this.canvasContext);
   this.viewPort = new ViewPort();
   this.environment = new Environment(this.viewPort, this.drawing);
 
-  this.socket = socket;
-
   this.id = null;
   this.players = [];
-  this.bullets = [];
+  this.projectiles = [];
   this.powerups = [];
 };
 
@@ -42,12 +42,65 @@ Game.prototype.setID = function(id) {
 };
 
 /**
+ * Returns the object in the players array that represents this client's
+ * player instance.
+ * @return {Object}
+ */
+Game.prototype.findSelf = function() {
+  for (var i = 0; i < this.players.length; ++i) {
+    if (this.players[i].id == this.id) {
+      return this.players[i];
+    }
+  }
+  return null;
+};
+
+/**
+ * Updates the game's storage of all the players, called each time
+ * the server sends a packet.
+ * @param {Array.<Object>}
+ */
+Game.prototype.receivePlayers = function(players) {
+  this.players = players;
+};
+
+/**
+ * Updates the game's storage of all the projectiles, called each time
+ * the server sends a packet.
+ * @param {Array.<Object>}
+ * @todo Update nomenclature
+ */
+Game.prototype.receiveProjectiles = function(projectiles) {
+  this.projectiles = projectiles;
+};
+
+/**
+ * Updates the game's storage of all the powerups, called each time
+ * the server sends packet.
+ * @param {Array.<Object>}
+ */
+Game.prototype.receivePowerups = function(powerups) {
+  this.powerups = powerups;
+};
+
+/**
+ * Starts an explosion animation given an object representing a bullet that
+ * has reached the end of it's path or collided with a player.
+ * @param {Object]
+ * @todo Finish this method
+ */
+Game.prototype.createExplosion = function(object) {
+  var point = [object.x, object.y];
+};
+
+/**
  * Updates the state of the game client side and relays intents to the
  * server.
  */
 Game.prototype.update = function() {
   var self = this.findSelf();
   this.viewPort.update(self.x, self.y);
+
   var turretAngle = Math.atan2(
     Input.MOUSE[1] - Game.HEIGHT / 2,
     Input.MOUSE[0] - Game.WIDTH / 2) + Math.PI / 2;
@@ -82,58 +135,6 @@ Game.prototype.update = function() {
 };
 
 /**
- * Returns the object in the players array that represents this client's
- * player instance.
- * @return {Object}
- */
-Game.prototype.findSelf = function() {
-  for (var i = 0; i < this.players.length; ++i) {
-    if (this.players[i].id == this.id) {
-      return this.players[i];
-    }
-  }
-  return null;
-};
-
-/**
- * Updates the game's storage of all the players, called each time
- * the server sends a packet.
- * @param {Array.<Object>}
- */
-Game.prototype.receivePlayers = function(players) {
-  this.players = players;
-};
-
-/**
- * Updates the game's storage of all the projectiles, called each time
- * the server sends a packet.
- * @param {Array.<Object>}
- * @todo Update nomenclature
- */
-Game.prototype.receiveProjectiles = function(projectiles) {
-  this.bullets = projectiles;
-};
-
-/**
- * Updates the game's storage of all the powerups, called each time
- * the server sends packet.
- * @param {Array.<Object>}
- */
-Game.prototype.receivePowerups = function(powerups) {
-  this.powerups = powerups;
-};
-
-/**
- * Starts an explosion animation given an object representing a bullet that
- * has reached the end of it's path or collided with a player.
- * @param {Object]
- * @todo Finish this method
- */
-Game.prototype.createExplosion = function(object) {
-  var point = [object.x, object.y];
-};
-
-/**
  * Draws the state of the game onto the HTML5 canvas.
  */
 Game.prototype.draw = function() {
@@ -141,15 +142,14 @@ Game.prototype.draw = function() {
 
   this.environment.draw();
 
-  // @todo refactor bullets to projectiles
-  for (var i = 0; i < this.bullets.length; ++i) {
+  // @todo refactor projectiles to projectiles
+  for (var i = 0; i < this.projectiles.length; ++i) {
     this.drawing.drawBullet(
-      this.viewPort.toCanvasCoords(this.bullets[i]),
-      this.bullets[i].direction);
+      this.viewPort.toCanvasCoords(this.projectiles[i]),
+      this.projectiles[i].direction);
   }
 
   var visiblePowerups = this.viewPort.getVisibleObjects(this.powerups);
-  console.log(visiblePowerups);
   for (var i = 0; i < visiblePowerups.length; ++i) {
     this.drawing.drawPowerup(
       this.viewPort.toCanvasCoords(visiblePowerups[i]),
@@ -158,7 +158,6 @@ Game.prototype.draw = function() {
 
   // TODO: only render visible players
   var visiblePlayers = this.viewPort.getVisibleObjects(this.players);
-  console.log(visiblePlayers);
   for (var i = 0; i < visiblePlayers.length; ++i) {
     this.drawing.drawTank(
       visiblePlayers[i].id == this.id,
