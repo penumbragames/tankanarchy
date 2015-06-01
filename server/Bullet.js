@@ -3,7 +3,7 @@
  * Author: Alvin Lin (alvin.lin@stuypulse.com)
  */
 
-var Util = require('./Util').Util;
+var Util = require('./Util');
 
 /**
  * Constructor for a bullet.
@@ -76,7 +76,6 @@ Bullet.prototype.update = function(clients) {
         players[i].respawn();
         var killingPlayer = clients.get(this.firedBy);
         killingPlayer.score++;
-        clients.set(this.firedBy, killingPlayer);
       }
       this.shouldExist = false;
       return;

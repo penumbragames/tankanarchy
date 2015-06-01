@@ -54,7 +54,6 @@ Game.prototype.updatePlayer = function(id, keyboardState, turretAngle) {
   var player = this.clients.get(id);
   if (player != undefined && player != null) {
     player.update(keyboardState, turretAngle);
-    this.clients.set(id, player);
   }
 };
 
@@ -72,9 +71,10 @@ Game.prototype.getPlayers = function() {
  * @param {string} The socket ID of the player that fired a projectile.
  */
 Game.prototype.addProjectile = function(id) {
-  var player = clients.get(id);
-  if (player != undefined && player != null) {
-    this.projectiles = this.projectiles.concat(player.getProjectilesShot());
+  var player = this.clients.get(id);
+  if (player != undefined && player != null && player.canShoot()) {
+    this.projectiles = this.projectiles.concat(
+      player.getProjectilesShot());
   }
 };
 
@@ -101,7 +101,7 @@ Game.prototype.getPowerups = function() {
 Game.prototype.update = function(io) {
   for (var i = 0; i < this.projectiles.length; ++i) {
     if (this.projectiles[i].shouldExist) {
-      this.projectiles[i].update(clients);
+      this.projectiles[i].update(this.clients);
     } else {
       io.sockets.emit('explosion', this.projectiles.splice(i, 1));
       i--;
