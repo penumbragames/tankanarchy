@@ -113,16 +113,18 @@ Drawing.prototype.drawPowerup = function(coords, name) {
 }
 
 /**
- * Draws a background tile.
- * @param {[number, number]} coords The coordinates of the top left corner
- *   of the tile.
+ * Draws the background tiles.
+ * @param {[number, number]} topLeft The coordinates of the top-leftmost
+ *   point to start laying down the tiles from.
+ * @param {[number, number]} bottomRight The coordinates of the
+ *   bottom-rightmost point to stop laying the tiles down at.
  */
-Drawing.prototype.drawTiles = function(coords, edges) {
+Drawing.prototype.drawTiles = function(topLeft, bottomRight) {
   this.context.save();
   var tile = new Image();
   tile.src = Drawing.TILE;
-  for (var x = coords[0]; x < edges[0]; x += Drawing.TILE_SIZE) {
-    for (var y = coords[1]; y < edges[1]; y += Drawing.TILE_SIZE) {
+  for (var x = topLeft[0]; x < bottomRight[0]; x += Drawing.TILE_SIZE) {
+    for (var y = topLeft[1]; y < bottomRight[1]; y += Drawing.TILE_SIZE) {
       this.context.drawImage(tile, x, y);
     }
   }

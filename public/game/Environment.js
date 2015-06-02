@@ -18,7 +18,7 @@ Environment.MIN = 0;
 Environment.MAX = 2500;
 
 /**
- * Draws the environment tiles on the viewport.
+ * Draws the environment tiles on the canvas.
  */
 Environment.prototype.draw = function() {
   var center = this.viewPort.selfCoords;
