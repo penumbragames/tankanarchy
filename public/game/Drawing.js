@@ -106,7 +106,7 @@ Drawing.prototype.drawBullet = function(coords, direction) {
 Drawing.prototype.drawPowerup = function(coords, name) {
   this.context.save();
   this.context.translate(coords[0], coords[1]);
-  var healthPack = new Image();
+  var powerup = new Image();
   powerup.src = '../data/' + name + '.png';
   this.context.drawImage(powerup, -powerup.width / 2, -powerup.height / 2);
   this.context.restore();
