@@ -66,7 +66,7 @@ Drawing.prototype.drawTank = function(isSelf, coords, orientation,
   } else {
     tank.src = Drawing.OTHER_TANK;
   }
-  this.context.drawImage(tank, -25, -30);
+  this.context.drawImage(tank, -tank.width / 2, -tank.height / 2);
   this.context.restore();
 
   this.context.save();
@@ -78,7 +78,7 @@ Drawing.prototype.drawTank = function(isSelf, coords, orientation,
   } else {
     turret.src = Drawing.OTHER_TURRET;
   }
-  this.context.drawImage(turret, -25, -30);
+  this.context.drawImage(turret, -turret.width / 2, -turret.height / 2);
   this.context.restore();
 };
 
@@ -94,7 +94,7 @@ Drawing.prototype.drawBullet = function(coords, direction) {
   this.context.rotate(direction);
   var bullet = new Image();
   bullet.src = Drawing.BULLET;
-  this.context.drawImage(bullet, -15, -15);
+  this.context.drawImage(bullet, -bullet.width / 2, -bullet.height / 2);
   this.context.restore();
 }
 
@@ -107,8 +107,8 @@ Drawing.prototype.drawPowerup = function(coords, name) {
   this.context.save();
   this.context.translate(coords[0], coords[1]);
   var healthPack = new Image();
-  healthPack.src = '../data/' + name + '.png';
-  this.context.drawImage(healthPack, -15, -15);
+  powerup.src = '../data/' + name + '.png';
+  this.context.drawImage(powerup, -powerup.width / 2, -powerup.height / 2);
   this.context.restore();
 }
 
