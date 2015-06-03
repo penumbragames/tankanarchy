@@ -50,7 +50,7 @@ Powerup.POWERUPS = [Powerup.HEALTHPACK,
                     Powerup.RAPIDFIRE,
                     Powerup.SPEEDBOOST];
 Powerup.MIN_DURATION = 5000;
-Powerup.MAX_DURATION = 20000;
+Powerup.MAX_DURATION = 15000;
 
 /**
  * Returns a randomly generated Powerup.
