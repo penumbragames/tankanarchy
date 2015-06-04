@@ -7,6 +7,7 @@ var Constants = require('./Constants');
 
 /**
  * Empty constructor for the Util class, all functions will be static.
+ * @constructor
  */
 function Util() {}
 

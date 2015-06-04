@@ -4,9 +4,11 @@
  */
 
 /**
- * This object merely helps render the game's background.
+ * This class merely helps render the game's background.
  * All the math to convert absolute coordinates to canvas
  * coordinates is done within this class's methods.
+ * @param {ViewPort} viewPort The Game's ViewPort object.
+ * @param {Drawing} drawing The Game's Drawing object.
  * @constructor
  */
 function Environment(viewPort, drawing) {

@@ -7,6 +7,7 @@
 
 /**
  * Empty constructor for the Constants class.
+ * @constructor
  */
 function Constants() {}
 

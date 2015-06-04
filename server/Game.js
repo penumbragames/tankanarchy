@@ -10,7 +10,7 @@ var Bullet = require('./Bullet');
 var Powerup = require('./Powerup');
 
 /**
- * Constructor for the server side game class.
+ * Constructor for the server side Game class.
  * Instantiates the data structures to track all the objects
  * in the game.
  * @constructor

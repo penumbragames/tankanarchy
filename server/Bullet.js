@@ -7,13 +7,13 @@ var Util = require('./Util');
 
 /**
  * Constructor for a bullet.
- * @constructor
  * @param {number} x The starting x-coordinate of the bullet (absolute).
  * @param {number} y The starting y-coordinate of the bullet (absolute).
  * @param {number} direction The direction the bullet will travel in
  *   radians.
  * @param {string} firedBy The socket ID of the client that fired the
  *   bullet.
+ * @constructor
  */
 function Bullet(x, y, direction, firedBy) {
   this.x = x;

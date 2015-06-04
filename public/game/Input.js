@@ -3,6 +3,10 @@
  * Author: Alvin Lin (alvin.lin@stuypulse.com)
  */
 
+/**
+ * Empty constructor for the Input object.
+ * @constructor
+ */
 function Input() {}
 
 Input.LEFT_CLICK = false;

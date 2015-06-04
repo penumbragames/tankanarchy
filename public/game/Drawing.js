@@ -4,7 +4,14 @@
  * Subordinate: Alvin Lin (alvin.lin@stuypulse.com)
  */
 
+/**
+ * Creates a Drawing object.
+ * @param {CanvasRenderingContext2D} context The context this object will
+ *   draw to.
+ * @constructor
+ */
 function Drawing(context) {
+  console.log(context);
   this.context = context;
 };
 

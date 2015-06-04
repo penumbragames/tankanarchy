@@ -6,7 +6,7 @@
  */
 
 /**
- * Empty constructor
+ * Empty constructor for the AFK object.
  * @constructor
  */
 function AFK() {}

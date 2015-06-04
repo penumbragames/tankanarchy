@@ -15,6 +15,7 @@ var Util = require('./Util');
  * @param {string} name The display name of the player.
  * @param {string} id The socket ID of the client associated with this
  *   player.
+ * @constructor
  */
 function Player(x, y, orientation, name, id) {
   this.x = x;

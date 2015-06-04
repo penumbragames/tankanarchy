@@ -12,6 +12,7 @@ var Util = require('./Util');
  * @param {string} name The name of the powerup.
  * @param {number|string} data Data associated with this powerup.
  * @param {number} The duration of the powerup when applied.
+ * @constructor
  */
 function Powerup(x, y, name, data, duration) {
   this.x = x;
