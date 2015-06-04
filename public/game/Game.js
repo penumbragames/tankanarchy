@@ -165,6 +165,7 @@ Game.prototype.draw = function() {
       visiblePlayers[i].orientation,
       visiblePlayers[i].turretAngle,
       visiblePlayers[i].name,
-      visiblePlayers[i].health);
+      visiblePlayers[i].health,
+      visiblePlayers[i].hasShield);
   }
 };

@@ -39,7 +39,9 @@ function Player(x, y, orientation, name, id) {
    * }
    */
   this.powerups = {};
+  this.hasShield = false;
   this.debuffs = {};
+
   this.score = 0;
   this.lastShotTime = 0;
 
@@ -122,8 +124,10 @@ Player.prototype.update = function(keyboardState, turretAngle) {
                         this.powerups[powerup].data;
         break;
       case Powerup.SHIELD:
+        this.hasShield = true;
         if (this.powerups[powerup].data == 0) {
           delete this.powerups[powerup];
+          this.hasShield = false;
           continue;
         }
         break;
@@ -141,6 +145,7 @@ Player.prototype.update = function(keyboardState, turretAngle) {
           this.velocity = Player.DEFAULT_VELOCITY;
           break;
         case Powerup.SHIELD:
+          this.hasShield = false;
           break;
       }
       delete this.powerups[powerup];    
