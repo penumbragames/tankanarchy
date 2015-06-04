@@ -11,7 +11,6 @@
  * @constructor
  */
 function Drawing(context) {
-  console.log(context);
   this.context = context;
 };
 
