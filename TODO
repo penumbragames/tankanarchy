@@ -1,3 +1,0 @@
-#!/bin/bash
-
-grep -r -i --exclude-dir=.git --exclude-dir=node_modules TODO

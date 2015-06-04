@@ -45,10 +45,14 @@ Powerup.RAPIDFIRE_MAX_MULTIPLIER = 3.5;
 Powerup.SPEEDBOOST = 'speedboost';
 Powerup.SPEEDBOOST_MIN_BOOST = 1.2;
 Powerup.SPEEDBOOST_MAX_BOOST = 1.8;
+Powerup.SHIELD = 'shield';
+Powerup.SHIELD_MIN_STRENGTH = 1;
+Powerup.SHIELD_MAX_STRENGTH = 3;
 Powerup.POWERUPS = [Powerup.HEALTHPACK,
                     Powerup.SHOTGUN,
                     Powerup.RAPIDFIRE,
-                    Powerup.SPEEDBOOST];
+                    Powerup.SPEEDBOOST,
+                    Powerup.SHIELD];
 Powerup.MIN_DURATION = 5000;
 Powerup.MAX_DURATION = 15000;
 
@@ -76,6 +80,9 @@ Powerup.generateRandomPowerup = function() {
     case Powerup.SPEEDBOOST:
       data = Util.randRange(Powerup.SPEEDBOOST_MIN_BOOST,
                             Powerup.SPEEDBOOST_MAX_BOOST);
+    case Powerup.SHIELD:
+      data = Util.randRangeInt(Powerup.SHIELD_MIN_STRENGTH,
+                               Powerup.SHIELD_MAX_STRENGTH + 1);
       break;
   }
   var duration = Util.randRange(Powerup.MIN_DURATION,

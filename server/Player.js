@@ -121,6 +121,12 @@ Player.prototype.update = function(keyboardState, turretAngle) {
         this.velocity = Player.DEFAULT_VELOCITY *
                         this.powerups[powerup].data;
         break;
+      case Powerup.SHIELD:
+        if (this.powerups[powerup].data == 0) {
+          delete this.powerups[powerup];
+          continue;
+        }
+        break;
     }
     if ((new Date()).getTime() > this.powerups[powerup].expirationTime) {
       switch (powerup) {
@@ -133,6 +139,8 @@ Player.prototype.update = function(keyboardState, turretAngle) {
           break;
         case Powerup.SPEEDBOOST:
           this.velocity = Player.DEFAULT_VELOCITY;
+          break;
+        case Powerup.SHIELD:
           break;
       }
       delete this.powerups[powerup];    
@@ -168,7 +176,7 @@ Player.prototype.canShoot = function() {
  */
 Player.prototype.getProjectilesShot = function() {
   bullets = [new Bullet(this.x, this.y, this.turretAngle, this.id)];
-  if (this.powerups[Powerup.SHOTGUN] != null ||
+  if (this.powerups[Powerup.SHOTGUN] != null &&
       this.powerups[Powerup.SHOTGUN] != undefined) {
     for (var i = 1; i < this.powerups[Powerup.SHOTGUN].data + 1; ++i) {
       bullets.push(
@@ -181,6 +189,19 @@ Player.prototype.getProjectilesShot = function() {
   }
   this.lastShotTime = (new Date()).getTime();
   return bullets;
+};
+
+/**
+ * Damages the player by the given amount, factoring in shields.
+ * @param {number} amount The amount to damage the player by.
+ */
+Player.prototype.damage = function(amount) {
+  if (this.powerups[Powerup.SHIELD] != null &&
+      this.powerups[Powerup.SHIELD] != null) {
+    this.powerups[Powerup.SHIELD] -= 1;
+  } else {   
+    this.health -= damage;
+  }
 };
 
 /**
