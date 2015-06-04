@@ -40,6 +40,7 @@ function Player(x, y, orientation, name, id) {
    */
   this.powerups = {};
   this.hasShield = false;
+  this.collisionDistance = Player.DEFAULT_COLLISION_DISTANCE;
   this.debuffs = {};
 
   this.score = 0;
@@ -58,6 +59,12 @@ function Player(x, y, orientation, name, id) {
 Player.TURN_RATE = Math.PI / 45;
 Player.DEFAULT_VELOCITY = 5;
 Player.DEFAULT_SHOT_COOLDOWN = 800;
+Player.DEFAULT_COLLISION_DISTANCE = 20;
+/**
+ * Note: The shield hit distance does NOT match the size of the shield
+ * in shield.png.
+ */
+Player.SHIELD_COLLISION_DISTANCE = 35;
 Player.MAX_HEALTH = 10;
 Player.MINIMUM_RESPAWN_BUFFER = 1000;
 
@@ -125,9 +132,11 @@ Player.prototype.update = function(keyboardState, turretAngle) {
         break;
       case Powerup.SHIELD:
         this.hasShield = true;
+        this.collisionDistance = Player.SHIELD_COLLISION_DISTANCE;
         if (this.powerups[powerup].data == 0) {
           delete this.powerups[powerup];
           this.hasShield = false;
+          this.collisionDistance = Player.DEFAULT_COLLISION_DISTANCE;
           continue;
         }
         break;
@@ -146,6 +155,7 @@ Player.prototype.update = function(keyboardState, turretAngle) {
           break;
         case Powerup.SHIELD:
           this.hasShield = false;
+          this.collisionDistance = Player.DEFAULT_COLLISION_DISTANCE;
           break;
       }
       delete this.powerups[powerup];    
@@ -174,9 +184,9 @@ Player.prototype.canShoot = function() {
 };
 
 /**
- * Returns an array containing projectiles that the player has fired, factoring
- * in all powerups. Assumes the shot cooldown has passed and the player CAN
- * shoot. Resets lastShotTime.
+ * Returns an array containing projectiles that the player has fired,
+ * factoring in all powerups. Assumes the shot cooldown has passed and the
+ * player CAN shoot. Resets lastShotTime.
  * @return {Array.<Bullet>}
  */
 Player.prototype.getProjectilesShot = function() {
@@ -194,6 +204,25 @@ Player.prototype.getProjectilesShot = function() {
   }
   this.lastShotTime = (new Date()).getTime();
   return bullets;
+};
+
+/**
+ * Returns true if the given point is close enough to the player to count
+ * as a collision, factors in shields, since they increase the player's
+ * hitbox.
+ */
+Player.prototype.isHit = function(x, y, hitboxSize) {
+  var minDistance = this.collisionDistance + hitboxSize;
+  return Util.getEuclideanDistance2(this.x, this.y, x, y) <
+    (minDistance * minDistance);
+};
+
+/**
+ * Returns a boolean determining if the player is dead or not.
+ * @return {boolean}
+ */
+Player.prototype.isDead = function() {
+  return this.health <= 0;
 };
 
 /**

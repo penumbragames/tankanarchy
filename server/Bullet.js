@@ -20,6 +20,7 @@ function Bullet(x, y, direction, firedBy) {
   this.y = y;
   this.direction = direction;
   this.firedBy = firedBy;
+  this.damage = Bullet.DEFAULT_DAMAGE;
 
   this.distanceTraveled = 0;
   this.shouldExist = true;
@@ -33,20 +34,9 @@ function Bullet(x, y, direction, firedBy) {
  * COLLISION_DISTANCE is in pixels.
  */
 Bullet.VELOCITY = 20;
+Bullet.DEFAULT_DAMAGE = 1;
 Bullet.MAX_TRAVEL_DISTANCE = 1000;
-Bullet.COLLISION_DISTANCE = 30;
-
-/**
- * Returns true if this bullet has collided with the given player.
- * We square the collision distance to avoid using any square roots
- * for the distance formula.
- * @param {Object} player The player to check collision against.
- * @return {boolean}
- */
-Bullet.prototype.hit = function(player) {
-  return Util.getEuclideanDistance2(this.x, this.y, player.x, player.y) <
-    (Bullet.COLLISION_DISTANCE * Bullet.COLLISION_DISTANCE);
-};
+Bullet.HITBOX_SIZE = 10;
 
 /**
  * Updates this bullet and checks for collision with any player.
@@ -70,9 +60,10 @@ Bullet.prototype.update = function(clients) {
 
   var players = clients.values();
   for (var i = 0; i < players.length; ++i) {
-    if (this.firedBy != players[i].id && this.hit(players[i])) {
-      players[i].health -= 1;
-      if (players[i].health <= 0) {
+    if (this.firedBy != players[i].id &&
+        players[i].isHit(this.x, this.y, Bullet.HITBOX_SIZE)) {
+      players[i].damage(1);
+      if (players[i].isDead()) {
         players[i].respawn();
         var killingPlayer = clients.get(this.firedBy);
         killingPlayer.score++;
