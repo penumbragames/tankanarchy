@@ -1,5 +1,6 @@
 var socket = io();
 var game = new Game(document.getElementById('canvas'), socket);
+var afk_kicker = new AFK_Kicker();
 
 $(document).ready(function() {
   $('#name-input').focus();
@@ -55,11 +56,11 @@ socket.on('explosion', function(data) {
 
 function init() {
   Input.applyEventHandlers();
-  AFK.init();
+  afk_kicker.init();
 };
 
 function animate() {
-  AFK.check();
+  afk_kicker.check();
   game.update();
   game.draw();
   window.requestAnimFrame(animate);

@@ -9,7 +9,9 @@ var Constants = require('./Constants');
  * Empty constructor for the Util class, all functions will be static.
  * @constructor
  */
-function Util() {}
+function Util() {
+  throw new Error('Util should not be instantiated!');
+};
 
 /**
  * Returns the Manhattan Distance between two points given their x and y

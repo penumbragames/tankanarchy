@@ -6,33 +6,34 @@
  */
 
 /**
- * Empty constructor for the AFK object.
+ * Constructor for the AFK kicker class.
  * @constructor
  */
-function AFK() {}
+function AFK() {
+  this.timer = null;
+}
 
 /**
  * AFK kicker constants.
  */
-AFK.TIMER = 0;
 AFK.KICK_TIME = 120000;
 
 /**
  * Initializes the AFK kicker, must be called when the game starts.
  */
-AFK.init = function() {
-  AFK.TIMER = (new Date).getTime();
-  window.addEventListener('click', AFK.resetTimer);
-  window.addEventListener('mousemove', AFK.resetTimer);
-  window.addEventListener('keydown', AFK.resetTimer);
+AFK.prototype.init = function() {
+  this.timer = (new Date).getTime();
+  window.addEventListener('click', this.resetTimer);
+  window.addEventListener('mousemove', this.resetTimer);
+  window.addEventListener('keydown', this.resetTimer);
 };
 
 /**
  * Checks the timer and reloads the page if the player is determined
  * to be AFK.
  */
-AFK.check = function() {
-  if ((new Date).getTime() > AFK.TIMER + AFK.KICK_TIME) {
+AFK.prototype.check = function() {
+  if ((new Date).getTime() > this.timer + AFK.KICK_TIME) {
     location.reload();
   }
 };
@@ -41,6 +42,6 @@ AFK.check = function() {
  * Resets the AFK kick timer. Bound to click and key actions so that
  * the player will reset the timer whenever they move or shoot.
  */
-AFK.resetTimer = function() {
-  AFK.TIMER = (new Date).getTime();
+AFK.prototype.resetTimer = function() {
+  this.timer = (new Date).getTime();
 };
