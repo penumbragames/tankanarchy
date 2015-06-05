@@ -31,7 +31,7 @@ function Bullet(x, y, direction, firedBy) {
 /**
  * VELOCITY is in pixels per update.
  * MAX_TRAVEL_DISTANCE is in pixels.
- * COLLISION_DISTANCE is in pixels.
+ * HITBOX_SIZE is in pixels.
  */
 Bullet.VELOCITY = 20;
 Bullet.DEFAULT_DAMAGE = 1;
@@ -61,7 +61,8 @@ Bullet.prototype.update = function(clients) {
   var players = clients.values();
   for (var i = 0; i < players.length; ++i) {
     if (this.firedBy != players[i].id &&
-        players[i].isHit(this.x, this.y, Bullet.HITBOX_SIZE)) {
+        players[i].isCollidedWith(this.x, this.y,
+                                  Bullet.HITBOX_SIZE)) {
       players[i].damage(1);
       if (players[i].isDead()) {
         players[i].respawn();

@@ -27,9 +27,9 @@ function Powerup(x, y, name, data, duration) {
 };
 
 /**
- * PICKUP_DISTANCE is in pixels.
+ * HITBOX_SIZE is in pixels.
  */
-Powerup.PICKUP_DISTANCE = 30;
+Powerup.HITBOX_SIZE = 15;
 
 /**
  * Available Powerup types and specifications.
@@ -101,17 +101,6 @@ Powerup.prototype.getAppliedObject = function() {
     data: this.data,
     expirationTime: (new Date()).getTime() + this.duration
   };
-};
-
-/**
- * Returns true if the given player can pick up this health pack.
- * We square the pickup distance to avoid doing a square root operation whe
- * calculating the distance.
- * @return {boolean}
- */
-Powerup.prototype.isValidPickup = function(player) {
-  return Util.getEuclideanDistance2(this.x, this.y, player.x, player.y) <
-    (Powerup.PICKUP_DISTANCE * Powerup.PICKUP_DISTANCE);
 };
 
 /**

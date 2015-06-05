@@ -41,7 +41,7 @@ function Player(x, y, orientation, name, id) {
    */
   this.powerups = {};
   this.hasShield = false;
-  this.collisionDistance = Player.DEFAULT_COLLISION_DISTANCE;
+  this.hitboxSize = Player.DEFAULT_HITBOX_SIZE;
   this.debuffs = {};
 
   this.score = 0;
@@ -52,20 +52,22 @@ function Player(x, y, orientation, name, id) {
 
 /**
  * TURN_RATE is in radians per update.
- * VELOCITY is in pixels per update.
+ * DEFAULT_VELOCITY is in pixels per update.
  * DEFAULT_SHOT_COOLDOWN is in milliseconds.
+ * DEFAULT_HITBOX_SIZE is in pixels.
+ * SHIELD_HITBOX_SIZE is in pixels.
  * MAX_HEALTH is in health units.
  * MINIMUM_RESPAWN_BUFFER is a distance in pixels.
  */
 Player.TURN_RATE = Math.PI / 45;
 Player.DEFAULT_VELOCITY = 5;
 Player.DEFAULT_SHOT_COOLDOWN = 800;
-Player.DEFAULT_COLLISION_DISTANCE = 20;
+Player.DEFAULT_HITBOX_SIZE = 20;
 /**
  * Note: The shield hit distance does NOT match the size of the shield
  * in shield.png.
  */
-Player.SHIELD_COLLISION_DISTANCE = 35;
+Player.SHIELD_HITBOX_SIZE = 35;
 Player.MAX_HEALTH = 10;
 Player.MINIMUM_RESPAWN_BUFFER = 1000;
 
@@ -133,11 +135,11 @@ Player.prototype.update = function(keyboardState, turretAngle) {
         break;
       case Powerup.SHIELD:
         this.hasShield = true;
-        this.collisionDistance = Player.SHIELD_COLLISION_DISTANCE;
+        this.hitboxSize = Player.SHIELD_HITBOX_SIZE;
         if (this.powerups[powerup].data == 0) {
           delete this.powerups[powerup];
           this.hasShield = false;
-          this.collisionDistance = Player.DEFAULT_COLLISION_DISTANCE;
+          this.hitboxSize = Player.DEFAULT_HITBOX_SIZE;
           continue;
         }
         break;
@@ -156,7 +158,7 @@ Player.prototype.update = function(keyboardState, turretAngle) {
           break;
         case Powerup.SHIELD:
           this.hasShield = false;
-          this.collisionDistance = Player.DEFAULT_COLLISION_DISTANCE;
+          this.hitboxSize = Player.DEFAULT_HITBOX_SIZE;
           break;
       }
       delete this.powerups[powerup];    
@@ -208,12 +210,18 @@ Player.prototype.getProjectilesShot = function() {
 };
 
 /**
- * Returns true if the given point is close enough to the player to count
- * as a collision, factors in shields, since they increase the player's
- * hitbox.
+ * Used to determine if two objects have collided, factors in shields, since
+ * they increase the player's hitbox. This collision detection method assumes
+ * all objects have circular hitboxes.
+ * @param {number} x The x-coordinate of the center of the object's circular
+ *   hitbox.
+ * @param {number} y The y-coordinate of the center of the object's circular
+ *   hitbox.
+ * @param {number} hitboxSize The radius of the object's circular
+ *   hitbox.
  */
-Player.prototype.isHit = function(x, y, hitboxSize) {
-  var minDistance = this.collisionDistance + hitboxSize;
+Player.prototype.isCollidedWith = function(x, y, hitboxSize) {
+  var minDistance = this.hitboxSize + hitboxSize;
   return Util.getEuclideanDistance2(this.x, this.y, x, y) <
     (minDistance * minDistance);
 };
