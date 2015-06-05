@@ -89,12 +89,14 @@ Drawing.prototype.drawTank = function(isSelf, coords, orientation,
   this.context.drawImage(turret, -turret.width / 2, -turret.height / 2);
   this.context.restore();
 
-  this.context.save()
-  this.context.translate(coords[0], coords[1]);
-  var sheild = new Image();
-  shield.src = Drawing.SHIELD_SRC;
-  this.context.drawImage(sheild, -sheild.width / 2, -sheild.height / 2);
-  this.context.restore();
+  if (hasShield) {
+    this.context.save()
+    this.context.translate(coords[0], coords[1]);
+    var shield = new Image();
+    shield.src = Drawing.SHIELD_SRC;
+    this.context.drawImage(shield, -shield.width / 2, -shield.height / 2);
+    this.context.restore();
+  }
 };
 
 /** 
