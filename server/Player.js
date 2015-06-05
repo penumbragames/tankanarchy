@@ -67,7 +67,7 @@ Player.DEFAULT_HITBOX_SIZE = 20;
  * Note: The shield hit distance does NOT match the size of the shield
  * in shield.png.
  */
-Player.SHIELD_HITBOX_SIZE = 35;
+Player.SHIELD_HITBOX_SIZE = 45;
 Player.MAX_HEALTH = 10;
 Player.MINIMUM_RESPAWN_BUFFER = 1000;
 
@@ -117,10 +117,12 @@ Player.prototype.update = function(keyboardState, turretAngle) {
 
   // Loops through and applies powerups to the player. Removes them
   // when they expire.
+  console.log(this.powerups);
   for (var powerup in this.powerups) {
     switch (powerup) {
       case Powerup.HEALTHPACK:
-        this.health += this.powerups[powerup].data;
+        this.health = Math.min(this.health + this.powerups[powerup].data,
+                               Player.MAX_HEALTH);
         delete this.powerups[powerup];
         continue;
       case Powerup.SHOTGUN:
@@ -136,7 +138,7 @@ Player.prototype.update = function(keyboardState, turretAngle) {
       case Powerup.SHIELD:
         this.hasShield = true;
         this.hitboxSize = Player.SHIELD_HITBOX_SIZE;
-        if (this.powerups[powerup].data == 0) {
+        if (this.powerups[powerup].data <= 0) {
           delete this.powerups[powerup];
           this.hasShield = false;
           this.hitboxSize = Player.DEFAULT_HITBOX_SIZE;
@@ -240,10 +242,10 @@ Player.prototype.isDead = function() {
  */
 Player.prototype.damage = function(amount) {
   if (this.powerups[Powerup.SHIELD] != null &&
-      this.powerups[Powerup.SHIELD] != null) {
-    this.powerups[Powerup.SHIELD] -= 1;
+      this.powerups[Powerup.SHIELD] != undefined) {
+    this.powerups[Powerup.SHIELD].data -= 1;
   } else {   
-    this.health -= damage;
+    this.health -= amount;
   }
 };
 

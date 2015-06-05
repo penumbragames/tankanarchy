@@ -60,7 +60,7 @@ function init() {
 };
 
 function animate() {
-  afk_kicker.check();
+  //afk_kicker.check();
   game.update();
   game.draw();
   window.requestAnimFrame(animate);

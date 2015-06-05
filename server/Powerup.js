@@ -29,24 +29,24 @@ function Powerup(x, y, name, data, duration) {
 /**
  * HITBOX_SIZE is in pixels.
  */
-Powerup.HITBOX_SIZE = 15;
+Powerup.HITBOX_SIZE = 10;
 
 /**
  * Available Powerup types and specifications.
  */
-Powerup.HEALTHPACK = 'healthpack';
+Powerup.HEALTHPACK = 'healthpack_powerup';
 Powerup.HEALTHPACK_MIN_HEAL = 1;
 Powerup.HEALTHPACK_MAX_HEAL = 4;
-Powerup.SHOTGUN = 'shotgun';
+Powerup.SHOTGUN = 'shotgun_powerup';
 Powerup.SHOTGUN_MIN_BONUS_SHELLS = 1;
 Powerup.SHOTGUN_MAX_BONUS_SHELLS = 2;
-Powerup.RAPIDFIRE = 'rapidfire';
+Powerup.RAPIDFIRE = 'rapidfire_powerup';
 Powerup.RAPIDFIRE_MIN_MULTIPLIER = 2.0;
 Powerup.RAPIDFIRE_MAX_MULTIPLIER = 3.5;
-Powerup.SPEEDBOOST = 'speedboost';
+Powerup.SPEEDBOOST = 'speedboost_powerup';
 Powerup.SPEEDBOOST_MIN_BOOST = 1.2;
 Powerup.SPEEDBOOST_MAX_BOOST = 1.8;
-Powerup.SHIELD = 'shield';
+Powerup.SHIELD = 'shield_powerup';
 Powerup.SHIELD_MIN_STRENGTH = 1;
 Powerup.SHIELD_MAX_STRENGTH = 3;
 Powerup.POWERUPS = [Powerup.HEALTHPACK,
@@ -110,7 +110,8 @@ Powerup.prototype.getAppliedObject = function() {
  */
 Powerup.prototype.update = function(players) {
   for (var i = 0; i < players.length; ++i) {
-    if (this.isValidPickup(players[i])) {
+    if (players[i].isCollidedWith(this.x, this.y,
+                                  Powerup.HITBOX_SIZE)) {
       players[i].applyPowerup(this.name, this.getAppliedObject());
       this.shouldExist = false;
       return;
