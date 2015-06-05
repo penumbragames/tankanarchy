@@ -58,7 +58,8 @@ Game.prototype.findSelf = function() {
 /**
  * Updates the game's storage of all the players, called each time
  * the server sends a packet.
- * @param {Array.<Object>}
+ * @param {Array.<Object>} players An array of objects representing all
+ *   the active players.
  */
 Game.prototype.receivePlayers = function(players) {
   this.players = players;
@@ -67,8 +68,8 @@ Game.prototype.receivePlayers = function(players) {
 /**
  * Updates the game's storage of all the projectiles, called each time
  * the server sends a packet.
- * @param {Array.<Object>}
- * @todo Update nomenclature
+ * @param {Array.<Object>} projectiles An array of objects representing all
+ *   the active projectiles.
  */
 Game.prototype.receiveProjectiles = function(projectiles) {
   this.projectiles = projectiles;
@@ -77,7 +78,8 @@ Game.prototype.receiveProjectiles = function(projectiles) {
 /**
  * Updates the game's storage of all the powerups, called each time
  * the server sends packet.
- * @param {Array.<Object>}
+ * @param {Array.<Object>} powerups An array of objects representing all the
+ *   existing powerups.
  */
 Game.prototype.receivePowerups = function(powerups) {
   this.powerups = powerups;
@@ -86,7 +88,7 @@ Game.prototype.receivePowerups = function(powerups) {
 /**
  * Starts an explosion animation given an object representing a bullet that
  * has reached the end of it's path or collided with a player.
- * @param {Object]
+ * @param {Object} object Um idk
  * @todo Finish this method
  */
 Game.prototype.createExplosion = function(object) {

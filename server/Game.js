@@ -61,7 +61,7 @@ Game.prototype.updatePlayer = function(id, keyboardState, turretAngle) {
 
 /**
  * Returns an array of the currently active players.
- * @return {Array.<Object>}
+ * @return {Array.<Player>}
  */
 Game.prototype.getPlayers = function() {
   return this.clients.values();
@@ -90,7 +90,7 @@ Game.prototype.getProjectiles = function() {
 
 /**
  * Returns an array of the currently existing powerups.
- * @return {Array.<Object>}
+ * @return {Array.<Powerup>}
  */
 Game.prototype.getPowerups = function() {
   return this.powerups;
@@ -98,7 +98,7 @@ Game.prototype.getPowerups = function() {
 
 /**
  * Updates the state of all the objects in the game.
- * @param {Socket} io
+ * @param {Socket} io The Socket object to which to emit update packets.
  */
 Game.prototype.update = function(io) {
   for (var i = 0; i < this.projectiles.length; ++i) {

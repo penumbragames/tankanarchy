@@ -126,7 +126,6 @@ Util.getRandomWorldPoint = function(padding) {
  * values, exclusive of the max value.
  * @param {number} min The minimum number to generate.
  * @param {number} max The maximum number to generate.
- * @param {number}
  */
 Util.randRange = function(min, max) {
   if (min >= max) {
@@ -140,7 +139,6 @@ Util.randRange = function(min, max) {
  * of the max value.
  * @param {number} min The minimum number to generate.
  * @param {number} max The maximum number to generate.
- * @param {number}
  */
 Util.randRangeInt = function(min, max) {
   if (min >= max) {
@@ -151,7 +149,8 @@ Util.randRangeInt = function(min, max) {
 
 /**
  * Returns a random element in a given array.
- * @param {Array.<Object>}
+ * @param {Array.<Object>} array The array from which to select a random
+ *   element from.
  * @return {Object}
  */
 Util.choiceArray = function(array) {

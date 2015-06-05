@@ -53,12 +53,17 @@ ViewPort.prototype.getVisibleObjects = function(objects) {
 
 /**
  * Given an object, returns an array containing the object's converted
- * coordinates. Assumes the object is a valid data structure sent by the
+ * coordinates. The object must be a valid data structure sent by the
  * server with an x and y value.
- * @param {Object}
+ * @param {Object} object The object whose converted coords should be
+ *   returned.
  * @return {[number, number]}
  */
 ViewPort.prototype.toCanvasCoords = function(object) {
+  if (object.x == null || object.x == undefined ||
+      object.y == null || object.y == undefined) {
+    throw new Error('Invalid object');
+  }
   if (object.id == this.selfId) {
     return [Game.WIDTH / 2, Game.HEIGHT / 2];
   } else {
