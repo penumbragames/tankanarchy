@@ -27,7 +27,7 @@ Drawing.OTHER_TURRET_SRC = '../data/other_turret.png';
 Drawing.SHIELD_SRC = '../data/shield.png';
 Drawing.BULLET_SRC = '../data/bullet.png';
 Drawing.TILE_SRC = '../data/tile.png';
-Drawing.TILE_SRC_SIZE = 100;
+Drawing.TILE_SIZE = 100;
 
 /**
  * Draws a tank to the canvas.
