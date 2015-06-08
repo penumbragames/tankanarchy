@@ -117,7 +117,6 @@ Player.prototype.update = function(keyboardState, turretAngle) {
 
   // Loops through and applies powerups to the player. Removes them
   // when they expire.
-  console.log(this.powerups);
   for (var powerup in this.powerups) {
     switch (powerup) {
       case Powerup.HEALTHPACK:

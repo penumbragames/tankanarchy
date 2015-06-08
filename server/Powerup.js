@@ -53,7 +53,7 @@ Powerup.POWERUPS = [Powerup.HEALTHPACK,
                     Powerup.SHOTGUN,
                     Powerup.RAPIDFIRE,
                     Powerup.SPEEDBOOST,
-                    Powerup.SHIELD];
+                    ]//;Powerup.SHIELD];
 Powerup.MIN_DURATION = 5000;
 Powerup.MAX_DURATION = 15000;
 
