@@ -59,7 +59,7 @@ Game.prototype.removePlayer = function(id) {
 Game.prototype.updatePlayer = function(id, keyboardState, turretAngle) {
   var player = this.clients.get(id);
   if (player != undefined && player != null) {
-    player.update(keyboardState, turretAngle);
+    player.updateOnInput(keyboardState, turretAngle);
   }
 };
 
@@ -105,6 +105,11 @@ Game.prototype.getPowerups = function() {
  * @param {Socket} io The Socket object to which to emit update packets.
  */
 Game.prototype.update = function(io) {
+  var players = this.getPlayers();
+  for (var i = 0; i < players.length; ++i) {
+    players[i].update();
+  }
+  
   for (var i = 0; i < this.projectiles.length; ++i) {
     if (this.projectiles[i].shouldExist) {
       this.projectiles[i].update(this.clients);
@@ -126,9 +131,9 @@ Game.prototype.update = function(io) {
       i--;
     }
   }
-
+  
   // Sends update packets every client.
-  io.sockets.emit('update-players', this.getPlayers());
+  io.sockets.emit('update-players', players);
   io.sockets.emit('update-projectiles', this.getProjectiles());
   io.sockets.emit('update-powerups', this.getPowerups());
 };

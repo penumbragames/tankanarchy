@@ -85,14 +85,13 @@ Player.generateNewPlayer = function(name, id) {
 
 /**
  * Updates this player given the the client's keyboard state and mouse angle
- * for setting the tank turret. Also updates the state of the powerups and
- * expires them if necessary.
+ * for setting the tank turret.
  * @param {Object} keyboardState A JSON Object storing the state of the
  *   client keyboard.
  * @param {number} turretAngle The angle of the client's mouse with respect
  *   to the tank.
  */
-Player.prototype.update = function(keyboardState, turretAngle) {
+Player.prototype.updateOnInput = function(keyboardState, turretAngle) {
   if (keyboardState.up) {
     this.x += this.velocity * Math.sin(this.orientation);
     this.y -= this.velocity * Math.cos(this.orientation);
@@ -113,7 +112,14 @@ Player.prototype.update = function(keyboardState, turretAngle) {
   this.y = boundedCoord[1];
 
   this.turretAngle = turretAngle;
+};
 
+/**
+ * Updates the player's powerup states, this runs in the 60Hz server side
+ * loop so that powerups expire even when the player is not moving or
+ * shooting.
+ */
+Player.prototype.update = function() {
   // Loops through and applies powerups to the player. Removes them
   // when they expire.
   for (var powerup in this.powerups) {
