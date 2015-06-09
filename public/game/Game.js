@@ -158,8 +158,9 @@ Game.prototype.draw = function() {
       visiblePowerups[i].name);
   }
 
-  // TODO: only render visible players
+
   var visiblePlayers = this.viewPort.getVisibleObjects(this.players);
+  console.log(visiblePlayers);
   for (var i = 0; i < visiblePlayers.length; ++i) {
     this.drawing.drawTank(
       visiblePlayers[i].id == this.id,
@@ -168,6 +169,6 @@ Game.prototype.draw = function() {
       visiblePlayers[i].turretAngle,
       visiblePlayers[i].name,
       visiblePlayers[i].health,
-      visiblePlayers[i].hasShield);
+      visiblePlayers[i].powerups['shield_powerup']);
   }
 };

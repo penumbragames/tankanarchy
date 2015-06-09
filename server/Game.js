@@ -23,6 +23,10 @@ function Game() {
   return this;
 };
 
+/**
+ * MAX_MAP_POWERUPS is the maximum of number of powerups that can be active
+ *   on the map at any given point in time.
+ */
 Game.MAX_MAP_POWERUPS = 10;
 
 /**

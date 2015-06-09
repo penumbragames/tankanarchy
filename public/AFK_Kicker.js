@@ -26,6 +26,7 @@ AFK_Kicker.prototype.init = function() {
   window.addEventListener('click', this.resetTimer);
   window.addEventListener('mousemove', this.resetTimer);
   window.addEventListener('keydown', this.resetTimer);
+  window.addEventListener('keyup', this.resetTimer);
 };
 
 /**

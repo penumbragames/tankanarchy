@@ -89,7 +89,7 @@ Drawing.prototype.drawTank = function(isSelf, coords, orientation,
   this.context.drawImage(turret, -turret.width / 2, -turret.height / 2);
   this.context.restore();
 
-  if (hasShield) {
+  if (hasShield != null && hasShield != undefined) {
     this.context.save()
     this.context.translate(coords[0], coords[1]);
     var shield = new Image();

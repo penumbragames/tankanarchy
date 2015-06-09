@@ -40,7 +40,6 @@ function Player(x, y, orientation, name, id) {
    * }
    */
   this.powerups = {};
-  this.hasShield = false;
   this.hitboxSize = Player.DEFAULT_HITBOX_SIZE;
   this.debuffs = {};
 
@@ -135,11 +134,9 @@ Player.prototype.update = function(keyboardState, turretAngle) {
                         this.powerups[powerup].data;
         break;
       case Powerup.SHIELD:
-        this.hasShield = true;
         this.hitboxSize = Player.SHIELD_HITBOX_SIZE;
         if (this.powerups[powerup].data <= 0) {
           delete this.powerups[powerup];
-          this.hasShield = false;
           this.hitboxSize = Player.DEFAULT_HITBOX_SIZE;
           continue;
         }
@@ -158,7 +155,6 @@ Player.prototype.update = function(keyboardState, turretAngle) {
           this.velocity = Player.DEFAULT_VELOCITY;
           break;
         case Powerup.SHIELD:
-          this.hasShield = false;
           this.hitboxSize = Player.DEFAULT_HITBOX_SIZE;
           break;
       }
@@ -175,6 +171,7 @@ Player.prototype.update = function(keyboardState, turretAngle) {
  */
 Player.prototype.applyPowerup = function(name, powerup) {
   this.powerups[name] = powerup;
+  console.log(powerup);
 };
 
 /**
@@ -243,7 +240,7 @@ Player.prototype.damage = function(amount) {
   if (this.powerups[Powerup.SHIELD] != null &&
       this.powerups[Powerup.SHIELD] != undefined) {
     this.powerups[Powerup.SHIELD].data -= 1;
-  } else {   
+  } else {
     this.health -= amount;
   }
 };

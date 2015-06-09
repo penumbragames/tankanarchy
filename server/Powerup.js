@@ -44,8 +44,8 @@ Powerup.RAPIDFIRE = 'rapidfire_powerup';
 Powerup.RAPIDFIRE_MIN_MULTIPLIER = 2.0;
 Powerup.RAPIDFIRE_MAX_MULTIPLIER = 3.5;
 Powerup.SPEEDBOOST = 'speedboost_powerup';
-Powerup.SPEEDBOOST_MIN_BOOST = 1.2;
-Powerup.SPEEDBOOST_MAX_BOOST = 1.8;
+Powerup.SPEEDBOOST_MIN_MULTIPLIER = 1.2;
+Powerup.SPEEDBOOST_MAX_MULTIPLIER = 1.8;
 Powerup.SHIELD = 'shield_powerup';
 Powerup.SHIELD_MIN_STRENGTH = 1;
 Powerup.SHIELD_MAX_STRENGTH = 3;
@@ -53,7 +53,7 @@ Powerup.POWERUPS = [Powerup.HEALTHPACK,
                     Powerup.SHOTGUN,
                     Powerup.RAPIDFIRE,
                     Powerup.SPEEDBOOST,
-                    ]//;Powerup.SHIELD];
+                    Powerup.SHIELD];
 Powerup.MIN_DURATION = 5000;
 Powerup.MAX_DURATION = 15000;
 
@@ -64,7 +64,7 @@ Powerup.MAX_DURATION = 15000;
 Powerup.generateRandomPowerup = function() {
   var point = Util.getRandomWorldPoint();
   var name = Util.choiceArray(Powerup.POWERUPS);
-  var data;
+  var data = null;
   switch (name) {
     case Powerup.HEALTHPACK:
       data = Util.randRangeInt(Powerup.HEALTHPACK_MIN_HEAL,
@@ -79,8 +79,9 @@ Powerup.generateRandomPowerup = function() {
                             Powerup.RAPIDFIRE_MAX_MULTIPLIER);
       break;
     case Powerup.SPEEDBOOST:
-      data = Util.randRange(Powerup.SPEEDBOOST_MIN_BOOST,
-                            Powerup.SPEEDBOOST_MAX_BOOST);
+      data = Util.randRange(Powerup.SPEEDBOOST_MIN_MULTIPLIER,
+                            Powerup.SPEEDBOOST_MAX_MULTIPLIER);
+      break;
     case Powerup.SHIELD:
       data = Util.randRangeInt(Powerup.SHIELD_MIN_STRENGTH,
                                Powerup.SHIELD_MAX_STRENGTH + 1);
@@ -96,6 +97,7 @@ Powerup.generateRandomPowerup = function() {
  * @return {Object}
  */
 Powerup.prototype.getAppliedObject = function() {
+  console.log(this.data);
   return {
     name: this.name,
     data: this.data,
