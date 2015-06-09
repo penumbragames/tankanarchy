@@ -97,7 +97,6 @@ Powerup.generateRandomPowerup = function() {
  * @return {Object}
  */
 Powerup.prototype.getAppliedObject = function() {
-  console.log(this.data);
   return {
     name: this.name,
     data: this.data,

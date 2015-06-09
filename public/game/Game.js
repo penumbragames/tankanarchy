@@ -157,10 +157,8 @@ Game.prototype.draw = function() {
       this.viewPort.toCanvasCoords(visiblePowerups[i]),
       visiblePowerups[i].name);
   }
-
-
+  
   var visiblePlayers = this.viewPort.getVisibleObjects(this.players);
-  console.log(visiblePlayers);
   for (var i = 0; i < visiblePlayers.length; ++i) {
     this.drawing.drawTank(
       visiblePlayers[i].id == this.id,

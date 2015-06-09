@@ -171,7 +171,6 @@ Player.prototype.update = function(keyboardState, turretAngle) {
  */
 Player.prototype.applyPowerup = function(name, powerup) {
   this.powerups[name] = powerup;
-  console.log(powerup);
 };
 
 /**
