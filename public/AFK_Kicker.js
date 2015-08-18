@@ -19,7 +19,7 @@ AFK_Kicker.TIMER = 0;
 /**
  * This is the time that must elapse before the player is kicked.
  */
-AFK_Kicker.KICK_TIME = 5000;
+AFK_Kicker.KICK_TIME = 120000;
 
 /**
  * Initializes the AFK_Kicker kicker, must be called when the game starts.
