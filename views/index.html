@@ -5,18 +5,16 @@
     <link rel='icon'
           type='image/png'
           href='data/favicon.png' />
-    <link href='//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'
+    <link href='/bower_components/bootstrap/dist/css/bootstrap.min.css'
           rel='stylesheet' />
-    <link href='//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'
-          rel='stylesheet'>
-    <link href='styles/styles.css' rel='stylesheet' />
-    
-    <script src='/socket.io/socket.io.js'>
+    <link href='/static/css/styles.css' rel='stylesheet' />
+    <script src="/socket.io/socket.io.js"></script>
+    <script src='/bower_components/jquery/dist/jquery.min.js'>
     </script>
-    <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'>
+<!--
+    <script src='/bower_components/socket.io-client/dist/socket.io.min.js'>
     </script>
-    <script src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js'>
-    </script>
+-->
   </head>
   <!--
       TODO: Make the webpage look nicer.
@@ -78,13 +76,13 @@
       </div>
     </div>
 
-    <script src='requestAnimFrame.js'></script>
-    <script src='AFK_Kicker.js'></script>
-    <script src='game/Input.js'></script>
-    <script src='game/ViewPort.js'></script>
-    <script src='game/Drawing.js'></script>
-    <script src='game/Environment.js'></script>
-    <script src='game/Game.js'></script>
-    <script src='client.js'></script>
+    <script src='/static/js/requestAnimFrame.js'></script>
+    <script src='/static/js/AFK_Kicker.js'></script>
+    <script src='/static/js/game/Input.js'></script>
+    <script src='/static/js/game/ViewPort.js'></script>
+    <script src='/static/js/game/Drawing.js'></script>
+    <script src='/static/js/game/Environment.js'></script>
+    <script src='/static/js/game/Game.js'></script>
+    <script src='/static/js/client.js'></script>
   </body>
 </html>

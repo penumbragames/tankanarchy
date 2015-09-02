@@ -88,7 +88,7 @@ Game.prototype.receivePowerups = function(powerups) {
 /**
  * Starts an explosion animation given an object representing a bullet that
  * has reached the end of it's path or collided with a player.
- * @param {Object} object Um idk
+ * @param {Object} object
  * @todo Finish this method
  */
 Game.prototype.createExplosion = function(object) {
@@ -121,7 +121,6 @@ Game.prototype.update = function() {
 
   // Emits an event for the player shooting to the server.
   if (Input.LEFT_CLICK) {
-    var self = this.findSelf();
     this.socket.emit('fire-bullet');
   }
 
@@ -157,7 +156,7 @@ Game.prototype.draw = function() {
       this.viewPort.toCanvasCoords(visiblePowerups[i]),
       visiblePowerups[i].name);
   }
-  
+
   var visiblePlayers = this.viewPort.getVisibleObjects(this.players);
   for (var i = 0; i < visiblePlayers.length; ++i) {
     this.drawing.drawTank(

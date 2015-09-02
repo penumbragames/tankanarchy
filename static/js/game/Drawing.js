@@ -20,13 +20,14 @@ Drawing.NAME_COLOR = 'black';
 Drawing.HP_COLOR = 'green';
 Drawing.HP_MISSING_COLOR = 'red';
 
-Drawing.SELF_TANK_SRC = '../data/self_tank.png';
-Drawing.SELF_TURRET_SRC = '../data/self_turret.png';
-Drawing.OTHER_TANK_SRC = '../data/other_tank.png';
-Drawing.OTHER_TURRET_SRC = '../data/other_turret.png';
-Drawing.SHIELD_SRC = '../data/shield.png';
-Drawing.BULLET_SRC = '../data/bullet.png';
-Drawing.TILE_SRC = '../data/tile.png';
+Drawing.BASE_IMG_URL = '/static/img/';
+Drawing.SELF_TANK_SRC = Drawing.BASE_IMG_URL + 'self_tank.png';
+Drawing.SELF_TURRET_SRC = Drawing.BASE_IMG_URL + 'self_turret.png';
+Drawing.OTHER_TANK_SRC = Drawing.BASE_IMG_URL + 'other_tank.png';
+Drawing.OTHER_TURRET_SRC = Drawing.BASE_IMG_URL + 'other_turret.png';
+Drawing.SHIELD_SRC = Drawing.BASE_IMG_URL + 'shield.png';
+Drawing.BULLET_SRC = Drawing.BASE_IMG_URL + 'bullet.png';
+Drawing.TILE_SRC = Drawing.BASE_IMG_URL + 'tile.png';
 Drawing.TILE_SIZE = 100;
 
 /**
@@ -62,7 +63,7 @@ Drawing.prototype.drawTank = function(isSelf, coords, orientation,
       this.context.fillStyle = Drawing.HP_MISSING_COLOR;
       this.context.fillRect(-25 + 5 * i, -42, 5, 4);
     }
-  }     
+  }
   this.context.restore();
 
   this.context.save();
@@ -99,7 +100,7 @@ Drawing.prototype.drawTank = function(isSelf, coords, orientation,
   }
 };
 
-/** 
+/**
  * Draws a bullet.
  * @param {[number, number]} coords The coordinates of the center of the
  *   bullet.
@@ -124,7 +125,7 @@ Drawing.prototype.drawPowerup = function(coords, name) {
   this.context.save();
   this.context.translate(coords[0], coords[1]);
   var powerup = new Image();
-  powerup.src = '../data/' + name + '.png';
+  powerup.src = Drawing.BASE_IMG_URL + name + '.png';
   this.context.drawImage(powerup, -powerup.width / 2, -powerup.height / 2);
   this.context.restore();
 }

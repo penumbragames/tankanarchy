@@ -1,21 +1,27 @@
 {
   "name": "tank-anarchy",
   "version": "1.1.2",
-  "description": "A fun multiplayer game",
+  "description": "A multiplayer tank battle arena game",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "postinstall": "./node_modules/bower/bin/bower install"
   },
   "dependencies": {
+    "async": "^1.4.2",
+    "body-parser": "^1.13.3",
+    "bower": "^1.5.2",
     "express": "~4.12.3",
     "hashmap": "^2.0.3",
-    "socket.io": "~1.3.5"
+    "morgan": "^1.6.1",
+    "socket.io": "~1.3.5",
+    "swig": "^1.4.2"
   },
   "engines": {
     "node": "*"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/omgimanerd/tank-anarchy"
+    "url": "https://github.com/omgimanerd/tankanarchy"
   }
 }
