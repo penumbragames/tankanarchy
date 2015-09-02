@@ -20,6 +20,7 @@ var Game = require('./server/Game');
 // Initialization.
 var app = express();
 var server = http.Server(app);
+var io = socketIo(server);
 var game = new Game();
 
 app.engine('html', swig.renderFile);
@@ -43,7 +44,6 @@ app.get('/', function(request, response) {
 // Server side input handler, modifies the state of the players and the
 // game based on the input it receives. Everything runs synchronously with
 // the game loop.
-var io = socketIo(server);
 io.on('connection', function(socket) {
   console.log('hit');
   // When a new player joins, the server sends his/her unique ID back so

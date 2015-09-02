@@ -37,7 +37,6 @@ AFK_Kicker.init = function() {
  * to be AFK_Kicker.
  */
 AFK_Kicker.check = function() {
-  console.log((new Date()).getTime() - AFK_Kicker.TIMER);
   if ((new Date()).getTime() > AFK_Kicker.TIMER + AFK_Kicker.KICK_TIME) {
     location.reload();
   }

@@ -1,88 +1,75 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Tank Anarchy</title>
-    <link rel='icon'
-          type='image/png'
-          href='data/favicon.png' />
-    <link href='/bower_components/bootstrap/dist/css/bootstrap.min.css'
-          rel='stylesheet' />
-    <link href='/static/css/styles.css' rel='stylesheet' />
-    <script src="/socket.io/socket.io.js"></script>
-    <script src='/bower_components/jquery/dist/jquery.min.js'>
-    </script>
-<!--
-    <script src='/bower_components/socket.io-client/dist/socket.io.min.js'>
-    </script>
--->
-  </head>
-  <!--
-      TODO: Make the webpage look nicer.
-  -->
-  <body oncontextmenu='return false;'>
-    <div id='name-prompt-overlay'>
-      <div id='name-prompt-container'>
-        <form id='name-form'>
-          <div class='input-group'>
-            <input type='text'
-                   class='form-control'
-                   id='name-input'
-                   placeholder='Nickname'
-                   autocomplete='off' />
-            <span class='input-group-addon'
-                  id='name-submit'>
-              Play
-            </span>
-          </div>
-        </form>
-      </div>
-    </div>
+{% extends 'layout.html' %}
 
-    <div id='container'>
-      <table id='content'>
-        <tr>
-          <td colspan='3'>
-            <h1>
-              Tank Anarchy
-            </h1>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            WASD to move
-            <br />
-            Click to shoot
-            <br />
-          </td>
-          <td>
-            <!--
-            TODO: Add kill announcement message.
-            <Player> was slain by <Player>.
-            -->
-            <canvas id='canvas'>
-            </canvas>
-          </td>
-          <td>
-            <h3>
-              Leaderboard:
-            </h3>
-            <ul id='leaderboard'>
-            </ul>
-          </td>
-        </tr>
-      </table>
-      <div id='copyright'>
-        &copy; 2015 Alvin Lin and Kenneth Li. All Rights Reserved.
-      </div>
-    </div>
+{% block head %}
+  <script src="/socket.io/socket.io.js">
+  </script>
+{% endblock %}
 
-    <script src='/static/js/requestAnimFrame.js'></script>
-    <script src='/static/js/AFK_Kicker.js'></script>
-    <script src='/static/js/game/Input.js'></script>
-    <script src='/static/js/game/ViewPort.js'></script>
-    <script src='/static/js/game/Drawing.js'></script>
-    <script src='/static/js/game/Environment.js'></script>
-    <script src='/static/js/game/Game.js'></script>
-    <script src='/static/js/client.js'></script>
-  </body>
-</html>
+{% block body %}
+  <div id='name-prompt-overlay'>
+    <div id='name-prompt-container'>
+      <form id='name-form'>
+        <div class='input-group'>
+          <input type='text'
+                 class='form-control'
+                 id='name-input'
+                 placeholder='Nickname'
+                 autocomplete='off' />
+          <span class='input-group-addon'
+                id='name-submit'>
+            Play
+          </span>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id='container'>
+    <table id='content'>
+      <tr>
+        <td colspan='3'>
+          <h1>
+            Tank Anarchy
+          </h1>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          WASD to move
+          <br />
+          Click to shoot
+          <br />
+        </td>
+        <td>
+          <!--
+          TODO: Add kill announcement message.
+          <Player> was slain by <Player>.
+          -->
+          <canvas id='canvas'>
+          </canvas>
+        </td>
+        <td>
+          <h3>
+            Leaderboard:
+          </h3>
+          <ul id='leaderboard'>
+          </ul>
+        </td>
+      </tr>
+    </table>
+    <div id='copyright'>
+      &copy; 2015 Alvin Lin and Kenneth Li. All Rights Reserved.
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src='/static/js/requestAnimFrame.js'></script>
+  <script src='/static/js/AFK_Kicker.js'></script>
+  <script src='/static/js/game/Input.js'></script>
+  <script src='/static/js/game/ViewPort.js'></script>
+  <script src='/static/js/game/Drawing.js'></script>
+  <script src='/static/js/game/Environment.js'></script>
+  <script src='/static/js/game/Game.js'></script>
+  <script src='/static/js/client.js'></script>
+{% endblock %}
