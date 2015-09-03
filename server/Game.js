@@ -109,7 +109,7 @@ Game.prototype.update = function(io) {
   for (var i = 0; i < players.length; ++i) {
     players[i].update();
   }
-  
+
   for (var i = 0; i < this.projectiles.length; ++i) {
     if (this.projectiles[i].shouldExist) {
       this.projectiles[i].update(this.clients);
@@ -131,7 +131,7 @@ Game.prototype.update = function(io) {
       i--;
     }
   }
-  
+
   // Sends update packets every client.
   io.sockets.emit('update-players', players);
   io.sockets.emit('update-projectiles', this.getProjectiles());
