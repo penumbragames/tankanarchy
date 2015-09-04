@@ -19,8 +19,6 @@ function Game() {
   this.clients = new HashMap();
   this.projectiles = [];
   this.powerups = [];
-
-  return this;
 };
 
 /**
@@ -64,24 +62,24 @@ Game.prototype.updatePlayer = function(id, keyboardState, turretAngle) {
 };
 
 /**
- * Returns an array of the currently active players.
- * @return {Array.<Player>}
- */
-Game.prototype.getPlayers = function() {
-  return this.clients.values();
-};
-
-/**
  * Given a socket ID, adds a projectile that was fired by the player
  * associated with that ID.
  * @param {string} The socket ID of the player that fired a projectile.
  */
-Game.prototype.addProjectile = function(id) {
+Game.prototype.addBulletFiredBy = function(id) {
   var player = this.clients.get(id);
   if (player != undefined && player != null && player.canShoot()) {
     this.projectiles = this.projectiles.concat(
       player.getProjectilesShot());
   }
+};
+
+/**
+ * Returns an array of the currently active players.
+ * @return {Array.<Player>}
+ */
+Game.prototype.getPlayers = function() {
+  return this.clients.values();
 };
 
 /**
@@ -101,6 +99,18 @@ Game.prototype.getPowerups = function() {
 };
 
 /**
+ * Returns an object containing all existing entities.
+ * @return {Object}
+ */
+Game.prototype.getState = function() {
+  return {
+    players: this.getPlayers(),
+    projectiles: this.getProjectiles(),
+    powerups: this.getPowerups()
+  }
+};
+
+/**
  * Updates the state of all the objects in the game.
  * @param {Socket} io The Socket object to which to emit update packets.
  */
@@ -114,7 +124,7 @@ Game.prototype.update = function(io) {
     if (this.projectiles[i].shouldExist) {
       this.projectiles[i].update(this.clients);
     } else {
-      io.sockets.emit('explosion', this.projectiles.splice(i, 1));
+//      io.sockets.emit('explosion', this.projectiles.splice(i, 1));
       i--;
     }
   }
@@ -131,11 +141,6 @@ Game.prototype.update = function(io) {
       i--;
     }
   }
-
-  // Sends update packets every client.
-  io.sockets.emit('update-players', players);
-  io.sockets.emit('update-projectiles', this.getProjectiles());
-  io.sockets.emit('update-powerups', this.getPowerups());
 };
 
 module.exports = Game;

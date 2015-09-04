@@ -45,24 +45,20 @@ app.get('/', function(request, response) {
 // game based on the input it receives. Everything runs synchronously with
 // the game loop.
 io.on('connection', function(socket) {
-  console.log('hit');
   // When a new player joins, the server sends his/her unique ID back so
   // for future identification purposes.
   socket.on('new-player', function(data) {
     game.addNewPlayer(data.name, socket.id);
     socket.emit('send-id', {
-      id: socket.id,
-      players: game.getPlayers()
+      id: socket.id
     });
   });
 
-  socket.on('move-player', function(data) {
+  socket.on('player-action', function(data) {
     game.updatePlayer(socket.id, data.keyboardState, data.turretAngle);
-  });
-
-  // TODO: player shooting sound and explosion animations
-  socket.on('fire-bullet', function() {
-    game.addProjectile(socket.id);
+    if (data.shot) {
+      game.addBulletFiredBy(socket.id);
+    }
   });
 
   // TODO: player disconnect explosion animation?
@@ -75,6 +71,7 @@ io.on('connection', function(socket) {
 // clients every tick.
 setInterval(function() {
   game.update(io);
+  io.sockets.emit('update', game.getState());
 }, FRAME_RATE);
 
 // Starts the server.

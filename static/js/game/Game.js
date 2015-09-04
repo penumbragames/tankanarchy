@@ -56,33 +56,14 @@ Game.prototype.findSelf = function() {
 };
 
 /**
- * Updates the game's storage of all the players, called each time
- * the server sends a packet.
- * @param {Array.<Object>} players An array of objects representing all
- *   the active players.
+ * Updates the game's internal storage of all the powerups, called each time
+ * the server sends packets.
+ * @param {Object} state
  */
-Game.prototype.receivePlayers = function(players) {
-  this.players = players;
-};
-
-/**
- * Updates the game's storage of all the projectiles, called each time
- * the server sends a packet.
- * @param {Array.<Object>} projectiles An array of objects representing all
- *   the active projectiles.
- */
-Game.prototype.receiveProjectiles = function(projectiles) {
-  this.projectiles = projectiles;
-};
-
-/**
- * Updates the game's storage of all the powerups, called each time
- * the server sends packet.
- * @param {Array.<Object>} powerups An array of objects representing all the
- *   existing powerups.
- */
-Game.prototype.receivePowerups = function(powerups) {
-  this.powerups = powerups;
+Game.prototype.receiveGameState = function(state) {
+  this.players = state.players;
+  this.projectiles = state.projectiles;
+  this.powerups = state.powerups;
 };
 
 /**
@@ -101,27 +82,25 @@ Game.prototype.createExplosion = function(object) {
  */
 Game.prototype.update = function() {
   var self = this.findSelf();
-  this.viewPort.update(self.x, self.y);
+  if (self) {
+    this.viewPort.update(self.x, self.y);
 
-  var turretAngle = Math.atan2(
-    Input.MOUSE[1] - Game.HEIGHT / 2,
-    Input.MOUSE[0] - Game.WIDTH / 2) + Math.PI / 2;
+    var turretAngle = Math.atan2(
+      Input.MOUSE[1] - Game.HEIGHT / 2,
+      Input.MOUSE[0] - Game.WIDTH / 2) + Math.PI / 2;
 
-  // Emits an event for the containing the player's intention to move
-  // to the server.
-  this.socket.emit('move-player', {
-    keyboardState: {
-      up: Input.UP,
-      right: Input.RIGHT,
-      down: Input.DOWN,
-      left: Input.LEFT
-    },
-    turretAngle: turretAngle
-  });
-
-  // Emits an event for the player shooting to the server.
-  if (Input.LEFT_CLICK) {
-    this.socket.emit('fire-bullet');
+    // Emits an event for the containing the player's intention to move
+    // or shoot to the server.
+    this.socket.emit('player-action', {
+      keyboardState: {
+        up: Input.UP,
+        right: Input.RIGHT,
+        down: Input.DOWN,
+        left: Input.LEFT
+      },
+      turretAngle: turretAngle,
+      shot: Input.LEFT_CLICK
+    });
   }
 
   // Updates the leaderboard.

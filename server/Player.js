@@ -164,7 +164,7 @@ Player.prototype.update = function() {
           this.hitboxSize = Player.DEFAULT_HITBOX_SIZE;
           break;
       }
-      delete this.powerups[powerup];    
+      delete this.powerups[powerup];
     }
   }
 };

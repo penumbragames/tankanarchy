@@ -31,22 +31,13 @@ socket.on('send-id', function(data) {
   // When we receive our ID, we will associate it to our Game object and
   // start the game.
   game.setID(data.id);
-  game.receivePlayers(data.players);
   $('#name-prompt-overlay').fadeOut(500);
   init();
   animate();
 });
 
-socket.on('update-players', function(data) {
-  game.receivePlayers(data);
-});
-
-socket.on('update-projectiles', function(data) {
-  game.receiveProjectiles(data);
-});
-
-socket.on('update-powerups', function(data) {
-  game.receivePowerups(data);
+socket.on('update', function(data) {
+  game.receiveGameState(data);
 });
 
 socket.on('explosion', function(data) {
