@@ -4,6 +4,7 @@
  */
 
 var PORT_NUMBER = process.env.PORT || 5000;
+var IP = process.env.IP || '127.0.0.1';
 var FRAME_RATE = 1000.0 / 60.0;
 
 // Dependencies.
@@ -59,7 +60,7 @@ io.on('connection', function(socket) {
     if (data.shot) {
       game.addBulletFiredBy(socket.id);
     }
-    var ping = (new Date()).getTime() - data.timestamp;
+    // var ping = (new Date()).getTime() - data.timestamp;
   });
 
   // TODO: player disconnect explosion animation?
@@ -76,5 +77,5 @@ setInterval(function() {
 }, FRAME_RATE);
 
 // Starts the server.
-server.listen(PORT_NUMBER);
+server.listen(PORT_NUMBER, IP);
 console.log('Starting server on port ' + PORT_NUMBER);
