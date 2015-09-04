@@ -60,7 +60,10 @@ io.on('connection', function(socket) {
     if (data.shot) {
       game.addBulletFiredBy(socket.id);
     }
-    // var ping = (new Date()).getTime() - data.timestamp;
+    var ping = (new Date()).getTime() - data.timestamp;
+    // TODO: filter player data when it is sent back so that only visible
+    // and valid players are sent back to prevent cham hacks from sniffing
+    // packets.
   });
 
   // TODO: player disconnect explosion animation?
