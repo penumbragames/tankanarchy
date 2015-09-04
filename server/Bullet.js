@@ -24,8 +24,6 @@ function Bullet(x, y, direction, firedBy) {
 
   this.distanceTraveled = 0;
   this.shouldExist = true;
-
-  return this;
 };
 
 /**

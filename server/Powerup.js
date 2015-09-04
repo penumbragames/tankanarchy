@@ -20,10 +20,8 @@ function Powerup(x, y, name, data, duration) {
   this.name = name;
   this.data = data;
   this.duration = duration;
-  
-  this.shouldExist = true;
 
-  return this;
+  this.shouldExist = true;
 };
 
 /**

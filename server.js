@@ -59,6 +59,7 @@ io.on('connection', function(socket) {
     if (data.shot) {
       game.addBulletFiredBy(socket.id);
     }
+    var ping = (new Date()).getTime() - data.timestamp;
   });
 
   // TODO: player disconnect explosion animation?

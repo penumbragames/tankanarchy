@@ -17,6 +17,7 @@ function Game(canvas, socket) {
   this.canvasContext = this.canvas.getContext('2d');
 
   this.socket = socket;
+  this.packetNumber_ = 0;
 
   this.drawing = new Drawing(this.canvasContext);
   this.viewPort = new ViewPort();
@@ -46,13 +47,21 @@ Game.prototype.setID = function(id) {
  * player instance.
  * @return {Object}
  */
-Game.prototype.findSelf = function() {
+Game.prototype.getSelf = function() {
   for (var i = 0; i < this.players.length; ++i) {
     if (this.players[i].id == this.id) {
       return this.players[i];
     }
   }
   return null;
+};
+
+/**
+ * Applies the user's movement client side regardless of server sider
+ * validation while we wait for the server to return packets. This is
+ * essentially a copy of server side Player class's updateOnInput() method.
+ */
+Game.prototype.applyAction = function(action) {
 };
 
 /**
@@ -81,7 +90,7 @@ Game.prototype.createExplosion = function(object) {
  * server.
  */
 Game.prototype.update = function() {
-  var self = this.findSelf();
+  var self = this.getSelf();
   if (self) {
     this.viewPort.update(self.x, self.y);
 
@@ -91,7 +100,7 @@ Game.prototype.update = function() {
 
     // Emits an event for the containing the player's intention to move
     // or shoot to the server.
-    this.socket.emit('player-action', {
+    var action = {
       keyboardState: {
         up: Input.UP,
         right: Input.RIGHT,
@@ -99,8 +108,10 @@ Game.prototype.update = function() {
         left: Input.LEFT
       },
       turretAngle: turretAngle,
-      shot: Input.LEFT_CLICK
-    });
+      shot: Input.LEFT_CLICK,
+      timestamp: (new Date()).getTime()
+    };
+    this.socket.emit('player-action', action);
   }
 
   // Updates the leaderboard.

@@ -15,8 +15,6 @@ function HeatSeeker(x, y, direction, target, firedBy) {
   this.firedBy = firedBy;
   this.distanceTraveled = 0;
   this.shouldExist = true;
-
-  return this;
 };
 
 HeatSeeker.VELOCITY = 10;
@@ -33,7 +31,7 @@ HeatSeeker.prototype.update = function(clients) {
                                                      this.target.x - this.x);
   this.direction += Math.min(Math.PI * 0.5,
                              Math.max(Math.PI * 0.25, delta_direction / 2));
-  
+
   this.x += Bullet.VELOCITY * Math.sin(this.direction);
   this.y += Bullet.VELOCITY * Math.cos(this.direction);
   this.distanceTraveled += Bullet.VELOCITY;

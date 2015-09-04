@@ -22,11 +22,18 @@ function Player(x, y, orientation, name, id) {
   this.y = y;
   this.orientation = orientation;
   this.turretAngle = orientation;
-
   this.name = name;
   this.id = id;
 
-  this.velocity = Player.DEFAULT_VELOCITY;
+  /**
+   * vx, vy, and turnRate represent rates of change for x, y, and
+   * orientation respectively. vx and vy are derived from orientation
+   * and vmag and are updated independently.
+   */
+  this.vx = 0;
+  this.vy = 0;
+  this.vmag = Player.DEFAULT_VELOCITY_MAGNITUDE;
+  this.turnRate = 0;
   this.shotCooldown = Player.DEFAULT_SHOT_COOLDOWN;
   this.health = Player.MAX_HEALTH;
   /**
@@ -45,13 +52,11 @@ function Player(x, y, orientation, name, id) {
 
   this.score = 0;
   this.lastShotTime = 0;
-
-  return this;
 };
 
 /**
  * TURN_RATE is in radians per update.
- * DEFAULT_VELOCITY is in pixels per update.
+ * DEFAULT_VELOCITY_MAGNITUDE is in pixels per update.
  * DEFAULT_SHOT_COOLDOWN is in milliseconds.
  * DEFAULT_HITBOX_SIZE is in pixels.
  * SHIELD_HITBOX_SIZE is in pixels.
@@ -59,7 +64,7 @@ function Player(x, y, orientation, name, id) {
  * MINIMUM_RESPAWN_BUFFER is a distance in pixels.
  */
 Player.TURN_RATE = Math.PI / 45;
-Player.DEFAULT_VELOCITY = 5;
+Player.DEFAULT_VELOCITY_MAGNITUDE = 5;
 Player.DEFAULT_SHOT_COOLDOWN = 800;
 Player.DEFAULT_HITBOX_SIZE = 20;
 /**
@@ -93,33 +98,44 @@ Player.generateNewPlayer = function(name, id) {
  */
 Player.prototype.updateOnInput = function(keyboardState, turretAngle) {
   if (keyboardState.up) {
-    this.x += this.velocity * Math.sin(this.orientation);
-    this.y -= this.velocity * Math.cos(this.orientation);
+    this.vx = this.vmag * Math.sin(this.orientation);
+    this.vy = -this.vmag * Math.cos(this.orientation);
   }
   if (keyboardState.down) {
-    this.x -= this.velocity * Math.sin(this.orientation);
-    this.y += this.velocity * Math.cos(this.orientation);
+    this.vx = this.vmag * Math.sin(this.orientation);
+    this.vy = -this.vmag * Math.cos(this.orientation);
+  }
+  if (!keyboardState.up && !keyboardState.down) {
+    this.vx = 0;
+    this.vy = 0;
   }
   if (keyboardState.right) {
-    this.orientation = this.orientation + Player.TURN_RATE;
+    this.turnRate = Player.TURN_RATE;
   }
   if (keyboardState.left) {
-    this.orientation = this.orientation - Player.TURN_RATE;
+    this.turnRate = -Player.TURN_RATE;
   }
-
-  var boundedCoord = Util.boundWorld(this.x, this.y);
-  this.x = boundedCoord[0];
-  this.y = boundedCoord[1];
+  if (!keyboardState.right && !keyboardState.left) {
+    this.turnRate = 0;
+  }
 
   this.turretAngle = turretAngle;
 };
 
 /**
- * Updates the player's powerup states, this runs in the 60Hz server side
- * loop so that powerups expire even when the player is not moving or
- * shooting.
+ * Updates the player's position and powerup states, this runs in the 60Hz
+ * server side loop so that powerups expire even when the player is not
+ * moving or shooting.
  */
 Player.prototype.update = function() {
+  this.x += this.vx;
+  this.y += this.vy;
+  this.orientation += this.turnRate;
+
+  var boundedCoord = Util.boundWorld(this.x, this.y);
+  this.x = boundedCoord[0];
+  this.y = boundedCoord[1];
+
   // Loops through and applies powerups to the player. Removes them
   // when they expire.
   for (var powerup in this.powerups) {
