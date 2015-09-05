@@ -40,6 +40,10 @@ socket.on('update', function(data) {
   game.receiveGameState(data);
 });
 
+socket.on('ping', function(data) {
+  console.log(data);
+});
+
 socket.on('explosion', function(data) {
   game.createExplosion(data);
 });

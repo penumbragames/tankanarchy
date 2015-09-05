@@ -27,6 +27,7 @@ function Game(canvas, socket) {
   this.players = [];
   this.projectiles = [];
   this.powerups = [];
+  this.explosions = [];
 };
 
 Game.WIDTH = 800;
@@ -133,29 +134,26 @@ Game.prototype.draw = function() {
 
   this.environment.draw();
 
-  // @todo refactor projectiles to projectiles
   for (var i = 0; i < this.projectiles.length; ++i) {
     this.drawing.drawBullet(
       this.viewPort.toCanvasCoords(this.projectiles[i]),
       this.projectiles[i].direction);
   }
 
-  var visiblePowerups = this.viewPort.getVisibleObjects(this.powerups);
-  for (var i = 0; i < visiblePowerups.length; ++i) {
+  for (var i = 0; i < this.powerups.length; ++i) {
     this.drawing.drawPowerup(
-      this.viewPort.toCanvasCoords(visiblePowerups[i]),
-      visiblePowerups[i].name);
+      this.viewPort.toCanvasCoords(this.powerups[i]),
+      this.powerups[i].name);
   }
 
-  var visiblePlayers = this.viewPort.getVisibleObjects(this.players);
-  for (var i = 0; i < visiblePlayers.length; ++i) {
+  for (var i = 0; i < this.players.length; ++i) {
     this.drawing.drawTank(
-      visiblePlayers[i].id == this.id,
-      this.viewPort.toCanvasCoords(visiblePlayers[i]),
-      visiblePlayers[i].orientation,
-      visiblePlayers[i].turretAngle,
-      visiblePlayers[i].name,
-      visiblePlayers[i].health,
-      visiblePlayers[i].powerups['shield_powerup']);
+      this.players[i].id == this.id,
+      this.viewPort.toCanvasCoords(this.players[i]),
+      this.players[i].orientation,
+      this.players[i].turretAngle,
+      this.players[i].name,
+      this.players[i].health,
+      this.players[i].powerups['shield_powerup']);
   }
 };

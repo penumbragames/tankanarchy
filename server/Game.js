@@ -1,13 +1,15 @@
 /**
  * Game class on the server to manage the state of existing players and
- * and objects.
+ * and entities.
  * @author Alvin Lin (alvin.lin@stuypulse.com)
  */
 
 var HashMap = require('hashmap');
+
 var Player = require('./Player');
 var Bullet = require('./Bullet');
 var Powerup = require('./Powerup');
+var Explosion = require('./Explosion');
 
 /**
  * Constructor for the server side Game class.
@@ -16,9 +18,25 @@ var Powerup = require('./Powerup');
  * @constructor
  */
 function Game() {
-  this.clients = new HashMap();
+  /**
+   * This is a hashmap containing all the connected socket ids and socket
+   * instances.
+   */
+  this.sockets = new HashMap();
+
+  /**
+   * This is a hashmap containing all the connected socket ids and the players
+   * associated with them.
+   */
+  this.players = new HashMap();
+
+  /**
+   * These arrays contain entities in the game world. They do not need to be
+   * stored in a hashmap because they do not have a unique id.
+   */
   this.projectiles = [];
   this.powerups = [];
+  this.explosions = [];
 };
 
 /**
@@ -30,10 +48,11 @@ Game.MAX_MAP_POWERUPS = 10;
 /**
  * Creates a new player with the given name and ID.
  * @param {string} The display name of the player.
- * @param {string} The socket ID of the player.
+ * @param {Object} The socket object of the player.
  */
-Game.prototype.addNewPlayer = function(name, id) {
-  this.clients.set(id, Player.generateNewPlayer(name, id));
+Game.prototype.addNewPlayer = function(name, socket) {
+  this.sockets.set(socket.id, socket);
+  this.players.set(socket.id, Player.generateNewPlayer(name, socket.id));
 };
 
 /**
@@ -41,8 +60,8 @@ Game.prototype.addNewPlayer = function(name, id) {
  * @param {string} The socket ID of the player to remove.
  */
 Game.prototype.removePlayer = function(id) {
-  if (this.clients.has(id)) {
-    this.clients.remove(id);
+  if (this.players.has(id)) {
+    this.players.remove(id);
   }
 };
 
@@ -55,7 +74,7 @@ Game.prototype.removePlayer = function(id) {
  *   in radians.
  */
 Game.prototype.updatePlayer = function(id, keyboardState, turretAngle) {
-  var player = this.clients.get(id);
+  var player = this.players.get(id);
   if (player != undefined && player != null) {
     player.updateOnInput(keyboardState, turretAngle);
   }
@@ -63,11 +82,11 @@ Game.prototype.updatePlayer = function(id, keyboardState, turretAngle) {
 
 /**
  * Given a socket ID, adds a projectile that was fired by the player
- * associated with that ID.
+ * associated with that ID if and only if that player can fire.
  * @param {string} The socket ID of the player that fired a projectile.
  */
 Game.prototype.addBulletFiredBy = function(id) {
-  var player = this.clients.get(id);
+  var player = this.players.get(id);
   if (player != undefined && player != null && player.canShoot()) {
     this.projectiles = this.projectiles.concat(
       player.getProjectilesShot());
@@ -75,11 +94,19 @@ Game.prototype.addBulletFiredBy = function(id) {
 };
 
 /**
+ * Adds an explosion to the internally maintained array.
+ * @param {Explosion} explosion The explosion to add.
+ */
+Game.prototype.addExplosion = function(explosion) {
+  this.explosions.push(explosion);
+};
+
+/**
  * Returns an array of the currently active players.
  * @return {Array.<Player>}
  */
 Game.prototype.getPlayers = function() {
-  return this.clients.values();
+  return this.players.values();
 };
 
 /**
@@ -99,6 +126,14 @@ Game.prototype.getPowerups = function() {
 };
 
 /**
+ * Returns an array of the currently existing explosions.
+ * @return {Array.<Explosion>}
+ */
+Game.prototype.getExplosions = function() {
+  return this.explosions;
+};
+
+/**
  * Returns an object containing all existing entities.
  * @return {Object}
  */
@@ -106,7 +141,8 @@ Game.prototype.getState = function() {
   return {
     players: this.getPlayers(),
     projectiles: this.getProjectiles(),
-    powerups: this.getPowerups()
+    powerups: this.getPowerups(),
+    explosions: this.getExplosions()
   }
 };
 
@@ -115,21 +151,27 @@ Game.prototype.getState = function() {
  * @param {Socket} io The Socket object to which to emit update packets.
  */
 Game.prototype.update = function(io) {
+  // Update all the players.
   var players = this.getPlayers();
   for (var i = 0; i < players.length; ++i) {
     players[i].update();
   }
 
+  // Update all the projectiles.
   for (var i = 0; i < this.projectiles.length; ++i) {
     if (this.projectiles[i].shouldExist) {
-      this.projectiles[i].update(this.clients);
+      this.projectiles[i].update(this.players);
     } else {
-//      io.sockets.emit('explosion', this.projectiles.splice(i, 1));
+      var removedProjectile = this.projectiles.splice(i, 1);
+      this.addExplosion(new Explosion(removedProjectile.x,
+                                      removedProjectile.y,
+                                      100, 1000));
       i--;
     }
   }
 
-  // Ensure that there are always 10 powerups on the map.
+  // Update the powerups and ensure that there are always 10 powerups on
+  // the map.
   while (this.powerups.length < Game.MAX_MAP_POWERUPS) {
     this.powerups.push(Powerup.generateRandomPowerup());
   }
@@ -138,6 +180,14 @@ Game.prototype.update = function(io) {
       this.powerups[i].update(this.getPlayers());
     } else {
       this.powerups.splice(i, 1);
+      i--;
+    }
+  }
+
+  // Update the explosions.
+  for (var i = 0; i < this.explosions.length; ++i) {
+    if (this.explosions[i].isExpired()) {
+      this.explosions.splice(i, 1);
       i--;
     }
   }

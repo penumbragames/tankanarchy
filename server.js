@@ -13,7 +13,7 @@ var bodyParser = require('body-parser');
 var express = require('express');
 var http = require('http');
 var morgan = require('morgan');
-var socketIo = require('socket.io');
+var socketIO = require('socket.io');
 var swig = require('swig');
 
 var Game = require('./server/Game');
@@ -21,7 +21,7 @@ var Game = require('./server/Game');
 // Initialization.
 var app = express();
 var server = http.Server(app);
-var io = socketIo(server);
+var io = socketIO(server);
 var game = new Game();
 
 app.engine('html', swig.renderFile);
@@ -49,21 +49,21 @@ io.on('connection', function(socket) {
   // When a new player joins, the server sends his/her unique ID back so
   // for future identification purposes.
   socket.on('new-player', function(data) {
-    game.addNewPlayer(data.name, socket.id);
+    game.addNewPlayer(data.name, socket);
     socket.emit('send-id', {
       id: socket.id
     });
   });
 
+  // Update the internal object states every time a player sends an intent
+  // packet and send back the player's network latency.
   socket.on('player-action', function(data) {
     game.updatePlayer(socket.id, data.keyboardState, data.turretAngle);
     if (data.shot) {
       game.addBulletFiredBy(socket.id);
     }
     var ping = (new Date()).getTime() - data.timestamp;
-    // TODO: filter player data when it is sent back so that only visible
-    // and valid players are sent back to prevent cham hacks from sniffing
-    // packets.
+    socket.emit('ping', ping);
   });
 
   // TODO: player disconnect explosion animation?
@@ -76,6 +76,9 @@ io.on('connection', function(socket) {
 // clients every tick.
 setInterval(function() {
   game.update(io);
+  // TODO: filter player data when it is sent back so that only visible
+  // and valid players are sent back to prevent cham hacks from sniffing
+  // packets.
   io.sockets.emit('update', game.getState());
 }, FRAME_RATE);
 

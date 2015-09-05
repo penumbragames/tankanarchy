@@ -1,6 +1,6 @@
 /**
  * Stores the state of the player on the server.
- * @author Alvin Lin <alvin.lin@stuypulse.com>
+ * @author Alvin Lin (alvin.lin@stuypulse.com)
  */
 
 var Bullet = require('./Bullet');
