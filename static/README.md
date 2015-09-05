@@ -1,4 +1,4 @@
-Client side
+Client Side Static Assets
 ========
 The client side scripts for Tank Anarchy handle the rendering of the game for
 each client and the sending of the input to the server. The client sends intents
