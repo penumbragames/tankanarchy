@@ -89,8 +89,8 @@ Game.prototype.createExplosion = function(object) {
  * server.
  */
 Game.prototype.update = function() {
-  if (self) {
-    this.viewPort.update(self.x, self.y);
+  if (this.self) {
+    this.viewPort.update(this.self.x, this.self.y);
 
     var turretAngle = Math.atan2(
       Input.MOUSE[1] - Game.HEIGHT / 2,

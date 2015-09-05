@@ -67,7 +67,6 @@ io.on('connection', function(socket) {
     socket.emit('ping', ping);
   });
 
-  // TODO: player disconnect explosion animation?
   socket.on('disconnect', function() {
     game.removePlayer(socket.id);
   });
@@ -77,9 +76,6 @@ io.on('connection', function(socket) {
 // clients every tick.
 setInterval(function() {
   game.update();
-  // TODO: filter player data when it is sent back so that only visible
-  // and valid players are sent back to prevent cham hacks from sniffing
-  // packets.
   game.sendState();
 }, FRAME_RATE);
 

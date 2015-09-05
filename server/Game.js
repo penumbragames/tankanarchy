@@ -64,6 +64,10 @@ Game.prototype.removePlayer = function(id) {
     this.sockets.remove(id);
   }
   if (this.players.has(id)) {
+    var player = this.players.get(id);
+    // todo: fixed hardcoded constants
+    this.explosions.push(new Explosion(player.x, player.y,
+                                       100, 1000));
     this.players.remove(id);
   }
 };
