@@ -166,11 +166,29 @@ Game.prototype.sendState = function() {
   // filter for visible.
   var ids = this.sockets.keys();
   for (var i = 0; i < ids.length; ++i) {
+    var currentPlayer = this.players.get(ids[i]);
     this.sockets.get(ids[i]).emit('update', {
-      players: this.players.values(),
-      projectiles: this.projectiles,
-      powerups: this.powerups,
-      explosions: this.explosions
+      // todo: the server should store packet number and ping
+      self: currentPlayer,
+      players: this.players.values().filter(function(player) {
+        // Filter out only the players that are visible to the current
+        // player. Since the current player is also in this array, we will
+        // remove the current player from the players packet and send it
+        // separately.
+        if (player.id == currentPlayer.id) {
+          return false;
+        }
+        return player.isVisibleTo(currentPlayer);
+      }),
+      projectiles: this.projectiles.filter(function(projectile) {
+        return projectile.isVisibleTo(currentPlayer);
+      }),
+      powerups: this.powerups.filter(function(powerup) {
+        return powerup.isVisibleTo(currentPlayer);
+      }),
+      explosions: this.explosions.filter(function(explosion) {
+        return explosion.isVisibleTo(currentPlayer);
+      })
     });
   }
 };

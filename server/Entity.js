@@ -24,8 +24,8 @@ function Entity(x, y) {
 Entity.prototype.isVisibleTo = function(player) {
   return Util.inBound(
       this.x,
-      player.x - Constants.VISIBILITY_THRESHOLD,
-      player.x + Constants.VISIBILITY_THRESHOLD) && Util.inBound(
+      player.x - Constants.VISIBILITY_THRESHOLD_X,
+      player.x + Constants.VISIBILITY_THRESHOLD_X) && Util.inBound(
       this.y,
       player.y - Constants.VISIBILITY_THRESHOLD_Y,
       player.y + Constants.VISIBILITY_THRESHOLD_Y);

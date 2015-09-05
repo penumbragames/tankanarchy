@@ -24,7 +24,8 @@ Constants.WORLD_MAX = 2500;
 Constants.WORLD_PADDING = 30;
 Constants.CANVAS_WIDTH = 800;
 Constants.CANVAS_HEIGHT = 600;
-// (height / 2) + 25 or (width / 2) + 25
+// x = (width / 2) + 25
+// y = (height / 2) + 25
 Constants.VISIBILITY_THRESHOLD_X = 425;
 Constants.VISIBILITY_THRESHOLD_Y = 325;
 

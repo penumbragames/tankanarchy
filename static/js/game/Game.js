@@ -24,6 +24,7 @@ function Game(canvas, socket) {
   this.environment = new Environment(this.viewPort, this.drawing);
 
   this.id = null;
+  this.self = null;
   this.players = [];
   this.projectiles = [];
   this.powerups = [];
@@ -40,7 +41,6 @@ Game.SHOOTING_INTERVAL = 800;
  */
 Game.prototype.setID = function(id) {
   this.id = id;
-  this.viewPort.setID(id);
 };
 
 /**
@@ -49,12 +49,7 @@ Game.prototype.setID = function(id) {
  * @return {Object}
  */
 Game.prototype.getSelf = function() {
-  for (var i = 0; i < this.players.length; ++i) {
-    if (this.players[i].id == this.id) {
-      return this.players[i];
-    }
-  }
-  return null;
+  return this.self;
 };
 
 /**
@@ -63,6 +58,7 @@ Game.prototype.getSelf = function() {
  * essentially a copy of server side Player class's updateOnInput() method.
  */
 Game.prototype.applyAction = function(action) {
+  // todo: applyAction
 };
 
 /**
@@ -71,9 +67,11 @@ Game.prototype.applyAction = function(action) {
  * @param {Object} state
  */
 Game.prototype.receiveGameState = function(state) {
+  this.self = state.self;
   this.players = state.players;
   this.projectiles = state.projectiles;
   this.powerups = state.powerups;
+  this.explosions = state.explosions;
 };
 
 /**
@@ -146,9 +144,19 @@ Game.prototype.draw = function() {
       this.powerups[i].name);
   }
 
+  if (this.self) {
+    this.drawing.drawTank(
+      true,
+      this.viewPort.toCanvasCoords(this.self),
+      this.self.orientation,
+      this.self.turretAngle,
+      this.self.name,
+      this.self.health,
+      this.self.powerups['shield_powerup']);
+  }
   for (var i = 0; i < this.players.length; ++i) {
     this.drawing.drawTank(
-      this.players[i].id == this.id,
+      false,
       this.viewPort.toCanvasCoords(this.players[i]),
       this.players[i].orientation,
       this.players[i].turretAngle,
