@@ -60,7 +60,7 @@ io.on('connection', function(socket) {
   socket.on('player-action', function(data) {
     game.updatePlayer(socket.id, data.keyboardState, data.turretAngle);
     if (data.shot) {
-      game.addBulletFiredBy(socket.id);
+      game.addProjectileFiredBy(socket.id);
     }
     var ping = (new Date()).getTime() - data.timestamp;
     socket.emit('ping', ping);

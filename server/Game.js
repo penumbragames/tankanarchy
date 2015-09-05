@@ -85,7 +85,7 @@ Game.prototype.updatePlayer = function(id, keyboardState, turretAngle) {
  * associated with that ID if and only if that player can fire.
  * @param {string} The socket ID of the player that fired a projectile.
  */
-Game.prototype.addBulletFiredBy = function(id) {
+Game.prototype.addProjectileFiredBy = function(id) {
   var player = this.players.get(id);
   if (player != undefined && player != null && player.canShoot()) {
     this.projectiles = this.projectiles.concat(
@@ -111,7 +111,7 @@ Game.prototype.getPlayers = function() {
 
 /**
  * Returns an array of the currently existing projectiles.
- * @return {Array.<Object>}
+ * @return {Array.<Projectile>}
  */
 Game.prototype.getProjectiles = function() {
   return this.projectiles;
