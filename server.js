@@ -75,11 +75,11 @@ io.on('connection', function(socket) {
 // Server side game loop, runs at 60Hz and sends out update packets to all
 // clients every tick.
 setInterval(function() {
-  game.update(io);
+  game.update();
   // TODO: filter player data when it is sent back so that only visible
   // and valid players are sent back to prevent cham hacks from sniffing
   // packets.
-  io.sockets.emit('update', game.getState());
+  game.sendState();
 }, FRAME_RATE);
 
 // Starts the server.

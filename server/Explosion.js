@@ -3,6 +3,9 @@
  * @author Alvin Lin (alvin.lin@stuypulse.com)
  */
 
+var Entity = require('./Entity');
+var Util = require('./Util');
+
 /**
  * @constructor
  * @param {number} x The x coordinate of the explosion.
@@ -17,6 +20,7 @@ function Explosion(x, y, size, duration) {
   this.size = size;
   this.expires = (new Date()).getTime() + duration;
 };
+Explosion.inheritsFrom(Entity);
 
 /**
  * Returns true if the explosion is expired.

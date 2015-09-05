@@ -4,6 +4,7 @@
  */
 
 var Bullet = require('./Bullet');
+var Entity = require('./Entity');
 var Powerup = require('./Powerup');
 var Util = require('./Util');
 
@@ -53,6 +54,7 @@ function Player(x, y, orientation, name, id) {
   this.score = 0;
   this.lastShotTime = 0;
 };
+Player.inheritsFrom(Entity);
 
 /**
  * TURN_RATE is in radians per update.
@@ -102,8 +104,8 @@ Player.prototype.updateOnInput = function(keyboardState, turretAngle) {
     this.vy = -this.vmag * Math.cos(this.orientation);
   }
   if (keyboardState.down) {
-    this.vx = this.vmag * Math.sin(this.orientation);
-    this.vy = -this.vmag * Math.cos(this.orientation);
+    this.vx = -this.vmag * Math.sin(this.orientation);
+    this.vy = this.vmag * Math.cos(this.orientation);
   }
   if (!keyboardState.up && !keyboardState.down) {
     this.vx = 0;
@@ -152,8 +154,8 @@ Player.prototype.update = function() {
                             this.powerups[powerup].data;
         break;
       case Powerup.SPEEDBOOST:
-        this.velocity = Player.DEFAULT_VELOCITY *
-                        this.powerups[powerup].data;
+        this.vmag = Player.DEFAULT_VELOCITY_MAGNITUDE *
+            this.powerups[powerup].data;
         break;
       case Powerup.SHIELD:
         this.hitboxSize = Player.SHIELD_HITBOX_SIZE;
@@ -174,7 +176,7 @@ Player.prototype.update = function() {
           this.shotCooldown = Player.DEFAULT_SHOT_COOLDOWN;
           break;
         case Powerup.SPEEDBOOST:
-          this.velocity = Player.DEFAULT_VELOCITY;
+          this.vmag = Player.DEFAULT_VELOCITY_MAGNITUDE;
           break;
         case Powerup.SHIELD:
           this.hitboxSize = Player.DEFAULT_HITBOX_SIZE;
@@ -213,8 +215,7 @@ Player.prototype.canShoot = function() {
  */
 Player.prototype.getProjectilesShot = function() {
   bullets = [new Bullet(this.x, this.y, this.turretAngle, this.id)];
-  if (this.powerups[Powerup.SHOTGUN] != null &&
-      this.powerups[Powerup.SHOTGUN] != undefined) {
+  if (this.powerups[Powerup.SHOTGUN]) {
     for (var i = 1; i < this.powerups[Powerup.SHOTGUN].data + 1; ++i) {
       bullets.push(
         new Bullet(this.x, this.y, this.turretAngle - (i * Math.PI / 9),
@@ -258,8 +259,7 @@ Player.prototype.isDead = function() {
  * @param {number} amount The amount to damage the player by.
  */
 Player.prototype.damage = function(amount) {
-  if (this.powerups[Powerup.SHIELD] != null &&
-      this.powerups[Powerup.SHIELD] != undefined) {
+  if (this.powerups[Powerup.SHIELD]) {
     this.powerups[Powerup.SHIELD].data -= 1;
   } else {
     this.health -= amount;

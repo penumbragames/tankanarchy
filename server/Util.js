@@ -54,7 +54,8 @@ Util.getEuclideanDistance = function(x1, y1, x2, y2) {
 
 /**
  * Given a value, a minimum, and a maximum, returns true if value is
- * between the minimum and maximum, inclusive of both bounds.
+ * between the minimum and maximum, inclusive of both bounds. This
+ * functio will still work if min and max are switched.
  * @param {number} val The value to check.
  * @param {number} min The minimum bound.
  * @param {number} max The maximum bound.
@@ -62,14 +63,14 @@ Util.getEuclideanDistance = function(x1, y1, x2, y2) {
  */
 Util.inBound = function(val, min, max) {
   if (min > max) {
-    throw new Error('You fucked up.');
+    return val >= max && val <= min;
   }
   return val >= min && val <= max;
 };
 
 /**
  * Bounds a number to the given minimum and maximum, inclusive of both
- * bounds.
+ * bounds. This function will still work if min and max are switched.
  * @param {number} val The value to check.
  * @param {number} min The minimum number to bound to.
  * @param {number} max The maximum number to bound to.
@@ -77,7 +78,7 @@ Util.inBound = function(val, min, max) {
  */
 Util.bound = function(val, min, max) {
   if (min > max) {
-    throw new Error('You fucked up.');
+    return Math.min(Math.max(val, max), min);
   }
   return Math.min(Math.max(val, min), max);
 };
@@ -155,6 +156,15 @@ Util.randRangeInt = function(min, max) {
  */
 Util.choiceArray = function(array) {
   return array[Util.randRangeInt(0, array.length)];
+};
+
+// We need to find a better place for this piece of code which helps us do
+// object inheritance.
+Function.prototype.inheritsFrom = function(parent) {
+  this.prototype = new parent();
+  this.prototype.constructor = this;
+  this.prototype.parent = parent.prototype;
+  return this;
 };
 
 module.exports = Util;

@@ -26,7 +26,7 @@ function Game() {
 
   /**
    * This is a hashmap containing all the connected socket ids and the players
-   * associated with them.
+   * associated with them. This should always be parallel with sockets.
    */
   this.players = new HashMap();
 
@@ -60,6 +60,9 @@ Game.prototype.addNewPlayer = function(name, socket) {
  * @param {string} The socket ID of the player to remove.
  */
 Game.prototype.removePlayer = function(id) {
+  if (this.sockets.has(id)) {
+    this.sockets.remove(id);
+  }
   if (this.players.has(id)) {
     this.players.remove(id);
   }
@@ -110,47 +113,9 @@ Game.prototype.getPlayers = function() {
 };
 
 /**
- * Returns an array of the currently existing projectiles.
- * @return {Array.<Projectile>}
- */
-Game.prototype.getProjectiles = function() {
-  return this.projectiles;
-};
-
-/**
- * Returns an array of the currently existing powerups.
- * @return {Array.<Powerup>}
- */
-Game.prototype.getPowerups = function() {
-  return this.powerups;
-};
-
-/**
- * Returns an array of the currently existing explosions.
- * @return {Array.<Explosion>}
- */
-Game.prototype.getExplosions = function() {
-  return this.explosions;
-};
-
-/**
- * Returns an object containing all existing entities.
- * @return {Object}
- */
-Game.prototype.getState = function() {
-  return {
-    players: this.getPlayers(),
-    projectiles: this.getProjectiles(),
-    powerups: this.getPowerups(),
-    explosions: this.getExplosions()
-  }
-};
-
-/**
  * Updates the state of all the objects in the game.
- * @param {Socket} io The Socket object to which to emit update packets.
  */
-Game.prototype.update = function(io) {
+Game.prototype.update = function() {
   // Update all the players.
   var players = this.getPlayers();
   for (var i = 0; i < players.length; ++i) {
@@ -190,6 +155,23 @@ Game.prototype.update = function(io) {
       this.explosions.splice(i, 1);
       i--;
     }
+  }
+};
+
+/**
+ * Sends the state of the game to all the connected sockets after
+ * filtering them appropriately.
+ */
+Game.prototype.sendState = function() {
+  // filter for visible.
+  var ids = this.sockets.keys();
+  for (var i = 0; i < ids.length; ++i) {
+    this.sockets.get(ids[i]).emit('update', {
+      players: this.players.values(),
+      projectiles: this.projectiles,
+      powerups: this.powerups,
+      explosions: this.explosions
+    });
   }
 };
 

@@ -3,6 +3,7 @@
  * Author: Alvin Lin (alvin.lin@stuypulse.com)
  */
 
+var Entity = require('./Entity');
 var Util = require('./Util');
 
 /**
@@ -23,6 +24,7 @@ function Powerup(x, y, name, data, duration) {
 
   this.shouldExist = true;
 };
+Powerup.inheritsFrom(Entity);
 
 /**
  * HITBOX_SIZE is in pixels.

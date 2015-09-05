@@ -1,6 +1,6 @@
 /**
  * Stores the state of a bullet on the server.
- * Author: Alvin Lin (alvin.lin@stuypulse.com)
+ * @author Alvin Lin (alvin.lin@stuypulse.com)
  */
 
 var Projectile = require('./Projectile');
@@ -27,9 +27,7 @@ function Bullet(x, y, direction, source) {
   this.distanceTraveled = 0;
   this.shouldExist = true;
 };
-Bullet.prototype = new Projectile();
-Bullet.prototype.constructor = Bullet;
-Bullet.prototype.parent = Projectile.prototype;
+Bullet.inheritsFrom(Projectile);
 
 /**
  * VELOCITY is in pixels per update.
