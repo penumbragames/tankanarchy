@@ -62,7 +62,7 @@ Util.getEuclideanDistance = function(x1, y1, x2, y2) {
  */
 Util.inBound = function(val, min, max) {
   if (min > max) {
-    throw new Error('You fucked up');
+    throw new Error('You fucked up.');
   }
   return val >= min && val <= max;
 };
@@ -77,7 +77,7 @@ Util.inBound = function(val, min, max) {
  */
 Util.bound = function(val, min, max) {
   if (min > max) {
-    throw new Error('You fucked up');
+    throw new Error('You fucked up.');
   }
   return Math.min(Math.max(val, min), max);
 };
@@ -122,14 +122,14 @@ Util.getRandomWorldPoint = function(padding) {
 };
 
 /**
- * Returns a random floating-point number between the given min and max 
+ * Returns a random floating-point number between the given min and max
  * values, exclusive of the max value.
  * @param {number} min The minimum number to generate.
  * @param {number} max The maximum number to generate.
  */
 Util.randRange = function(min, max) {
   if (min >= max) {
-    throw new Error('You fucked up');
+    throw new Error('You fucked up.');
   }
   return (Math.random() * (max - min)) + min;
 };
@@ -142,7 +142,7 @@ Util.randRange = function(min, max) {
  */
 Util.randRangeInt = function(min, max) {
   if (min >= max) {
-    throw new Error('You fucked up');
+    throw new Error('You fucked up.');
   }
   return Math.floor(Math.random() * (max - min)) + min;
 };

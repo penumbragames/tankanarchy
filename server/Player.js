@@ -9,13 +9,13 @@ var Util = require('./Util');
 
 /**
  * Constructor for a Player.
+ * @constructor
  * @param {number} x X-coordinate to generate the player at.
  * @param {number} y Y-coordinate to generate the player at.
  * @param {number} orientation Direction to face the player from 0 to 2 * PI.
  * @param {string} name The display name of the player.
  * @param {string} id The socket ID of the client associated with this
  *   player.
- * @constructor
  */
 function Player(x, y, orientation, name, id) {
   this.x = x;

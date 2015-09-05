@@ -41,7 +41,7 @@ socket.on('update', function(data) {
 });
 
 socket.on('ping', function(data) {
-  console.log(data);
+  // todo: display the ping
 });
 
 socket.on('explosion', function(data) {

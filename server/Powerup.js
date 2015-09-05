@@ -7,12 +7,12 @@ var Util = require('./Util');
 
 /**
  * Constructor for a powerup.
+ * @constructor
  * @param {number} x The x-coordinate of the powerup.
  * @param {number} y The y-coordinate of the powerup.
  * @param {string} name The name of the powerup.
  * @param {number|string} data Data associated with this powerup.
  * @param {number} The duration of the powerup when applied.
- * @constructor
  */
 function Powerup(x, y, name, data, duration) {
   this.x = x;

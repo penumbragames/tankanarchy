@@ -3,28 +3,33 @@
  * Author: Alvin Lin (alvin.lin@stuypulse.com)
  */
 
+var Projectile = require('./Projectile');
 var Util = require('./Util');
 
 /**
  * Constructor for a bullet.
+ * @constructor
  * @param {number} x The starting x-coordinate of the bullet (absolute).
  * @param {number} y The starting y-coordinate of the bullet (absolute).
  * @param {number} direction The direction the bullet will travel in
  *   radians.
- * @param {string} firedBy The socket ID of the client that fired the
+ * @param {string} source The socket ID of the player that fired the
  *   bullet.
- * @constructor
+ * @extends Projectile
  */
-function Bullet(x, y, direction, firedBy) {
+function Bullet(x, y, direction, source) {
   this.x = x;
   this.y = y;
   this.direction = direction;
-  this.firedBy = firedBy;
+  this.source = source;
   this.damage = Bullet.DEFAULT_DAMAGE;
 
   this.distanceTraveled = 0;
   this.shouldExist = true;
 };
+Bullet.prototype = new Projectile();
+Bullet.prototype.constructor = Bullet;
+Bullet.prototype.parent = Projectile.prototype;
 
 /**
  * VELOCITY is in pixels per update.
@@ -58,13 +63,13 @@ Bullet.prototype.update = function(clients) {
 
   var players = clients.values();
   for (var i = 0; i < players.length; ++i) {
-    if (this.firedBy != players[i].id &&
+    if (this.source != players[i].id &&
         players[i].isCollidedWith(this.x, this.y,
                                   Bullet.HITBOX_SIZE)) {
       players[i].damage(1);
       if (players[i].isDead()) {
         players[i].respawn();
-        var killingPlayer = clients.get(this.firedBy);
+        var killingPlayer = clients.get(this.source);
         killingPlayer.score++;
       }
       this.shouldExist = false;
