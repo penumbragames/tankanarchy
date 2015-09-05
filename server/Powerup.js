@@ -1,6 +1,6 @@
 /**
  * A class encapsulating the state of a powerup on the server.
- * Author: Alvin Lin (alvin.lin@stuypulse.com)
+ * @author Alvin Lin (alvin.lin@stuypulse.com)
  */
 
 var Entity = require('./Entity');

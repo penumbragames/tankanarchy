@@ -38,6 +38,7 @@ app.use('/node_modules',
 app.use('/static',
         express.static(__dirname + '/static'));
 
+// Routing
 app.get('/', function(request, response) {
   response.render('index.html');
 });

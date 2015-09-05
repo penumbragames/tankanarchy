@@ -1,6 +1,6 @@
 /**
  * Manages the player viewport when they move around.
- * Author: Kenneth Li (kennethli.3470@gmail.com)
+ * @author Kenneth Li (kennethli.3470@gmail.com)
  */
 
 /**

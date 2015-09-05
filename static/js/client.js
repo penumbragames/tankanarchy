@@ -1,3 +1,8 @@
+/**
+ * Client side script that initializes the game.
+ * @author Alvin Lin (alvin.lin@stuypulse.com)
+ */
+
 var socket = io();
 var game = new Game(document.getElementById('canvas'), socket);
 
@@ -38,10 +43,6 @@ socket.on('send-id', function(data) {
 
 socket.on('update', function(data) {
   game.receiveGameState(data);
-});
-
-socket.on('explosion', function(data) {
-  game.createExplosion(data);
 });
 
 function init() {

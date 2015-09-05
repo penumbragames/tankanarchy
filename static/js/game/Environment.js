@@ -1,6 +1,6 @@
 /**
  * Keeps track of the environment.
- * Author: Alvin Lin (alvin.lin@stuypulse.com)
+ * @author Alvin Lin (alvin.lin@stuypulse.com)
  */
 
 /**

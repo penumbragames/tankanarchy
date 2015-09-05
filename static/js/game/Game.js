@@ -1,6 +1,6 @@
 /**
  * Class containing the game, handles drawing and updates.
- * Author: Alvin Lin (alvin.lin@stuypulse.com)
+ * @author Alvin Lin (alvin.lin@stuypulse.com)
  */
 
 /**
@@ -89,7 +89,6 @@ Game.prototype.createExplosion = function(object) {
  * server.
  */
 Game.prototype.update = function() {
-  var self = this.getSelf();
   if (self) {
     this.viewPort.update(self.x, self.y);
 
@@ -99,6 +98,7 @@ Game.prototype.update = function() {
 
     // Emits an event for the containing the player's intention to move
     // or shoot to the server.
+    // todo: put limits on this to prevent someone from dos-ing us.
     var action = {
       keyboardState: {
         up: Input.UP,
@@ -128,22 +128,27 @@ Game.prototype.update = function() {
  * Draws the state of the game onto the HTML5 canvas.
  */
 Game.prototype.draw = function() {
+  // Clear the canvas.
   this.canvasContext.clearRect(0, 0, Game.WIDTH, Game.HEIGHT);
 
+  // Draw the background first.
   this.environment.draw();
 
+  // Draw the projectiles next.
   for (var i = 0; i < this.projectiles.length; ++i) {
     this.drawing.drawBullet(
       this.viewPort.toCanvasCoords(this.projectiles[i]),
       this.projectiles[i].direction);
   }
 
+  // Draw the powerups next.
   for (var i = 0; i < this.powerups.length; ++i) {
     this.drawing.drawPowerup(
       this.viewPort.toCanvasCoords(this.powerups[i]),
       this.powerups[i].name);
   }
 
+  // Draw the tank that represents the player.
   if (this.self) {
     this.drawing.drawTank(
       true,
@@ -154,6 +159,7 @@ Game.prototype.draw = function() {
       this.self.health,
       this.self.powerups['shield_powerup']);
   }
+  // Draw any other tanks.
   for (var i = 0; i < this.players.length; ++i) {
     this.drawing.drawTank(
       false,

@@ -1,6 +1,6 @@
 /**
  * This class keeps track of the user input in global variables.
- * Author: Alvin Lin (alvin.lin@stuypulse.com)
+ * @author Alvin Lin (alvin.lin@stuypulse.com)
  */
 
 /**

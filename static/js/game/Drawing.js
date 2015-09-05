@@ -1,7 +1,6 @@
 /**
  * Methods for drawing all the sprites onto the HTML5 canvas.
- * Author: Kenneth Li (kennethli.3470@gmail.com)
- * Subordinate: Alvin Lin (alvin.lin@stuypulse.com)
+ * @author Kenneth Li (kennethli.3470@gmail.com)
  */
 
 /**

@@ -1,6 +1,6 @@
 /**
  * This is a utility class containing utility methods used on the server.
- * Author: Alvin Lin (alvin.lin@stuypulse.com)
+ * @author Alvin Lin (alvin.lin@stuypulse.com)
  */
 
 var Constants = require('./Constants');
