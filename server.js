@@ -57,14 +57,13 @@ io.on('connection', function(socket) {
   });
 
   // Update the internal object states every time a player sends an intent
-  // packet and send back the player's network latency.
+  // packet.
   socket.on('player-action', function(data) {
-    game.updatePlayer(socket.id, data.keyboardState, data.turretAngle);
+    game.updatePlayer(socket.id, data.keyboardState, data.turretAngle,
+                      data.packetNumber, data.timestamp);
     if (data.shot) {
       game.addProjectileFiredBy(socket.id);
     }
-    var ping = (new Date()).getTime() - data.timestamp;
-    socket.emit('ping', ping);
   });
 
   socket.on('disconnect', function() {

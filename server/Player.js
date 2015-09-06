@@ -50,7 +50,6 @@ function Player(x, y, orientation, name, id) {
    */
   this.powerups = {};
   this.hitboxSize = Player.DEFAULT_HITBOX_SIZE;
-  this.debuffs = {};
 
   this.score = 0;
   this.lastShotTime = 0;

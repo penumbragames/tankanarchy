@@ -20,9 +20,9 @@ var Explosion = require('./Explosion');
 function Game() {
   /**
    * This is a hashmap containing all the connected socket ids and socket
-   * instances.
+   * instances as well as the packet number of the socket and their latency.
    */
-  this.sockets = new HashMap();
+  this.clients = new HashMap();
 
   /**
    * This is a hashmap containing all the connected socket ids and the players
@@ -51,7 +51,11 @@ Game.MAX_MAP_POWERUPS = 10;
  * @param {Object} The socket object of the player.
  */
 Game.prototype.addNewPlayer = function(name, socket) {
-  this.sockets.set(socket.id, socket);
+  this.clients.set(socket.id, {
+    socket: socket,
+    packetNumber: 0,
+    latency: 0
+  });
   this.players.set(socket.id, Player.generateNewPlayer(name, socket.id));
 };
 
@@ -60,8 +64,8 @@ Game.prototype.addNewPlayer = function(name, socket) {
  * @param {string} The socket ID of the player to remove.
  */
 Game.prototype.removePlayer = function(id) {
-  if (this.sockets.has(id)) {
-    this.sockets.remove(id);
+  if (this.clients.has(id)) {
+    this.clients.remove(id);
   }
   if (this.players.has(id)) {
     var player = this.players.get(id);
@@ -80,10 +84,16 @@ Game.prototype.removePlayer = function(id) {
  * @param {number} turretAngle The angle of the player's tank's turret
  *   in radians.
  */
-Game.prototype.updatePlayer = function(id, keyboardState, turretAngle) {
+Game.prototype.updatePlayer = function(id, keyboardState, turretAngle,
+                                       packetNumber, timestamp) {
   var player = this.players.get(id);
-  if (player != undefined && player != null) {
+  var client = this.clients.get(id);
+  if (player) {
     player.updateOnInput(keyboardState, turretAngle);
+  }
+  if (client) {
+    client.packetNumber = packetNumber;
+    client.latency = (new Date()).getTime() - timestamp;
   }
 };
 
@@ -168,11 +178,11 @@ Game.prototype.update = function() {
  */
 Game.prototype.sendState = function() {
   // filter for visible.
-  var ids = this.sockets.keys();
+  var ids = this.clients.keys();
   for (var i = 0; i < ids.length; ++i) {
     var currentPlayer = this.players.get(ids[i]);
-    this.sockets.get(ids[i]).emit('update', {
-      // todo: the server should store packet number and ping
+    var currentClient = this.clients.get(ids[i]);
+    currentClient.socket.emit('update', {
       self: currentPlayer,
       players: this.players.values().filter(function(player) {
         // Filter out only the players that are visible to the current
@@ -192,7 +202,9 @@ Game.prototype.sendState = function() {
       }),
       explosions: this.explosions.filter(function(explosion) {
         return explosion.isVisibleTo(currentPlayer);
-      })
+      }),
+      packetNumber: currentClient.packetNumber,
+      latency: currentClient.latency
     });
   }
 };
