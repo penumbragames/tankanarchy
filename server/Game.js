@@ -83,6 +83,8 @@ Game.prototype.removePlayer = function(id) {
  * @param {Object} keyboardState The state of the player's keyboard.
  * @param {number} turretAngle The angle of the player's tank's turret
  *   in radians.
+ * @param {number} packetNumber The number of the packet being sent.
+ * @param {number} timestamp The timestamp of the packet sent.
  */
 Game.prototype.updatePlayer = function(id, keyboardState, turretAngle,
                                        packetNumber, timestamp) {
