@@ -17,13 +17,13 @@ function Game(canvas, socket) {
   this.canvasContext = this.canvas.getContext('2d');
 
   this.socket = socket;
-  this.packetNumber_ = 0;
+  this.id = null;
+  this.packetNumber = 0;
 
   this.drawing = new Drawing(this.canvasContext);
   this.viewPort = new ViewPort();
   this.environment = new Environment(this.viewPort, this.drawing);
 
-  this.id = null;
   this.self = null;
   this.players = [];
   this.projectiles = [];
@@ -41,15 +41,6 @@ Game.SHOOTING_INTERVAL = 800;
  */
 Game.prototype.setID = function(id) {
   this.id = id;
-};
-
-/**
- * Returns the object in the players array that represents this client's
- * player instance.
- * @return {Object}
- */
-Game.prototype.getSelf = function() {
-  return this.self;
 };
 
 /**
@@ -75,16 +66,6 @@ Game.prototype.receiveGameState = function(state) {
 };
 
 /**
- * Starts an explosion animation given an object representing a bullet that
- * has reached the end of it's path or collided with a player.
- * @param {Object} object
- * @todo Finish this method
- */
-Game.prototype.createExplosion = function(object) {
-  var point = [object.x, object.y];
-};
-
-/**
  * Updates the state of the game client side and relays intents to the
  * server.
  */
@@ -99,7 +80,7 @@ Game.prototype.update = function() {
     // Emits an event for the containing the player's intention to move
     // or shoot to the server.
     // todo: put limits on this to prevent someone from dos-ing us.
-    var action = {
+    var packet = {
       keyboardState: {
         up: Input.UP,
         right: Input.RIGHT,
@@ -108,9 +89,10 @@ Game.prototype.update = function() {
       },
       turretAngle: turretAngle,
       shot: Input.LEFT_CLICK,
+      packetNumber: this.packetNumber++,
       timestamp: (new Date()).getTime()
     };
-    this.socket.emit('player-action', action);
+    this.socket.emit('player-action', packet);
   }
 
   // Updates the leaderboard.

@@ -1,6 +1,7 @@
 /**
  * Methods for drawing all the sprites onto the HTML5 canvas.
  * @author Kenneth Li (kennethli.3470@gmail.com)
+ * @todo Add explosion drawing.
  */
 
 /**

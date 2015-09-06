@@ -12,7 +12,7 @@ $(document).ready(function() {
 
 function send_name() {
   name = $('#name-input').val();
-  if (name != '' && name != null && name.length < 20) {
+  if (name && name != '' && name.length < 20) {
     // Create an instance of the user's player and sends it.
     // The server will associate our socket id with this player and
     // any move commands will be sent with our ID after the server

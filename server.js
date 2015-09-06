@@ -80,5 +80,6 @@ setInterval(function() {
 }, FRAME_RATE);
 
 // Starts the server.
-server.listen(PORT_NUMBER, IP);
-console.log('Starting server on port ' + PORT_NUMBER);
+server.listen(PORT_NUMBER, IP, function() {
+  console.log('Starting server on port ' + PORT_NUMBER);
+});

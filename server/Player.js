@@ -1,5 +1,6 @@
 /**
- * Stores the state of the player on the server.
+ * Stores the state of the player on the server. This class will also store
+ * other important information such as socket ID, packet number, and latency.
  * @author Alvin Lin (alvin.lin@stuypulse.com)
  */
 
