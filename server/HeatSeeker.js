@@ -1,6 +1,7 @@
 /**
  * Stores the state of a heat-seeking projectile on the server.
  * @author Kenneth Li <kennethli.3470@gmail.com>
+ * @todo this needs to be rewritten to account for Projectile superclass.
  */
 
 var Util = require('./Util').Util;
