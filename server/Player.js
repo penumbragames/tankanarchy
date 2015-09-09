@@ -54,6 +54,7 @@ function Player(x, y, orientation, name, id) {
   this.score = 0;
   this.lastShotTime = 0;
 }
+require('./inheritable');
 Player.inheritsFrom(Entity);
 
 /**

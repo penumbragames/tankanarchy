@@ -27,6 +27,7 @@ function Bullet(x, y, direction, source) {
   this.distanceTraveled = 0;
   this.shouldExist = true;
 }
+require('./inheritable');
 Bullet.inheritsFrom(Projectile);
 
 /**

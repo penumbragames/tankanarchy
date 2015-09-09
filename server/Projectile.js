@@ -5,7 +5,6 @@
 
 // Needed for class inheritance.
 var Entity = require('./Entity');
-var Util = require('./Util');
 
 /**
  * Constructor for a projectile.
@@ -16,6 +15,7 @@ function Projectile(x, y, direction, source) {
   this.direction = direction;
   this.source = source;
 }
+require('./inheritable');
 Projectile.inheritsFrom(Entity);
 
 module.exports = Projectile;

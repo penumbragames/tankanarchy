@@ -4,7 +4,6 @@
  */
 
 var Entity = require('./Entity');
-var Util = require('./Util');
 
 /**
  * @constructor
@@ -20,6 +19,7 @@ function Explosion(x, y, size, duration) {
   this.size = size;
   this.expires = (new Date()).getTime() + duration;
 }
+require('./inheritable');
 Explosion.inheritsFrom(Entity);
 
 /**

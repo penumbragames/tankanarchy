@@ -113,7 +113,7 @@ Util.boundWorld = function(x, y) {
  * @return {[number, number]}
  */
 Util.getRandomWorldPoint = function(padding) {
-  if (padding == null || padding == undefined) {
+  if (!padding) {
     padding = Constants.WORLD_PADDING;
   }
   return [Util.randRange(Constants.WORLD_MIN + padding,
@@ -130,7 +130,9 @@ Util.getRandomWorldPoint = function(padding) {
  */
 Util.randRange = function(min, max) {
   if (min >= max) {
-    throw new Error('You fucked up.');
+    var swap = min;
+    min = max;
+    max = swap;
   }
   return (Math.random() * (max - min)) + min;
 };
@@ -143,7 +145,9 @@ Util.randRange = function(min, max) {
  */
 Util.randRangeInt = function(min, max) {
   if (min >= max) {
-    throw new Error('You fucked up.');
+    var swap = min;
+    min = max;
+    max = swap;
   }
   return Math.floor(Math.random() * (max - min)) + min;
 };
@@ -156,15 +160,6 @@ Util.randRangeInt = function(min, max) {
  */
 Util.choiceArray = function(array) {
   return array[Util.randRangeInt(0, array.length)];
-};
-
-// We need to find a better place for this piece of code which helps us do
-// object inheritance.
-Function.prototype.inheritsFrom = function(parent) {
-  this.prototype = new parent();
-  this.prototype.constructor = this;
-  this.prototype.parent = parent.prototype;
-  return this;
 };
 
 module.exports = Util;

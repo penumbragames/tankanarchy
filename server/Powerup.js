@@ -24,6 +24,7 @@ function Powerup(x, y, name, data, duration) {
 
   this.shouldExist = true;
 }
+require('./inheritable');
 Powerup.inheritsFrom(Entity);
 
 /**
