@@ -36,6 +36,7 @@ function Player(x, y, orientation, name, id) {
   this.vy = 0;
   this.vmag = Player.DEFAULT_VELOCITY_MAGNITUDE;
   this.turnRate = 0;
+  this.lastUpdateTime = (new Date()).getTime();
   this.shotCooldown = Player.DEFAULT_SHOT_COOLDOWN;
   this.health = Player.MAX_HEALTH;
   /**
@@ -59,15 +60,15 @@ Player.inheritsFrom(Entity);
 
 /**
  * TURN_RATE is in radians per update.
- * DEFAULT_VELOCITY_MAGNITUDE is in pixels per update.
+ * DEFAULT_VELOCITY_MAGNITUDE is in pixels per millisecond.
  * DEFAULT_SHOT_COOLDOWN is in milliseconds.
  * DEFAULT_HITBOX_SIZE is in pixels.
  * SHIELD_HITBOX_SIZE is in pixels.
  * MAX_HEALTH is in health units.
  * MINIMUM_RESPAWN_BUFFER is a distance in pixels.
  */
-Player.TURN_RATE = Math.PI / 45;
-Player.DEFAULT_VELOCITY_MAGNITUDE = 5;
+Player.TURN_RATE = 0.005;
+Player.DEFAULT_VELOCITY_MAGNITUDE = 0.3;
 Player.DEFAULT_SHOT_COOLDOWN = 800;
 Player.DEFAULT_HITBOX_SIZE = 20;
 /**
@@ -131,9 +132,11 @@ Player.prototype.updateOnInput = function(keyboardState, turretAngle) {
  * moving or shooting.
  */
 Player.prototype.update = function() {
-  this.x += this.vx;
-  this.y += this.vy;
-  this.orientation += this.turnRate;
+  var currentTime = (new Date()).getTime();
+  var timeDifference = currentTime - this.lastUpdateTime;
+  this.x += this.vx * timeDifference;
+  this.y += this.vy * timeDifference;
+  this.orientation += this.turnRate * timeDifference;
 
   var boundedCoord = Util.boundWorld(this.x, this.y);
   this.x = boundedCoord[0];
@@ -186,6 +189,8 @@ Player.prototype.update = function() {
       delete this.powerups[powerup];
     }
   }
+
+  this.lastUpdateTime = currentTime;
 };
 
 /**
