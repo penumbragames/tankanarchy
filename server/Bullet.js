@@ -24,6 +24,7 @@ function Bullet(x, y, direction, source) {
   this.source = source;
   this.damage = Bullet.DEFAULT_DAMAGE;
 
+  this.lastUpdateTime = (new Date()).getTime();
   this.distanceTraveled = 0;
   this.shouldExist = true;
 }
@@ -31,11 +32,12 @@ require('./inheritable');
 Bullet.inheritsFrom(Projectile);
 
 /**
- * VELOCITY is in pixels per update.
+ * VELOCITY is in pixels per millisecond.
+ * DEFAULT_DAMAGE is in health points.
  * MAX_TRAVEL_DISTANCE is in pixels.
- * HITBOX_SIZE is in pixels.
+ * HITBOX_SIZE is in pixels and represents a radius around the bullet entity.
  */
-Bullet.VELOCITY = 20;
+Bullet.VELOCITY = 1;
 Bullet.DEFAULT_DAMAGE = 1;
 Bullet.MAX_TRAVEL_DISTANCE = 1000;
 Bullet.HITBOX_SIZE = 10;
@@ -50,9 +52,11 @@ Bullet.HITBOX_SIZE = 10;
  *   the server.
  */
 Bullet.prototype.update = function(clients) {
-  this.x += Bullet.VELOCITY * Math.sin(this.direction);
-  this.y -= Bullet.VELOCITY * Math.cos(this.direction);
-  this.distanceTraveled += Bullet.VELOCITY;
+  var currentTime = (new Date()).getTime();
+  var timeDifference = currentTime - this.lastUpdateTime;
+  this.x += Bullet.VELOCITY * Math.sin(this.direction) * timeDifference;
+  this.y -= Bullet.VELOCITY * Math.cos(this.direction) * timeDifference;
+  this.distanceTraveled += Bullet.VELOCITY * timeDifference;
 
   if (this.distanceTraveled > Bullet.MAX_TRAVEL_DISTANCE ||
       !Util.inWorld(this.x, this.y)) {
@@ -75,6 +79,8 @@ Bullet.prototype.update = function(clients) {
       return;
     }
   }
+
+  this.lastUpdateTime = currentTime;
 };
 
 module.exports = Bullet;
