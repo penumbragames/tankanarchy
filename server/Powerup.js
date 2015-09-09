@@ -23,7 +23,7 @@ function Powerup(x, y, name, data, duration) {
   this.duration = duration;
 
   this.shouldExist = true;
-};
+}
 Powerup.inheritsFrom(Entity);
 
 /**

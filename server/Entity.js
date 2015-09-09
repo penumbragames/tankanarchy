@@ -15,7 +15,7 @@ var Util = require('./Util');
 function Entity(x, y) {
   this.x = x;
   this.y = y;
-};
+}
 
 /**
  * Returns true if this entity is visible to the given player.

@@ -53,7 +53,7 @@ function Player(x, y, orientation, name, id) {
 
   this.score = 0;
   this.lastShotTime = 0;
-};
+}
 Player.inheritsFrom(Entity);
 
 /**

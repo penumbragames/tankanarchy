@@ -12,7 +12,7 @@
  */
 function Constants() {
   throw new Error('Constants should not be instantiated!');
-};
+}
 
 /**
  * The world will always be a square, so there's no need for an x and y max.

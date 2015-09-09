@@ -19,7 +19,7 @@ function Explosion(x, y, size, duration) {
   this.y = y;
   this.size = size;
   this.expires = (new Date()).getTime() + duration;
-};
+}
 Explosion.inheritsFrom(Entity);
 
 /**

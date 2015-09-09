@@ -37,7 +37,7 @@ function Game() {
   this.projectiles = [];
   this.powerups = [];
   this.explosions = [];
-};
+}
 
 /**
  * MAX_MAP_POWERUPS is the maximum of number of powerups that can be active
