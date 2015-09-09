@@ -23,6 +23,11 @@ require('./inheritable');
 Explosion.inheritsFrom(Entity);
 
 /**
+ * DEFAULT_DURATION is in milliseconds.
+ */
+Explosion.DEFAULT_DURATION = 1000;
+
+/**
  * Returns true if the explosion is expired.
  * @return {boolean}
  */

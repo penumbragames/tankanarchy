@@ -5,6 +5,11 @@
  * @author Alvin Lin (alvin.lin@stuypulse.com)
  */
 
+/**
+ * This extension of the Function class allows for class inheritance.
+ * Example usage:
+ * Player.inheritsFrom(Entity);
+ */
 Function.prototype.inheritsFrom = function(parent) {
   this.prototype = new parent();
   this.prototype.constructor = this;
