@@ -1,5 +1,6 @@
 /**
- * Class containing the game, handles drawing and updates.
+ * Class encapsulating the client side of the game, handles drawing and
+ * updates.
  * @author Alvin Lin (alvin.lin@stuypulse.com)
  */
 
@@ -31,9 +32,12 @@ function Game(canvas, socket) {
   this.explosions = [];
 };
 
+/**
+ * WIDTH is in pixels and represents the width of the canvas.
+ * HEIGHT is in pixels and represents the height of the canvas.
+ */
 Game.WIDTH = 800;
 Game.HEIGHT = 600;
-Game.SHOOTING_INTERVAL = 800;
 
 /**
  * Stores this client's socket ID after getting it back from the server.
@@ -41,15 +45,6 @@ Game.SHOOTING_INTERVAL = 800;
  */
 Game.prototype.setID = function(id) {
   this.id = id;
-};
-
-/**
- * Applies the user's movement client side regardless of server sider
- * validation while we wait for the server to return packets. This is
- * essentially a copy of server side Player class's updateOnInput() method.
- */
-Game.prototype.applyAction = function(action) {
-  // todo: applyAction
 };
 
 /**

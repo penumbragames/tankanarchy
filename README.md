@@ -10,8 +10,7 @@ Technical:
   - The client merely sends intents to the server, which are processed. The
   server returns a series of JSON objects that hold the state of the world to
   the client for rendering.
-  - The client uses prediction and reconciliation to mask network latency,
-  even though the server has authoritative determination over the positions
-  of all the entities.
+  - The server holds authoritative determination and the client does not use
+  prediction/reconciliation.
 
 &copy; 2015 Kenneth Li and Alvin Lin

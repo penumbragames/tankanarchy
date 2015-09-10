@@ -32,12 +32,12 @@ require('./inheritable');
 Bullet.inheritsFrom(Projectile);
 
 /**
- * VELOCITY is in pixels per millisecond.
+ * VELOCITY_MAGNITUDE is in pixels per millisecond.
  * DEFAULT_DAMAGE is in health points.
  * MAX_TRAVEL_DISTANCE is in pixels.
  * HITBOX_SIZE is in pixels and represents a radius around the bullet entity.
  */
-Bullet.VELOCITY = 1;
+Bullet.VELOCITY_MAGNITUDE = 1;
 Bullet.DEFAULT_DAMAGE = 1;
 Bullet.MAX_TRAVEL_DISTANCE = 1000;
 Bullet.HITBOX_SIZE = 10;
@@ -54,9 +54,11 @@ Bullet.HITBOX_SIZE = 10;
 Bullet.prototype.update = function(clients) {
   var currentTime = (new Date()).getTime();
   var timeDifference = currentTime - this.lastUpdateTime;
-  this.x += Bullet.VELOCITY * Math.sin(this.direction) * timeDifference;
-  this.y -= Bullet.VELOCITY * Math.cos(this.direction) * timeDifference;
-  this.distanceTraveled += Bullet.VELOCITY * timeDifference;
+  this.x += Bullet.VELOCITY_MAGNITUDE * Math.sin(this.direction) *
+      timeDifference;
+  this.y -= Bullet.VELOCITY_MAGNITUDE * Math.cos(this.direction) *
+      timeDifference;
+  this.distanceTraveled += Bullet.VELOCITY_MAGNITUDE * timeDifference;
 
   if (this.distanceTraveled > Bullet.MAX_TRAVEL_DISTANCE ||
       !Util.inWorld(this.x, this.y)) {

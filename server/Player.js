@@ -59,7 +59,7 @@ require('./inheritable');
 Player.inheritsFrom(Entity);
 
 /**
- * TURN_RATE is in radians per update.
+ * TURN_RATE is in radians per millisecond.
  * DEFAULT_VELOCITY_MAGNITUDE is in pixels per millisecond.
  * DEFAULT_SHOT_COOLDOWN is in milliseconds.
  * DEFAULT_HITBOX_SIZE is in pixels.

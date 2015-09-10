@@ -8,6 +8,7 @@
 /**
  * This extension of the Function class allows for class inheritance.
  * Example usage:
+ * require('./inheritable');
  * Player.inheritsFrom(Entity);
  */
 Function.prototype.inheritsFrom = function(parent) {
