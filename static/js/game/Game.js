@@ -48,9 +48,25 @@ Game.prototype.setID = function(id) {
 };
 
 /**
+ * Returns an array containing all the active players including the current
+ * player.
+ * @return {Array.<Object>}
+ */
+Game.prototype.getPlayers = function() {
+  var shallowPlayersCopy = JSON.parse(JSON.stringify(this.players));
+  var shallowSelfCopy = JSON.parse(JSON.stringify(this.self));
+  // If there is no 'self' object, then we should not return anything because
+  // all initial values have not been initialized.
+  if (shallowSelfCopy) {
+    return shallowPlayersCopy.concat(shallowSelfCopy);
+  }
+  return [];
+};
+
+/**
  * Updates the game's internal storage of all the powerups, called each time
  * the server sends packets.
- * @param {Object} state
+ * @param {Object}
  */
 Game.prototype.receiveGameState = function(state) {
   this.self = state.self;
@@ -89,16 +105,6 @@ Game.prototype.update = function() {
     };
     this.socket.emit('player-action', packet);
   }
-
-  // Updates the leaderboard.
-  this.players.sort(function(o1, o2) {
-    return o2.score > o1.score;
-  });
-  $('#leaderboard').empty();
-  for (var i = 0; i < Math.min(this.players.length, 10); ++i) {
-    $('#leaderboard').append($('<li>').text(
-      this.players[i].name + ": " + this.players[i].score))
-  };
 };
 
 /**

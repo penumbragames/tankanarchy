@@ -5,10 +5,11 @@
 
 var socket = io();
 var game = new Game(document.getElementById('canvas'), socket);
+var leaderboard = new Leaderboard($('#leaderboard'));
 
 $(document).ready(function() {
   $('#name-input').focus();
-});;
+});
 
 function send_name() {
   name = $('#name-input').val();
@@ -54,5 +55,6 @@ function animate() {
   AFK_Kicker.check();
   game.update();
   game.draw();
+  leaderboard.update(game.getPlayers());
   window.requestAnimFrame(animate);
 };
