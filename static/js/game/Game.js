@@ -49,7 +49,8 @@ Game.prototype.setID = function(id) {
 
 /**
  * Returns an array containing all the active players including the current
- * player.
+ * player. We use JSON.parse() and JSON.stringify() to create shallow copies of
+ * of the objects.
  * @return {Array.<Object>}
  */
 Game.prototype.getPlayers = function() {

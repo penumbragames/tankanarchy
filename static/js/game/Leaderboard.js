@@ -14,6 +14,11 @@ function Leaderboard(element) {
   this.players = null;
 }
 
+/**
+ * Updates the leaderboard.
+ * @param {Array.<Object>} players An array containing all active players.
+ * @todo ONLY VISIBLE PLAYERS ARE SENT, HAVE THE SERVER SEND LEADERBOARD.
+ */
 Leaderboard.prototype.update = function(players) {
   this.players = players;
   console.log(players);
@@ -25,6 +30,6 @@ Leaderboard.prototype.update = function(players) {
   this.element.empty();
   for (var i = 0; i < Math.min(this.players.length, 10); ++i) {
     this.element.append($('<li>').text(
-      this.players[i].name + ": " + this.players[i].score))
+      this.players[i].name + ": " + this.players[i].kills));
   };
 };

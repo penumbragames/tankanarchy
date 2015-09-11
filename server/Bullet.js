@@ -75,7 +75,7 @@ Bullet.prototype.update = function(clients) {
       if (players[i].isDead()) {
         players[i].respawn();
         var killingPlayer = clients.get(this.source);
-        killingPlayer.score++;
+        killingPlayer.kills++;
       }
       this.shouldExist = false;
       return;

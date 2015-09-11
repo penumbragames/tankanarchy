@@ -38,6 +38,7 @@ function Player(x, y, orientation, name, id) {
   this.turnRate = 0;
   this.lastUpdateTime = (new Date()).getTime();
   this.shotCooldown = Player.DEFAULT_SHOT_COOLDOWN;
+  this.lastShotTime = 0;
   this.health = Player.MAX_HEALTH;
   /**
    * this.powerups is a JSON Object of the format:
@@ -52,8 +53,8 @@ function Player(x, y, orientation, name, id) {
   this.powerups = {};
   this.hitboxSize = Player.DEFAULT_HITBOX_SIZE;
 
-  this.score = 0;
-  this.lastShotTime = 0;
+  this.kills = 0;
+  this.deaths = 0;
 }
 require('./inheritable');
 Player.inheritsFrom(Entity);
@@ -276,6 +277,7 @@ Player.prototype.damage = function(amount) {
  * Handles the respawning of the player when killed.
  * @param {Array.<Player>} players An array of players to check against for
  *   smart respawning.
+ * @todo fix this shit
  */
 Player.prototype.respawn = function(players) {
   var point = Util.getRandomWorldPoint();
@@ -298,7 +300,7 @@ Player.prototype.respawn = function(players) {
   this.x = point[0];
   this.y = point[1];
   this.health = Player.MAX_HEALTH;
-  this.score--;
+  this.deaths++;
 };
 
 module.exports = Player;
