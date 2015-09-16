@@ -23,5 +23,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/omgimanerd/tankanarchy"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-less": "^3.0.3"
   }
 }
