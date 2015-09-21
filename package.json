@@ -3,11 +3,12 @@
   "version": "2.0.0",
   "description": "A multiplayer tank battle arena game",
   "main": "server.js",
-  "licence": "MIT",
   "scripts": {
     "start": "node server.js",
     "postinstall": "./node_modules/bower/bin/bower install"
   },
+  "author": "Alvin Lin",
+  "licence": "MIT",
   "dependencies": {
     "async": "^1.4.2",
     "body-parser": "^1.13.3",
