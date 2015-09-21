@@ -12,9 +12,10 @@ var notify = require('gulp-notify');
 gulp.task('less', function() {
   return gulp.src('./static/less/styles.less')
     .pipe(less({ compress: true}))
-//    .pipe(autoprefixer())
+    .pipe(autoprefixer())
     .pipe(minifyCss())
-    .pipe(gulp.dest('./static/css'));
+    .pipe(gulp.dest('./static/css'))
+    .pipe(notify('LESS files compiled and minified'));
 });
 
 gulp.task('watch-less', function() {

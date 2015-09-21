@@ -4,7 +4,6 @@
  */
 
 var PORT_NUMBER = process.env.PORT || 5000;
-var IP = process.env.IP || '127.0.0.1';
 var FRAME_RATE = 1000.0 / 60.0;
 
 // Dependencies.
