@@ -5,11 +5,15 @@
 
 var gulp = require('gulp');
 var less = require('gulp-less');
+var autoprefixer = require('gulp-autoprefixer');
+var minifyCss = require('gulp-minify-css');
+var notify = require('gulp-notify');
 
 gulp.task('less', function() {
-  console.log('Recompiling CSS');
   return gulp.src('./static/less/styles.less')
-    .pipe(less())
+    .pipe(less({ compress: true}))
+//    .pipe(autoprefixer())
+    .pipe(minifyCss())
     .pipe(gulp.dest('./static/css'));
 });
 
