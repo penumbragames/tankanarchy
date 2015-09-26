@@ -32,8 +32,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan(':date[web] :method :url :req[header] :remote-addr :status'));
 app.use('/bower_components',
         express.static(__dirname + '/bower_components'));
-app.use('/static',
-        express.static(__dirname + '/static'));
+app.use('/static/dist',
+        express.static(__dirname + '/static/dist'));
+app.use('/static/img',
+        express.static(__dirname + '/static/img'));
 
 // Routing
 app.get('/', function(request, response) {
