@@ -8,7 +8,7 @@
     "postinstall": "./node_modules/bower/bin/bower install"
   },
   "author": "Alvin Lin",
-  "licence": "MIT",
+  "license": "MIT",
   "dependencies": {
     "async": "^1.4.2",
     "body-parser": "^1.13.3",
@@ -29,8 +29,11 @@
   "devDependencies": {
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.0.1",
+    "gulp-closure-compiler": "^0.3.0",
     "gulp-less": "^3.0.3",
+    "gulp-merge": "^0.1.1",
     "gulp-minify-css": "^1.2.1",
-    "gulp-notify": "^2.2.0"
+    "gulp-notify": "^2.2.0",
+    "gulp-rename": "^1.2.2"
   }
 }

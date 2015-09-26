@@ -21,7 +21,7 @@ function Leaderboard(element) {
  */
 Leaderboard.prototype.update = function(players) {
   this.players = players;
-  console.log(players);
+//  console.log(players);
 
   // Updates the leaderboard.
   this.players.sort(function(p1, p2) {

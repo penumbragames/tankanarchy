@@ -3,21 +3,7 @@
 {% block head %}
   <script src="/socket.io/socket.io.js">
   </script>
-  <script src='/static/js/requestAnimFrame.js'>
-  </script>
-  <script src='/static/js/AFK_Kicker.js'>
-  </script>
-  <script src='/static/js/game/Input.js'>
-  </script>
-  <script src='/static/js/game/ViewPort.js'>
-  </script>
-  <script src='/static/js/game/Drawing.js'>
-  </script>
-  <script src='/static/js/game/Environment.js'>
-  </script>
-  <script src='/static/js/game/Game.js'>
-  </script>
-  <script src='/static/js/game/Leaderboard.js'>
+  <script src='/static/dist/game-minified.js'>
   </script>
 {% endblock %}
 
@@ -80,6 +66,6 @@
 {% endblock %}
 
 {% block scripts %}
-  <script src='/static/js/client.js'>
+  <script src='/static/dist/client-minified.js'>
   </script>
 {% endblock %}
