@@ -24,6 +24,8 @@ the same time.
 # Contributing:
   - Fork this repository and set it up on your computer.
   - Commit to your own fork and send a pull request to the master repository.
+  - Note that only compiled sources are exposed on the server but are not
+  committed to this repository. Do not commit compiled sources (/static/dist).
   - Your code will be reviewed and must be approved before it is merged.
   - Please use our convention of **2 space tabs that are space characters and
   not tab characters**. Document any code that you write.
