@@ -14,7 +14,7 @@ the same time.
   of all the objects.
 
 # Setting Up:
-  Requires npm, bower and gulp should be installed globally on your system.
+  npm, bower and gulp should be installed globally on your system.
   ```
   npm install
   bower install
