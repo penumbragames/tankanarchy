@@ -18,6 +18,7 @@ the same time.
   ```
   npm install
   bower install
+  gulp
   ```
   
 # Contributing:
