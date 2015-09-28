@@ -14,9 +14,8 @@ the same time.
   of all the objects.
 
 # Setting Up:
-  (Requires npm, bower and gulp should be installed globally on your system)
+  Requires npm, bower and gulp should be installed globally on your system.
   ```
-  git clone https://github.com/tankanarchy/tankanarchy.git
   npm install
   bower install
   ```
