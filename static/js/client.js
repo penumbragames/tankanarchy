@@ -4,8 +4,9 @@
  */
 
 var socket = io();
-var game = new Game(document.getElementById('canvas'), socket);
-var leaderboard = new Leaderboard($('#leaderboard'));
+var game = new Game(socket,
+                    document.getElementById('canvas'),
+                    $('#leaderboard'));
 
 $(document).ready(function() {
   $('#name-input').focus();
@@ -55,6 +56,5 @@ function animate() {
   AFK_Kicker.check();
   game.update();
   game.draw();
-  leaderboard.update(game.getPlayers());
   window.requestAnimFrame(animate);
 };

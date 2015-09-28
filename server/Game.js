@@ -83,18 +83,16 @@ Game.prototype.removePlayer = function(id) {
  * @param {Object} keyboardState The state of the player's keyboard.
  * @param {number} turretAngle The angle of the player's tank's turret
  *   in radians.
- * @param {number} packetNumber The number of the packet being sent.
  * @param {number} timestamp The timestamp of the packet sent.
  */
 Game.prototype.updatePlayer = function(id, keyboardState, turretAngle,
-                                       packetNumber, timestamp) {
+                                       timestamp) {
   var player = this.players.get(id);
   var client = this.clients.get(id);
   if (player) {
     player.updateOnInput(keyboardState, turretAngle);
   }
   if (client) {
-    client.packetNumber = packetNumber;
     client.latency = (new Date()).getTime() - timestamp;
   }
 };
@@ -179,12 +177,22 @@ Game.prototype.update = function() {
  * filtering them appropriately.
  */
 Game.prototype.sendState = function() {
-  // filter for visible.
+  var leaderboard = this.players.values().map(function(player) {
+    return {
+      name: player.name,
+      kills: player.kills,
+      deaths: player.deaths,
+    }
+  }).sort(function(a, b) {
+    return b.kills - a.kills;
+  }).slice(0, 10);
+
   var ids = this.clients.keys();
   for (var i = 0; i < ids.length; ++i) {
     var currentPlayer = this.players.get(ids[i]);
     var currentClient = this.clients.get(ids[i]);
     currentClient.socket.emit('update', {
+      leaderboard: leaderboard,
       self: currentPlayer,
       players: this.players.values().filter(function(player) {
         // Filter out only the players that are visible to the current
@@ -205,7 +213,6 @@ Game.prototype.sendState = function() {
       explosions: this.explosions.filter(function(explosion) {
         return explosion.isVisibleTo(currentPlayer);
       }),
-      packetNumber: currentClient.packetNumber,
       latency: currentClient.latency
     });
   }

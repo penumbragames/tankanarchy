@@ -8,18 +8,20 @@
  * Creates a game on the client side to manage and render the players,
  * projectiles, and powerups.
  * @constructor
- * @param {Element} canvas The HTML5 canvas to render the game on.
  * @param {Socket} socket The socket connected to the server.
+ * @param {Element} canvas The HTML5 canvas to render the game on.
+ * @param {Element} leaderboard The div element to render the leaderboard in.
  */
-function Game(canvas, socket) {
+function Game(socket, canvas, leaderboard) {
+  this.socket = socket;
+  this.id = null;
+
   this.canvas = canvas;
   this.canvas.width = Game.WIDTH;
   this.canvas.height = Game.HEIGHT;
   this.canvasContext = this.canvas.getContext('2d');
 
-  this.socket = socket;
-  this.id = null;
-  this.packetNumber = 0;
+  this.leaderboard = new Leaderboard(leaderboard);
 
   this.drawing = new Drawing(this.canvasContext);
   this.viewPort = new ViewPort();
@@ -30,6 +32,7 @@ function Game(canvas, socket) {
   this.projectiles = [];
   this.powerups = [];
   this.explosions = [];
+  this.latency = 0;
 };
 
 /**
@@ -48,33 +51,19 @@ Game.prototype.setID = function(id) {
 };
 
 /**
- * Returns an array containing all the active players including the current
- * player. We use JSON.parse() and JSON.stringify() to create shallow copies of
- * of the objects.
- * @return {Array.<Object>}
- */
-Game.prototype.getPlayers = function() {
-  var shallowPlayersCopy = JSON.parse(JSON.stringify(this.players));
-  var shallowSelfCopy = JSON.parse(JSON.stringify(this.self));
-  // If there is no 'self' object, then we should not return anything because
-  // all initial values have not been initialized.
-  if (shallowSelfCopy) {
-    return shallowPlayersCopy.concat(shallowSelfCopy);
-  }
-  return [];
-};
-
-/**
  * Updates the game's internal storage of all the powerups, called each time
  * the server sends packets.
  * @param {Object}
  */
 Game.prototype.receiveGameState = function(state) {
+  this.leaderboard.update(state.leaderboard);
+
   this.self = state.self;
   this.players = state.players;
   this.projectiles = state.projectiles;
   this.powerups = state.powerups;
   this.explosions = state.explosions;
+  this.latency = state.latency;
 };
 
 /**
@@ -101,7 +90,6 @@ Game.prototype.update = function() {
       },
       turretAngle: turretAngle,
       shot: Input.LEFT_CLICK,
-      packetNumber: this.packetNumber++,
       timestamp: (new Date()).getTime()
     };
     this.socket.emit('player-action', packet);

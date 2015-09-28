@@ -10,7 +10,6 @@ var closureCompiler = require('gulp-closure-compiler');
 var less = require('gulp-less');
 var merge = require('gulp-merge');
 var minifyCss = require('gulp-minify-css');
-var notify = require('gulp-notify');
 var rename = require('gulp-rename');
 
 gulp.task('default', ['js', 'less']);
@@ -21,16 +20,14 @@ gulp.task('js', function() {
       compilerPath: 'bower_components/closure-compiler/compiler.jar',
       fileName: 'game-minified.js'
     }))
-    .pipe(gulp.dest('./static/dist'))
-    .pipe(notify('Game JS compiled and minified'));
+    .pipe(gulp.dest('./static/dist'));
 
   var clientJs = gulp.src('./static/js/*.js')
     .pipe(closureCompiler({
       compilerPath: 'bower_components/closure-compiler/compiler.jar',
       fileName: 'client-minified.js'
     }))
-    .pipe(gulp.dest('./static/dist'))
-    .pipe(notify('Client JS compiled and minified'));
+    .pipe(gulp.dest('./static/dist'));
 
   return merge(gameJs, clientJs);
 });
@@ -44,12 +41,11 @@ gulp.task('less', function() {
       path.basename = 'minified';
       path.extname = '.css';
     }))
-    .pipe(gulp.dest('./static/dist'))
-    .pipe(notify('LESS files compiled and minified'));
+    .pipe(gulp.dest('./static/dist'));
 });
 
 gulp.task('watch-js', function() {
-  gulp.watch('./static/**/*.js', ['js']);
+  gulp.watch(['./static/js/*.js', './static/js/game/*.js'], ['js']);
 });
 
 gulp.task('watch-less', function() {
@@ -57,6 +53,6 @@ gulp.task('watch-less', function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch('./static/**/*.js', ['js']);
+  gulp.watch(['./static/js/*.js', './static/js/game/*.js'], ['js']);
   gulp.watch('./static/less/*.less', ['less']);
 });

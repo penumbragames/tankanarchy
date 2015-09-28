@@ -16,20 +16,16 @@ function Leaderboard(element) {
 
 /**
  * Updates the leaderboard.
- * @param {Array.<Object>} players An array containing all active players.
- * @todo ONLY VISIBLE PLAYERS ARE SENT, HAVE THE SERVER SEND LEADERBOARD.
+ * @param {Array.<Object>} players A sorted array of the top ten players.
  */
 Leaderboard.prototype.update = function(players) {
   this.players = players;
-//  console.log(players);
+  console.log(players);
 
-  // Updates the leaderboard.
-  this.players.sort(function(p1, p2) {
-    return p2.score > p1.score;
-  });
   this.element.empty();
-  for (var i = 0; i < Math.min(this.players.length, 10); ++i) {
+  for (var i = 0; i < this.players.length; ++i) {
     this.element.append($('<li>').text(
-      this.players[i].name + ": " + this.players[i].kills));
+      this.players[i].name + ": " + this.players[i].kills + " " +
+      this.players[i].deaths));
   };
 };
