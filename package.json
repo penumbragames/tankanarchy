@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "postinstall": "./node_modules/bower/bin/bower install"
+    "postinstall": "bower install; gulp"
   },
   "author": "Alvin Lin",
   "license": "MIT",
@@ -13,6 +13,13 @@
     "async": "^1.4.2",
     "body-parser": "^1.13.3",
     "bower": "^1.5.2",
+    "gulp": "^3.9.0",
+    "gulp-autoprefixer": "^3.0.1",
+    "gulp-closure-compiler": "^0.3.0",
+    "gulp-less": "^3.0.3",
+    "gulp-merge": "^0.1.1",
+    "gulp-minify-css": "^1.2.1",
+    "gulp-rename": "^1.2.2",
     "express": "^4.13.3",
     "hashmap": "^2.0.3",
     "morgan": "^1.6.1",
@@ -25,14 +32,5 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/omgimanerd/tankanarchy"
-  },
-  "devDependencies": {
-    "gulp": "^3.9.0",
-    "gulp-autoprefixer": "^3.0.1",
-    "gulp-closure-compiler": "^0.3.0",
-    "gulp-less": "^3.0.3",
-    "gulp-merge": "^0.1.1",
-    "gulp-minify-css": "^1.2.1",
-    "gulp-rename": "^1.2.2"
   }
 }
