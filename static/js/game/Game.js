@@ -80,7 +80,6 @@ Game.prototype.update = function() {
 
     // Emits an event for the containing the player's intention to move
     // or shoot to the server.
-    // todo: put limits on this to prevent someone from dos-ing us.
     var packet = {
       keyboardState: {
         up: Input.UP,

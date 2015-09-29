@@ -1,8 +1,5 @@
-Client Side Static Assets
-========
+# Client Side Static Assets
 
-/dist holds the compiled static assets.
-<br />
 /img holds static image assets used in the game scripts for rendering the game
 background and entities.
 <br />

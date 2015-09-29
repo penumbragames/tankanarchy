@@ -25,7 +25,7 @@ Leaderboard.prototype.update = function(players) {
   this.element.empty();
   for (var i = 0; i < this.players.length; ++i) {
     this.element.append($('<li>').text(
-      this.players[i].name + ": " + this.players[i].kills + " " +
-      this.players[i].deaths));
+      this.players[i].name + " - Kills: " + this.players[i].kills +
+      " Deaths: " + this.players[i].deaths));
   };
 };
