@@ -277,7 +277,8 @@ Player.prototype.damage = function(amount) {
  * Handles the respawning of the player when killed.
  * @param {Array.<Player>} players An array of players to check against for
  *   smart respawning.
- * @todo fix this shit
+ * @todo The player respawn calculation with the minimum buffer doesn't quite
+ *   work.
  */
 Player.prototype.respawn = function(players) {
   var point = Util.getRandomWorldPoint();

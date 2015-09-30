@@ -17,10 +17,10 @@ function Leaderboard(element) {
 /**
  * Updates the leaderboard.
  * @param {Array.<Object>} players A sorted array of the top ten players.
+ * @todo rewrite so that update does nto depend on jQuery.
  */
 Leaderboard.prototype.update = function(players) {
   this.players = players;
-  console.log(players);
 
   this.element.empty();
   for (var i = 0; i < this.players.length; ++i) {
