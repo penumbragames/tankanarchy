@@ -14,6 +14,7 @@ the same time.
   of all the objects.
 
 # Setting Up:
+  This project requires node version 0.12 or greater.
   npm, bower and gulp should be installed globally on your system.
   ```
   npm install
