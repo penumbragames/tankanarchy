@@ -1,5 +1,5 @@
 /**
- * Reloads the page if the player has been afk for more than 2 minutes.
+ * Reloads the page if the player has been AFK for more than 2 minutes.
  * This essentially kicks them from the game since it will fire the socket
  * disconnect event.
  * @author Alvin Lin (alvin.lin@stuypulse.com)
@@ -35,7 +35,7 @@ AFK_Kicker.init = function() {
 
 /**
  * Checks the timer and reloads the page if the player is determined
- * to be AFK_Kicker.
+ * to be AFK.
  */
 AFK_Kicker.check = function() {
   if ((new Date()).getTime() > AFK_Kicker.TIMER + AFK_Kicker.KICK_TIME) {
