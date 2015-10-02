@@ -6,7 +6,7 @@
 var socket = io();
 var game = new Game(socket,
                     document.getElementById('canvas'),
-                    $('#leaderboard'));
+                    document.getElementById('leaderboard'));
 
 $(document).ready(function() {
   $('#name-input').focus();
