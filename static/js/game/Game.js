@@ -14,7 +14,6 @@
  */
 function Game(socket, canvas, leaderboard) {
   this.socket = socket;
-  this.id = null;
 
   this.canvas = canvas;
   this.canvas.width = Game.WIDTH;
@@ -42,12 +41,11 @@ function Game(socket, canvas, leaderboard) {
 Game.WIDTH = 800;
 Game.HEIGHT = 600;
 
-/**
- * Stores this client's socket ID after getting it back from the server.
- * @param {string} id This client's socket ID.
- */
-Game.prototype.setID = function(id) {
-  this.id = id;
+Game.prototype.init = function() {
+  var context = this;
+  this.socket.on('update', function(data) {
+    context.receiveGameState(data);
+  });
 };
 
 /**

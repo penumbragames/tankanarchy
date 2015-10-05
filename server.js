@@ -43,16 +43,13 @@ app.get('/', function(request, response) {
 });
 
 // Server side input handler, modifies the state of the players and the
-// game based on the input it receives. Everything runs synchronously with
+// game based on the input it receives. Everything runs asynchronously with
 // the game loop.
 io.on('connection', function(socket) {
-  // When a new player joins, the server sends his/her unique ID back so
-  // for future identification purposes.
+  // When a new player joins, the server adds a new player to the game.
   socket.on('new-player', function(data) {
     game.addNewPlayer(data.name, socket);
-    socket.emit('send-id', {
-      id: socket.id
-    });
+    socket.emit('received-new-player');
   });
 
   // Update the internal object states every time a player sends an intent
@@ -65,6 +62,11 @@ io.on('connection', function(socket) {
     }
   });
 
+  socket.on('chat-client-to-server', function(data) {
+    io.sockets.emit('chat-server-to-clients', data);
+  });
+
+  // When a player disconnects, remove them from the game.
   socket.on('disconnect', function() {
     game.removePlayer(socket.id);
   });

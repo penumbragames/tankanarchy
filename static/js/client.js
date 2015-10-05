@@ -1,5 +1,6 @@
 /**
- * Client side script that initializes the game.
+ * Client side script that initializes the game. This should be the only script
+ * that depends on JQuery.
  * @author Alvin Lin (alvin.lin@stuypulse.com)
  */
 
@@ -7,49 +8,50 @@ var socket = io();
 var game = new Game(socket,
                     document.getElementById('canvas'),
                     document.getElementById('leaderboard'));
+var chat = new Chat(socket,
+                    document.getElementById('chat-display'),
+                    document.getElementById('chat-input'),
+                    document.getElementById('chat-button'));
+
 
 $(document).ready(function() {
   $('#name-input').focus();
-});
 
-function send_name() {
-  name = $('#name-input').val();
-  if (name && name != '' && name.length < 20) {
-    // Create an instance of the user's player and sends it.
-    // The server will associate our socket id with this player and
-    // any move commands will be sent with our ID after the server
-    // sends back our ID.
-    socket.emit('new-player', {
-      name: name
-    });
-    $('#name-prompt-container').empty();
-    $('#name-prompt-container').append(
-      $('<span>').addClass('fa fa-2x fa-spinner fa-pulse'));
-  } else {
-    window.alert('Your name cannot be blank or over 20 characters.');
-  }
-  return false;
-};
-$('#name-form').submit(send_name);
-$('#name-submit').click(send_name);
+  function send_name() {
+    name = $('#name-input').val();
+    if (name && name != '' && name.length < 20) {
+      // The server will associate our socket id with this player and
+      // any move commands will be sent with our ID after the server
+      // sends back our ID.
+      socket.emit('new-player', {
+        name: name
+      });
+      $('#name-prompt-container').empty();
+      $('#name-prompt-container').append(
+        $('<span>').addClass('fa fa-2x fa-spinner fa-pulse'));
+    } else {
+      window.alert('Your name cannot be blank or over 20 characters.');
+    }
+    return false;
+  };
+  $('#name-form').submit(send_name);
+  $('#name-submit').click(send_name);
 
-socket.on('send-id', function(data) {
-  // This is fired when the server receives the instance of our player.
-  // When we receive our ID, we will associate it to our Game object and
-  // start the game.
-  game.setID(data.id);
-  $('#name-prompt-overlay').fadeOut(500);
-  init();
-  animate();
-});
-
-socket.on('update', function(data) {
-  game.receiveGameState(data);
+  socket.on('received-new-player', function(data) {
+    // This is fired when the server receives the instance of our player.
+    // When we receive our ID, we will associate it to our Game object and
+    // start the game.
+    $('#name-prompt-overlay').fadeOut(500);
+    init();
+    animate();
+  });
 });
 
 function init() {
   Input.applyEventHandlers();
   AFK_Kicker.init();
+  game.init();
+  chat.init();
 };
 
 function animate() {

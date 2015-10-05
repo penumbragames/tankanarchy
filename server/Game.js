@@ -104,7 +104,7 @@ Game.prototype.updatePlayer = function(id, keyboardState, turretAngle,
  */
 Game.prototype.addProjectileFiredBy = function(id) {
   var player = this.players.get(id);
-  if (player != undefined && player != null && player.canShoot()) {
+  if (player && player.canShoot()) {
     this.projectiles = this.projectiles.concat(
       player.getProjectilesShot());
   }
