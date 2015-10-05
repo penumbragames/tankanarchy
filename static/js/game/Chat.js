@@ -8,12 +8,11 @@
  * Constructor for the Chat class.
  * @constructor
  */
-function Chat(socket, displayElement, textElement, buttonElement) {
+function Chat(socket, displayElement, textElement) {
   this.socket = socket;
 
   this.displayElement = displayElement;
   this.textElement = textElement;
-  this.buttonElement = buttonElement;
 }
 
 /**
@@ -22,10 +21,6 @@ function Chat(socket, displayElement, textElement, buttonElement) {
  */
 Chat.prototype.init = function() {
   var context = this;
-
-  this.buttonElement.onclick = function() {
-    context.sendMessage();
-  }
 
   this.textElement.onkeydown = function(e) {
     if (e.keyCode == 13) {

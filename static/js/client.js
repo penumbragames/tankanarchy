@@ -10,9 +10,7 @@ var game = new Game(socket,
                     document.getElementById('leaderboard'));
 var chat = new Chat(socket,
                     document.getElementById('chat-display'),
-                    document.getElementById('chat-input'),
-                    document.getElementById('chat-button'));
-
+                    document.getElementById('chat-input'));
 
 $(document).ready(function() {
   $('#name-input').focus();
