@@ -41,24 +41,31 @@ Input.onMouseMove = function(e) {
 };
 
 Input.onKeyDown = function(e) {
-  switch (e.keyCode) {
-    case 37:
-    case 65:
-      Input.LEFT = true;
-      break;
-    case 38:
-    case 87:
-      Input.UP = true;
-      break;
-    case 39:
-    case 68:
-      Input.RIGHT = true;
-      break;
-    case 40:
-    case 83:
-      Input.DOWN = true;
-      break;
-  };
+  if (document.activeElement == document.getElementById('chat-input')) {
+    Input.LEFT = false;
+    Input.UP = false;
+    Input.RIGHT = false;
+    Input.DOWN = false;
+  } else {
+    switch (e.keyCode) {
+      case 37:
+      case 65:
+        Input.LEFT = true;
+        break;
+      case 38:
+      case 87:
+        Input.UP = true;
+        break;
+      case 39:
+      case 68:
+        Input.RIGHT = true;
+        break;
+      case 40:
+      case 83:
+        Input.DOWN = true;
+        break;
+    };
+  }
 };
 
 Input.onKeyUp = function(e) {

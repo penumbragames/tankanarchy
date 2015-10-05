@@ -77,6 +77,18 @@ Game.prototype.removePlayer = function(id) {
 };
 
 /**
+ * Returns the name of the player with the given socket id.
+ * @param {string} The socket id to look up.
+ */
+Game.prototype.getPlayerNameBySocketId = function(id) {
+  var player = this.players.get(id);
+  if (player) {
+    return player.name;
+  }
+  return null;
+};
+
+/**
  * Updates the player with the given ID according to the
  * input state sent by that player's client.
  * @param {string} id The socket ID of the player to update.

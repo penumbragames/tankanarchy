@@ -75,3 +75,37 @@ body {
 
   border-radius: 5px;
 }
+
+#chat-display {
+  height: 200px;
+  border: 1px solid black;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  overflow-y: scroll;
+
+  li {
+    list-style-type: none;
+    padding: 0 0 0 5px;
+  }
+
+  li:nth-child(even) {
+    background: #ccc;
+  }
+
+  li:nth-child(odd) {
+    background: #aaa;
+  }
+}
+
+#chat-container {
+  width: 100%;
+
+  #chat-input {
+    display: inline-block;
+  }
+
+  #chat-button {
+    display: inline-block;
+  }
+}

@@ -63,7 +63,8 @@ io.on('connection', function(socket) {
   });
 
   socket.on('chat-client-to-server', function(data) {
-    io.sockets.emit('chat-server-to-clients', data);
+    var sendBack = game.getPlayerNameBySocketId(socket.id) + ': ' + data;
+    io.sockets.emit('chat-server-to-clients', sendBack);
   });
 
   // When a player disconnects, remove them from the game.

@@ -27,6 +27,12 @@ Chat.prototype.init = function() {
     context.sendMessage();
   }
 
+  this.textElement.onkeydown = function(e) {
+    if (e.keyCode == 13) {
+      context.sendMessage();
+    }
+  }
+
   this.socket.on('chat-server-to-clients', function(data) {
     context.receiveMessage(data);
   });
