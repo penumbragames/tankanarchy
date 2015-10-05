@@ -16,8 +16,8 @@ function Game(socket, canvas, leaderboard) {
   this.socket = socket;
 
   this.canvas = canvas;
-  this.canvas.width = Game.WIDTH;
-  this.canvas.height = Game.HEIGHT;
+  this.canvas.width = Constants.CANVAS_WIDTH;
+  this.canvas.height = Constants.CANVAS_HEIGHT;
   this.canvasContext = this.canvas.getContext('2d');
 
   this.leaderboard = new Leaderboard(leaderboard);
@@ -33,13 +33,6 @@ function Game(socket, canvas, leaderboard) {
   this.explosions = [];
   this.latency = 0;
 };
-
-/**
- * WIDTH is in pixels and represents the width of the canvas.
- * HEIGHT is in pixels and represents the height of the canvas.
- */
-Game.WIDTH = 800;
-Game.HEIGHT = 600;
 
 Game.prototype.init = function() {
   var context = this;
@@ -73,8 +66,8 @@ Game.prototype.update = function() {
     this.viewPort.update(this.self.x, this.self.y);
 
     var turretAngle = Math.atan2(
-      Input.MOUSE[1] - Game.HEIGHT / 2,
-      Input.MOUSE[0] - Game.WIDTH / 2) + Math.PI / 2;
+      Input.MOUSE[1] - Constants.CANVAS_HEIGHT / 2,
+      Input.MOUSE[0] - Constants.CANVAS_WIDTH / 2) + Math.PI / 2;
 
     // Emits an event for the containing the player's intention to move
     // or shoot to the server.
@@ -98,7 +91,8 @@ Game.prototype.update = function() {
  */
 Game.prototype.draw = function() {
   // Clear the canvas.
-  this.canvasContext.clearRect(0, 0, Game.WIDTH, Game.HEIGHT);
+  this.canvasContext.clearRect(0, 0, Constants.CANVAS_WIDTH,
+                               Constants.CANVAS_HEIGHT);
 
   // Draw the background first.
   this.environment.draw();

@@ -1,9 +1,12 @@
 /**
- * This is a utility class containing utility methods used on the server.
+ * This is a utility class containing utility methods used on the server and
+ * client.
  * @author Alvin Lin (alvin.lin@stuypulse.com)
  */
 
-var Constants = require('./Constants');
+try {
+  var Constants = require('./Constants');
+} catch (err) {}
 
 /**
  * Empty constructor for the Util class, all functions will be static.
@@ -162,4 +165,6 @@ Util.choiceArray = function(array) {
   return array[Util.randRangeInt(0, array.length)];
 };
 
-module.exports = Util;
+try {
+  module.exports = Util;
+} catch (err) {}

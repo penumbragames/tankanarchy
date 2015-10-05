@@ -3,8 +3,8 @@
  * @author Alvin Lin (alvin.lin@stuypulse.com)
  */
 
-var Constants = require('./Constants');
-var Util = require('./Util');
+var Constants = require('../shared/Constants');
+var Util = require('../shared/Util');
 
 /**
  * All entities will inherit from this class.

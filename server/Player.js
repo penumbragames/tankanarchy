@@ -7,7 +7,7 @@
 var Bullet = require('./Bullet');
 var Entity = require('./Entity');
 var Powerup = require('./Powerup');
-var Util = require('./Util');
+var Util = require('../shared/Util');
 
 /**
  * Constructor for a Player.

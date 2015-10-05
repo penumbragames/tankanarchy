@@ -29,11 +29,8 @@ ViewPort.prototype.update = function(x, y) {
  * @return {[number, number]}
  */
 ViewPort.prototype.toCanvasCoords = function(object) {
-//  if (!object.x || !object.y) {
-//    throw new Error('Invalid object');
-//  }
-  var translateX = this.selfCoords[0] - Game.WIDTH / 2;
-  var translateY = this.selfCoords[1] - Game.HEIGHT / 2;
+  var translateX = this.selfCoords[0] - Constants.CANVAS_WIDTH / 2;
+  var translateY = this.selfCoords[1] - Constants.CANVAS_HEIGHT / 2;
   return [object.x - translateX,
           object.y - translateY];
 };

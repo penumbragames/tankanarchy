@@ -1,9 +1,6 @@
 /**
- * This class stores global constants on the server, such as environment
- * size. The client will maintain its own version of this, so it's important
- * that if we change it server side, we also change it client side.
+ * This class stores global constants between the client and server.
  * @author Alvin Lin (alvin.lin@stuypulse.com)
- * @todo Find a better way to maintain constants between the client and server.
  */
 
 /**
@@ -25,9 +22,15 @@ Constants.WORLD_MAX = 2500;
 Constants.WORLD_PADDING = 30;
 Constants.CANVAS_WIDTH = 800;
 Constants.CANVAS_HEIGHT = 600;
-// x = (width / 2) + 25
-// y = (height / 2) + 25
+/**
+ * Constants.VISIBILITY_THRESHOLD_X = (Constants.CANVAS_WIDTH / 2) + 25
+ */
 Constants.VISIBILITY_THRESHOLD_X = 425;
+/**
+ * Constants.VISIBILITY_THRESHOLD_Y = (Constants.CANVAS_HEIGHT / 2) + 25
+ */
 Constants.VISIBILITY_THRESHOLD_Y = 325;
 
-module.exports = Constants;
+try {
+  module.exports = Constants;
+} catch (err) {}

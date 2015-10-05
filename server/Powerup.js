@@ -4,7 +4,7 @@
  */
 
 var Entity = require('./Entity');
-var Util = require('./Util');
+var Util = require('../shared/Util');
 
 /**
  * Constructor for a powerup.

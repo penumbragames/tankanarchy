@@ -4,7 +4,7 @@
  */
 
 var Projectile = require('./Projectile');
-var Util = require('./Util');
+var Util = require('../shared/Util');
 
 /**
  * Constructor for a bullet.

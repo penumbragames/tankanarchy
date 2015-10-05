@@ -21,6 +21,21 @@ the same time.
   bower install
   gulp
   ```
+  The project Gulpfile already has a few custom processes to run.  
+  ```bash
+  gulp            # will compile the JS and LESS assets
+  
+  gulp js         # will compile only the JS assets
+  
+  gulp less       # will compile only the LESS assets
+  
+  gulp watch      # will watch the JS and LESS assets and compile them when
+                  # they are modified, recommended during development
+                
+  gulp watch-js   # will only watch the JS assets
+  
+  gulp watch-less # will only watch the LESS assets
+  ```
   
 # Contributing:
   - Fork this repository and set it up on your computer.
