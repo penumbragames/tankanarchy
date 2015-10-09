@@ -10,7 +10,6 @@
   "author": "Alvin Lin",
   "license": "MIT",
   "dependencies": {
-    "async": "^1.4.2",
     "body-parser": "^1.13.3",
     "bower": "^1.5.2",
     "gulp": "^3.9.0",

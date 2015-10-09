@@ -7,7 +7,6 @@ var PORT_NUMBER = process.env.PORT || 5000;
 var FRAME_RATE = 1000.0 / 60.0;
 
 // Dependencies.
-var async = require('async');
 var bodyParser = require('body-parser');
 var express = require('express');
 var http = require('http');
