@@ -50,6 +50,11 @@ io.on('connection', function(socket) {
   socket.on('new-player', function(data) {
     game.addNewPlayer(data.name, socket);
     socket.emit('received-new-player');
+    io.sockets.emit('chat-server-to-clients', {
+      name: '[Tank Anarchy]',
+      message: data.name + ' has joined the game.',
+      isNotification: true
+    });
   });
 
   // Update the internal object states every time a player sends an intent
@@ -63,13 +68,20 @@ io.on('connection', function(socket) {
   });
 
   socket.on('chat-client-to-server', function(data) {
-    var sendBack = game.getPlayerNameBySocketId(socket.id) + ': ' + data;
-    io.sockets.emit('chat-server-to-clients', sendBack);
+    io.sockets.emit('chat-server-to-clients', {
+      name: game.getPlayerNameBySocketId(socket.id),
+      message: data
+    });
   });
 
   // When a player disconnects, remove them from the game.
   socket.on('disconnect', function() {
-    game.removePlayer(socket.id);
+    var name = game.removePlayer(socket.id);
+    io.sockets.emit('chat-server-to-clients', {
+      name: '[Tank Anarchy]',
+      message: name + ' has left the game.',
+      isNotification: true
+    });
   });
 });
 

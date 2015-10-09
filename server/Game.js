@@ -60,20 +60,24 @@ Game.prototype.addNewPlayer = function(name, socket) {
 };
 
 /**
- * Removes the player with the given socket ID.
+ * Removes the player with the given socket ID and returns the name of the
+ * player removed.
  * @param {string} The socket ID of the player to remove.
+ * @return {string}
  */
 Game.prototype.removePlayer = function(id) {
   if (this.clients.has(id)) {
     this.clients.remove(id);
   }
+  var player = {};
   if (this.players.has(id)) {
-    var player = this.players.get(id);
+    player = this.players.get(id);
     // todo: Finish Explosion class
     this.explosions.push(new Explosion(player.x, player.y,
                                        100, 1000));
     this.players.remove(id);
   }
+  return player.name;
 };
 
 /**

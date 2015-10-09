@@ -29,13 +29,16 @@ Chat.prototype.init = function() {
   }
 
   this.socket.on('chat-server-to-clients', function(data) {
-    context.receiveMessage(data);
+    context.receiveMessage(data.name, data.message, data.isNotification);
   });
 };
 
-Chat.prototype.receiveMessage = function(message) {
+Chat.prototype.receiveMessage = function(name, message, isNotification) {
   var element = document.createElement('li');
-  element.appendChild(document.createTextNode(message));
+  if (isNotification) {
+    element.setAttribute('class', 'notification');
+  }
+  element.appendChild(document.createTextNode(name + ': ' + message));
   this.displayElement.appendChild(element);
 };
 
