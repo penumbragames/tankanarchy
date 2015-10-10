@@ -1,6 +1,7 @@
 /**
  * This is the server app script that is run on the server.
  * @author Alvin Lin (alvin.lin@stuypulse.com)
+ * @todo Add unit tests!
  */
 
 var PORT_NUMBER = process.env.PORT || 5000;
