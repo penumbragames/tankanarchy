@@ -1,6 +1,7 @@
 /**
  * Wrapper class for all entities on the server.
  * @author Alvin Lin (alvin.lin@stuypulse.com)
+ * @TODO factor out position, velocity, and acceleration updates to this class.
  */
 
 var Constants = require('../shared/Constants');
