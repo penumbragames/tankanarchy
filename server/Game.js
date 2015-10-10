@@ -33,6 +33,7 @@ function Game() {
   /**
    * These arrays contain entities in the game world. They do not need to be
    * stored in a hashmap because they do not have a unique id.
+   * @type {Entity}
    */
   this.projectiles = [];
   this.powerups = [];

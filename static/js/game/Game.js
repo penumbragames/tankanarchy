@@ -105,7 +105,7 @@ Game.prototype.draw = function() {
   for (var i = 0; i < this.projectiles.length; ++i) {
     this.drawing.drawBullet(
       this.viewPort.toCanvasCoords(this.projectiles[i]),
-      this.projectiles[i].direction);
+      this.projectiles[i].orientation);
   }
 
   // Draw the powerups next.

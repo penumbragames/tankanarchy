@@ -16,13 +16,14 @@ var Util = require('../shared/Util');
  * @param {number} vy The velocity in the y direction of the entity.
  * @param {string} source The socket ID of the player that fired the
  *   bullet.
- * @extends Projectile
+ * @extends Entity
  */
-function Bullet(x, y, vx, vy, source) {
+function Bullet(x, y, vx, vy, orientation, source) {
   this.x = x;
   this.y = y;
   this.vx = vx;
   this.vy = vy;
+  this.orientation = orientation;
   this.source = source;
   this.damage = Bullet.DEFAULT_DAMAGE;
 
@@ -38,7 +39,7 @@ Bullet.inheritsFrom(Entity);
  * MAX_TRAVEL_DISTANCE is in pixels.
  * HITBOX_SIZE is in pixels and represents a radius around the bullet entity.
  */
-Bullet.VELOCITY_MAGNITUDE = 1;
+Bullet.VELOCITY_MAGNITUDE = 0.85;
 Bullet.DEFAULT_DAMAGE = 1;
 Bullet.MAX_TRAVEL_DISTANCE = 1000;
 Bullet.HITBOX_SIZE = 10;
@@ -54,9 +55,9 @@ Bullet.HITBOX_SIZE = 10;
  *   bullet.
  */
 Bullet.create = function(x, y, direction, source) {
-  var vx = Bullet.VELOCITY_MAGNITUDE * Math.sin(direction);
-  var vy = Bullet.VELOCITY_MAGNITUDE * Math.cos(direction);
-  return new Bullet(x, y, vx, vy, source);
+  var vx = Bullet.VELOCITY_MAGNITUDE * Math.cos(direction - Math.PI / 2);
+  var vy = Bullet.VELOCITY_MAGNITUDE * Math.sin(direction - Math.PI / 2);
+  return new Bullet(x, y, vx, vy, direction, source);
 };
 
 /**
@@ -72,7 +73,7 @@ Bullet.prototype.update = function(clients) {
   this.parent.update.call(this);
 
   this.distanceTraveled += Bullet.VELOCITY_MAGNITUDE *
-      this.updateTimeDifferencem;
+      this.updateTimeDifference;
   if (this.distanceTraveled > Bullet.MAX_TRAVEL_DISTANCE ||
       !Util.inWorld(this.x, this.y)) {
     this.shouldExist = false;
@@ -94,8 +95,6 @@ Bullet.prototype.update = function(clients) {
       return;
     }
   }
-
-  this.lastUpdateTime = currentTime;
 };
 
 module.exports = Bullet;

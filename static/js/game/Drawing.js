@@ -104,12 +104,12 @@ Drawing.prototype.drawTank = function(isSelf, coords, orientation,
  * Draws a bullet.
  * @param {[number, number]} coords The coordinates of the center of the
  *   bullet.
- * @param {number} direction The direction of the bullet from 0 to 2 * PI
+ * @param {number} orientation The orientation of the bullet from 0 to 2 * PI
  */
-Drawing.prototype.drawBullet = function(coords, direction) {
+Drawing.prototype.drawBullet = function(coords, orientation) {
   this.context.save();
   this.context.translate(coords[0], coords[1]);
-  this.context.rotate(direction);
+  this.context.rotate(orientation);
   var bullet = new Image();
   bullet.src = Drawing.BULLET_SRC;
   this.context.drawImage(bullet, -bullet.width / 2, -bullet.height / 2);

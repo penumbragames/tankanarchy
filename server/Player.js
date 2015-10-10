@@ -213,7 +213,7 @@ Player.prototype.canShoot = function() {
  * @return {Array.<Bullet>}
  */
 Player.prototype.getProjectilesShot = function() {
-  var bullets = [new Bullet(this.x, this.y, this.turretAngle, this.id)];
+  var bullets = [Bullet.create(this.x, this.y, this.turretAngle, this.id)];
   if (this.powerups[Powerup.SHOTGUN]) {
     for (var i = 1; i < this.powerups[Powerup.SHOTGUN].data + 1; ++i) {
       bullets.push(

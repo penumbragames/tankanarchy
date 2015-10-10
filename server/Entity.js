@@ -46,7 +46,11 @@ Entity.prototype.isVisibleTo = function(player) {
  */
 Entity.prototype.update = function() {
   var currentTime = (new Date()).getTime();
-  this.updateTimeDifference = currentTime - this.lastUpdateTime;
+  if (this.lastUpdateTime == 0) {
+    this.updateTimeDifference = 0;
+  } else {
+    this.updateTimeDifference = currentTime - this.lastUpdateTime;
+  }
   this.x += this.vx * this.updateTimeDifference;
   this.y += this.vy * this.updateTimeDifference;
   this.lastUpdateTime = currentTime;
