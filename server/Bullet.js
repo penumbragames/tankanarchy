@@ -3,33 +3,34 @@
  * @author Alvin Lin (alvin.lin@stuypulse.com)
  */
 
-var Projectile = require('./Projectile');
+var Entity = require('./Entity');
+
 var Util = require('../shared/Util');
 
 /**
  * Constructor for a bullet.
  * @constructor
- * @param {number} x The starting x-coordinate of the bullet (absolute).
- * @param {number} y The starting y-coordinate of the bullet (absolute).
- * @param {number} direction The direction the bullet will travel in
- *   radians.
+ * @param {number} x The x coordinate of the entity.
+ * @param {number} y The y coordinate of the entity.
+ * @param {number} vx The velocity in the x direction of the entity.
+ * @param {number} vy The velocity in the y direction of the entity.
  * @param {string} source The socket ID of the player that fired the
  *   bullet.
  * @extends Projectile
  */
-function Bullet(x, y, direction, source) {
+function Bullet(x, y, vx, vy, source) {
   this.x = x;
   this.y = y;
-  this.direction = direction;
+  this.vx = vx;
+  this.vy = vy;
   this.source = source;
   this.damage = Bullet.DEFAULT_DAMAGE;
 
-  this.lastUpdateTime = (new Date()).getTime();
   this.distanceTraveled = 0;
   this.shouldExist = true;
 }
 require('./inheritable');
-Bullet.inheritsFrom(Projectile);
+Bullet.inheritsFrom(Entity);
 
 /**
  * VELOCITY_MAGNITUDE is in pixels per millisecond.
@@ -43,6 +44,22 @@ Bullet.MAX_TRAVEL_DISTANCE = 1000;
 Bullet.HITBOX_SIZE = 10;
 
 /**
+ * Factory method for the Bullet object. This is meant to be called from the
+ * context of a Player.
+ * @param {number} x The starting x-coordinate of the bullet (absolute).
+ * @param {number} y The starting y-coordinate of the bullet (absolute).
+ * @param {number} direction The direction the bullet will travel in
+ *   radians.
+ * @param {string} source The socket ID of the player that fired the
+ *   bullet.
+ */
+Bullet.create = function(x, y, direction, source) {
+  var vx = Bullet.VELOCITY_MAGNITUDE * Math.sin(direction);
+  var vy = Bullet.VELOCITY_MAGNITUDE * Math.cos(direction);
+  return new Bullet(x, y, vx, vy, source);
+};
+
+/**
  * Updates this bullet and checks for collision with any player.
  * We reverse the coordinate system and apply sin(direction) to x because
  * canvas in HTML will use up as its '0' reference point while JS math uses
@@ -52,14 +69,10 @@ Bullet.HITBOX_SIZE = 10;
  *   the server.
  */
 Bullet.prototype.update = function(clients) {
-  var currentTime = (new Date()).getTime();
-  var timeDifference = currentTime - this.lastUpdateTime;
-  this.x += Bullet.VELOCITY_MAGNITUDE * Math.sin(this.direction) *
-      timeDifference;
-  this.y -= Bullet.VELOCITY_MAGNITUDE * Math.cos(this.direction) *
-      timeDifference;
-  this.distanceTraveled += Bullet.VELOCITY_MAGNITUDE * timeDifference;
+  this.parent.update.call(this);
 
+  this.distanceTraveled += Bullet.VELOCITY_MAGNITUDE *
+      this.updateTimeDifferencem;
   if (this.distanceTraveled > Bullet.MAX_TRAVEL_DISTANCE ||
       !Util.inWorld(this.x, this.y)) {
     this.shouldExist = false;

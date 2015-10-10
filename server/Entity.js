@@ -12,10 +12,17 @@ var Util = require('../shared/Util');
  * @constructor
  * @param {number} x The x coordinate of the entity.
  * @param {number} y The y coordinate of the entity.
+ * @param {number} vx The velocity in the x direction of the entity.
+ * @param {number} vy The velocity in the y direction of the entity.
  */
-function Entity(x, y) {
-  this.x = x;
-  this.y = y;
+function Entity(x, y, vx, vy) {
+  this.x = x || 0;
+  this.y = y || 0;
+  this.vx = vx || 0;
+  this.vy = vy || 0;
+
+  this.lastUpdateTime = 0;
+  this.updateTimeDifference = 0;
 }
 
 /**
@@ -30,6 +37,19 @@ Entity.prototype.isVisibleTo = function(player) {
       this.y,
       player.y - Constants.VISIBILITY_THRESHOLD_Y,
       player.y + Constants.VISIBILITY_THRESHOLD_Y);
+};
+
+/**
+ * Updates the entity's position based on its velocity according to
+ * the amount of time the passed between this update and the last
+ * update.
+ */
+Entity.prototype.update = function() {
+  var currentTime = (new Date()).getTime();
+  this.updateTimeDifference = currentTime - this.lastUpdateTime;
+  this.x += this.vx * this.updateTimeDifference;
+  this.y += this.vy * this.updateTimeDifference;
+  this.lastUpdateTime = currentTime;
 };
 
 module.exports = Entity;

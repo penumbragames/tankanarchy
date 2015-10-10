@@ -7,6 +7,7 @@
 var Bullet = require('./Bullet');
 var Entity = require('./Entity');
 var Powerup = require('./Powerup');
+
 var Util = require('../shared/Util');
 
 /**
@@ -28,15 +29,11 @@ function Player(x, y, orientation, name, id) {
   this.id = id;
 
   /**
-   * vx, vy, and turnRate represent rates of change for x, y, and
-   * orientation respectively. vx and vy are derived from orientation
-   * and vmag and are updated independently.
+   * vmag represents the magnitude of the velocity and determines vx and vy
+   * (inherited from Entity). turnRate is a rate of change for the orientation.
    */
-  this.vx = 0;
-  this.vy = 0;
   this.vmag = Player.DEFAULT_VELOCITY_MAGNITUDE;
   this.turnRate = 0;
-  this.lastUpdateTime = (new Date()).getTime();
   this.shotCooldown = Player.DEFAULT_SHOT_COOLDOWN;
   this.lastShotTime = 0;
   this.health = Player.MAX_HEALTH;
@@ -133,11 +130,8 @@ Player.prototype.updateOnInput = function(keyboardState, turretAngle) {
  * moving or shooting.
  */
 Player.prototype.update = function() {
-  var currentTime = (new Date()).getTime();
-  var timeDifference = currentTime - this.lastUpdateTime;
-  this.x += this.vx * timeDifference;
-  this.y += this.vy * timeDifference;
-  this.orientation += this.turnRate * timeDifference;
+  this.parent.update.call(this);
+  this.orientation += this.turnRate * this.updateTimeDifference;
 
   var boundedCoord = Util.boundWorld(this.x, this.y);
   this.x = boundedCoord[0];
@@ -190,8 +184,6 @@ Player.prototype.update = function() {
       delete this.powerups[powerup];
     }
   }
-
-  this.lastUpdateTime = currentTime;
 };
 
 /**
@@ -225,11 +217,11 @@ Player.prototype.getProjectilesShot = function() {
   if (this.powerups[Powerup.SHOTGUN]) {
     for (var i = 1; i < this.powerups[Powerup.SHOTGUN].data + 1; ++i) {
       bullets.push(
-        new Bullet(this.x, this.y, this.turretAngle - (i * Math.PI / 9),
-                   this.id));
+        Bullet.create(this.x, this.y, this.turretAngle - (i * Math.PI / 9),
+                      this.id));
       bullets.push(
-        new Bullet(this.x, this.y, this.turretAngle + (i * Math.PI / 9),
-                   this.id));
+        Bullet.create(this.x, this.y, this.turretAngle + (i * Math.PI / 9),
+                      this.id));
     }
   }
   this.lastShotTime = (new Date()).getTime();
