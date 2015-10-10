@@ -41,6 +41,8 @@ Input.onMouseMove = function(e) {
 };
 
 Input.onKeyDown = function(e) {
+  // Since this class is used to maintain input for the game only, we should
+  // not be reading while the user is chatting.
   if (document.activeElement == document.getElementById('chat-input')) {
     Input.LEFT = false;
     Input.UP = false;

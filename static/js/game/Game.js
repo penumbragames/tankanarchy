@@ -34,6 +34,10 @@ function Game(socket, canvas, leaderboard) {
   this.latency = 0;
 };
 
+/**
+ * Initializes the game and sets the game to respond to update packets from the
+ * server.
+ */
 Game.prototype.init = function() {
   var context = this;
   this.socket.on('update', function(data) {
