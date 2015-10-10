@@ -1,3 +1,3 @@
 #!/bin/bash
 
-grep -r -i --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=bower_components $@
+grep -r -i --exclude-dir=static/dist --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=bower_components $@
