@@ -54,7 +54,6 @@ Game.MAX_MAP_POWERUPS = 10;
 Game.prototype.addNewPlayer = function(name, socket) {
   this.clients.set(socket.id, {
     socket: socket,
-    packetNumber: 0,
     latency: 0
   });
   this.players.set(socket.id, Player.generateNewPlayer(name, socket.id));
@@ -100,30 +99,23 @@ Game.prototype.getPlayerNameBySocketId = function(id) {
  * @param {Object} keyboardState The state of the player's keyboard.
  * @param {number} turretAngle The angle of the player's tank's turret
  *   in radians.
+ * @param {boolean} shot The state of the player's left click determining
+ *   if they shot.
  * @param {number} timestamp The timestamp of the packet sent.
  */
 Game.prototype.updatePlayer = function(id, keyboardState, turretAngle,
-                                       timestamp) {
+                                       shot, timestamp) {
   var player = this.players.get(id);
   var client = this.clients.get(id);
   if (player) {
     player.updateOnInput(keyboardState, turretAngle);
+    if (shot && player.canShoot()) {
+      this.projectiles = this.projectiles.concat(
+        player.getProjectilesShot());
+    }
   }
   if (client) {
     client.latency = (new Date()).getTime() - timestamp;
-  }
-};
-
-/**
- * Given a socket ID, adds a projectile that was fired by the player
- * associated with that ID if and only if that player can fire.
- * @param {string} The socket ID of the player that fired a projectile.
- */
-Game.prototype.addProjectileFiredBy = function(id) {
-  var player = this.players.get(id);
-  if (player && player.canShoot()) {
-    this.projectiles = this.projectiles.concat(
-      player.getProjectilesShot());
   }
 };
 

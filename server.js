@@ -61,10 +61,7 @@ io.on('connection', function(socket) {
   // packet.
   socket.on('player-action', function(data) {
     game.updatePlayer(socket.id, data.keyboardState, data.turretAngle,
-                      data.packetNumber, data.timestamp);
-    if (data.shot) {
-      game.addProjectileFiredBy(socket.id);
-    }
+                      data.shot, data.timestamp);
   });
 
   socket.on('chat-client-to-server', function(data) {
