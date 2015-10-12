@@ -48,4 +48,8 @@ the same time.
   - Please use our convention of **2 space tabs that are space characters and
   not tab characters**. Document any code that you write.
 
-&copy; 2015 Kenneth Li and Alvin Lin
+# Creators:
+  - Alvin Lin (omgimanerd)
+  - Kenneth Li (noobbyte)
+
+&copy; 2015 Penumbra Games
