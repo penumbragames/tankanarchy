@@ -1,9 +1,20 @@
-body {
+// out: ../dist/minified.css, compress: true, autoprefixer: true
+/**
+ * Main stylesheet for Tank Anarchy.
+ * Author: Alvin Lin (alvin.lin@stuypulse.com)
+ */
+
+html, body {
   width: 100%;
   height: 100%;
   text-align: center;
 
+  box-sizing: border-box;
   user-select: none;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
 }
 
 #name-prompt-overlay {
@@ -47,19 +58,16 @@ body {
 
 #content {
   margin: auto;
-}
 
-#content td {
-  padding: 10px;
-}
+  th {
+    text-align: center;
+  }
 
-#canvas {
-  width: 800px;
-  height: 600px;
-  border: 5px solid #000;
-  margin: 0;
-  background-color: #fff;
-  cursor: crosshair;
+  td {
+    height: 600px;
+    padding: 0;
+    margin: 0;
+  }
 }
 
 #leaderboard {
@@ -69,16 +77,29 @@ body {
 }
 
 #leaderboard li {
-  margin: 5px;
   list-style-type: none;
   background-color: #b9b9b9;
 
   border-radius: 5px;
 }
 
-#chat-display {
-  height: 200px;
+#canvas {
+  width: 800px;
+  height: 600px;
   border: 1px solid black;
+  // I don't know why this margin hack is necessary, but it straightens
+  // out the <td> elements.
+  margin-bottom: -5px;
+  background-color: #fff;
+  cursor: crosshair;
+}
+
+#chat-display {
+  height: 570px;
+  width: 250px;
+  border: 1px solid black;
+  border-left-style: none;
+  border-bottom-style: none;
   padding: 0;
   margin: 0;
   text-align: left;
@@ -86,7 +107,7 @@ body {
 
   li {
     list-style-type: none;
-    padding: 0 0 0 5px;
+    padding-left: 5px;
   }
 
   li:nth-child(even) {
@@ -106,6 +127,7 @@ body {
 
 #chat-input {
   width: 100%;
+  height: 30px;
   border: 1px solid black;
-  padding: 4px;
+  border-left-style: none;
 }

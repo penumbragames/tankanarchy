@@ -27,18 +27,19 @@
   <div id='container'>
     <table id='content'>
       <tr>
-        <td colspan='3'>
+        <th colspan='3'>
           <h1>
             Tank Anarchy
           </h1>
-        </td>
+        </ th>
       </tr>
       <tr>
         <td>
-          WASD to move
-          <br />
-          Click to shoot
-          <br />
+          <h3>
+            Leaderboard:
+          </h3>
+          <ul id='leaderboard'>
+          </ul>
         </td>
         <td>
           <!--
@@ -49,19 +50,17 @@
           </canvas>
         </td>
         <td>
-          <h3>
-            Leaderboard:
-          </h3>
-          <ul id='leaderboard'>
-          </ul>
-        </td>
-      </tr>
-      <tr>
-        <td colspan='3'>
           <ul id='chat-display'>
           </ul>
           <input id='chat-input' type='text'
                  placeholder='Press Enter to send' name='chat' />
+        </td>
+      </tr>
+      <tr>
+        <td colspan='3'>
+          WASD to move.
+          <br />
+          Click to shoot.
         </td>
       </tr>
     </table>
