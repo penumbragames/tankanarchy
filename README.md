@@ -39,9 +39,9 @@ the same time.
   
 # Contributing:
   - Fork this repository and set it up on your computer.
+  - Commit to your own fork and send a pull request to the master repository.
   - The `search-src` script will help you search for TODOs in the source code.
   Run `search-src todo` to find things that need to be fixed or modified.
-  - Commit to your own fork and send a pull request to the master repository.
   - Note that only compiled sources are exposed on the server but are not
   committed to this repository. Do not commit compiled sources (/static/dist).
   - Your code will be reviewed and must be approved before it is merged.
