@@ -69,10 +69,16 @@ html, body {
   }
 }
 
+#leaderboard-label {
+  width: 200px;
+  height: 50px;
+}
+
 #leaderboard {
   width: 200px;
   margin: 0;
   padding: 0;
+  height: 550px;
 
   li {
     list-style-type: none;
@@ -88,8 +94,8 @@ html, body {
   width: 800px;
   height: 600px;
   border: 1px solid black;
-  // I don't know why this margin hack is necessary, but it straightens
-  // out the <td> elements.
+  // This margin hack is necessary to straighten out the <td> element
+  // because of bootstrap.
   margin-bottom: -5px;
   background-color: #fff;
   cursor: crosshair;

@@ -83,7 +83,7 @@ Game.prototype.update = function() {
         left: Input.LEFT
       },
       turretAngle: turretAngle,
-      shot: Input.LEFT_CLICK,
+      shot: Input.LEFT_CLICK || Input.TOUCH,
       timestamp: (new Date()).getTime()
     };
     this.socket.emit('player-action', packet);

@@ -9,6 +9,7 @@
  */
 function Input() {}
 
+Input.TOUCH = false;
 Input.LEFT_CLICK = false;
 Input.RIGHT_CLICK = false;
 Input.MOUSE = [];
@@ -16,6 +17,14 @@ Input.LEFT = false;
 Input.UP = false;
 Input.RIGHT = false;
 Input.DOWN = false;
+
+Input.onTouchStart = function(e) {
+  Input.TOUCH = true;
+};
+
+Input.onTouchEnd = function(e) {
+  Input.TOUCH = false;
+};
 
 Input.onMouseDown = function(e) {
   if (e.which == 1) {
@@ -97,6 +106,8 @@ Input.onKeyUp = function(e) {
  * class to track user input.
  */
 Input.applyEventHandlers = function() {
+  window.addEventListener('touchstart', Input.onTouchStart);
+  window.addEventListener('touchend', Input.onTouchEnd);
   window.addEventListener('mousedown', Input.onMouseDown);
   window.addEventListener('mouseup', Input.onMouseUp);
   window.addEventListener('mousemove', Input.onMouseMove);
