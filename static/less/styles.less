@@ -51,7 +51,6 @@ html, body {
 
 #container {
   width: 100%;
-  height: 100%;
   margin: auto;
   border: 0;
 }
@@ -74,15 +73,15 @@ html, body {
   width: 200px;
   margin: 0;
   padding: 0;
-}
 
-#leaderboard li {
-  list-style-type: none;
-  background-color: #b9b9b9;
-  margin-right: 5px;
-  padding: 3px;
+  li {
+    list-style-type: none;
+    background-color: #b9b9b9;
+    margin-right: 5px;
+    padding: 3px;
 
-  border-radius: 2px;
+    border-radius: 2px;
+  }
 }
 
 #canvas {
@@ -109,7 +108,7 @@ html, body {
 
   li {
     list-style-type: none;
-    padding-left: 5px;
+    padding: 5px;
   }
 
   li:nth-child(even) {
@@ -130,6 +129,14 @@ html, body {
 #chat-input {
   width: 100%;
   height: 30px;
+  padding: 5px;
   border: 1px solid black;
   border-left-style: none;
+}
+
+.howto {
+  div {
+    display: inline-block;
+    margin: 0 20px;
+  }
 }
