@@ -69,24 +69,36 @@ html, body {
   }
 }
 
-#leaderboard-label {
-  width: 200px;
-  height: 50px;
-}
+#leaderboard-container {
+  box-sizing: border-box;
 
-#leaderboard {
-  width: 200px;
-  margin: 0;
-  padding: 0;
-  height: 550px;
+  div {
+    height: 600px;
+    border: 1px solid black;
+    border-right-style: none;
+  }
 
-  li {
-    list-style-type: none;
-    background-color: #b9b9b9;
-    margin-right: 5px;
-    padding: 3px;
+  h3 {
+    width: 200px;
+    height: 50px;
+    margin: 0;
+    padding: 5px;
+  }
 
-    border-radius: 2px;
+  #leaderboard {
+    width: 200px;
+    height: 550px;
+    margin: 0;
+    padding: 5px;
+
+    li {
+      list-style-type: none;
+      background-color: #b9b9b9;
+      margin-right: 5px;
+      padding: 3px;
+
+      border-radius: 2px;
+    }
   }
 }
 
