@@ -52,7 +52,7 @@ Util.getEuclideanDistance2 = function(x1, y1, x2, y2) {
  * @return {number}
  */
 Util.getEuclideanDistance = function(x1, y1, x2, y2) {
-  return Math.sqrt(Util.getEuclideanDistance2(x1, x2, y1, y2));
+  return Math.sqrt(Util.getEuclideanDistance2(x1, y1, x2, y2));
 };
 
 /**
