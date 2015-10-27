@@ -5,12 +5,12 @@
  */
 
 var socket = io();
-var game = new Game(socket,
-                    document.getElementById('canvas'),
-                    document.getElementById('leaderboard'));
-var chat = new Chat(socket,
-                    document.getElementById('chat-display'),
-                    document.getElementById('chat-input'));
+var game = Game.create(socket,
+                       document.getElementById('canvas'),
+                       document.getElementById('leaderboard'));
+var chat = Chat.create(socket,
+                       document.getElementById('chat-display'),
+                       document.getElementById('chat-input'));
 
 $(document).ready(function() {
   $('#name-input').focus();

@@ -31,6 +31,14 @@ Drawing.TILE_SRC = Drawing.BASE_IMG_URL + 'tile.png';
 Drawing.TILE_SIZE = 100;
 
 /**
+ * Clears the canvas.
+ */
+Drawing.prototype.clear = function() {
+  this.context.clearRect(0, 0, Constants.CANVAS_WIDTH,
+                         Constants.CANVAS_HEIGHT);
+};
+
+/**
  * Draws a tank to the canvas.
  * @param {boolean} isSelf Tells if I should draw a green tank (self)
  *   or a red tank (other player).

@@ -9,22 +9,20 @@
  * projectiles, and powerups.
  * @constructor
  * @param {Socket} socket The socket connected to the server.
- * @param {Element} canvas The HTML5 canvas to render the game on.
- * @param {Element} leaderboard The div element to render the leaderboard in.
+ * @param {Leaderboard} leaderboard The Leaderboard object to update.
+ * @param {Drawing} drawing The Drawing object that will render the game.
+ * @param {ViewPort} viewPort The ViewPort object that will manage the
+ *   player's view of the entities.
+ * @param {Environment} environment The Environment object to draw the
+ *   game background.
  */
-function Game(socket, canvas, leaderboard) {
+function Game(socket, leaderboard, drawing, viewPort, environment) {
   this.socket = socket;
 
-  this.canvas = canvas;
-  this.canvas.width = Constants.CANVAS_WIDTH;
-  this.canvas.height = Constants.CANVAS_HEIGHT;
-  this.canvasContext = this.canvas.getContext('2d');
-
-  this.leaderboard = new Leaderboard(leaderboard);
-
-  this.drawing = new Drawing(this.canvasContext);
-  this.viewPort = new ViewPort();
-  this.environment = new Environment(this.viewPort, this.drawing);
+  this.leaderboard = leaderboard;
+  this.drawing = drawing;
+  this.viewPort = viewPort;
+  this.environment = environment;
 
   this.self = null;
   this.players = [];
@@ -32,6 +30,25 @@ function Game(socket, canvas, leaderboard) {
   this.powerups = [];
   this.explosions = [];
   this.latency = 0;
+};
+
+/**
+ * Factory method for the Game class.
+ * @param {Socket} socket The socket connected to the server.
+ * @param {Element} canvas The HTML5 canvas to render the game on.
+ * @param {Element} leaderboard The div element to render the leaderboard in.
+ */
+Game.create = function(socket, canvasElement, leaderboardElement) {
+  canvasElement.width = Constants.CANVAS_WIDTH;
+  canvasElement.height = Constants.CANVAS_HEIGHT;
+  var canvasContext = canvasElement.getContext('2d');
+
+  var leaderboard = new Leaderboard(leaderboardElement);
+  var drawing = new Drawing(canvasContext);
+  var viewPort = new ViewPort();
+  var environment = new Environment(viewPort, drawing);
+
+  return new Game(socket, leaderboard, drawing, viewPort, environment);
 };
 
 /**
@@ -95,8 +112,7 @@ Game.prototype.update = function() {
  */
 Game.prototype.draw = function() {
   // Clear the canvas.
-  this.canvasContext.clearRect(0, 0, Constants.CANVAS_WIDTH,
-                               Constants.CANVAS_HEIGHT);
+  this.drawing.clear();
 
   // Draw the background first.
   this.environment.draw();

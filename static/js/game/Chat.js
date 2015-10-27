@@ -7,6 +7,11 @@
 /**
  * Constructor for the Chat class.
  * @constructor
+ * @param {Socket} socket The socket connected to the server.
+ * @param {Element} displayElement The element in which the chat will be
+ *   displayed.
+ * @param {Element} textElement The input element from which text will be read
+ *   to be sent as a chat message to the server.
  */
 function Chat(socket, displayElement, textElement) {
   this.socket = socket;
@@ -14,6 +19,18 @@ function Chat(socket, displayElement, textElement) {
   this.displayElement = displayElement;
   this.textElement = textElement;
 }
+
+/**
+ * Factory method to create a Chat object.
+ * @param {Socket} socket The socket connected to the server.
+ * @param {Element} displayElement The element in which the chat will be
+ *   displayed.
+ * @param {Element} textElement The input element from which text will be read
+ *   to be sent as a chat message to the server.
+ */
+Chat.create = function(socket, displayElement, textElement) {
+  return new Chat(socket, displayElement, textElement);
+};
 
 /**
  * Binds the event handlers. This should be called during the initialization
