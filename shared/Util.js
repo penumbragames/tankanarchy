@@ -1,7 +1,7 @@
 /**
  * This is a utility class containing utility methods used on the server and
  * client.
- * @author Alvin Lin (alvin.lin@stuypulse.com)
+ * @author Alvin Lin (alvin.lin.dev@gmail.com)
  */
 
 try {

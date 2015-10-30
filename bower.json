@@ -3,7 +3,7 @@
   "version": "1.1.2",
   "homepage": "http://tankanarchy.herokuapp.com",
   "authors": [
-    "Alvin Lin <alvin.lin@stuypulse.com>"
+    "Alvin Lin <alvin.lin.dev@gmail.com>"
   ],
   "description": "A multiplayer tank battle arena game",
   "main": "server.js",

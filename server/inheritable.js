@@ -2,7 +2,7 @@
  * This file is needed as a dependency for any class that extends another class.
  * Since we are extending the Function wrapper class, we do not need a module
  * export.
- * @author Alvin Lin (alvin.lin@stuypulse.com)
+ * @author Alvin Lin (alvin.lin.dev@gmail.com)
  */
 
 /**

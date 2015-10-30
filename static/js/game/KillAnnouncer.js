@@ -2,7 +2,7 @@
  * This class manages the kill messages at the top of the screen.
  * When a player is killed, the corresponding message will be
  * displayed.
- * @author Alvin Lin (alvin.lin@stuypulse.com)
+ * @author Alvin Lin (alvin.lin.dev@gmail.com)
  */
 
 /**

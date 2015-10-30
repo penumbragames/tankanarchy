@@ -1,6 +1,6 @@
 /**
  * This class stores global constants between the client and server.
- * @author Alvin Lin (alvin.lin@stuypulse.com)
+ * @author Alvin Lin (alvin.lin.dev@gmail.com)
  */
 
 /**

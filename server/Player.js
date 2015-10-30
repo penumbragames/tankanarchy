@@ -1,7 +1,7 @@
 /**
  * Stores the state of the player on the server. This class will also store
  * other important information such as socket ID, packet number, and latency.
- * @author Alvin Lin (alvin.lin@stuypulse.com)
+ * @author Alvin Lin (alvin.lin.dev@gmail.com)
  */
 
 var Bullet = require('./Bullet');

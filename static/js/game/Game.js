@@ -1,7 +1,7 @@
 /**
  * Class encapsulating the client side of the game, handles drawing and
  * updates.
- * @author Alvin Lin (alvin.lin@stuypulse.com)
+ * @author Alvin Lin (alvin.lin.dev@gmail.com)
  */
 
 /**

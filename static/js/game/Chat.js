@@ -1,7 +1,7 @@
 /**
  * This class handles the sending and receiving of chat messages as well as
  * their display. Chat messages will use the same socket as the game.
- * @author Alvin Lin (alvin.lin@stuypulse.com)
+ * @author Alvin Lin (alvin.lin.dev@gmail.com)
  */
 
 /**

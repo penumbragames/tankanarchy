@@ -1,7 +1,7 @@
 /**
  * Client side script that initializes the game. This should be the only script
  * that depends on JQuery.
- * @author Alvin Lin (alvin.lin@stuypulse.com)
+ * @author Alvin Lin (alvin.lin.dev@gmail.com)
  */
 
 var socket = io();

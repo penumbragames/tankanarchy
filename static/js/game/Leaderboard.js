@@ -1,6 +1,6 @@
 /**
  * This class handles the rendering and updating of the leaderboard.
- * @authro Alvin Lin (alvin.lin@stuypulse.com)
+ * @authro Alvin Lin (alvin.lin.dev@gmail.com)
  */
 
 /**
