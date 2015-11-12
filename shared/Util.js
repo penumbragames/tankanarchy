@@ -89,7 +89,7 @@ Util.bound = function(val, min, max) {
 /**
  * Returns true if the given point is in the game environment world.
  * @param {number} x The x-coordinate of the given point.
- * @param {number] y The y-coordinate of the given point.
+ * @param {number} y The y-coordinate of the given point.
  * @return {boolean}
  */
 Util.inWorld = function(x, y) {
@@ -100,7 +100,7 @@ Util.inWorld = function(x, y) {
 /**
  * Bounds a coordinate if it is outside of the game environment world.
  * @param {number} x The x-coordinate of the given point.
- * @param {number] y The y-coordinate of the given point.
+ * @param {number} y The y-coordinate of the given point.
  * @return {[number, number]}
  */
 Util.boundWorld = function(x, y) {
