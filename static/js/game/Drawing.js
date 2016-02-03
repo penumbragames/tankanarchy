@@ -10,8 +10,20 @@
  *   draw to.
  * @constructor
  */
-function Drawing(context) {
+function Drawing(context,
+                 selfTankImage, selfTurretImage,
+                 otherTankImage, otherTurretImage,
+                 shieldImage, bulletImage, tileImage) {
   this.context = context;
+  
+  this.selfTankImage = selfTankImage;
+  this.selfTurretImage = selfTurretImage;
+  this.otherTankImage = otherTankImage;
+  this.otherTurretImage = otherTurretImage;
+  
+  this.shieldImage = shieldImage;
+  this.bulletImage = bulletImage;
+  this.tileImage = tileImage;
 };
 
 Drawing.NAME_FONT = '14px Helvetica';
@@ -29,6 +41,15 @@ Drawing.SHIELD_SRC = Drawing.BASE_IMG_URL + 'shield.png';
 Drawing.BULLET_SRC = Drawing.BASE_IMG_URL + 'bullet.png';
 Drawing.TILE_SRC = Drawing.BASE_IMG_URL + 'tile.png';
 Drawing.TILE_SIZE = 100;
+
+/**
+ * Factory method for creating a Drawing object.
+ * @param {CanvasRenderingContext2D} context The context this object will
+ *   draw to.
+ */
+Drawing.create = function(context) {
+  var selfTankImage = new Image();
+}
 
 /**
  * Clears the canvas.
