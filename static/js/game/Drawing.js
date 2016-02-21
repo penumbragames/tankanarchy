@@ -10,8 +10,10 @@
  *   draw to.
  * @constructor
  */
-function Drawing(context) {
+function Drawing(context, images) {
   this.context = context;
+
+  this.images = images;
 };
 
 Drawing.NAME_FONT = '14px Helvetica';
@@ -21,14 +23,34 @@ Drawing.HP_COLOR = 'green';
 Drawing.HP_MISSING_COLOR = 'red';
 
 Drawing.BASE_IMG_URL = '/static/img/';
-Drawing.SELF_TANK_SRC = Drawing.BASE_IMG_URL + 'self_tank.png';
-Drawing.SELF_TURRET_SRC = Drawing.BASE_IMG_URL + 'self_turret.png';
-Drawing.OTHER_TANK_SRC = Drawing.BASE_IMG_URL + 'other_tank.png';
-Drawing.OTHER_TURRET_SRC = Drawing.BASE_IMG_URL + 'other_turret.png';
-Drawing.SHIELD_SRC = Drawing.BASE_IMG_URL + 'shield.png';
-Drawing.BULLET_SRC = Drawing.BASE_IMG_URL + 'bullet.png';
-Drawing.TILE_SRC = Drawing.BASE_IMG_URL + 'tile.png';
+Drawing.IMG_KEYS = [
+  'self_tank', 'self_turret', 'other_tank', 'other_turret',
+  'shield', 'bullet', 'tile'
+];
+Drawing.IMG_SRCS = {
+  'self_tank': Drawing.BASE_IMG_URL + 'self_tank.png',
+  'self_turret': Drawing.BASE_IMG_URL + 'self_turret.png',
+  'other_tank': Drawing.BASE_IMG_URL + 'other_tank.png',
+  'other_turret': Drawing.BASE_IMG_URL + 'other_turret.png',
+  'shield': Drawing.BASE_IMG_URL + 'shield.png',
+  'bullet': Drawing.BASE_IMG_URL + 'bullet.png',
+  'tile': Drawing.BASE_IMG_URL + 'tile.png'
+};
 Drawing.TILE_SIZE = 100;
+
+/**
+ * Factory method for creating a Drawing object.
+ * @param {CanvasRenderingContext2D} context The context this object will
+ *   draw to.
+ */
+Drawing.create = function(context) {
+  var images = {}
+  for (key in Drawing.IMG_KEYS) {
+    images[key] = new Image();
+    images[key].src = Drawing.IMG_SRCS[key];
+  }
+  return new Drawing(context, images);
+}
 
 /**
  * Clears the canvas.
@@ -77,11 +99,11 @@ Drawing.prototype.drawTank = function(isSelf, coords, orientation,
   this.context.save();
   this.context.translate(coords[0], coords[1]);
   this.context.rotate(orientation);
-  var tank = new Image();
+  var tank = null;
   if (isSelf) {
-    tank.src = Drawing.SELF_TANK_SRC;
+    tank = this.images['self_tank'];
   } else {
-    tank.src = Drawing.OTHER_TANK_SRC;
+    tank = this.images['other_tank'];
   }
   this.context.drawImage(tank, -tank.width / 2, -tank.height / 2);
   this.context.restore();
@@ -89,11 +111,11 @@ Drawing.prototype.drawTank = function(isSelf, coords, orientation,
   this.context.save();
   this.context.translate(coords[0], coords[1]);
   this.context.rotate(turretAngle);
-  var turret = new Image();
+  var turret = null;
   if (isSelf) {
-    turret.src = Drawing.SELF_TURRET_SRC;
+    turret = this.images['self_turret'];
   } else {
-    turret.src = Drawing.OTHER_TURRET_SRC;
+    turret = this.images['other_turret'];
   }
   this.context.drawImage(turret, -turret.width / 2, -turret.height / 2);
   this.context.restore();
@@ -101,8 +123,7 @@ Drawing.prototype.drawTank = function(isSelf, coords, orientation,
   if (hasShield != null && hasShield != undefined) {
     this.context.save()
     this.context.translate(coords[0], coords[1]);
-    var shield = new Image();
-    shield.src = Drawing.SHIELD_SRC;
+    var shield = this.images['shield'];
     this.context.drawImage(shield, -shield.width / 2, -shield.height / 2);
     this.context.restore();
   }
@@ -118,8 +139,7 @@ Drawing.prototype.drawBullet = function(coords, orientation) {
   this.context.save();
   this.context.translate(coords[0], coords[1]);
   this.context.rotate(orientation);
-  var bullet = new Image();
-  bullet.src = Drawing.BULLET_SRC;
+  var bullet = this.images['bullet'];
   this.context.drawImage(bullet, -bullet.width / 2, -bullet.height / 2);
   this.context.restore();
 }
@@ -133,6 +153,9 @@ Drawing.prototype.drawPowerup = function(coords, name) {
   this.context.save();
   this.context.translate(coords[0], coords[1]);
   var powerup = new Image();
+  /**
+   * TODO: store all powerup images during initialization
+   */
   powerup.src = Drawing.BASE_IMG_URL + name + '.png';
   this.context.drawImage(powerup, -powerup.width / 2, -powerup.height / 2);
   this.context.restore();
@@ -147,8 +170,7 @@ Drawing.prototype.drawPowerup = function(coords, name) {
  */
 Drawing.prototype.drawTiles = function(topLeft, bottomRight) {
   this.context.save();
-  var tile = new Image();
-  tile.src = Drawing.TILE_SRC;
+  var tile = this.images['tile'];
   for (var x = topLeft[0]; x < bottomRight[0]; x += Drawing.TILE_SIZE) {
     for (var y = topLeft[1]; y < bottomRight[1]; y += Drawing.TILE_SIZE) {
       this.context.drawImage(tile, x, y);
