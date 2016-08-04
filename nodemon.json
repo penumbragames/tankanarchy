@@ -1,0 +1,9 @@
+{
+  "restartable": "rs",
+  "ignore": [
+    ".git",
+    "node_modules/*",
+    "public/bower/*"
+  ],
+  "ext": "js html json css less png"
+}

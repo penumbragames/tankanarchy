@@ -31,6 +31,8 @@ Constants.VISIBILITY_THRESHOLD_X = 425;
  */
 Constants.VISIBILITY_THRESHOLD_Y = 325;
 
-try {
+if (typeof module === 'object') {
   module.exports = Constants;
-} catch (err) {}
+} else {
+  window.Constants = Constants;
+}

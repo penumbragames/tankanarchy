@@ -61,27 +61,27 @@
     </table>
     <div class='howto'>
       <div>
-        <img src='/static/img/favicon.png' />
+        <img src='/public/img/favicon.png' />
         Your tank
       </div>
       <div>
-        <img src='/static/img/healthpack_powerup.png' />
+        <img src='/public/img/healthpack_powerup.png' />
         Health pack
       </div>
       <div>
-        <img src='/static/img/rapidfire_powerup.png' />
+        <img src='/public/img/rapidfire_powerup.png' />
         Rapid fire powerup
       </div>
       <div>
-        <img src='/static/img/shield_powerup.png' />
+        <img src='/public/img/shield_powerup.png' />
         Shield powerup
       </div>
       <div>
-        <img src='/static/img/shotgun_powerup.png' />
+        <img src='/public/img/shotgun_powerup.png' />
         Shotgun powerup
       </div>
       <div>
-        <img src='/static/img/speedboost_powerup.png' />
+        <img src='/public/img/speedboost_powerup.png' />
         Speed boost
       </div>
     </div>
@@ -92,6 +92,21 @@
 {% endblock %}
 
 {% block scripts %}
-  <script src='/static/dist/minified.js'>
-  </script>
+  {% if dev_mode %}
+    <script src="/shared/Constants.js"></script>
+    <script src="/shared/Util.js"></script>
+    <script src="/public/js/game/AFK_Kicker.js"></script>
+    <script src="/public/js/game/Chat.js"></script>
+    <script src="/public/js/game/Drawing.js"></script>
+    <script src="/public/js/game/Environment.js"></script>
+    <script src="/public/js/game/Game.js"></script>
+    <script src="/public/js/game/Input.js"></script>
+    <script src="/public/js/game/Leaderboard.js"></script>
+    <script src="/public/js/game/ViewPort.js"></script>
+    <script src="/public/js/requestAnimFrame.js"></script>
+    <script src="/public/js/client.js"></script>
+  {% else %}
+    <script src='/public/dist/minified.js'>
+    </script>
+  {% endif %}
 {% endblock %}

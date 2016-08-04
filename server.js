@@ -4,8 +4,20 @@
  * @todo Add unit tests!
  */
 
+var DEV_MODE = false;
 var PORT_NUMBER = process.env.PORT || 5000;
 var FRAME_RATE = 1000.0 / 60.0;
+
+/**
+ * Sets the DEV_MODE constant for development.
+ * Example usage:
+ * node server.js --dev
+ */
+process.argv.forEach(function(value, index, array) {
+  if (value == '--dev' || value == '--development') {
+    DEV_MODE = true;
+  }
+});
 
 // Dependencies.
 var bodyParser = require('body-parser');
@@ -15,7 +27,7 @@ var morgan = require('morgan');
 var socketIO = require('socket.io');
 var swig = require('swig');
 
-var Game = require('./server/Game');
+var Game = require('./lib/Game');
 
 // Initialization.
 var app = express();
@@ -28,18 +40,15 @@ app.engine('html', swig.renderFile);
 app.set('port', PORT_NUMBER);
 app.set('view engine', 'html');
 
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan(':date[web] :method :url :req[header] :remote-addr :status'));
-app.use('/bower_components',
-        express.static(__dirname + '/bower_components'));
-app.use('/static/dist',
-        express.static(__dirname + '/static/dist'));
-app.use('/static/img',
-        express.static(__dirname + '/static/img'));
+app.use('/public', express.static(__dirname + '/public'));
+app.use('/shared', express.static(__dirname + '/shared'));
 
 // Routing
 app.get('/', function(request, response) {
-  response.render('index.html');
+  response.render('index.html', {
+    dev_mode: DEV_MODE
+  });
 });
 
 // Server side input handler, modifies the state of the players and the

@@ -1,5 +1,5 @@
 # Shared Data
 
 These two JavaScript files contain utility methods and constants that are used
-on both the client and server side scripts. They are accessible by both to
-reduce redundancies.
+on both the client and server side scripts. They are written as modules that
+can be imported into both to reduce redundancies.

@@ -44,7 +44,7 @@ Game.create = function(socket, canvasElement, leaderboardElement) {
   var canvasContext = canvasElement.getContext('2d');
 
   var leaderboard = new Leaderboard(leaderboardElement);
-  var drawing = new Drawing(canvasContext);
+  var drawing = Drawing.create(canvasContext);
   var viewPort = new ViewPort();
   var environment = new Environment(viewPort, drawing);
 

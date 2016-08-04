@@ -8,11 +8,11 @@
  * Creates a Drawing object.
  * @param {CanvasRenderingContext2D} context The context this object will
  *   draw to.
+ * @param {Array<Image>} images The image objects used to draw each entity.
  * @constructor
  */
 function Drawing(context, images) {
   this.context = context;
-
   this.images = images;
 };
 
@@ -22,11 +22,7 @@ Drawing.NAME_COLOR = 'black';
 Drawing.HP_COLOR = 'green';
 Drawing.HP_MISSING_COLOR = 'red';
 
-Drawing.BASE_IMG_URL = '/static/img/';
-Drawing.IMG_KEYS = [
-  'self_tank', 'self_turret', 'other_tank', 'other_turret',
-  'shield', 'bullet', 'tile'
-];
+Drawing.BASE_IMG_URL = '/public/img/';
 Drawing.IMG_SRCS = {
   'self_tank': Drawing.BASE_IMG_URL + 'self_tank.png',
   'self_turret': Drawing.BASE_IMG_URL + 'self_turret.png',
@@ -39,13 +35,14 @@ Drawing.IMG_SRCS = {
 Drawing.TILE_SIZE = 100;
 
 /**
- * Factory method for creating a Drawing object.
+ * Factory method for creating a Drawing object. It initializes all the
+ * necessary Image objects.
  * @param {CanvasRenderingContext2D} context The context this object will
  *   draw to.
  */
 Drawing.create = function(context) {
-  var images = {}
-  for (key in Drawing.IMG_KEYS) {
+  var images = {};
+  for (var key in Drawing.IMG_SRCS) {
     images[key] = new Image();
     images[key].src = Drawing.IMG_SRCS[key];
   }

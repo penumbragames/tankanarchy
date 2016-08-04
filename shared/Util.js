@@ -17,6 +17,50 @@ function Util() {
 };
 
 /**
+ * This method truncates a number to an integer.
+ * @param {number} x The number to truncate.
+ * @return {number}
+ */
+Util.truncate = function(x) {
+  return x | 0;
+};
+
+/**
+ * This method returns the sign of a number.
+ * @param {number} x The number to check.
+ * @return {number}
+ */
+Util.getSign = function(x) {
+  if (x > 0) {
+    return 1;
+  } else if (x < 0) {
+    return -1;
+  }
+  return 0;
+};
+
+/**
+ * Generates and returns a UID.
+ * @param {?number=} length An optional length parameter for the UID to
+ *   to generate. If the length is not provided, this function will return a
+ *   UID of length 32.
+ * @return {string}
+ */
+Util.generateUID = function(length) {
+  if (!length) {
+    length = 32;
+  }
+  var choice = 'abcdefghijklmnopqrstuvwxyz' +
+               'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
+               '1234567890';
+  var uid = '';
+  for (var i = 0; i < length; ++i) {
+    uid += choice.charAt(Math.floor(Math.random() * choice.length));
+  }
+  return uid;
+};
+
+/**
  * Returns the Manhattan Distance between two points given their x and y
  * coordinates.
  * @param {number} x1 The x-coordinate of the first point.
@@ -165,6 +209,8 @@ Util.choiceArray = function(array) {
   return array[Util.randRangeInt(0, array.length)];
 };
 
-try {
+if (typeof module === 'object') {
   module.exports = Util;
-} catch (err) {}
+} else {
+  window.Util = Util;
+}

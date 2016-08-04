@@ -1,36 +1,38 @@
 {
   "name": "tankanarchy",
-  "version": "2.1.0",
+  "version": "2.0.0",
   "description": "A multiplayer tank battle arena game",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "postinstall": "bower install; gulp"
-  },
-  "author": "Alvin Lin",
-  "license": "MIT",
-  "dependencies": {
-    "body-parser": "^1.13.3",
-    "bower": "^1.5.2",
-    "express": "^4.13.3",
-    "gulp": "^3.9.0",
-    "gulp-autoprefixer": "^3.0.1",
-    "gulp-closure-compiler-service": "^0.6.0",
-    "gulp-concat": "^2.6.0",
-    "gulp-cssnano": "^2.1.0",
-    "gulp-less": "^3.0.3",
-    "gulp-plumber": "^1.1.0",
-    "gulp-rename": "^1.2.2",
-    "hashmap": "^2.0.3",
-    "morgan": "^1.6.1",
-    "socket.io": "^1.3.6",
-    "swig": "^1.4.2"
-  },
-  "engines": {
-    "node": "*"
+    "test": "node server.js",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/omgimanerd/tankanarchy"
+    "url": "git+https://github.com/penumbragames/tankanarchy.git"
+  },
+  "author": "Alvin Lin (omgimanerd)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/penumbragames/tankanarchy/issues"
+  },
+  "homepage": "https://github.com/penumbragames/tankanarchy#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "del": "^2.2.1",
+    "express": "^4.14.0",
+    "google-closure-compiler": "^20160713.2.0",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-gjslint": "^0.1.5",
+    "gulp-less": "^3.1.0",
+    "gulp-rename": "^1.2.2",
+    "hashmap": "^2.0.6",
+    "less-plugin-autoprefix": "^1.5.1",
+    "less-plugin-clean-css": "^1.5.1",
+    "merge-stream": "^1.0.0",
+    "morgan": "^1.7.0",
+    "socket.io": "^1.4.8",
+    "swig": "^1.4.2"
   }
 }
