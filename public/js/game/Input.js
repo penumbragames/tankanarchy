@@ -1,86 +1,100 @@
 /**
- * This class keeps track of the user input in global variables.
- * @author Alvin Lin (alvin.lin.dev@gmail.com)
+ * This class facilitates the tracking of user input, such as mouse clicks
+ * and button presses.
+ * @author alvin.lin.dev@gmail.com (Alvin Lin)
  */
 
 /**
  * Empty constructor for the Input object.
- * @constructor
  */
-function Input() {}
+function Input() {
+  throw new Error('Input should not be instantiated!');
+}
 
-Input.TOUCH = false;
+/** @type {boolean} */
 Input.LEFT_CLICK = false;
+/** @type {boolean} */
 Input.RIGHT_CLICK = false;
+/** @type {Object<string, Array<number>>} */
 Input.MOUSE = [];
+
+/** @type {boolean} */
 Input.LEFT = false;
+/** @type {boolean} */
 Input.UP = false;
+/** @type {boolean} */
 Input.RIGHT = false;
+/** @type {boolean} */
 Input.DOWN = false;
+/** @type {Object<number, boolean>} */
+Input.MISC_KEYS = {};
 
-Input.onTouchStart = function(e) {
-  Input.TOUCH = true;
-};
-
-Input.onTouchEnd = function(e) {
-  Input.TOUCH = false;
-};
-
-Input.onMouseDown = function(e) {
-  if (e.which == 1) {
+/**
+ * This method is a callback bound to the onmousedown event on the document
+ * and updates the state of the mouse click stored in the Input class.
+ * @param {Event} event The event passed to this function.
+ */
+Input.onMouseDown = function(event) {
+  if (event.which == 1) {
     Input.LEFT_CLICK = true;
-  } else if (e.which == 3) {
+  } else if (event.which == 3) {
+    // This may fail depending on the browser as right click handling is
+    // not universally supported.
     Input.RIGHT_CLICK = true;
   }
 };
 
-Input.onMouseUp = function(e) {
-  if (e.which == 1) {
+/**
+ * This method is a callback bound to the onmouseup event on the document and
+ * updates the state of the mouse click stored in the Input class.
+ * @param {Event} event The event passed to this function.
+ */
+Input.onMouseUp = function(event) {
+  if (event.which == 1) {
     Input.LEFT_CLICK = false;
-  } else if (e.which == 3) {
+  } else if (event.which == 3) {
+    // This may fail depending on the browser as right click handling is
+    // not universally supported.
     Input.RIGHT_CLICK = false;
   }
 };
 
-Input.onMouseMove = function(e) {
-  var canvas = document.getElementById('canvas');
-  var rect = canvas.getBoundingClientRect();
-  Input.MOUSE = [e.pageX - rect.left,
-                 e.pageY - rect.top];
-};
-
-Input.onKeyDown = function(e) {
-  // Since this class is used to maintain input for the game only, we should
-  // not be reading while the user is chatting.
-  if (document.activeElement == document.getElementById('chat-input')) {
-    Input.LEFT = false;
-    Input.UP = false;
-    Input.RIGHT = false;
-    Input.DOWN = false;
-  } else {
-    switch (e.keyCode) {
-      case 37:
-      case 65:
-        Input.LEFT = true;
-        break;
-      case 38:
-      case 87:
-        Input.UP = true;
-        break;
-      case 39:
-      case 68:
-        Input.RIGHT = true;
-        break;
-      case 40:
-      case 83:
-        Input.DOWN = true;
-        break;
-    };
+/**
+ * This method is a callback bound to the onkeydown event on the document and
+ * @param {Event} event The event passed to this function.
+ * updates the state of the keys stored in the Input class.
+ */
+Input.onKeyDown = function(event) {
+  switch (event.keyCode) {
+    case 37:
+    case 65:
+      Input.LEFT = true;
+      break;
+    case 38:
+    case 87:
+      Input.UP = true;
+      break;
+    case 39:
+    case 68:
+      Input.RIGHT = true;
+      break;
+    case 40:
+    case 83:
+      Input.DOWN = true;
+      break;
+    default:
+      Input.MISC_KEYS[event.keyCode] = true;
+      break;
   }
 };
 
-Input.onKeyUp = function(e) {
-  switch (e.keyCode) {
+/**
+ * This method is a callback bound to the onkeyup event on the document and
+ * updates the state of the keys stored in the Input class.
+ * @param {Event} event The event passed to this function.
+ */
+Input.onKeyUp = function(event) {
+  switch (event.keyCode) {
     case 37:
     case 65:
       Input.LEFT = false;
@@ -97,20 +111,29 @@ Input.onKeyUp = function(e) {
     case 83:
       Input.DOWN = false;
       break;
-  };
+    default:
+      Input.MISC_KEYS[event.keyCode] = false;
+  }
 };
 
 /**
- * This is the only function that needs to be called in the client-side
- * script. This should be called during initialization to allow the Input
+ * This should be called during initialization to allow the Input
  * class to track user input.
  */
 Input.applyEventHandlers = function() {
-  window.addEventListener('touchstart', Input.onTouchStart);
-  window.addEventListener('touchend', Input.onTouchEnd);
-  window.addEventListener('mousedown', Input.onMouseDown);
-  window.addEventListener('mouseup', Input.onMouseUp);
-  window.addEventListener('mousemove', Input.onMouseMove);
-  window.addEventListener('keyup', Input.onKeyUp);
-  window.addEventListener('keydown', Input.onKeyDown);
+  document.addEventListener('mousedown', Input.onMouseDown);
+  document.addEventListener('mouseup', Input.onMouseUp);
+  document.addEventListener('keyup', Input.onKeyUp);
+  document.addEventListener('keydown', Input.onKeyDown);
+};
+
+/**
+ * This should be called any time an element needs to track mouse coordinates
+ * over it.
+ * @param {Element} element The element to apply the event listener to.
+ */
+Input.addMouseTracker = function(element) {
+  element.addEventListener('mousemove', function(event) {
+    Input.MOUSE = [event.offsetX, event.offsetY];
+  });
 };

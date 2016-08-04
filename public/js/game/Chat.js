@@ -1,7 +1,7 @@
 /**
  * This class handles the sending and receiving of chat messages as well as
  * their display. Chat messages will use the same socket as the game.
- * @author Alvin Lin (alvin.lin.dev@gmail.com)
+ * @author alvin.lin.dev@gmail.com (Alvin Lin)
  */
 
 /**
@@ -27,6 +27,7 @@ function Chat(socket, displayElement, textElement) {
  *   displayed.
  * @param {Element} textElement The input element from which text will be read
  *   to be sent as a chat message to the server.
+ * @return {Chat}
  */
 Chat.create = function(socket, displayElement, textElement) {
   return new Chat(socket, displayElement, textElement);
@@ -43,7 +44,7 @@ Chat.prototype.init = function() {
     if (e.keyCode == 13) {
       context.sendMessage();
     }
-  }
+  };
 
   this.socket.on('chat-server-to-clients', function(data) {
     context.receiveMessage(data.name, data.message, data.isNotification);

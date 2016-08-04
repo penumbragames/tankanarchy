@@ -1,6 +1,6 @@
 /**
  * Allows for a smooth client side game loop, running optimally at 60 FPS.
- * @author Alvin Lin (alvin.lin.dev@gmail.com)
+ * @author alvin.lin.dev@gmail.com (Alvin Lin)
  */
 
 window.requestAnimFrame = (function() {

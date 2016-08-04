@@ -1,7 +1,7 @@
 /**
  * Client side script that initializes the game. This should be the only script
  * that depends on JQuery.
- * @author Alvin Lin (alvin.lin.dev@gmail.com)
+ * @author alvin.lin.dev@gmail.com (Alvin Lin)
  */
 
 var socket = io();
@@ -26,7 +26,7 @@ $(document).ready(function() {
       });
       $('#name-prompt-container').empty();
       $('#name-prompt-container').append(
-        $('<span>').addClass('fa fa-2x fa-spinner fa-pulse'));
+          $('<span>').addClass('fa fa-2x fa-spinner fa-pulse'));
     } else {
       window.alert('Your name cannot be blank or over 20 characters.');
     }
@@ -47,14 +47,15 @@ $(document).ready(function() {
 
 function init() {
   Input.applyEventHandlers();
+  Input.addMouseTracker(document.getElementById('canvas'));
   AFK_Kicker.init();
   game.init();
   chat.init();
-};
+}
 
 function animate() {
   AFK_Kicker.check();
   game.update();
   game.draw();
   window.requestAnimFrame(animate);
-};
+}

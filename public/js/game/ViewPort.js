@@ -1,6 +1,6 @@
 /**
  * Manages the player viewport when they move around.
- * @author Kenneth Li (kennethli.3470@gmail.com)
+ * @author kennethli.3470@gmail.com (Kenneth Li)
  */
 
 /**
@@ -11,10 +11,12 @@
  */
 function ViewPort() {
   this.selfCoords = [];
-};
+}
 
 /**
  * Updates the viewport with this client's player instance's coordinates.
+ * @param {number} x The absolute x coordinate of the player.
+ * @param {number} y The absolute y coordinate of the player.
  */
 ViewPort.prototype.update = function(x, y) {
   this.selfCoords = [x, y];

@@ -1,7 +1,7 @@
 /**
  * Methods for drawing all the sprites onto the HTML5 canvas.
- * @author Kenneth Li (kennethli.3470@gmail.com)
- * @todo Add explosion drawing.
+ * @author kennethli.3470@gmail.com (Kenneth Li)
+ * TODO: Add explosion drawing.
  */
 
 /**
@@ -14,15 +14,42 @@
 function Drawing(context, images) {
   this.context = context;
   this.images = images;
-};
+}
 
+/**
+ * @const
+ * @type {string}
+ */
 Drawing.NAME_FONT = '14px Helvetica';
+
+/**
+ * @const
+ * @type {string}
+ */
 Drawing.NAME_COLOR = 'black';
 
+/**
+ * @const
+ * @type {string}
+ */
 Drawing.HP_COLOR = 'green';
+
+/**
+ * @const
+ * @type {string}
+ */
 Drawing.HP_MISSING_COLOR = 'red';
 
+/**
+ * @const
+ * @type {string}
+ */
 Drawing.BASE_IMG_URL = '/public/img/';
+
+/**
+ * @const
+ * @type {Object}
+ */
 Drawing.IMG_SRCS = {
   'self_tank': Drawing.BASE_IMG_URL + 'self_tank.png',
   'self_turret': Drawing.BASE_IMG_URL + 'self_turret.png',
@@ -32,6 +59,11 @@ Drawing.IMG_SRCS = {
   'bullet': Drawing.BASE_IMG_URL + 'bullet.png',
   'tile': Drawing.BASE_IMG_URL + 'tile.png'
 };
+
+/**
+ * @const
+ * @type {number}
+ */
 Drawing.TILE_SIZE = 100;
 
 /**
@@ -39,6 +71,7 @@ Drawing.TILE_SIZE = 100;
  * necessary Image objects.
  * @param {CanvasRenderingContext2D} context The context this object will
  *   draw to.
+ * @return {Drawing}
  */
 Drawing.create = function(context) {
   var images = {};
@@ -47,7 +80,7 @@ Drawing.create = function(context) {
     images[key].src = Drawing.IMG_SRCS[key];
   }
   return new Drawing(context, images);
-}
+};
 
 /**
  * Clears the canvas.
@@ -68,6 +101,7 @@ Drawing.prototype.clear = function() {
  * @param {number} turretAngle The angle of the turret from 0 to 2 * PI.
  * @param {string} name The name of the player associated with this tank.
  * @param {number} health The current health of the tank.
+ * @param {boolean} hasShield The shield state of the tank.
  */
 Drawing.prototype.drawTank = function(isSelf, coords, orientation,
                                       turretAngle, name, health,
@@ -118,7 +152,7 @@ Drawing.prototype.drawTank = function(isSelf, coords, orientation,
   this.context.restore();
 
   if (hasShield != null && hasShield != undefined) {
-    this.context.save()
+    this.context.save();
     this.context.translate(coords[0], coords[1]);
     var shield = this.images['shield'];
     this.context.drawImage(shield, -shield.width / 2, -shield.height / 2);
@@ -139,12 +173,13 @@ Drawing.prototype.drawBullet = function(coords, orientation) {
   var bullet = this.images['bullet'];
   this.context.drawImage(bullet, -bullet.width / 2, -bullet.height / 2);
   this.context.restore();
-}
+};
 
 /**
  * Draws a powerup.
  * @param {[number, number]} coords The coordinates of the center of the
  *   powerup
+ * @param {string} name The name of the powerup to draw.
  */
 Drawing.prototype.drawPowerup = function(coords, name) {
   this.context.save();
@@ -156,7 +191,7 @@ Drawing.prototype.drawPowerup = function(coords, name) {
   powerup.src = Drawing.BASE_IMG_URL + name + '.png';
   this.context.drawImage(powerup, -powerup.width / 2, -powerup.height / 2);
   this.context.restore();
-}
+};
 
 /**
  * Draws the background tiles.
@@ -174,4 +209,4 @@ Drawing.prototype.drawTiles = function(topLeft, bottomRight) {
     }
   }
   this.context.restore();
-}
+};

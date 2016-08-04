@@ -1,12 +1,12 @@
 /**
  * This class handles the rendering and updating of the leaderboard.
- * @authro Alvin Lin (alvin.lin.dev@gmail.com)
+ * @author alvin.lin.dev@gmail.com (Alvin Lin)
  */
 
 /**
  * Constructor for the Leaderboard object.
  * @constructor
- * @param {Element} The container element of the leaderboard. This
+ * @param {Element} element The container element of the leaderboard. This
  *   element should be an unordered list.
  */
 function Leaderboard(element) {
@@ -29,8 +29,8 @@ Leaderboard.prototype.update = function(players) {
   for (var i = 0; i < this.players.length; ++i) {
     var playerElement = document.createElement('li');
     playerElement.appendChild(document.createTextNode(
-      this.players[i].name + " - Kills: " + this.players[i].kills +
-      " Deaths: " + this.players[i].deaths));
+        this.players[i].name + ' - Kills: ' + this.players[i].kills +
+        ' Deaths: ' + this.players[i].deaths));
     this.element.appendChild(playerElement);
-  };
+  }
 };

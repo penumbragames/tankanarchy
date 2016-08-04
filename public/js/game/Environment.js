@@ -1,6 +1,6 @@
 /**
  * Keeps track of the environment.
- * @author Alvin Lin (alvin.lin.dev@gmail.com)
+ * @author alvin.lin.dev@gmail.com (Alvin Lin)
  */
 
 /**
@@ -14,29 +14,29 @@
 function Environment(viewPort, drawing) {
   this.viewPort = viewPort;
   this.drawing = drawing;
-};
+}
 
 /**
  * Draws the environment tiles on the canvas.
  */
 Environment.prototype.draw = function() {
   var center = this.viewPort.selfCoords;
+  var leftX = center[0] - Constants.CANVAS_WIDTH / 2;
+  var topY = center[1] - Constants.CANVAS_HEIGHT / 2;
+  var rightX = center[0] + Constants.CANVAS_WIDTH / 2;
+  var bottomY = center[1] + Constants.CANVAS_HEIGHT / 2;
   this.drawing.drawTiles(
-    this.viewPort.toCanvasCoords({
-      x: Math.max(Math.floor(
-                  (center[0] - Constants.CANVAS_WIDTH / 2) / Drawing.TILE_SIZE) *
-                  Drawing.TILE_SIZE, Constants.WORLD_MIN),
-      y: Math.max(Math.floor(
-                  (center[1] - Constants.CANVAS_HEIGHT / 2) / Drawing.TILE_SIZE) *
-                  Drawing.TILE_SIZE, Constants.WORLD_MIN)
-    }),
-    this.viewPort.toCanvasCoords({
-      x: Math.min((Math.ceil(
-                  (center[0] + Constants.CANVAS_WIDTH / 2) / Drawing.TILE_SIZE) + 1) *
-                  Drawing.TILE_SIZE, Constants.WORLD_MAX),
-      y: Math.min((Math.ceil(
-                  (center[1] + Constants.CANVAS_HEIGHT / 2) / Drawing.TILE_SIZE) + 1) *
-                  Drawing.TILE_SIZE, Constants.WORLD_MAX)
-    })
+      this.viewPort.toCanvasCoords({
+        x: Math.max(Math.floor(leftX / Drawing.TILE_SIZE) *
+                    Drawing.TILE_SIZE, Constants.WORLD_MIN),
+        y: Math.max(Math.floor(topY / Drawing.TILE_SIZE) *
+                    Drawing.TILE_SIZE, Constants.WORLD_MIN)
+      }),
+      this.viewPort.toCanvasCoords({
+        x: Math.min((Math.ceil(rightX / Drawing.TILE_SIZE) + 1) *
+                    Drawing.TILE_SIZE, Constants.WORLD_MAX),
+        y: Math.min((Math.ceil(bottomY / Drawing.TILE_SIZE) + 1) *
+                    Drawing.TILE_SIZE, Constants.WORLD_MAX)
+      })
   );
 };

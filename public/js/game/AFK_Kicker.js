@@ -2,7 +2,7 @@
  * Reloads the page if the player has been AFK for more than 2 minutes.
  * This essentially kicks them from the game since it will fire the socket
  * disconnect event.
- * @author Alvin Lin (alvin.lin.dev@gmail.com)
+ * @author alvin.lin.dev@gmail.com (Alvin Lin)
  */
 
 /**

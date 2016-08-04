@@ -1,12 +1,14 @@
 /**
  * This is a utility class containing utility methods used on the server and
  * client.
- * @author Alvin Lin (alvin.lin.dev@gmail.com)
+ * @author alvin.lin.dev@gmail.com (Alvin Lin)
  */
 
-try {
+if (typeof module == 'object') {
   var Constants = require('./Constants');
-} catch (err) {}
+} else {
+  var Constants = window.Constants;
+}
 
 /**
  * Empty constructor for the Util class, all functions will be static.
@@ -14,7 +16,7 @@ try {
  */
 function Util() {
   throw new Error('Util should not be instantiated!');
-};
+}
 
 /**
  * This method truncates a number to an integer.
@@ -174,6 +176,7 @@ Util.getRandomWorldPoint = function(padding) {
  * values, exclusive of the max value.
  * @param {number} min The minimum number to generate.
  * @param {number} max The maximum number to generate.
+ * @return {number}
  */
 Util.randRange = function(min, max) {
   if (min >= max) {
@@ -189,6 +192,7 @@ Util.randRange = function(min, max) {
  * of the max value.
  * @param {number} min The minimum number to generate.
  * @param {number} max The maximum number to generate.
+ * @return {number}
  */
 Util.randRangeInt = function(min, max) {
   if (min >= max) {
@@ -210,7 +214,13 @@ Util.choiceArray = function(array) {
 };
 
 if (typeof module === 'object') {
+  /**
+   * If Util is loaded as a Node module, then this line is called.
+   */
   module.exports = Util;
 } else {
+  /**
+   * If Util is loaded into the browser, then this line is called.
+   */
   window.Util = Util;
 }
