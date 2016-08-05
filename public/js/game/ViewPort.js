@@ -31,9 +31,29 @@ ViewPort.prototype.update = function(x, y) {
 };
 
 /**
+ * Given an absolute world x coordinate, this function returns the canvas
+ * x coordinate that it converts to.
+ * @param {number} x The absolute world x coordinate to convert.
+ * @return {number}
+ */
+ViewPort.prototype.toCanvasX = function(x) {
+  return x - (this.selfCoords[0] - Constants.CANVAS_WIDTH / 2);
+};
+
+/**
+ * Given an absolute world y coordinate, this function returns the canvas
+ * y coordinate that it converts to.
+ * @param {number} y The absolute world y coordinate to convert.
+ * @return {number}
+ */
+ViewPort.prototype.toCanvasY = function(y) {
+  return y - (this.selfCoords[1] - Constants.CANVAS_HEIGHT / 2);
+};
+
+/**
  * Given an object, returns an array containing the object's converted
  * coordinates. The object must be a valid data structure sent by the
- * server with an x and y value.
+ * server with an x and y attribute.
  * @param {Object} object The object whose converted coords should be
  *   returned.
  * @return {Array.<number>}
