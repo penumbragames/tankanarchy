@@ -49,5 +49,6 @@ function init() {
 function animate() {
   AFK_Kicker.check();
   game.update();
+  game.draw();
   window.requestAnimFrame(animate);
 }

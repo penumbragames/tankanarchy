@@ -198,18 +198,17 @@ Drawing.prototype.drawPowerup = function(coords, name) {
 };
 
 /**
- * Draws the background tiles.
- * @param {Array.<number>} topLeft The coordinates of the top-leftmost
- *   point to start laying down the tiles from. (canvas coordinates)
- * @param {Array.<number>} bottomRight The coordinates of the
- *   bottom-rightmost point to stop laying the tiles down at.
- *   (canvas coordinates)
+ * This function draws the background tiles on the canvas.
+ * @param {number} minX The minimum canvas x coordinate to start drawing from.
+ * @param {number} minY The minimum canvas y coordinate to start drawing from.
+ * @param {number} maxX The maximum canvas x coordinate to draw to.
+ * @param {number} maxY The maximum canvas y coordinate to draw to.
  */
-Drawing.prototype.drawTiles = function(topLeft, bottomRight) {
+Drawing.prototype.drawTiles = function(minX, minY, maxX, maxY) {
   this.context.save();
   var tile = this.images['tile'];
-  for (var x = topLeft[0]; x < bottomRight[0]; x += Drawing.TILE_SIZE) {
-    for (var y = topLeft[1]; y < bottomRight[1]; y += Drawing.TILE_SIZE) {
+  for (var x = minX; x < maxX; x += Drawing.TILE_SIZE) {
+    for (var y = minY; y < maxY; y += Drawing.TILE_SIZE) {
       this.context.drawImage(tile, x, y);
     }
   }

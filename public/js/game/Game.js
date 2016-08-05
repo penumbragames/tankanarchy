@@ -130,25 +130,35 @@ Game.prototype.draw = function() {
     // Clear the canvas.
     this.drawing.clear();
 
-    // Draw the background first.
+    /**
+     * Draw the background first behind the other entities, we calculate the
+     * closest top-left coordinate outside of the ViewPort. We use that
+     * coordinate to draw background tiles from left to right, top to bottom,
+     * so that the entire ViewPort is appropriately filled.
+     */
     var center = this.viewPort.selfCoords;
     var leftX = this.self['x'] - Constants.CANVAS_WIDTH / 2;
     var topY = this.self['y'] - Constants.CANVAS_HEIGHT / 2;
-    var rightX = this.self['x'] + Constants.CANVAS_WIDTH / 2;
-    var bottomY = this.self['y'] + Constants.CANVAS_HEIGHT / 2;
+    var drawStartX = Math.max(
+        leftX - (leftX % Drawing.TILE_SIZE), Constants.WORLD_MIN);
+    var drawStartY = Math.max(
+        topY - (topY % Drawing.TILE_SIZE), Constants.WORLD_MIN);
+    /**
+     * drawEndX and drawEndY have an extra Drawing.TILE_SIZE added to account
+     * for the edge case where we are at the bottom rightmost part of the
+     * world.
+     */
+    var drawEndX = Math.min(
+        drawStartX + Constants.CANVAS_WIDTH + Drawing.TILE_SIZE,
+        Constants.WORLD_MAX);
+    var drawEndY = Math.min(
+        drawStartY + Constants.CANVAS_HEIGHT + Drawing.TILE_SIZE,
+        Constants.WORLD_MAX);
     this.drawing.drawTiles(
-        this.viewPort.toCanvasCoords({
-          x: Math.max(Math.floor(leftX / Drawing.TILE_SIZE) *
-                      Drawing.TILE_SIZE, Constants.WORLD_MIN),
-          y: Math.max(Math.floor(topY / Drawing.TILE_SIZE) *
-                      Drawing.TILE_SIZE, Constants.WORLD_MIN)
-        }),
-        this.viewPort.toCanvasCoords({
-          x: Math.min((Math.ceil(rightX / Drawing.TILE_SIZE) + 1) *
-                      Drawing.TILE_SIZE, Constants.WORLD_MAX),
-          y: Math.min((Math.ceil(bottomY / Drawing.TILE_SIZE) + 1) *
-                      Drawing.TILE_SIZE, Constants.WORLD_MAX)
-        })
+      this.viewPort.toCanvasX(drawStartX),
+      this.viewPort.toCanvasY(drawStartY),
+      this.viewPort.toCanvasX(drawEndX),
+      this.viewPort.toCanvasY(drawEndY)
     );
 
     // Draw the projectiles next.
