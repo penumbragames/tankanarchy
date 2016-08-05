@@ -155,10 +155,10 @@ Game.prototype.draw = function() {
         drawStartY + Constants.CANVAS_HEIGHT + Drawing.TILE_SIZE,
         Constants.WORLD_MAX);
     this.drawing.drawTiles(
-      this.viewPort.toCanvasX(drawStartX),
-      this.viewPort.toCanvasY(drawStartY),
-      this.viewPort.toCanvasX(drawEndX),
-      this.viewPort.toCanvasY(drawEndY)
+        this.viewPort.toCanvasX(drawStartX),
+        this.viewPort.toCanvasY(drawStartY),
+        this.viewPort.toCanvasX(drawEndX),
+        this.viewPort.toCanvasY(drawEndY)
     );
 
     // Draw the projectiles next.
