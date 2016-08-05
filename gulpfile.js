@@ -5,13 +5,15 @@
  * @version 1.0.0
  */
 
+var path = require('path');
+
 var gulp = require('gulp');
 
 var del = require('del');
 var compilerPackage = require('google-closure-compiler');
-var concat = require('gulp-concat');
 var gjslint = require('gulp-gjslint');
 var less = require('gulp-less');
+var plumber = require('gulp-plumber');
 var rename = require('gulp-rename');
 var lessPluginAutoprefix = require('less-plugin-autoprefix');
 var lessPluginCleanCss = require('less-plugin-clean-css');
@@ -21,15 +23,20 @@ const JS_DIRECTORY = './public/js';
 const JS_BUILD_RULES = [
   {
     name: 'game javascript',
-    sourceFiles: ['./public/js/**/*.js'],
-    outputFile: 'game.js'
+    sourceFiles: [
+      './public/js/game/*.js',
+      './shared/*.js',
+      './public/js/requestAnimFrame.js',
+      './public/js/client.js'
+    ],
+    outputFile: 'minified.js'
   }
 ];
 const LESS_BUILD_RULES = [
   {
     name: 'styles',
-    sourceFiles: ['./public/less/*.less'],
-    outputFile: 'styles.min.css'
+    sourceFiles: [ './public/less/*.less' ],
+    outputFile: 'minified.css'
   }
 ]
 const OUTPUT_DIRECTORY = './public/dist';
@@ -42,10 +49,11 @@ var getClosureCompilerConfiguration = function(outputFile) {
       path.dirname(__filename) + '/extern/extern.js'
     ],
     warning_level: 'VERBOSE',
-    compilation_level: 'ADVANGED_OPTIMIZATIONS',
+    compilation_level: 'ADVANCED_OPTIMIZATIONS',
     js_output_file: outputFile
   });
 };
+
 
 var getLessConfiguration = function() {
   var autoprefix = new lessPluginAutoprefix({
@@ -82,10 +90,10 @@ gulp.task('js-lint', function() {
   })).pipe(gjslint.reporter('console'));
 });
 
-gulp.task('js', function() {
+gulp.task('js-compile', function() {
   return merge(JS_BUILD_RULES.map(function(rule) {
     return gulp.src(rule.sourceFiles)
-      .pipe(concat(rule.outputFile))
+      .pipe(plumber())
       .pipe(getClosureCompilerConfiguration(rule.outputFile))
       .pipe(gulp.dest(OUTPUT_DIRECTORY))
       .on('finish', function() {
@@ -97,6 +105,7 @@ gulp.task('js', function() {
 gulp.task('less', function() {
   return merge(LESS_BUILD_RULES.map(function(rule) {
     return gulp.src(rule.sourceFiles)
+      .pipe(plumber())
       .pipe(getLessConfiguration())
       .pipe(rename(rule.outputFile))
       .pipe(gulp.dest(OUTPUT_DIRECTORY))

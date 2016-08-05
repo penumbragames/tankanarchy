@@ -36,7 +36,7 @@ ViewPort.prototype.update = function(x, y) {
  * server with an x and y value.
  * @param {Object} object The object whose converted coords should be
  *   returned.
- * @return {[number, number]}
+ * @return {Array.<number>}
  */
 ViewPort.prototype.toCanvasCoords = function(object) {
   var translateX = this.selfCoords[0] - Constants.CANVAS_WIDTH / 2;

@@ -16,7 +16,7 @@ $(document).ready(function() {
   $('#name-input').focus();
 
   function send_name() {
-    name = $('#name-input').val();
+    var name = $('#name-input').val();
     if (name && name != '' && name.length < 20) {
       $('#name-prompt-container').empty();
       $('#name-prompt-container').append(
@@ -25,6 +25,7 @@ $(document).ready(function() {
         name: name
       }, function() {
         $('#name-prompt-overlay').fadeOut(500);
+        $('#canvas').focus();
         init();
         animate();
       });

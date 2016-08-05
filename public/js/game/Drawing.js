@@ -8,11 +8,15 @@
  * Creates a Drawing object.
  * @param {CanvasRenderingContext2D} context The context this object will
  *   draw to.
- * @param {Array<Image>} images The image objects used to draw each entity.
+ * @param {Object<string, Image>} images The image objects used to draw
+ *   each entity.
  * @constructor
  */
 function Drawing(context, images) {
   this.context = context;
+  /**
+   * @type {Object<string, Image>}
+   */
   this.images = images;
 }
 
@@ -94,7 +98,7 @@ Drawing.prototype.clear = function() {
  * Draws a tank to the canvas.
  * @param {boolean} isSelf Tells if I should draw a green tank (self)
  *   or a red tank (other player).
- * @param {[number, number]} coords The coordinates of the center of the
+ * @param {Array.<number>} coords The coordinates of the center of the
  *   tank.
  * @param {number} orientation The orientation of the tank from 0 to
  *   2 * PI.
@@ -162,7 +166,7 @@ Drawing.prototype.drawTank = function(isSelf, coords, orientation,
 
 /**
  * Draws a bullet.
- * @param {[number, number]} coords The coordinates of the center of the
+ * @param {Array.<number>} coords The coordinates of the center of the
  *   bullet.
  * @param {number} orientation The orientation of the bullet from 0 to 2 * PI
  */
@@ -177,7 +181,7 @@ Drawing.prototype.drawBullet = function(coords, orientation) {
 
 /**
  * Draws a powerup.
- * @param {[number, number]} coords The coordinates of the center of the
+ * @param {Array.<number>} coords The coordinates of the center of the
  *   powerup
  * @param {string} name The name of the powerup to draw.
  */
@@ -195,9 +199,9 @@ Drawing.prototype.drawPowerup = function(coords, name) {
 
 /**
  * Draws the background tiles.
- * @param {[number, number]} topLeft The coordinates of the top-leftmost
+ * @param {Array.<number>} topLeft The coordinates of the top-leftmost
  *   point to start laying down the tiles from.
- * @param {[number, number]} bottomRight The coordinates of the
+ * @param {Array.<number>} bottomRight The coordinates of the
  *   bottom-rightmost point to stop laying the tiles down at.
  */
 Drawing.prototype.drawTiles = function(topLeft, bottomRight) {

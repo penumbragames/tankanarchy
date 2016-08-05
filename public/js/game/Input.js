@@ -15,7 +15,7 @@ function Input() {
 Input.LEFT_CLICK = false;
 /** @type {boolean} */
 Input.RIGHT_CLICK = false;
-/** @type {Object<string, Array<number>>} */
+/** @type {Array<number>} */
 Input.MOUSE = [];
 
 /** @type {boolean} */

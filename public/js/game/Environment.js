@@ -18,6 +18,10 @@ function Environment(viewPort, drawing) {
 
 /**
  * Factory method for an Environment class.
+ * @param {ViewPort} viewPort The ViewPort used to determine the center
+ *   of the screen.
+ * @param {Drawing} drawing The Drawing object used to draw the background
+ *   tiles.
  * @return {Environment}
  */
 Environment.create = function(viewPort, drawing) {

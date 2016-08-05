@@ -8,7 +8,7 @@
  * Creates a game on the client side to manage and render the players,
  * projectiles, and powerups.
  * @constructor
- * @param {Socket} socket The socket connected to the server.
+ * @param {Object} socket The socket connected to the server.
  * @param {Leaderboard} leaderboard The Leaderboard object to update.
  * @param {Drawing} drawing The Drawing object that will render the game.
  * @param {ViewPort} viewPort The ViewPort object that will manage the
@@ -25,6 +25,9 @@ function Game(socket, leaderboard, drawing, viewPort, environment) {
   this.environment = environment;
 
   this.self = null;
+  /**
+   * @type {Array<Object>}
+   */
   this.players = [];
   this.projectiles = [];
   this.powerups = [];
@@ -34,7 +37,7 @@ function Game(socket, leaderboard, drawing, viewPort, environment) {
 
 /**
  * Factory method for the Game class.
- * @param {Socket} socket The socket connected to the server.
+ * @param {Object} socket The socket connected to the server.
  * @param {Element} canvasElement The HTML5 canvas to render the game on.
  * @param {Element} leaderboardElement The div element to render the
  *   leaderboard in.
@@ -71,14 +74,14 @@ Game.prototype.init = function() {
  *   the server.
  */
 Game.prototype.receiveGameState = function(state) {
-  this.leaderboard.update(state.leaderboard);
+  this.leaderboard.update(state['leaderboard']);
 
-  this.self = state.self;
-  this.players = state.players;
-  this.projectiles = state.projectiles;
-  this.powerups = state.powerups;
-  this.explosions = state.explosions;
-  this.latency = state.latency;
+  this.self = state['self'];
+  this.players = state['players'];
+  this.projectiles = state['projectiles'];
+  this.powerups = state['powerups'];
+  this.explosions = state['explosions'];
+  this.latency = state['latency'];
 };
 
 /**
@@ -96,15 +99,15 @@ Game.prototype.update = function() {
     // Emits an event for the containing the player's intention to move
     // or shoot to the server.
     var packet = {
-      keyboardState: {
-        up: Input.UP,
-        right: Input.RIGHT,
-        down: Input.DOWN,
-        left: Input.LEFT
+      'keyboardState': {
+        'up': Input.UP,
+        'right': Input.RIGHT,
+        'down': Input.DOWN,
+        'left': Input.LEFT
       },
-      turretAngle: turretAngle,
-      shot: Input.LEFT_CLICK,
-      timestamp: (new Date()).getTime()
+      'turretAngle': turretAngle,
+      'shot': Input.LEFT_CLICK,
+      'timestamp': (new Date()).getTime()
     };
     this.socket.emit('player-action', packet);
   }
@@ -124,14 +127,14 @@ Game.prototype.draw = function() {
   for (var i = 0; i < this.projectiles.length; ++i) {
     this.drawing.drawBullet(
         this.viewPort.toCanvasCoords(this.projectiles[i]),
-        this.projectiles[i].orientation);
+        this.projectiles[i]['orientation']);
   }
 
   // Draw the powerups next.
   for (var i = 0; i < this.powerups.length; ++i) {
     this.drawing.drawPowerup(
         this.viewPort.toCanvasCoords(this.powerups[i]),
-        this.powerups[i].name);
+        this.powerups[i]['name']);
   }
 
   // Draw the tank that represents the player.
@@ -139,21 +142,21 @@ Game.prototype.draw = function() {
     this.drawing.drawTank(
         true,
         this.viewPort.toCanvasCoords(this.self),
-        this.self.orientation,
-        this.self.turretAngle,
-        this.self.name,
-        this.self.health,
-        this.self.powerups['shield_powerup']);
+        this.self['orientation'],
+        this.self['turretAngle'],
+        this.self['name'],
+        this.self['health'],
+        this.self['powerups']['shield_powerup']);
   }
   // Draw any other tanks.
   for (var i = 0; i < this.players.length; ++i) {
     this.drawing.drawTank(
         false,
         this.viewPort.toCanvasCoords(this.players[i]),
-        this.players[i].orientation,
-        this.players[i].turretAngle,
-        this.players[i].name,
-        this.players[i].health,
-        this.players[i].powerups['shield_powerup']);
+        this.players[i]['orientation'],
+        this.players[i]['turretAngle'],
+        this.players[i]['name'],
+        this.players[i]['health'],
+        this.players[i]['powerups']['shield_powerup']);
   }
 };

@@ -7,7 +7,7 @@
 /**
  * Constructor for the Chat class.
  * @constructor
- * @param {Socket} socket The socket connected to the server.
+ * @param {Object} socket The socket connected to the server.
  * @param {Element} displayElement The element in which the chat will be
  *   displayed.
  * @param {Element} textElement The input element from which text will be read
@@ -22,7 +22,7 @@ function Chat(socket, displayElement, textElement) {
 
 /**
  * Factory method to create a Chat object.
- * @param {Socket} socket The socket connected to the server.
+ * @param {Object} socket The socket connected to the server.
  * @param {Element} displayElement The element in which the chat will be
  *   displayed.
  * @param {Element} textElement The input element from which text will be read
@@ -47,7 +47,8 @@ Chat.prototype.init = function() {
   };
 
   this.socket.on('chat-server-to-clients', function(data) {
-    context.receiveMessage(data.name, data.message, data.isNotification);
+    context.receiveMessage(
+        data['name'], data['message'], data['isNotification']);
   });
 };
 

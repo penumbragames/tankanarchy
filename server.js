@@ -64,6 +64,12 @@ io.on('connection', function(socket) {
       isNotification: true
     });
     callback();
+    socket.emit('chat-server-to-clients', {
+      name: '[Tank Anarchy]',
+      message: 'Welcome, ' + data.name + '! Use WASD to move and click ' +
+          'to shoot. Pick up powerups to boost your tank temporarily!',
+      isNotification: true
+    })
   });
 
   // Update the internal object states every time a player sends an intent

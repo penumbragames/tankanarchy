@@ -47,8 +47,10 @@ the same time.
   - Note that only compiled sources are exposed on the server but are not
   committed to this repository. Do not commit compiled sources (/static/dist).
   - Your code will be reviewed and must be approved before it is merged.
+  - The `gulp lint` test must pass for any pull request you send.
   - Please use our convention of **2 space tabs that are space characters and
-  not tab characters**. Document any code that you write.
+  not tab characters**.
+  - Document any code that you write using Google's JSDOC conventions.
 
 # Creators:
   - Alvin Lin (omgimanerd)
