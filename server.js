@@ -1,7 +1,7 @@
 /**
  * This is the server app script that is run on the server.
  * @author Alvin Lin (alvin.lin.dev@gmail.com)
- * @todo Add unit tests!
+ * TODO: Add unit tests!
  */
 
 var DEV_MODE = false;

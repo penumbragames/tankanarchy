@@ -42,12 +42,11 @@ the same time.
 # Contributing:
   - Fork this repository and set it up on your computer.
   - Commit to your own fork and send a pull request to the master repository.
-  - The `search-src` script will help you search for TODOs in the source code.
-  Run `search-src todo` to find things that need to be fixed or modified.
+  - Search for TODOs using git grep.
   - Note that only compiled sources are exposed on the server but are not
-  committed to this repository. Do not commit compiled sources (/static/dist).
+  committed to this repository. Do not commit compiled sources (/public/dist).
   - Your code will be reviewed and must be approved before it is merged.
-  - The `gulp lint` test must pass for any pull request you send.
+  - `gulp js` should not throw any errors in your code.
   - Please use our convention of **2 space tabs that are space characters and
   not tab characters**.
   - Document any code that you write using Google's JSDOC conventions.
