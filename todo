@@ -1,3 +1,6 @@
 #!/bin/bash
+# TODO: Rewrite the gulpfile so that it can be reused without major revisions
+# and can accept a build file containing JSON build rules.
+# TODO: Remove the Environment class and refactor its code into Drawing.
 
 git grep -i todo

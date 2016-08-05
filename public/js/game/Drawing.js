@@ -200,9 +200,10 @@ Drawing.prototype.drawPowerup = function(coords, name) {
 /**
  * Draws the background tiles.
  * @param {Array.<number>} topLeft The coordinates of the top-leftmost
- *   point to start laying down the tiles from.
+ *   point to start laying down the tiles from. (canvas coordinates)
  * @param {Array.<number>} bottomRight The coordinates of the
  *   bottom-rightmost point to stop laying the tiles down at.
+ *   (canvas coordinates)
  */
 Drawing.prototype.drawTiles = function(topLeft, bottomRight) {
   this.context.save();

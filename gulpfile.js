@@ -115,6 +115,10 @@ gulp.task('less', function() {
   }));
 });
 
+gulp.task('clean', function() {
+  return del(OUTPUT_DIRECTORY);
+});
+
 gulp.task('watch-js', function() {
   gulp.watch([
     './shared/*.js',

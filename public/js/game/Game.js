@@ -13,24 +13,34 @@
  * @param {Drawing} drawing The Drawing object that will render the game.
  * @param {ViewPort} viewPort The ViewPort object that will manage the
  *   player's view of the entities.
- * @param {Environment} environment The Environment object to draw the
- *   game background.
  */
-function Game(socket, leaderboard, drawing, viewPort, environment) {
+function Game(socket, leaderboard, drawing, viewPort) {
   this.socket = socket;
 
   this.leaderboard = leaderboard;
   this.drawing = drawing;
   this.viewPort = viewPort;
-  this.environment = environment;
 
   this.self = null;
+
   /**
    * @type {Array<Object>}
    */
   this.players = [];
+
+  /**
+   * @type {Array<Object>}
+   */
   this.projectiles = [];
+
+  /**
+   * @type {Array<Object>}
+   */
   this.powerups = [];
+
+  /**
+   * @type {Array<Object>}
+   */
   this.explosions = [];
   this.latency = 0;
 }
@@ -51,9 +61,8 @@ Game.create = function(socket, canvasElement, leaderboardElement) {
   var leaderboard = Leaderboard.create(leaderboardElement);
   var drawing = Drawing.create(canvasContext);
   var viewPort = ViewPort.create();
-  var environment = Environment.create(viewPort, drawing);
 
-  return new Game(socket, leaderboard, drawing, viewPort, environment);
+  return new Game(socket, leaderboard, drawing, viewPort);
 };
 
 /**
@@ -90,7 +99,7 @@ Game.prototype.receiveGameState = function(state) {
  */
 Game.prototype.update = function() {
   if (this.self) {
-    this.viewPort.update(this.self.x, this.self.y);
+    this.viewPort.update(this.self['x'], this.self['y']);
 
     var turretAngle = Math.atan2(
         Input.MOUSE[1] - Constants.CANVAS_HEIGHT / 2,
@@ -117,46 +126,66 @@ Game.prototype.update = function() {
  * Draws the state of the game onto the HTML5 canvas.
  */
 Game.prototype.draw = function() {
-  // Clear the canvas.
-  this.drawing.clear();
-
-  // Draw the background first.
-  this.environment.draw();
-
-  // Draw the projectiles next.
-  for (var i = 0; i < this.projectiles.length; ++i) {
-    this.drawing.drawBullet(
-        this.viewPort.toCanvasCoords(this.projectiles[i]),
-        this.projectiles[i]['orientation']);
-  }
-
-  // Draw the powerups next.
-  for (var i = 0; i < this.powerups.length; ++i) {
-    this.drawing.drawPowerup(
-        this.viewPort.toCanvasCoords(this.powerups[i]),
-        this.powerups[i]['name']);
-  }
-
-  // Draw the tank that represents the player.
   if (this.self) {
-    this.drawing.drawTank(
-        true,
-        this.viewPort.toCanvasCoords(this.self),
-        this.self['orientation'],
-        this.self['turretAngle'],
-        this.self['name'],
-        this.self['health'],
-        this.self['powerups']['shield_powerup']);
-  }
-  // Draw any other tanks.
-  for (var i = 0; i < this.players.length; ++i) {
-    this.drawing.drawTank(
-        false,
-        this.viewPort.toCanvasCoords(this.players[i]),
-        this.players[i]['orientation'],
-        this.players[i]['turretAngle'],
-        this.players[i]['name'],
-        this.players[i]['health'],
-        this.players[i]['powerups']['shield_powerup']);
+    // Clear the canvas.
+    this.drawing.clear();
+
+    // Draw the background first.
+    var center = this.viewPort.selfCoords;
+    var leftX = this.self['x'] - Constants.CANVAS_WIDTH / 2;
+    var topY = this.self['y'] - Constants.CANVAS_HEIGHT / 2;
+    var rightX = this.self['x'] + Constants.CANVAS_WIDTH / 2;
+    var bottomY = this.self['y'] + Constants.CANVAS_HEIGHT / 2;
+    this.drawing.drawTiles(
+        this.viewPort.toCanvasCoords({
+          x: Math.max(Math.floor(leftX / Drawing.TILE_SIZE) *
+                      Drawing.TILE_SIZE, Constants.WORLD_MIN),
+          y: Math.max(Math.floor(topY / Drawing.TILE_SIZE) *
+                      Drawing.TILE_SIZE, Constants.WORLD_MIN)
+        }),
+        this.viewPort.toCanvasCoords({
+          x: Math.min((Math.ceil(rightX / Drawing.TILE_SIZE) + 1) *
+                      Drawing.TILE_SIZE, Constants.WORLD_MAX),
+          y: Math.min((Math.ceil(bottomY / Drawing.TILE_SIZE) + 1) *
+                      Drawing.TILE_SIZE, Constants.WORLD_MAX)
+        })
+    );
+
+    // Draw the projectiles next.
+    for (var i = 0; i < this.projectiles.length; ++i) {
+      this.drawing.drawBullet(
+          this.viewPort.toCanvasCoords(this.projectiles[i]),
+          this.projectiles[i]['orientation']);
+    }
+
+    // Draw the powerups next.
+    for (var i = 0; i < this.powerups.length; ++i) {
+      this.drawing.drawPowerup(
+          this.viewPort.toCanvasCoords(this.powerups[i]),
+          this.powerups[i]['name']);
+    }
+
+    // Draw the tank that represents the player.
+    if (this.self) {
+      this.drawing.drawTank(
+          true,
+          this.viewPort.toCanvasCoords(this.self),
+          this.self['orientation'],
+          this.self['turretAngle'],
+          this.self['name'],
+          this.self['health'],
+          this.self['powerups']['shield_powerup']);
+    }
+    // Draw any other tanks.
+    for (var i = 0; i < this.players.length; ++i) {
+      this.drawing.drawTank(
+          false,
+          this.viewPort.toCanvasCoords(this.players[i]),
+          this.players[i]['orientation'],
+          this.players[i]['turretAngle'],
+          this.players[i]['name'],
+          this.players[i]['health'],
+          this.players[i]['powerups']['shield_powerup']);
+    }
   }
 };

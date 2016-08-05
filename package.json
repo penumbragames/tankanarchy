@@ -4,8 +4,8 @@
   "description": "A multiplayer tank battle arena game",
   "main": "server.js",
   "scripts": {
-    "test": "node server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "postinstall": "bower install; gulp"
   },
   "repository": {
     "type": "git",
