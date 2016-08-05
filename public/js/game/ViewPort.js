@@ -14,6 +14,14 @@ function ViewPort() {
 }
 
 /**
+ * Factory method for a ViewPort class.
+ * @return {ViewPort}
+ */
+ViewPort.create = function() {
+  return new ViewPort();
+};
+
+/**
  * Updates the viewport with this client's player instance's coordinates.
  * @param {number} x The absolute x coordinate of the player.
  * @param {number} y The absolute y coordinate of the player.

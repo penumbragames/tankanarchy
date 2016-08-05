@@ -1,4 +1,4 @@
-{% extends 'layout.html' %}
+{% extends "layout.html" %}
 
 {% block head %}
   <script src="/socket.io/socket.io.js">
@@ -6,17 +6,17 @@
 {% endblock %}
 
 {% block body %}
-  <div id='name-prompt-overlay'>
-    <div id='name-prompt-container'>
-      <form id='name-form'>
-        <div class='input-group'>
-          <input type='text'
-                 class='form-control'
-                 id='name-input'
-                 placeholder='Nickname'
-                 autocomplete='off' />
-          <span class='input-group-addon'
-                id='name-submit'>
+  <div id="name-prompt-overlay">
+    <div id="name-prompt-container">
+      <form id="name-form">
+        <div class="input-group">
+          <input type="text"
+                 class="form-control"
+                 id="name-input"
+                 placeholder="Nickname"
+                 autocomplete="off" />
+          <span class="input-group-addon"
+                id="name-submit">
             Play
           </span>
         </div>
@@ -24,22 +24,22 @@
     </div>
   </div>
 
-  <div id='container'>
-    <table id='content'>
+  <div id="container">
+    <table id="content">
       <tr>
-        <th colspan='3'>
+        <th colspan="3">
           <h1>
             Tank Anarchy
           </h1>
         </th>
       </tr>
       <tr>
-        <td id='leaderboard-container'>
+        <td id="leaderboard-container">
           <div>
             <h3>
               Leaderboard:
             </h3>
-            <ul id='leaderboard'>
+            <ul id="leaderboard">
             </ul>
           </div>
         </td>
@@ -48,44 +48,44 @@
           TODO: Add kill announcement message.
           <Player> was slain by <Player>.
           -->
-          <canvas id='canvas'>
+          <canvas id="canvas">
           </canvas>
         </td>
         <td>
-          <ul id='chat-display'>
+          <ul id="chat-display">
           </ul>
-          <input id='chat-input' type='text'
-                 placeholder='Press Enter to send' name='chat' />
+          <input id="chat-input" type="text"
+                 placeholder="Press Enter to send" name="chat" />
         </td>
       </tr>
     </table>
-    <div class='howto'>
+    <div class="howto">
       <div>
-        <img src='/public/img/favicon.png' />
+        <img src="/public/img/favicon.png" />
         Your tank
       </div>
       <div>
-        <img src='/public/img/healthpack_powerup.png' />
+        <img src="/public/img/healthpack_powerup.png" />
         Health pack
       </div>
       <div>
-        <img src='/public/img/rapidfire_powerup.png' />
+        <img src="/public/img/rapidfire_powerup.png" />
         Rapid fire powerup
       </div>
       <div>
-        <img src='/public/img/shield_powerup.png' />
+        <img src="/public/img/shield_powerup.png" />
         Shield powerup
       </div>
       <div>
-        <img src='/public/img/shotgun_powerup.png' />
+        <img src="/public/img/shotgun_powerup.png" />
         Shotgun powerup
       </div>
       <div>
-        <img src='/public/img/speedboost_powerup.png' />
+        <img src="/public/img/speedboost_powerup.png" />
         Speed boost
       </div>
     </div>
-    <div id='copyright'>
+    <div id="copyright">
       &copy; 2015 Alvin Lin and Kenneth Li. All Rights Reserved.
     </div>
   </div>
@@ -106,7 +106,7 @@
     <script src="/public/js/requestAnimFrame.js"></script>
     <script src="/public/js/client.js"></script>
   {% else %}
-    <script src='/public/dist/minified.js'>
+    <script src="/public/dist/minified.js">
     </script>
   {% endif %}
 {% endblock %}

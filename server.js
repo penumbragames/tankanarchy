@@ -56,14 +56,14 @@ app.get('/', function(request, response) {
 // the game loop.
 io.on('connection', function(socket) {
   // When a new player joins, the server adds a new player to the game.
-  socket.on('new-player', function(data) {
+  socket.on('new-player', function(data, callback) {
     game.addNewPlayer(data.name, socket);
-    socket.emit('received-new-player');
     io.sockets.emit('chat-server-to-clients', {
       name: '[Tank Anarchy]',
       message: data.name + ' has joined the game.',
       isNotification: true
     });
+    callback();
   });
 
   // Update the internal object states every time a player sends an intent

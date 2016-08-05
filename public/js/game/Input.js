@@ -119,12 +119,14 @@ Input.onKeyUp = function(event) {
 /**
  * This should be called during initialization to allow the Input
  * class to track user input.
+ * @param {Element} element The element to apply the event listener to.
  */
-Input.applyEventHandlers = function() {
-  document.addEventListener('mousedown', Input.onMouseDown);
-  document.addEventListener('mouseup', Input.onMouseUp);
-  document.addEventListener('keyup', Input.onKeyUp);
-  document.addEventListener('keydown', Input.onKeyDown);
+Input.applyEventHandlers = function(element) {
+  element.setAttribute('tabindex', 1);
+  element.addEventListener('mousedown', Input.onMouseDown);
+  element.addEventListener('mouseup', Input.onMouseUp);
+  element.addEventListener('keyup', Input.onKeyUp);
+  element.addEventListener('keydown', Input.onKeyDown);
 };
 
 /**

@@ -16,6 +16,16 @@ function Leaderboard(element) {
 }
 
 /**
+ * Factory method for a Leaderboard object.
+ * @param {Element} element The container element of the leaderboard. This
+ *   element should be an unordered list.
+ * @return {Leaderboard}
+ */
+Leaderboard.create = function(element) {
+  return new Leaderboard(element);
+};
+
+/**
  * Updates the leaderboard.
  * @param {Array.<Object>} players A sorted array of the top ten players.
  */

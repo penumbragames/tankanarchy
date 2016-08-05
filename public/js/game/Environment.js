@@ -17,6 +17,14 @@ function Environment(viewPort, drawing) {
 }
 
 /**
+ * Factory method for an Environment class.
+ * @return {Environment}
+ */
+Environment.create = function(viewPort, drawing) {
+  return new Environment(viewPort, drawing);
+};
+
+/**
  * Draws the environment tiles on the canvas.
  */
 Environment.prototype.draw = function() {

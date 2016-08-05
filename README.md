@@ -25,6 +25,8 @@ the same time.
   ```bash
   gulp            # will compile the JS and LESS assets
 
+  gulp lint       # will lint the JS assets
+
   gulp js         # will compile only the JS assets
 
   gulp less       # will compile only the LESS assets

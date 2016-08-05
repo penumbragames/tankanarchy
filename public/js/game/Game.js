@@ -45,10 +45,10 @@ Game.create = function(socket, canvasElement, leaderboardElement) {
   canvasElement.height = Constants.CANVAS_HEIGHT;
   var canvasContext = canvasElement.getContext('2d');
 
-  var leaderboard = new Leaderboard(leaderboardElement);
+  var leaderboard = Leaderboard.create(leaderboardElement);
   var drawing = Drawing.create(canvasContext);
-  var viewPort = new ViewPort();
-  var environment = new Environment(viewPort, drawing);
+  var viewPort = ViewPort.create();
+  var environment = Environment.create(viewPort, drawing);
 
   return new Game(socket, leaderboard, drawing, viewPort, environment);
 };
