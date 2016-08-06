@@ -1,6 +1,6 @@
 /**
  * This is the server app script that is run on the server.
- * @author Alvin Lin (alvin.lin.dev@gmail.com)
+ * @author alvin.lin.dev@gmail.com (Alvin Lin)
  * TODO: Add unit tests!
  */
 
@@ -69,7 +69,7 @@ io.on('connection', function(socket) {
       message: 'Welcome, ' + data.name + '! Use WASD to move and click ' +
           'to shoot. Pick up powerups to boost your tank temporarily!',
       isNotification: true
-    })
+    });
   });
 
   // Update the internal object states every time a player sends an intent
