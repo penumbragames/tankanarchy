@@ -30,7 +30,9 @@ function Chat(socket, displayElement, textElement) {
  * @return {Chat}
  */
 Chat.create = function(socket, displayElement, textElement) {
-  return new Chat(socket, displayElement, textElement);
+  var chat = new Chat(socket, displayElement, textElement);
+  chat.init();
+  return chat;
 };
 
 /**
@@ -38,18 +40,15 @@ Chat.create = function(socket, displayElement, textElement) {
  * in client.js.
  */
 Chat.prototype.init = function() {
-  var context = this;
-
-  this.textElement.onkeydown = function(e) {
+  this.textElement.addEventListener('keydown', bind(this, function(e) {
     if (e.keyCode == 13) {
-      context.sendMessage();
+      this.sendMessage();
     }
-  };
+  }));
 
-  this.socket.on('chat-server-to-clients', function(data) {
-    context.receiveMessage(
-        data['name'], data['message'], data['isNotification']);
-  });
+  this.socket.on('chat-server-to-clients', bind(this, function(data) {
+    this.receiveMessage(data['name'], data['message'], data['isNotification']);
+  }));
 };
 
 /**

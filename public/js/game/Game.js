@@ -43,6 +43,8 @@ function Game(socket, leaderboard, drawing, viewPort) {
    */
   this.explosions = [];
   this.latency = 0;
+
+  this.animationFrameId = 0;
 }
 
 /**
@@ -62,18 +64,18 @@ Game.create = function(socket, canvasElement, leaderboardElement) {
   var drawing = Drawing.create(canvasContext);
   var viewPort = ViewPort.create();
 
-  return new Game(socket, leaderboard, drawing, viewPort);
+  var game = new Game(socket, leaderboard, drawing, viewPort);
+  game.init();
+  return game;
 };
 
 /**
- * Initializes the game and sets the game to respond to update packets from the
- * server.
+ * Initializes the game and sets the event handler for the server packets.
  */
 Game.prototype.init = function() {
-  var context = this;
-  this.socket.on('update', function(data) {
-    context.receiveGameState(data);
-  });
+  this.socket.on('update', bind(this, function(data) {
+    this.receiveGameState(data);
+  }));
 };
 
 /**
@@ -91,6 +93,30 @@ Game.prototype.receiveGameState = function(state) {
   this.powerups = state['powerups'];
   this.explosions = state['explosions'];
   this.latency = state['latency'];
+};
+
+/**
+ * This method begins the animation loop for the game.
+ */
+Game.prototype.animate = function() {
+  this.animationFrameId = window.requestAnimationFrame(
+      bind(this, this.run));
+};
+
+/**
+ * This method stops the animation loop for the game.
+ */
+Game.prototype.stopAnimation = function() {
+  window.cancelAnimationFrame(this.animationFrameId);
+};
+
+/**
+ * This method is a convenience method that calls update and draw.
+ */
+Game.prototype.run = function() {
+  this.update();
+  this.draw();
+  this.animate();
 };
 
 /**
