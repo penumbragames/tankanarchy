@@ -19,6 +19,7 @@
   "homepage": "https://github.com/penumbragames/tankanarchy#readme",
   "dependencies": {
     "body-parser": "^1.15.2",
+    "bower": "^1.7.9",
     "del": "^2.2.1",
     "express": "^4.14.0",
     "google-closure-compiler": "^20160713.2.0",
