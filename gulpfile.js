@@ -118,7 +118,7 @@ gulp.task('less', function() {
         .pipe(rename(rule.outputFile))
         .pipe(gulp.dest(rule.outputDirectory))
         .on('finish', function() {
-          console.log('Finished compiling LESS rule ' + rule.name);
+          console.log('Finished compiling ' + rule.name);
         });
     }));
   }

@@ -4,7 +4,7 @@
  * For build system: 1.1.0
  */
 
-const build = {
+module.exports = {
   JS_LINT_RULES: [
     {
       name: 'server side javascript',
@@ -48,6 +48,4 @@ const build = {
       outputFile: 'minified.css'
     }
   ]
-}
-
-module.exports = build;
+};
