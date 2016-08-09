@@ -96,16 +96,17 @@ Drawing.prototype.clear = function() {
 
 /**
  * Draws a tank to the canvas.
- * @param {boolean} isSelf Tells if I should draw a green tank (self)
- *   or a red tank (other player).
- * @param {Array.<number>} coords The coordinates of the center of the
+ * @param {boolean} isSelf If this is true, then a green tank will be drawn,
+ *   denoting the player's tank. If this is false, then a red tank will be
+ *   drawn, denoting an enemy tank.
+ * @param {Array.<number>} coords The canvas coordinates of the center of the
  *   tank.
  * @param {number} orientation The orientation of the tank from 0 to
  *   2 * PI.
  * @param {number} turretAngle The angle of the turret from 0 to 2 * PI.
  * @param {string} name The name of the player associated with this tank.
  * @param {number} health The current health of the tank.
- * @param {boolean} hasShield The shield state of the tank.
+ * @param {boolean} hasShield Whether or not the tank has a shield.
  */
 Drawing.prototype.drawTank = function(isSelf, coords, orientation,
                                       turretAngle, name, health,

@@ -1,3 +1,4 @@
 #!/bin/bash
+# TODO: reorganize powerups and factor out all the constants. Give each powerup a callback function that can modify a player attribute instead
 
 git grep -i todo

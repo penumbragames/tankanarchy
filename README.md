@@ -14,7 +14,8 @@ the same time.
   of all the objects.
 
 # Setting Up:
-  This project requires node version 0.12 or greater.
+  This project requires node version 6.0.0 or greater. We recommend using
+  nvm to manage your node versions.
   npm, bower and gulp should be installed globally on your system.
   ```
   npm install
@@ -27,9 +28,9 @@ the same time.
 
   gulp lint       # will lint the JS assets
 
-  gulp js         # will compile only the JS assets
+  gulp js         # will lint and compile the JS assets
 
-  gulp less       # will compile only the LESS assets
+  gulp less       # will compile the LESS assets
 
   gulp watch      # will watch the JS and LESS assets and compile them when
                   # they are modified, recommended during development
