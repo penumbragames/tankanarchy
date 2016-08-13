@@ -1,25 +1,25 @@
 /**
  * Multipurpose Javascript Task Runner to compile my projects.
  * @author Alvin Lin (alvin.lin.dev@gmail.com)
- * @version 1.1.0
+ * @version 1.2.2
  */
 
-try {
-  var gulp = require('gulp');
-  var merge = require('merge-stream');
-} catch (error) {
-  console.error(error.message);
-  process.exit(0);
-}
+const version = "1.2.2";
+
+var gulp = require('gulp');
+var merge = require('merge-stream');
 
 try {
   var BUILD = require('./BUILD');
+  if (BUILD.GULPFILE_VERSION !== version) {
+    console.warn(
+      'WARNING: Your BUILD.js and gulpfile.js versions do not match!');
+  }
 } catch (error) {
-  console.error('Unable to locate BUILD.js');
-  process.exit(0);
+  throw new Error('Unable to locate BUILD.js');
 }
 
-gulp.task('default', ['js', 'less']);
+gulp.task('default', ['js', 'less', 'sass']);
 
 gulp.task('js', ['js-lint', 'js-compile']);
 
@@ -27,50 +27,44 @@ gulp.task('lint', ['js-lint']);
 
 gulp.task('js-lint', function() {
   if (BUILD.JS_LINT_RULES) {
-    try {
-      var gjslint = require('gulp-gjslint');
-    } catch (error) {
-      console.error(error.message);
-      return;
-    }
+    var gjslint = require('gulp-gjslint');
+
     return merge(BUILD.JS_LINT_RULES.map(function(rule) {
+      // Set default flags to be used for gulp-gjslint
+      var flags = [
+        '--jslint_error indentation',
+        '--jslint_error well_formed_author',
+        '--jslint_error braces_around_type',
+        '--jslint_error unused_private_members',
+        '--jsdoc',
+        '--max_line_length 80',
+        '--error_trace'
+      ] || rule.flags;
       return gulp.src(rule.sourceFiles).pipe(gjslint({
-        flags: ['--jslint_error indentation',
-                '--jslint_error well_formed_author',
-                '--jslint_error braces_around_type',
-                '--jslint_error unused_private_members',
-                '--jsdoc',
-                '--max_line_length 80',
-                '--error_trace'
-               ]
+        flags: flags
       })).pipe(gjslint.reporter('console'))
          .on('finish', function() {
            console.log('Finished linting ' + rule.name);
          });
     }));
+  } else {
+    console.error('JS_LINT_RULES are not defined in your BUILD.js');
   }
 });
 
 gulp.task('js-compile', function() {
   if (BUILD.JS_BUILD_RULES) {
-    try {
-      var path = require('path');
-      var compilerPackage = require('google-closure-compiler');
-      var plumber = require('gulp-plumber');
-    } catch (error) {
-      console.error(error.message);
-      return;
-    }
+    var path = require('path');
+    var compilerPackage = require('google-closure-compiler');
+    var plumber = require('gulp-plumber');
 
-    var getClosureCompilerConfiguration = function(outputFile) {
-      var closureCompiler = compilerPackage.gulp();
+    var closureCompiler = compilerPackage.gulp();
+    var getClosureCompilerConfiguration = function(externs, compilationLevel,
+                                                   outputFile) {
       return closureCompiler({
-        externs: [
-          compilerPackage.compiler.CONTRIB_PATH + '/externs/jquery-1.9.js',
-          path.dirname(__filename) + '/extern/extern.js'
-        ],
+        externs: externs,
         warning_level: 'VERBOSE',
-        compilation_level: 'ADVANCED_OPTIMIZATIONS',
+        compilation_level: compilationLevel,
         js_output_file: outputFile
       });
     };
@@ -78,26 +72,27 @@ gulp.task('js-compile', function() {
     return merge(BUILD.JS_BUILD_RULES.map(function(rule) {
       return gulp.src(rule.sourceFiles)
         .pipe(plumber())
-        .pipe(getClosureCompilerConfiguration(rule.outputFile))
+        .pipe(getClosureCompilerConfiguration(rule.externs,
+                                              rule.compilationLevel,
+                                              rule.outputFile))
         .pipe(gulp.dest(rule.outputDirectory))
         .on('finish', function() {
-          console.log('Finished compiling ' + rule.name);
+          console.log('Finished compiling ' + rule.name + ' with ' +
+              rule.compilationLevel);
         });
     }));
+  } else {
+    console.error('JS_BUILD_RULES are not defined in your BUILD.js');
   }
 });
 
 gulp.task('less', function() {
   if (BUILD.LESS_BUILD_RULES) {
-    try {
-      var less = require('gulp-less');
-      var plumber = require('gulp-plumber');
-      var rename = require('gulp-rename');
-      var lessPluginAutoprefix = require('less-plugin-autoprefix');
-      var lessPluginCleanCss = require('less-plugin-clean-css');
-    } catch (error) {
-      console.error(error.message);
-    }
+    var less = require('gulp-less');
+    var plumber = require('gulp-plumber');
+    var rename = require('gulp-rename');
+    var lessPluginAutoprefix = require('less-plugin-autoprefix');
+    var lessPluginCleanCss = require('less-plugin-clean-css');
 
     var getLessConfiguration = function() {
       var autoprefix = new lessPluginAutoprefix({
@@ -121,6 +116,31 @@ gulp.task('less', function() {
           console.log('Finished compiling ' + rule.name);
         });
     }));
+  } else {
+    console.error('LESS_BUILD_RULES are not defined in your BUILD.js');
+  }
+});
+
+gulp.task('sass', function() {
+  if (BUILD.SASS_BUILD_RULES) {
+    var sass = require('gulp-sass');
+    var plumber = require('gulp-plumber');
+    var rename = require('gulp-rename');
+
+    return merge(BUILD.SASS_BUILD_RULES.map(function(rule) {
+      return gulp.src(rule.sourceFiles)
+        .pipe(plumber())
+        .pipe(sass({
+          outputStyle: 'compressed'
+        }))
+        .pipe(rename(rule.outputFile))
+        .pipe(gulp.dest(rule.outputDirectory))
+        .on('finish', function() {
+          console.log('Finished compiling ' + rule.name);
+        })
+    }));
+  } else {
+    console.error('SASS_BUILD_RULES are not defined in your BUILD.js');
   }
 });
 
@@ -136,4 +156,10 @@ gulp.task('watch-less', function() {
   })
 });
 
-gulp.task('watch', ['watch-js', 'watch-less']);
+gulp.task('watch-sass', function() {
+  BUILD.SASS_BUILD_RULES.map(function(rule) {
+    gulp.watch(rule.sourceFiles, ['sass']);
+  })
+})
+
+gulp.task('watch', ['watch-js', 'watch-less', 'watch-sass']);

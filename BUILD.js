@@ -1,10 +1,11 @@
 /**
  * This file contains compilation and build rules for the project. This file
  * is imported by the gulpfile during compilation and build.
- * For build system: 1.1.0
+ * For build system: 1.2.2
  */
 
 module.exports = {
+  GULPFILE_VERSION: "1.2.2",
   JS_LINT_RULES: [
     {
       name: 'server side javascript',
@@ -29,6 +30,11 @@ module.exports = {
   JS_BUILD_RULES: [
     {
       name: 'client side game javascript',
+      externs: [
+        './node_modules/google-closure-compiler/contrib/externs/jquery-1.9.js',
+        './extern/extern.js'
+      ],
+      compilationLevel: 'ADVANCED_OPTIMIZATIONS',
       sourceFiles: [
         './public/js/game/*.js',
         './shared/*.js',
