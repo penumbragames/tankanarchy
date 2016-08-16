@@ -1,25 +1,29 @@
 /**
  * Multipurpose Javascript Task Runner to compile my projects.
  * @author Alvin Lin (alvin.lin.dev@gmail.com)
- * @version 1.2.2
+ * @version 1.3.1
  */
 
-const version = "1.2.2";
+const version = "1.3.1";
+
+var semver = require('semver');
 
 var gulp = require('gulp');
 var merge = require('merge-stream');
 
 try {
   var BUILD = require('./BUILD');
-  if (BUILD.GULPFILE_VERSION !== version) {
-    console.warn(
-      'WARNING: Your BUILD.js and gulpfile.js versions do not match!');
+  if (semver.gt(BUILD.GULPFILE_VERSION, version)) {
+    console.warn('Your gulpfile.js is outdated and may not work properly!');
+  } else if (semver.gt(version, BUILD.GULPFILE_VERSION)) {
+    console.warn('Your BUILD.js is using an older format. Consider updating ' +
+        'it as certain features may not work.');
   }
 } catch (error) {
   throw new Error('Unable to locate BUILD.js');
 }
 
-gulp.task('default', ['js', 'less', 'sass']);
+gulp.task('default', BUILD.DEFAULT_TASKS || ['js', 'less', 'sass']);
 
 gulp.task('js', ['js-lint', 'js-compile']);
 
@@ -48,7 +52,7 @@ gulp.task('js-lint', function() {
          });
     }));
   } else {
-    console.error('JS_LINT_RULES are not defined in your BUILD.js');
+    console.warn('JS_LINT_RULES are not defined in your BUILD.js');
   }
 });
 
@@ -82,7 +86,7 @@ gulp.task('js-compile', function() {
         });
     }));
   } else {
-    console.error('JS_BUILD_RULES are not defined in your BUILD.js');
+    console.warn('JS_BUILD_RULES are not defined in your BUILD.js');
   }
 });
 
@@ -117,7 +121,7 @@ gulp.task('less', function() {
         });
     }));
   } else {
-    console.error('LESS_BUILD_RULES are not defined in your BUILD.js');
+    console.warn('LESS_BUILD_RULES are not defined in your BUILD.js');
   }
 });
 
@@ -140,9 +144,20 @@ gulp.task('sass', function() {
         })
     }));
   } else {
-    console.error('SASS_BUILD_RULES are not defined in your BUILD.js');
+    console.warn('SASS_BUILD_RULES are not defined in your BUILD.js');
   }
 });
+
+gulp.task('clean', function() {
+  if (BUILD.CLEAN_PROJECT_RULES) {
+    var del = require('del');
+    return del(BUILD.CLEAN_PROJECT_RULES).then(function(paths) {
+      console.log('Cleaned:\n' + paths.join('\n'));
+    });
+  } else {
+    console.warn('CLEAN_PROJECT_RULES are not defined in your BUILD.js');
+  }
+})
 
 gulp.task('watch-js', function() {
   BUILD.JS_BUILD_RULES.map(function(rule) {

@@ -1,11 +1,12 @@
 /**
  * This file contains compilation and build rules for the project. This file
  * is imported by the gulpfile during compilation and build.
- * For build system: 1.2.2
+ * For build system: 1.3.1
  */
 
 module.exports = {
-  GULPFILE_VERSION: "1.2.2",
+  GULPFILE_VERSION: "1.3.1",
+  DEFAULT_TASKS: ['js', 'less'],
   JS_LINT_RULES: [
     {
       name: 'server side javascript',
@@ -53,5 +54,8 @@ module.exports = {
       outputDirectory: './public/dist',
       outputFile: 'minified.css'
     }
+  ],
+  CLEAN_PROJECT_RULES: [
+    './public/dist/*'
   ]
 };
