@@ -36,27 +36,6 @@ Util.getSign = function(x) {
 };
 
 /**
- * Generates and returns a UID.
- * @param {?number=} length An optional length parameter for the UID to
- *   to generate. If the length is not provided, this function will return a
- *   UID of length 32.
- * @return {string}
- */
-Util.generateUID = function(length) {
-  if (!length) {
-    length = 32;
-  }
-  var choice = 'abcdefghijklmnopqrstuvwxyz' +
-               'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
-               '1234567890';
-  var uid = '';
-  for (var i = 0; i < length; ++i) {
-    uid += choice.charAt(Math.floor(Math.random() * choice.length));
-  }
-  return uid;
-};
-
-/**
  * Returns the Manhattan Distance between two points given their x and y
  * coordinates.
  * @param {number} x1 The x-coordinate of the first point.

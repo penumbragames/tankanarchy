@@ -38,6 +38,8 @@ the same time.
   gulp watch-js   # will only watch the JS assets
 
   gulp watch-less # will only watch the LESS assets
+
+  gulp clean      # removes all the compiled assets
   ```
 
 # Contributing:

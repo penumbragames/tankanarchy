@@ -1,10 +1,10 @@
 /**
  * Multipurpose Javascript Task Runner to compile my projects.
  * @author Alvin Lin (alvin.lin.dev@gmail.com)
- * @version 1.3.1
+ * @version 2.0.0
  */
 
-const version = "1.3.1";
+const version = "2.0.0";
 
 var semver = require('semver');
 
@@ -80,7 +80,7 @@ gulp.task('js-compile', function() {
                                               rule.compilationLevel,
                                               rule.outputFile))
         .pipe(gulp.dest(rule.outputDirectory))
-        .on('finish', function() {
+        .on('end', function() {
           console.log('Finished compiling ' + rule.name + ' with ' +
               rule.compilationLevel);
         });
@@ -116,7 +116,7 @@ gulp.task('less', function() {
         .pipe(getLessConfiguration())
         .pipe(rename(rule.outputFile))
         .pipe(gulp.dest(rule.outputDirectory))
-        .on('finish', function() {
+        .on('end', function() {
           console.log('Finished compiling ' + rule.name);
         });
     }));
@@ -139,7 +139,7 @@ gulp.task('sass', function() {
         }))
         .pipe(rename(rule.outputFile))
         .pipe(gulp.dest(rule.outputDirectory))
-        .on('finish', function() {
+        .on('end', function() {
           console.log('Finished compiling ' + rule.name);
         })
     }));
@@ -149,7 +149,7 @@ gulp.task('sass', function() {
 });
 
 gulp.task('clean', function() {
-  if (BUILD.CLEAN_PROJECT_RULES) {
+  if (BUILD.CLEAN_PROJECT_PATHS) {
     var del = require('del');
     return del(BUILD.CLEAN_PROJECT_RULES).then(function(paths) {
       console.log('Cleaned:\n' + paths.join('\n'));
@@ -157,7 +157,20 @@ gulp.task('clean', function() {
   } else {
     console.warn('CLEAN_PROJECT_RULES are not defined in your BUILD.js');
   }
-})
+});
+
+gulp.task('test', function() {
+  if (BUILD.JASMINE_TEST_PATHS) {
+    var jasmine = require('gulp-jasmine');
+    var jasmineReporters = require('jasmine-reporters');
+    return gulp.src(BUILD.JASMINE_TEST_PATHS)
+      .pipe(jasmine()).on('end', function() {
+        console.log('Finished running unit tests');
+      });
+  } else {
+    console.warn('JASMINE_TEST_PATHS are not defined in your BUILD.js');
+  }
+});
 
 gulp.task('watch-js', function() {
   BUILD.JS_BUILD_RULES.map(function(rule) {
@@ -175,6 +188,6 @@ gulp.task('watch-sass', function() {
   BUILD.SASS_BUILD_RULES.map(function(rule) {
     gulp.watch(rule.sourceFiles, ['sass']);
   })
-})
+});
 
 gulp.task('watch', ['watch-js', 'watch-less', 'watch-sass']);
