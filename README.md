@@ -1,4 +1,6 @@
 # Tank Anarchy
+[![Build Status](https://travis-ci.org/penumbragames/tankanarchy.svg?branch=master)](https://travis-ci.org/penumbragames/tankanarchy)
+
 Tank Anarchy is an online multiplayer tank battle arena game that takes place
 in a single large world. Anyone who logs on can battle anyone else that's online at
 the same time.
