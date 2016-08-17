@@ -34,6 +34,8 @@ the same time.
 
   gulp less       # will compile the LESS assets
 
+  gulp test       # will run the unit tests
+
   gulp watch      # will watch the JS and LESS assets and compile them when
                   # they are modified, recommended during development
 
@@ -51,7 +53,7 @@ the same time.
   - Note that only compiled sources are exposed on the server but are not
   committed to this repository. Do not commit compiled sources (/public/dist).
   - Your code will be reviewed and must be approved before it is merged.
-  - `gulp js` should not throw any errors in your code.
+  - `gulp js` and `gulp test` should not throw any errors in your code.
   - Please use our convention of **2 space tabs that are space characters and
   not tab characters**.
   - Document any code that you write using Google's JSDOC conventions.
