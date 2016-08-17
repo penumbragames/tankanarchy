@@ -162,7 +162,6 @@ gulp.task('clean', function() {
 gulp.task('test', function() {
   if (BUILD.JASMINE_TEST_PATHS) {
     var jasmine = require('gulp-jasmine');
-    var jasmineReporters = require('jasmine-reporters');
     return gulp.src(BUILD.JASMINE_TEST_PATHS)
       .pipe(jasmine()).on('end', function() {
         console.log('Finished running unit tests');

@@ -6,7 +6,7 @@
 
 module.exports = {
   GULPFILE_VERSION: "2.0.0",
-  DEFAULT_TASKS: ['js', 'less'],
+  DEFAULT_TASKS: ['js', 'less', 'test'],
   JS_LINT_RULES: [
     {
       name: 'server side javascript',
