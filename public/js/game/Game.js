@@ -125,7 +125,7 @@ Game.prototype.run = function() {
  */
 Game.prototype.update = function() {
   if (this.self) {
-    this.viewPort.update(this.self['position'][0], this.self['position'][1]);
+    this.viewPort.update(this.self['position'], this.self['position']);
 
     var turretAngle = Math.atan2(
         Input.MOUSE[1] - Constants.CANVAS_HEIGHT / 2,
