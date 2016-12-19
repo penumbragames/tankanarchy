@@ -5,7 +5,7 @@
  */
 
 var DEV_MODE = false;
-var PORT_NUMBER = process.env.PORT || 5000;
+var PORT = process.env.PORT || 5000;
 var FRAME_RATE = 1000.0 / 60.0;
 
 /**
@@ -37,10 +37,10 @@ var game = new Game();
 
 app.engine('html', swig.renderFile);
 
-app.set('port', PORT_NUMBER);
+app.set('port', PORT);
 app.set('view engine', 'html');
 
-app.use(morgan(':date[web] :method :url :req[header] :remote-addr :status'));
+app.use(morgan('dev'));
 app.use('/public', express.static(__dirname + '/public'));
 app.use('/shared', express.static(__dirname + '/shared'));
 
@@ -105,6 +105,9 @@ setInterval(function() {
 }, FRAME_RATE);
 
 // Starts the server.
-server.listen(PORT_NUMBER, function() {
-  console.log('Starting server on port ' + PORT_NUMBER);
+server.listen(PORT, function() {
+  console.log('Starting server on port ' + PORT);
+  if (DEV_MODE) {
+    console.log('DEVELOPMENT MODE ENABLED: SERVING UNCOMPILED JAVASCRIPT!');
+  }
 });
