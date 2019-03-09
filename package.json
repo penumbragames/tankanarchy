@@ -18,24 +18,18 @@
   },
   "homepage": "https://github.com/penumbragames/tankanarchy#readme",
   "dependencies": {
-    "body-parser": "^1.15.2",
-    "bower": "^1.7.9",
-    "del": "^2.2.1",
-    "express": "^4.14.0",
-    "google-closure-compiler": "^20161201.0.0",
-    "gulp": "^3.9.1",
-    "gulp-gjslint": "^0.1.5",
-    "gulp-jasmine": "^2.4.0",
-    "gulp-less": "^3.1.0",
-    "gulp-plumber": "^1.1.0",
-    "gulp-rename": "^1.2.2",
-    "hashmap": "^2.0.6",
-    "less-plugin-autoprefix": "^1.5.1",
-    "less-plugin-clean-css": "^1.5.1",
-    "merge-stream": "^1.0.0",
-    "morgan": "^1.7.0",
-    "socket.io": "^1.7.2",
-    "swig": "^1.4.2",
-    "vectors": "^0.1.0"
+    "express": "^4.16.4",
+    "hashmap": "^2.3.0",
+    "jquery": "^3.3.1",
+    "morgan": "^1.9.1",
+    "pug": "^2.0.3",
+    "socket.io": "^2.2.0",
+    "webpack-cli": "^3.2.3"
+  },
+  "devDependencies": {
+    "css-loader": "^2.1.1",
+    "node-sass": "^4.11.0",
+    "sass-loader": "^7.1.0",
+    "webpack": "^4.29.6"
   }
 }
