@@ -5,16 +5,15 @@
 module.exports = {
   'env': {
     'browser': true,
-    'es6': true,
-    'node': true
+    'node': true,
   },
   'extends': 'eslint:recommended',
   'parserOptions': {
+    'ecmaVersion': 8,
     'sourceType': 'module'
   },
   'rules': {
     // Possible Errors
-    'no-await-in-loop': 'warn',
     'no-extra-parens': ['error', 'all'],
     'no-prototype-builtins': 'error',
     'no-template-curly-in-string': 'error',

@@ -5,35 +5,27 @@
  */
 
 /**
- * Empty constructor for the Util class, all functions will be static.
- * @constructor
- */
-function Util() {
-  throw new Error('Util should not be instantiated!');
-}
-
-/**
  * This method truncates a number to an integer.
  * @param {number} x The number to truncate.
  * @return {number}
  */
-Util.truncate = function(x) {
-  return x | 0;
-};
+const truncate = x => {
+  return x | 0
+}
 
 /**
  * This method returns the sign of a number.
  * @param {number} x The number to check.
  * @return {number}
  */
-Util.getSign = function(x) {
+const getSign = x => {
   if (x > 0) {
-    return 1;
+    return 1
   } else if (x < 0) {
-    return -1;
+    return -1
   }
-  return 0;
-};
+  return 0
+}
 
 /**
  * Returns the Manhattan Distance between two points given their x and y
@@ -44,9 +36,9 @@ Util.getSign = function(x) {
  * @param {number} y2 The y-coordinate of the second point.
  * @return {number}
  */
-Util.getManhattanDistance = function(x1, y1, x2, y2) {
-  return Math.abs(x1 - x2) + Math.abs(y1 - y2);
-};
+const getManhattanDistance = (x1, y1, x2, y2) => {
+  return Math.abs(x1 - x2) + Math.abs(y1 - y2)
+}
 
 /**
  * Returns the squared Euclidean distance between two points given their
@@ -57,9 +49,9 @@ Util.getManhattanDistance = function(x1, y1, x2, y2) {
  * @param {number} y2 The y-coordinate of the second point.
  * @return {number}
  */
-Util.getEuclideanDistance2 = function(x1, y1, x2, y2) {
-  return ((x1 - x2) * (x1 - x2)) + ((y1 - y2) * (y1 - y2));
-};
+const getEuclideanDistance2 = (x1, y1, x2, y2) => {
+  return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)
+}
 
 /**
  * Returns the true Euclidean distance between two points given their
@@ -70,9 +62,9 @@ Util.getEuclideanDistance2 = function(x1, y1, x2, y2) {
  * @param {number} y2 The y-coordinate of the second point.
  * @return {number}
  */
-Util.getEuclideanDistance = function(x1, y1, x2, y2) {
-  return Math.sqrt(Util.getEuclideanDistance2(x1, y1, x2, y2));
-};
+const getEuclideanDistance = (x1, y1, x2, y2) => {
+  return Math.sqrt(getEuclideanDistance2(x1, y1, x2, y2))
+}
 
 /**
  * Given a value, a minimum, and a maximum, returns true if value is
@@ -83,12 +75,12 @@ Util.getEuclideanDistance = function(x1, y1, x2, y2) {
  * @param {number} max The maximum bound.
  * @return {boolean}
  */
-Util.inBound = function(val, min, max) {
+const inBound = (val, min, max) => {
   if (min > max) {
-    return val >= max && val <= min;
+    return val >= max && val <= min
   }
-  return val >= min && val <= max;
-};
+  return val >= min && val <= max
+}
 
 /**
  * Bounds a number to the given minimum and maximum, inclusive of both
@@ -98,12 +90,12 @@ Util.inBound = function(val, min, max) {
  * @param {number} max The maximum number to bound to.
  * @return {number}
  */
-Util.bound = function(val, min, max) {
+const bound = (val, min, max) => {
   if (min > max) {
-    return Math.min(Math.max(val, max), min);
+    return Math.min(Math.max(val, max), min)
   }
-  return Math.min(Math.max(val, min), max);
-};
+  return Math.min(Math.max(val, min), max)
+}
 
 /**
  * Returns a random floating-point number between the given min and max
@@ -112,14 +104,12 @@ Util.bound = function(val, min, max) {
  * @param {number} max The maximum number to generate.
  * @return {number}
  */
-Util.randRange = function(min, max) {
+const randRange = (min, max) => {
   if (min >= max) {
-    var swap = min;
-    min = max;
-    max = swap;
+    return Math.random() * (min - max) + max
   }
-  return (Math.random() * (max - min)) + min;
-};
+  return Math.random() * (max - min) + min
+}
 
 /**
  * Returns a random integer between the given min and max values, exclusive
@@ -128,14 +118,12 @@ Util.randRange = function(min, max) {
  * @param {number} max The maximum number to generate.
  * @return {number}
  */
-Util.randRangeInt = function(min, max) {
-  if (min >= max) {
-    var swap = min;
-    min = max;
-    max = swap;
+const randRangeInt = (min, max) => {
+  if (min > max) {
+    return Math.floor(Math.random() * (min - max)) + max
   }
-  return Math.floor(Math.random() * (max - min)) + min;
-};
+  return Math.floor(Math.random() * (max - min)) + min
+}
 
 /**
  * Returns a random element in a given array.
@@ -143,18 +131,19 @@ Util.randRangeInt = function(min, max) {
  *   element from.
  * @return {Object}
  */
-Util.choiceArray = function(array) {
-  return array[Util.randRangeInt(0, array.length)];
-};
+const choiceArray = array => {
+  return array[randRangeInt(0, array.length)]
+}
 
-if (typeof module === 'object') {
-  /**
-   * If Util is loaded as a Node module, then this line is called.
-   */
-  module.exports = Util;
-} else {
-  /**
-   * If Util is loaded into the browser, then this line is called.
-   */
-  window.Util = Util;
+module.exports = {
+  truncate,
+  getSign,
+  getManhattanDistance,
+  getEuclideanDistance2,
+  getEuclideanDistance,
+  inBound,
+  bound,
+  randRange,
+  randRangeInt,
+  choiceArray
 }
