@@ -4,6 +4,8 @@
  * @author alvin.lin.dev@gmail.com (Alvin Lin)
  */
 
+require('../less/styles.less')
+
 const $ = require('jquery')
 const io = require('socket.io-client')
 
