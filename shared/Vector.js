@@ -1,6 +1,5 @@
 /**
- * @fileoverview Vector class for simple physics manipulations needed by the
- *   game.
+ * @fileoverview Vector class for simple physics manipulations.
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
@@ -10,6 +9,7 @@
 class Vector {
   /**
    * Constructor for a Vector object.
+   * @constructor
    * @param {number} [x=0] x component
    * @param {number} [y=0] y component
    */
@@ -139,6 +139,14 @@ class Vector {
   add(other) {
     this.x += other.x
     this.y += other.y
+  }
+
+  /**
+   * Returns a copy of this Vector.
+   * @return {Vecto}
+   */
+  copy() {
+    return new Vector(this.x, this.y)
   }
 
   /**
