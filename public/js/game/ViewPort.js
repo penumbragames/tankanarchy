@@ -23,11 +23,10 @@ ViewPort.create = function() {
 
 /**
  * Updates the viewport with this client's player instance's coordinates.
- * @param {number} x The absolute x coordinate of the player.
- * @param {number} y The absolute y coordinate of the player.
+ * @param {Array.<number>} position The position of the client's player.
  */
-ViewPort.prototype.update = function(x, y) {
-  this.selfCoords = [x, y];
+ViewPort.prototype.update = function(position) {
+  this.selfCoords = position.slice();
 };
 
 /**
@@ -61,6 +60,6 @@ ViewPort.prototype.toCanvasY = function(y) {
 ViewPort.prototype.toCanvasCoords = function(object) {
   var translateX = this.selfCoords[0] - Constants.CANVAS_WIDTH / 2;
   var translateY = this.selfCoords[1] - Constants.CANVAS_HEIGHT / 2;
-  return [object.x - translateX,
-          object.y - translateY];
+  return [object.position[0] - translateX,
+          object.position[1] - translateY];
 };

@@ -125,7 +125,7 @@ Game.prototype.run = function() {
  */
 Game.prototype.update = function() {
   if (this.self) {
-    this.viewPort.update(this.self['x'], this.self['y']);
+    this.viewPort.update(this.self['position'], this.self['position']);
 
     var turretAngle = Math.atan2(
         Input.MOUSE[1] - Constants.CANVAS_HEIGHT / 2,
@@ -163,8 +163,8 @@ Game.prototype.draw = function() {
      * so that the entire ViewPort is appropriately filled.
      */
     var center = this.viewPort.selfCoords;
-    var leftX = this.self['x'] - Constants.CANVAS_WIDTH / 2;
-    var topY = this.self['y'] - Constants.CANVAS_HEIGHT / 2;
+    var leftX = this.self['position'][0] - Constants.CANVAS_WIDTH / 2;
+    var topY = this.self['position'][1] - Constants.CANVAS_HEIGHT / 2;
     var drawStartX = Math.max(
         leftX - (leftX % Drawing.TILE_SIZE), Constants.WORLD_MIN);
     var drawStartY = Math.max(
