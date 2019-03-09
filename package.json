@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/penumbragames/tankanarchy#readme",
   "dependencies": {
+    "bootstrap": "^4.3.1",
     "express": "^4.16.4",
     "hashmap": "^2.3.0",
     "jquery": "^3.3.1",
