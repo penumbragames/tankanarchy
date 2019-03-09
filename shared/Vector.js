@@ -5,7 +5,7 @@
  */
 
 /**
- * Vector class for handling physics manipulations.
+ * Vector class.
  */
 class Vector {
   /**
@@ -19,15 +19,6 @@ class Vector {
   }
 
   /**
-   * Creates a new Vector object from another object.
-   * @param {Object} obj The source object
-   * @return {Vector}
-   */
-  static fromObject(obj) {
-    return new Vector(obj.x, obj.y)
-  }
-
-  /**
    * Creates a new Vector object from an array.
    * @param {Array<number>} array The source array
    * @return {Vector}
@@ -37,11 +28,62 @@ class Vector {
   }
 
   /**
+   * Creates a new Vector object from another object.
+   * @param {Object} obj The source object
+   * @return {Vector}
+   */
+  static fromObject(obj) {
+    return new Vector(obj.x, obj.y)
+  }
+
+  /**
+   * Creates a new Vector object from a direction and magnitude.
+   * @param {number} r The magnitude of the new Vector
+   * @param {number} theta The angle of the new Vector in radians
+   * @return {Vector}
+   */
+  static fromPolar(r, theta) {
+    return new Vector(this.r * Math.cos(theta), this.r * Math.sin(theta))
+  }
+
+  /**
+   * Return a Vector of ones.
+   * @return {[type]}
+   */
+  static one() {
+    return new Vector(1, 1)
+  }
+
+  /**
+   * Return the zero Vector.
+   * @return {Vector}
+   */
+  static zero() {
+    return new Vector(0, 0)
+  }
+
+  /**
    * Return the angle of the Vector.
    * @return {number}
    */
   get angle() {
     return Math.atan2(this.y, this.x)
+  }
+
+  /**
+   * Returns the Vector's magnitude.
+   * @return {number}
+   */
+  get mag() {
+    return Math.sqrt(this.mag)
+  }
+
+  /**
+   * Returns the square of this Vector's magnitude.
+   * @return {number}
+   */
+  get mag2() {
+    return this.x * this.x + this.y * this.y
   }
 
   /**
