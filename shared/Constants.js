@@ -23,5 +23,28 @@ module.exports = {
   BULLET_DEFAULT_DAMAGE: 1,
   BULLET_VELOCITY_MAGNITUDE: 850,
   BULLET_MAX_TRAVEL_DISTANCE: 1000 * 1000,
-  BULLET_HITBOX_SIZE: 10
+  BULLET_HITBOX_SIZE: 10,
+
+  POWERUP_HITBOX_SIZE: 10,
+  POWERUP_MIN_DURATION: 5000,
+  POWERUP_MAX_DURATION: 15000,
+  POWERUP_HEALTHPACK: 'healthpack',
+  POWERUP_SHOTGUN: 'shotgun',
+  POWERUP_RAPIDFIRE: 'rapidfire',
+  POWERUP_SPEEDBOOST: 'speedboost',
+  POWERUP_SHIELD: 'shield',
+  POWERUP_KEYS: [
+    'healthpack',
+    'shotgun',
+    'rapidfire',
+    'speedboost',
+    'shield'
+  ],
+  POWERUP_DATA: {
+    healthpack: { MIN: 1, MAX: 4 },
+    shotgun: { MIN: 1, MAX: 2 },
+    rapidfire: { MIN: 2, MAX: 4 },
+    speedboost: { MIN: 1.2, MAX: 1.8 },
+    shield: { MIN: 1, MAX: 4 }
+  }
 }
