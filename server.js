@@ -24,6 +24,7 @@ const game = new Game()
 app.set('port', PORT)
 
 app.use(morgan('dev'))
+app.use('/client', express.static(path.join(__dirname, '/client')))
 app.use('/dist', express.static(path.join(__dirname, '/dist')))
 
 // Routing

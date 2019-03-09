@@ -1,111 +1,89 @@
-{% extends "layout.html" %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tank Anarchy</title>
+    <link rel='icon' type='image/png' href='/client/img/favicon.png' />
 
-{% block head %}
-  <script src="/socket.io/socket.io.js">
-  </script>
-{% endblock %}
-
-{% block body %}
-  <div id="name-prompt-overlay">
-    <div id="name-prompt-container">
-      <form id="name-form">
-        <div class="input-group">
-          <input type="text"
-                 class="form-control"
-                 id="name-input"
-                 placeholder="Nickname"
-                 autocomplete="off" />
-          <span class="input-group-addon"
-                id="name-submit">
-            Play
-          </span>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <div id="container">
-    <table id="content">
-      <tr>
-        <th colspan="3">
-          <h1>
-            Tank Anarchy
-          </h1>
-        </th>
-      </tr>
-      <tr>
-        <td id="leaderboard-container">
-          <div>
-            <h3>
-              Leaderboard:
-            </h3>
-            <ul id="leaderboard">
-            </ul>
+  </head>
+  <body oncontextmenu='return false;'>
+    <div id="name-prompt-overlay">
+      <div id="name-prompt-container">
+        <form id="name-form">
+          <div class="input-group">
+            <input type="text"
+                   class="form-control"
+                   id="name-input"
+                   placeholder="Nickname"
+                   autocomplete="off" />
+            <span class="input-group-addon"
+                  id="name-submit">
+              Play
+            </span>
           </div>
-        </td>
-        <td>
-          <!--
-          TODO: Add kill announcement message.
-          <Player> was slain by <Player>.
-          -->
-          <canvas id="canvas">
-          </canvas>
-        </td>
-        <td>
-          <ul id="chat-display">
-          </ul>
-          <input id="chat-input" type="text"
-                 placeholder="Press Enter to send" name="chat" />
-        </td>
-      </tr>
-    </table>
-    <div class="howto">
-      <div>
-        <img src="/public/img/favicon.png" />
-        Your tank
-      </div>
-      <div>
-        <img src="/public/img/healthpack_powerup.png" />
-        Health pack
-      </div>
-      <div>
-        <img src="/public/img/rapidfire_powerup.png" />
-        Rapid fire powerup
-      </div>
-      <div>
-        <img src="/public/img/shield_powerup.png" />
-        Shield powerup
-      </div>
-      <div>
-        <img src="/public/img/shotgun_powerup.png" />
-        Shotgun powerup
-      </div>
-      <div>
-        <img src="/public/img/speedboost_powerup.png" />
-        Speed boost
+        </form>
       </div>
     </div>
-    <div id="copyright">
-      &copy; 2015 Alvin Lin and Kenneth Li. All Rights Reserved.
-    </div>
-  </div>
-{% endblock %}
 
-{% block scripts %}
-  {% if dev_mode %}
-    <script src="/shared/Constants.js"></script>
-    <script src="/shared/Util.js"></script>
-    <script src="/shared/base.js"></script>
-    <script src="/public/js/game/AFK_Kicker.js"></script>
-    <script src="/public/js/game/Chat.js"></script>
-    <script src="/public/js/game/Drawing.js"></script>
-    <script src="/public/js/game/Game.js"></script>
-    <script src="/public/js/game/Input.js"></script>
-    <script src="/public/js/game/Leaderboard.js"></script>
-    <script src="/public/js/game/ViewPort.js"></script>
-    <script src="/public/js/client.js"></script>
-  {% else %}
-    <script src="/public/dist/minified.js">
-    </script>
-  {% endif %}
-{% endblock %}
+    <div id="container">
+      <table id="content">
+        <tr>
+          <th colspan="3">
+            <h1>
+              Tank Anarchy
+            </h1>
+          </th>
+        </tr>
+        <tr>
+          <td id="leaderboard-container">
+            <div>
+              <h3>
+                Leaderboard:
+              </h3>
+              <ul id="leaderboard">
+              </ul>
+            </div>
+          </td>
+          <td>
+            <canvas id="canvas">
+            </canvas>
+          </td>
+          <td>
+            <ul id="chat-display">
+            </ul>
+            <input id="chat-input" type="text"
+                   placeholder="Press Enter to send" name="chat" />
+          </td>
+        </tr>
+      </table>
+      <div class="howto">
+        <div>
+          <img src="/client/img/favicon.png" />
+          Your tank
+        </div>
+        <div>
+          <img src="/client/img/healthpack_powerup.png" />
+          Health pack
+        </div>
+        <div>
+          <img src="/client/img/rapidfire_powerup.png" />
+          Rapid fire powerup
+        </div>
+        <div>
+          <img src="/client/img/shield_powerup.png" />
+          Shield powerup
+        </div>
+        <div>
+          <img src="/client/img/shotgun_powerup.png" />
+          Shotgun powerup
+        </div>
+        <div>
+          <img src="/client/img/speedboost_powerup.png" />
+          Speed boost
+        </div>
+      </div>
+      <div id="copyright">
+        &copy; 2015 Alvin Lin and Kenneth Li. All Rights Reserved.
+      </div>
+    </div>
+  </body>
+</html>
