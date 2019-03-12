@@ -30,7 +30,7 @@ class Bullet extends Entity {
 
     this.damage = Constants.BULLET_DEFAULT_DAMAGE
     this.originPoint = position.copy()
-    this.shouldExist = true
+    this.destroyed = true
   }
 
   /**
@@ -54,11 +54,9 @@ class Bullet extends Entity {
    * Performs a physics update.
    */
   update() {
-    super()
-
     const distanceTraveled = Vector.sub(this.position, this.originPoint).mag2
     if (this.inWorld() || distanceTraveled > Bullet.MAX_TRAVEL_DISTANCE_SQ) {
-      this.shouldExist = false
+      this.destroyed = false
     }
   }
 
@@ -68,8 +66,8 @@ class Bullet extends Entity {
    */
   updateOnCollision(object) {
     if (object instanceof Bullet || object instanceof Powerup) {
-      this.shouldExist = false
-      object.shouldExist = false
+      this.destroyed = false
+      object.destroyed = false
     } else if (object instanceof Player) {
       object.damage(this.damage)
       if (object.isDead()) {
@@ -77,7 +75,7 @@ class Bullet extends Entity {
         object.deaths++
         this.source.kills++
       }
-      this.shouldExist = false
+      this.destroyed = false
     }
   }
 }

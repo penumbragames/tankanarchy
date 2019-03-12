@@ -94,12 +94,13 @@ class Player extends Entity {
 
   /**
    * Performs a physics update.
+   * @param {number} lastUpdateTime The last timestamp an update occurred
+   * @param {number} deltaTime The timestep to compute the update with
    */
-  update() {
-    super()
-    this.position.add(Vector.scale(this.velocity, this.deltaTime))
+  update(lastUpdateTime, deltaTime) {
+    this.position.add(Vector.scale(this.velocity, deltaTime))
     this.boundToWorld()
-    this.orientation += this.turnRate * this.deltaTime
+    this.orientation += this.turnRate * deltaTime
   }
 
   /**

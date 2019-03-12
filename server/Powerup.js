@@ -24,9 +24,9 @@ class Powerup extends Entity {
     this.name = null
     this.data = null
     this.duration = null
+    this.pickupTime = null
 
     this.hitboxSize = Constants.POWERUP_HITBOX_SIZE
-    this.expirationTime = 0
   }
 
   /**
@@ -40,23 +40,16 @@ class Powerup extends Entity {
   }
 
   /**
-   * Performs an update on this entity to update its delta time.
-   */
-  update() {
-    super()
-  }
-
-  /**
    * Performs a collision update with another Entity. If the powerup is picked
    * up by a player, then it will be recycled by randomizing position to
    * simulate another powerup spawn.
    * @param {Entity} object The colliding Entity
+   * @param {number} timestamp The timestamp of the collision
    */
-  updateOnCollision(object) {
+  updateOnCollision(object, timestamp) {
     if (object instanceof Player) {
       object.applyPowerup(this)
-      this.expirationTime = this.lastUpdateTime + this.duration
-      this.randomizeAttributes()
+      this.pickupTime = timestamp
     }
   }
 

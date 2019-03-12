@@ -27,9 +27,11 @@ class Game {
      * associated with them. This should always be parallel with sockets.
      */
     this.players = new Map()
-
     this.projectiles = []
     this.powerups = []
+
+    this.lastUpdateTime = 0
+    this.deltaTime = 0
   }
 
   /**
@@ -46,9 +48,7 @@ class Game {
    * Initializes the game state.
    */
   init() {
-    for (let i = 0; i < Constants.POWERUP_MAX_COUNT; ++i) {
-      this.powerups.push(Powerup.create())
-    }
+    this.lastUpdateTime = Date.now()
   }
 
   /**
@@ -109,31 +109,44 @@ class Game {
    * Updates the state of all the objects in the game.
    */
   update() {
+    const currentTime = Date.now()
+    this.deltaTime = currentTime - this.lastUpdateTime
+    this.lastUpdateTime = currentTime
+
     /**
-     * Perform a physics update and collision update for all entities.
+     * Perform a physics update and collision update for all entities
+     * that need it.
      */
-    // TODO: Refactor Entity deltaTime update into the game class
     const entities = [
       ...this.players.values(),
-      ...this.powerups,
       ...this.projectiles
     ]
-    entities.forEach(entity => entity.update)
+    entities.forEach(
+      entity => entity.update(this.lastUpdateTime, this.deltaTime))
     entities.forEach(entity1 => {
       entities.forEach(entity2 => {
         if (entity1 !== entity2) {
           if (entity1.collided(entity2)) {
-            entity1.updateOnCollision(entity2)
+            entity1.updateOnCollision(entity2, this.lastUpdateTime)
           }
         }
       })
     })
 
     /**
-     * Filters out destroyed projectiles.
+     * Filters out destroyed projectiles and picked up powerups.
      */
     this.projectiles = this.projectiles.filter(
-      projectile => projectile.shouldExist)
+      projectile => projectile.destroyed)
+    this.powerups = this.powerups.filter(
+      powerup => powerup.pickupTime !== null)
+
+    /**
+     * Repopulate the world with new powerups.
+     */
+    while (this.powerups.length < Constants.POWERUP_MAX_COUNT) {
+      this.powerups.push(Powerup.create())
+    }
   }
 
   /**
