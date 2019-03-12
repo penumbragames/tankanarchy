@@ -33,8 +33,8 @@ class Chat {
    * @return {Chat}
    */
   static create(socket, displayElementID, inputElementID) {
-    const displayElement = document.getElementByID(displayElementID)
-    const inputElement = document.getElementByID(inputElementID)
+    const displayElement = document.getElementById(displayElementID)
+    const inputElement = document.getElementById(inputElementID)
     const chat = new Chat(socket, displayElement, inputElement)
     chat.init()
     return chat
@@ -44,7 +44,8 @@ class Chat {
    * Binds the event handlers to initialize the Chat class.
    */
   init() {
-    this.textElement.addEventListener('keydown', this.onInputKeyDown.bind(this))
+    this.inputElement.addEventListener('keydown',
+      this.onInputKeyDown.bind(this))
     this.socket.on(Constants.SOCKET_CHAT_SERVER_CLIENT,
       this.onChatReceive.bind(this))
   }
@@ -55,8 +56,8 @@ class Chat {
    */
   onInputKeyDown(event) {
     if (event.keyCode === 13) {
-      const text = this.textElement.value
-      this.textElement.value = ''
+      const text = this.inputElement.value
+      this.inputElement.value = ''
       this.socket.emit(Constants.SOCKET_CHAT_CLIENT_SERVER, text)
     }
   }

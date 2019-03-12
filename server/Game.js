@@ -153,7 +153,7 @@ class Game {
    * Sends the state of the game to all connected players.
    */
   sendState() {
-    const players = Array.from(this.players.values().entries())
+    const players = [...this.players.values()]
     this.clients.forEach((client, socketID) => {
       const currentPlayer = this.players.get(socketID)
       this.clients.get(socketID).emit(Constants.SOCKET_MESSAGE_UPDATE, {

@@ -43,7 +43,7 @@ class Drawing {
       images[type].src =
         `${Constants.DRAWING_IMG_BASE_PATH}/${type}_powerup.png`
     }
-    return new Drawing(canvas, context, images, viewport)
+    return new Drawing(context, images, viewport)
   }
 
   /**

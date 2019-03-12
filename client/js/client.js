@@ -4,6 +4,7 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
+require('bootstrap')
 require('../less/styles.less')
 
 const $ = require('jquery')
@@ -11,19 +12,11 @@ const io = require('socket.io-client')
 
 const Chat = require('./game/Chat')
 const Game = require('./game/Game')
-const Input = require('./game/Input')
 
 $(document).ready(() => {
   const socket = io()
-  const game = Game.create(socket,
-    document.getElementById('canvas'),
-    document.getElementById('leaderboard'))
-  Chat.create(socket,
-    document.getElementById('chat-display'),
-    document.getElementById('chat-input'))
-
-  Input.applyEventHandlers(document.getElementById('canvas'))
-  Input.addMouseTracker(document.getElementById('canvas'))
+  const game = Game.create(socket, 'canvas', 'leaderboard')
+  Chat.create(socket, 'chat-display', 'chat-input')
 
   $('#name-input').focus()
 

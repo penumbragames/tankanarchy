@@ -21,7 +21,7 @@ class Leaderboard {
    * @return {Leaderboard}
    */
   static create(containerElementID) {
-    return new Leaderboard(document.getElementByID(containerElementID))
+    return new Leaderboard(document.getElementById(containerElementID))
   }
 
   /**

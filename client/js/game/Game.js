@@ -53,7 +53,7 @@ class Game {
    * @return {Game}
    */
   static create(socket, canvasElementID, leaderboardElementID) {
-    const canvas = document.getElementByID(canvasElementID)
+    const canvas = document.getElementById(canvasElementID)
     canvas.width = Constants.CANVAS_WIDTH
     canvas.height = Constants.CANVAS_HEIGHT
 
@@ -61,7 +61,7 @@ class Game {
     const drawing = Drawing.create(canvas, viewport)
     const input = Input.create(document, canvas)
 
-    const leaderboardElement = document.getElementByID(leaderboardElementID)
+    const leaderboardElement = document.getElementById(leaderboardElementID)
     const leaderboard = Leaderboard.create(leaderboardElement)
 
     const game = new Game(socket, drawing, input, leaderboard)

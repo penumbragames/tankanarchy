@@ -64,7 +64,7 @@ class Powerup extends Entity {
         Constants.WORLD_MAX - Constants.WORLD_PADDING))
     this.type = Util.choiceArray(Constants.POWERUP_KEYS)
     const dataRanges = Constants.POWERUP_DATA[this.type]
-    switch (name) {
+    switch (this.type) {
     case Constants.POWERUP_HEALTHPACK:
       this.data = Util.randRangeInt(dataRanges.MIN, dataRanges.MAX + 1)
       break
