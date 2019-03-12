@@ -37,7 +37,12 @@ class Drawing {
     const images = {}
     for (const key of Constants.DRAWING_IMG_KEYS) {
       images[key] = new Image()
-      images[key].src = `${Constants.DRAWING_IMG_BASE_PATH}/${key}`
+      images[key].src = `${Constants.DRAWING_IMG_BASE_PATH}/${key}.png`
+    }
+    for (const type of Constants.POWERUP_KEYS) {
+      images[type] = new Image()
+      images[type].src =
+        `${Constants.DRAWING_IMG_BASE_PATH}/${type}_powerup.png`
     }
     const viewport = new Viewport()
     return new Drawing(canvas, context, images, viewport)
@@ -120,6 +125,18 @@ class Drawing {
   }
 
   /**
+   * Draws a powerup to the canvas.
+   * @param {Powerup} powerup The powerup to draw
+   */
+  drawPowerup(powerup) {
+    this.context.save()
+    const canvasCoords = this.viewport.toCanvas(powerup.position)
+    this.context.translate(canvasCoords.x, canvasCoords.y)
+    this.context.drawCenteredImage(this.images[powerup.type])
+    this.context.restore()
+  }
+
+  /**
    * Draws the background tiles to the canvas.
    */
   drawTiles() {
@@ -134,21 +151,3 @@ class Drawing {
     }
   }
 }
-
-/**
- * Draws a powerup.
- * @param {Array.<number>} coords The coordinates of the center of the
- *   powerup
- * @param {string} name The name of the powerup to draw.
- */
-// Drawing.prototype.drawPowerup = function(coords, name) {
-//   this.context.save();
-//   this.context.translate(coords[0], coords[1]);
-//   var powerup = new Image();
-//   /**
-//    * TODO: store all powerup images during initialization
-//    */
-//   powerup.src = Drawing.BASE_IMG_URL + name + '.png';
-//   this.context.drawImage(powerup, -powerup.width / 2, -powerup.height / 2);
-//   this.context.restore();
-// };
