@@ -1,6 +1,6 @@
 /**
  * Wrapper class for all entities that need basic physics.
- * @author alvin.lin.dev@gmail.com (Alvin Lin)
+ * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
 const Constants = require('./Constants')

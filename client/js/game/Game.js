@@ -1,7 +1,7 @@
 /**
  * Class encapsulating the client side of the game, handles drawing and
  * updates.
- * @author alvin.lin.dev@gmail.com (Alvin Lin)
+ * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
 const Drawing = require('./Drawing')

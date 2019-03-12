@@ -1,6 +1,6 @@
 /**
  * This is the server app script that is run on the server.
- * @author alvin.lin.dev@gmail.com (Alvin Lin)
+ * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
 const PORT = process.env.PORT || 5000

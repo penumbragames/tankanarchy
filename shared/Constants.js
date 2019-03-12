@@ -1,6 +1,6 @@
 /**
  * This class stores global constants between the client and server.
- * @author alvin.lin.dev@gmail.com (Alvin Lin)
+ * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
 module.exports = {
