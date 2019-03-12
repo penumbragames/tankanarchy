@@ -3,63 +3,60 @@
  * @author kennethli.3470@gmail.com (Kenneth Li)
  */
 
+const Entity = require('../../shared/Entity')
+const Vector = require('../../shared/Vector')
+
 /**
- * This class manages the viewport of the client. It is mostly
- * an abstract class that handles the math of converting absolute
- * coordinates to appropriate canvas coordinates.
- * @constructor
+ * Viewport class.
  */
-function ViewPort() {
-  this.selfCoords = [];
+class Viewport extends Entity {
+  /**
+   * Constructor for a Viewport object. The position of the viewport will hold
+   * the absolute world coordinates for the top left of the view (which
+   * correspond to canvas coordinates [width / 2, height / 2]).
+   * @param {Vector} position The starting position of the viewport
+   * @param {Vector} velocity The starting velocity of the viewport
+   * @param {number} canvasWidth The width of the canvas for this viewport
+   * @param {number} canvasHeight The height of the canvas for this viewport
+   */
+  constructor(position, velocity, canvasWidth, canvasHeight) {
+    super(position, velocity)
+
+    this.canvasOffset = new Vector(canvasWidth / 2, canvasHeight / 2)
+  }
+
+  /**
+   * Create a Viewport object.
+   * @param {Vector} position The starting position of the viewport
+   * @param {Element} canvas The canvas element this viewport represents
+   * @return {Viewport}
+   */
+  static create(position, canvas) {
+    return new Viewport(position, Vector.zero(), canvas.width, canvas.height)
+  }
+
+  /**
+   * Updates the velocity nad position of the viewport.
+   * @param {Vector} playerPosition The absolute world coordinates of the
+   *   player
+   */
+  update(playerPosition) {
+    super.update()
+    const translatedPlayer = Vector.sub(playerPosition, this.canvasOffset)
+    this.velocity = Vector.sub(this.position, translatedPlayer).scale(
+      0.001 * this.deltaTime)
+    this.position.add(this.velocity)
+  }
+
+  /**
+   * Converts an absolute world coordinate to a position on the canvas in this
+   * viewport's field of view.
+   * @param {Vector} position The absolute world coordinate to convert.
+   * @return {Vector}
+   */
+  toCanvas(position) {
+    return Vector.sub(position, this.position)
+  }
 }
 
-/**
- * Factory method for a ViewPort class.
- * @return {ViewPort}
- */
-ViewPort.create = function() {
-  return new ViewPort();
-};
-
-/**
- * Updates the viewport with this client's player instance's coordinates.
- * @param {Array.<number>} position The position of the client's player.
- */
-ViewPort.prototype.update = function(position) {
-  this.selfCoords = position.slice();
-};
-
-/**
- * Given an absolute world x coordinate, this function returns the canvas
- * x coordinate that it converts to.
- * @param {number} x The absolute world x coordinate to convert.
- * @return {number}
- */
-ViewPort.prototype.toCanvasX = function(x) {
-  return x - (this.selfCoords[0] - Constants.CANVAS_WIDTH / 2);
-};
-
-/**
- * Given an absolute world y coordinate, this function returns the canvas
- * y coordinate that it converts to.
- * @param {number} y The absolute world y coordinate to convert.
- * @return {number}
- */
-ViewPort.prototype.toCanvasY = function(y) {
-  return y - (this.selfCoords[1] - Constants.CANVAS_HEIGHT / 2);
-};
-
-/**
- * Given an object, returns an array containing the object's converted
- * coordinates. The object must be a valid data structure sent by the
- * server with an x and y attribute.
- * @param {Object} object The object whose converted coords should be
- *   returned.
- * @return {Array.<number>}
- */
-ViewPort.prototype.toCanvasCoords = function(object) {
-  var translateX = this.selfCoords[0] - Constants.CANVAS_WIDTH / 2;
-  var translateY = this.selfCoords[1] - Constants.CANVAS_HEIGHT / 2;
-  return [object.position[0] - translateX,
-          object.position[1] - translateY];
-};
+module.exports = Viewport

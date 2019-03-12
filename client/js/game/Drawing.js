@@ -49,10 +49,12 @@ class Drawing {
   }
 
   /**
-   * Clears the canvas.
+   * Wait a second...
+   * @param {number} angle The angle to translate
+   * @return {number}
    */
-  clear() {
-    this.context.clearRect(0, 0, this.width, this.height)
+  static translateAngle(angle) {
+    return (angle + 1.5 * Math.PI) % (2 * Math.PI)
   }
 
   /**
@@ -61,6 +63,13 @@ class Drawing {
    */
   drawCenteredImage(image) {
     this.context.drawImage(image, -image.width / 2, -image.height / 2)
+  }
+
+  /**
+   * Clears the canvas.
+   */
+  clear() {
+    this.context.clearRect(0, 0, this.width, this.height)
   }
 
   /**
@@ -89,7 +98,7 @@ class Drawing {
       this.context.fillRect(-25 + 5 * i, -24, 5, 4)
     }
 
-    this.context.rotate(this.translateAngle(player.tankAngle))
+    this.context.rotate(Drawing.translateAngle(player.tankAngle))
     this.drawCenteredImage(this.images[
       // eslint-disable-next-line multiline-ternary
       isSelf ? Constants.DRAWING_IMG_SELF_TANK :
@@ -119,7 +128,7 @@ class Drawing {
     this.context.save()
     const canvasCoords = this.viewport.toCanvas(bullet.position)
     this.context.translate(canvasCoords.x, canvasCoords.y)
-    this.context.rotate(this.translateAngle(bullet.angle))
+    this.context.rotate(Drawing.translateAngle(bullet.angle))
     this.drawCenteredImage(this.images[Constants.DRAWING_IMG_BULLET])
     this.context.restore()
   }
