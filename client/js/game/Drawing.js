@@ -151,3 +151,5 @@ class Drawing {
     }
   }
 }
+
+module.exports = Drawing

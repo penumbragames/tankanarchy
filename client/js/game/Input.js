@@ -5,137 +5,129 @@
  */
 
 /**
- * Empty constructor for the Input object.
+ * Input class.
  */
-function Input() {
-  throw new Error('Input should not be instantiated!');
+class Input {
+  /**
+   * Constructor for the Input class.
+   */
+  constructor() {
+    this.up = false
+    this.down = false
+    this.left = false
+    this.right = false
+
+    this.shoot = false
+    this.mouse = [0, 0]
+  }
+
+  /**
+   * Key down event handler.
+   * @param {Event} event The event passed to the event handler
+   */
+  onKeyDown(event) {
+    /* eslint-disable no-fallthrough */
+    switch (event.keyCode) {
+    case 37:
+    case 65:
+    case 97:
+      this.left = true
+      break
+    case 38:
+    case 87:
+    case 199:
+      this.up = true
+      break
+    case 39:
+    case 68:
+    case 100:
+      this.right = true
+      break
+    case 40:
+    case 83:
+    case 115:
+      this.down = true
+    default:
+      break
+    }
+    /* eslint-enable no-fallthrough */
+  }
+
+  /**
+   * Key up event handler.
+   * @param {Event} event The event passed to the event handler
+   */
+  onKeyUp(event) {
+    /* eslint-disable no-fallthrough */
+    switch (event.keyCode) {
+    case 37:
+    case 65:
+    case 97:
+      this.left = false
+      break
+    case 38:
+    case 87:
+    case 199:
+      this.up = false
+      break
+    case 39:
+    case 68:
+    case 100:
+      this.right = false
+      break
+    case 40:
+    case 83:
+    case 115:
+      this.down = false
+    default:
+      break
+    }
+    /* eslint-enable no-fallthrough */
+  }
+
+  /**
+   * Mouse down event handler.
+   * @param {Event} event The event passed to the event handler
+   */
+  onMouseDown(event) {
+    if (event.which === 1) {
+      this.shoot = true
+    }
+  }
+
+  /**
+   * Mouse up event handler.
+   * @param {Event} event The event passed to the event handler
+   */
+  onMouseUp(event) {
+    if (event.which === 1) {
+      this.shoot = false
+    }
+  }
+
+  /**
+   * Mouse move event handler.
+   * @param {Event} event The event passed to the event handler
+   */
+  onMouseMove(event) {
+    this.mouse = [event.offsetX, event.offsetY]
+  }
+
+  /**
+   * Applies the event handlers to elements in the DOM.
+   * @param {Element} keyElement The element to track keypresses on
+   * @param {Element} mouseClickElement The element to track mouse clicks on
+   * @param {Element} mouseMoveElement The element to track mouse movement
+   *   relative to
+   */
+  applyEventHandlers(keyElement, mouseClickElement, mouseMoveElement) {
+    keyElement.addEventListener('keydown', this.onKeyDown.bind(this))
+    keyElement.addEventListener('keyup', this.onKeyUp.bind(this))
+    mouseClickElement.addEventListener('mousedown', this.onMouseDown.bind(this))
+    mouseClickElement.addEventListener('mouseup', this.onMouseUp.bind(this))
+    mouseMoveElement.setAttribute('tabindex', 1)
+    mouseMoveElement.addEventListener('mousemove', this.onMouseMove.bind(this))
+  }
 }
 
-/** @type {boolean} */
-Input.LEFT_CLICK = false;
-/** @type {boolean} */
-Input.RIGHT_CLICK = false;
-/** @type {Array<number>} */
-Input.MOUSE = [];
-
-/** @type {boolean} */
-Input.LEFT = false;
-/** @type {boolean} */
-Input.UP = false;
-/** @type {boolean} */
-Input.RIGHT = false;
-/** @type {boolean} */
-Input.DOWN = false;
-/** @type {Object<number, boolean>} */
-Input.MISC_KEYS = {};
-
-/**
- * This method is a callback bound to the onmousedown event on the document
- * and updates the state of the mouse click stored in the Input class.
- * @param {Event} event The event passed to this function.
- */
-Input.onMouseDown = function(event) {
-  if (event.which == 1) {
-    Input.LEFT_CLICK = true;
-  } else if (event.which == 3) {
-    // This may fail depending on the browser as right click handling is
-    // not universally supported.
-    Input.RIGHT_CLICK = true;
-  }
-};
-
-/**
- * This method is a callback bound to the onmouseup event on the document and
- * updates the state of the mouse click stored in the Input class.
- * @param {Event} event The event passed to this function.
- */
-Input.onMouseUp = function(event) {
-  if (event.which == 1) {
-    Input.LEFT_CLICK = false;
-  } else if (event.which == 3) {
-    // This may fail depending on the browser as right click handling is
-    // not universally supported.
-    Input.RIGHT_CLICK = false;
-  }
-};
-
-/**
- * This method is a callback bound to the onkeydown event on the document and
- * @param {Event} event The event passed to this function.
- * updates the state of the keys stored in the Input class.
- */
-Input.onKeyDown = function(event) {
-  switch (event.keyCode) {
-    case 37:
-    case 65:
-      Input.LEFT = true;
-      break;
-    case 38:
-    case 87:
-      Input.UP = true;
-      break;
-    case 39:
-    case 68:
-      Input.RIGHT = true;
-      break;
-    case 40:
-    case 83:
-      Input.DOWN = true;
-      break;
-    default:
-      Input.MISC_KEYS[event.keyCode] = true;
-      break;
-  }
-};
-
-/**
- * This method is a callback bound to the onkeyup event on the document and
- * updates the state of the keys stored in the Input class.
- * @param {Event} event The event passed to this function.
- */
-Input.onKeyUp = function(event) {
-  switch (event.keyCode) {
-    case 37:
-    case 65:
-      Input.LEFT = false;
-      break;
-    case 38:
-    case 87:
-      Input.UP = false;
-      break;
-    case 39:
-    case 68:
-      Input.RIGHT = false;
-      break;
-    case 40:
-    case 83:
-      Input.DOWN = false;
-      break;
-    default:
-      Input.MISC_KEYS[event.keyCode] = false;
-  }
-};
-
-/**
- * This should be called during initialization to allow the Input
- * class to track user input.
- * @param {Element} element The element to apply the event listener to.
- */
-Input.applyEventHandlers = function(element) {
-  element.setAttribute('tabindex', 1);
-  element.addEventListener('mousedown', Input.onMouseDown);
-  element.addEventListener('mouseup', Input.onMouseUp);
-  element.addEventListener('keyup', Input.onKeyUp);
-  element.addEventListener('keydown', Input.onKeyDown);
-};
-
-/**
- * This should be called any time an element needs to track mouse coordinates
- * over it.
- * @param {Element} element The element to apply the event listener to.
- */
-Input.addMouseTracker = function(element) {
-  element.addEventListener('mousemove', function(event) {
-    Input.MOUSE = [event.offsetX, event.offsetY];
-  });
-};
+module.exports = Input

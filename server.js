@@ -52,9 +52,7 @@ io.on('connection', socket => {
   })
 
   socket.on(Constants.SOCKET_PLAYER_ACTION, data => {
-    game.updatePlayer(
-      socket.id, data.keyboardState, data.turretAngle, data.shot,
-      data.timestamp)
+    game.updatePlayer(socket.id, data)
   })
 
   socket.on(Constants.SOCKET_CHAT_CLIENT_SERVER, data => {
