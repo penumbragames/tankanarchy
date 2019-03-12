@@ -11,6 +11,24 @@ module.exports = {
   CANVAS_WIDTH: 800,
   CANVAS_HEIGHT: 600,
 
+  DRAWING_NAME_FONT: '14px Helvetica',
+  DRAWING_NAME_COLOR: 'black',
+  DRAWING_HP_COLOR: 'green',
+  DRAWING_HP_MISSING_COLOR: 'red',
+  DRAWING_IMG_BASE_PATH: '/client/img',
+  DRAWING_IMG_SELF_TANK: 'self_tank',
+  DRAWING_IMG_SELF_TURRET: 'self_turret',
+  DRAWING_IMG_OTHER_TANK: 'other_tank',
+  DRAWING_IMG_OTHER_TURRET: 'other_turret',
+  DRAWING_IMG_SHIELD: 'shield',
+  DRAWING_IMG_BULLET: 'bullet',
+  DRAWING_IMG_TILE: 'tile',
+  DRAWING_IMG_KEYS: [
+    'self_tank', 'self_turret', 'other_tank', 'other_turret', 'shield',
+    'bullet', 'tile'
+  ],
+  DRAWING_TILE_SIZE: 100,
+
   SOCKET_UPDATE: 'update',
   SOCKET_NEW_PLAYER: 'new-player',
   SOCKET_PLAYER_ACTION: 'player-action',

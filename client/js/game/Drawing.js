@@ -1,184 +1,139 @@
 /**
  * Methods for drawing all the sprites onto the HTML5 canvas.
  * @author kennethli.3470@gmail.com (Kenneth Li)
- * TODO: Add explosion drawing.
  */
 
+const Viewport = require('./Viewport')
+
+const Constants = require('../../shared/Constants')
+
 /**
- * Creates a Drawing object.
- * @param {CanvasRenderingContext2D} context The context this object will
- *   draw to.
- * @param {Object<string, Image>} images The image objects used to draw
- *   each entity.
- * @constructor
+ * Drawing class.
  */
-function Drawing(context, images) {
-  this.context = context;
+class Drawing {
   /**
-   * @type {Object<string, Image>}
+   * Constructor for the Drawing class.
+   * @param {CanvasRenderingContext2D} context The canvas context to draw to
+   * @param {Object<string, Image>} images The image assets for each entity
+   * @param {Viewport} viewport The viewport class to translate from absolute
+   *   world coordinates to relative cannon coordinates.
    */
-  this.images = images;
-}
+  constructor(context, images, viewport) {
+    this.context = context
+    this.images = images
+    this.viewport = viewport
 
-/**
- * @const
- * @type {string}
- */
-Drawing.NAME_FONT = '14px Helvetica';
-
-/**
- * @const
- * @type {string}
- */
-Drawing.NAME_COLOR = 'black';
-
-/**
- * @const
- * @type {string}
- */
-Drawing.HP_COLOR = 'green';
-
-/**
- * @const
- * @type {string}
- */
-Drawing.HP_MISSING_COLOR = 'red';
-
-/**
- * @const
- * @type {string}
- */
-Drawing.BASE_IMG_URL = '/public/img/';
-
-/**
- * @const
- * @type {Object}
- */
-Drawing.IMG_SRCS = {
-  'self_tank': Drawing.BASE_IMG_URL + 'self_tank.png',
-  'self_turret': Drawing.BASE_IMG_URL + 'self_turret.png',
-  'other_tank': Drawing.BASE_IMG_URL + 'other_tank.png',
-  'other_turret': Drawing.BASE_IMG_URL + 'other_turret.png',
-  'shield': Drawing.BASE_IMG_URL + 'shield.png',
-  'bullet': Drawing.BASE_IMG_URL + 'bullet.png',
-  'tile': Drawing.BASE_IMG_URL + 'tile.png'
-};
-
-/**
- * @const
- * @type {number}
- */
-Drawing.TILE_SIZE = 100;
-
-/**
- * Factory method for creating a Drawing object. It initializes all the
- * necessary Image objects.
- * @param {CanvasRenderingContext2D} context The context this object will
- *   draw to.
- * @return {Drawing}
- */
-Drawing.create = function(context) {
-  var images = {};
-  for (var key in Drawing.IMG_SRCS) {
-    images[key] = new Image();
-    images[key].src = Drawing.IMG_SRCS[key];
+    this.width = context.canvas.width
+    this.height = context.canvas.height
   }
-  return new Drawing(context, images);
-};
 
-/**
- * Clears the canvas.
- */
-Drawing.prototype.clear = function() {
-  this.context.clearRect(0, 0, Constants.CANVAS_WIDTH,
-                         Constants.CANVAS_HEIGHT);
-};
+  /**
+   * Factory method for creating a Drawing object.
+   * @param {Element} canvas The canvas element to draw to
+   * @return {Drawing}
+   */
+  static create(canvas) {
+    const context = canvas.getContext('2d')
+    const images = {}
+    for (const key of Constants.DRAWING_IMG_KEYS) {
+      images[key] = new Image()
+      images[key].src = `${Constants.DRAWING_IMG_BASE_PATH}/${key}`
+    }
+    const viewport = new Viewport()
+    return new Drawing(canvas, context, images, viewport)
+  }
 
-/**
- * Draws a tank to the canvas.
- * @param {boolean} isSelf If this is true, then a green tank will be drawn,
- *   denoting the player's tank. If this is false, then a red tank will be
- *   drawn, denoting an enemy tank.
- * @param {Array.<number>} coords The canvas coordinates of the center of the
- *   tank.
- * @param {number} orientation The orientation of the tank from 0 to
- *   2 * PI.
- * @param {number} turretAngle The angle of the turret from 0 to 2 * PI.
- * @param {string} name The name of the player associated with this tank.
- * @param {number} health The current health of the tank.
- * @param {boolean} hasShield Whether or not the tank has a shield.
- */
-Drawing.prototype.drawTank = function(isSelf, coords, orientation,
-                                      turretAngle, name, health,
-                                      hasShield) {
-  this.context.save();
-  this.context.translate(coords[0], coords[1]);
-  this.context.textAlign = 'center';
-  this.context.font = Drawing.NAME_FONT;
-  this.context.fillStyle = Drawing.NAME_COLOR;
-  this.context.fillText(name, 0, -50);
-  this.context.restore();
+  /**
+   * Clears the canvas.
+   */
+  clear() {
+    this.context.clearRect(0, 0, this.width, this.height)
+  }
 
-  this.context.save();
-  this.context.translate(coords[0], coords[1]);
-  for (var i = 0; i < 10; i++) {
-    if (i < health) {
-      this.context.fillStyle = Drawing.HP_COLOR;
-      this.context.fillRect(-25 + 5 * i, -42, 5, 4);
-    } else {
-      this.context.fillStyle = Drawing.HP_MISSING_COLOR;
-      this.context.fillRect(-25 + 5 * i, -42, 5, 4);
+  /**
+   * Draws an image on the canvas at the centered at the origin.
+   * @param {Image} image The image to draw on the canvas
+   */
+  drawCenteredImage(image) {
+    this.context.drawImage(image, -image.width / 2, -image.height / 2)
+  }
+
+  /**
+   * Draws a player to the canvas as a tank.
+   * @param {boolean} isSelf If this is true, then a green tank will be draw
+   *   to denote the player's tank. Otherwise a red tank will be drawn to
+   *   denote an enemy tank.
+   * @param {Player} player The player object to draw.
+   */
+  drawTank(isSelf, player) {
+    this.context.save()
+    const canvasCoords = this.viewport.toCanvas(player.position)
+    this.context.translate(canvasCoords.x, canvasCoords.y)
+
+    this.context.textAlign = 'center'
+    this.context.font = Constants.DRAWING_NAME_FONT
+    this.context.fillStyle = Constants.DRAWING_NAME_COLOR
+    this.context.fillText(player.name, 0, -50)
+
+    for (let i = 0; i < 10; ++i) {
+      if (i < player.health) {
+        this.context.fillStyle = Constants.DRAWING_HP_COLOR
+      } else {
+        this.context.fillStyle = Constants.DRAWING_HP_MISSING_COLOR
+      }
+      this.context.fillRect(-25 + 5 * i, -24, 5, 4)
+    }
+
+    this.context.rotate(this.translateAngle(player.tankAngle))
+    this.drawCenteredImage(this.images[
+      // eslint-disable-next-line multiline-ternary
+      isSelf ? Constants.DRAWING_IMG_SELF_TANK :
+        Constants.DRAWING_IMG_OTHER_TANK
+    ])
+    this.context.rotate(this.translateAngle(
+      player.turretAngle - player.tankAngle))
+    this.drawCenteredImage(this.images[
+      // eslint-disable-next-line multiline-ternary
+      isSelf ? Constants.DRAWING_IMG_SELF_TURRET :
+        Constants.DRAWING_IMG_OTHER_TURRET
+    ])
+
+    if (player.powerups[Constants.POWERUP_SHIELD] !== null) {
+      this.context.rotate(-this.translateAngle(-player.turretAngle))
+      this.drawCenteredImage(this.images[Constants.DRAWING_IMG_SHIELD])
+    }
+
+    this.context.restore()
+  }
+
+  /**
+   * Draws a bullet (tank shell) to the canvas.
+   * @param {Bullet} bullet The bullet to draw to the canvas
+   */
+  drawBullet(bullet) {
+    this.context.save()
+    const canvasCoords = this.viewport.toCanvas(bullet.position)
+    this.context.translate(canvasCoords.x, canvasCoords.y)
+    this.context.rotate(this.translateAngle(bullet.angle))
+    this.drawCenteredImage(this.images[Constants.DRAWING_IMG_BULLET])
+    this.context.restore()
+  }
+
+  /**
+   * Draws the background tiles to the canvas.
+   */
+  drawTiles() {
+    const start = this.viewport.toCanvas(
+      { x: Constants.WORLD_MIN, y: Constants.WORLD_MIN })
+    const end = this.viewport.toCanvas(
+      { x: Constants.WORLD_MAX, y: Constants.WORLD_MAX })
+    for (let x = start.x; x < end.x; x += Constants.DRAWING_TILE_SIZE) {
+      for (let y = start.y; y < end.y; y += Constants.DRAWING_TILE_SIZE) {
+        this.context.drawImage(this.images[Constants.DRAWING_IMG_TILE], x, y)
+      }
     }
   }
-  this.context.restore();
-
-  this.context.save();
-  this.context.translate(coords[0], coords[1]);
-  this.context.rotate(orientation);
-  var tank = null;
-  if (isSelf) {
-    tank = this.images['self_tank'];
-  } else {
-    tank = this.images['other_tank'];
-  }
-  this.context.drawImage(tank, -tank.width / 2, -tank.height / 2);
-  this.context.restore();
-
-  this.context.save();
-  this.context.translate(coords[0], coords[1]);
-  this.context.rotate(turretAngle);
-  var turret = null;
-  if (isSelf) {
-    turret = this.images['self_turret'];
-  } else {
-    turret = this.images['other_turret'];
-  }
-  this.context.drawImage(turret, -turret.width / 2, -turret.height / 2);
-  this.context.restore();
-
-  if (hasShield != null && hasShield != undefined) {
-    this.context.save();
-    this.context.translate(coords[0], coords[1]);
-    var shield = this.images['shield'];
-    this.context.drawImage(shield, -shield.width / 2, -shield.height / 2);
-    this.context.restore();
-  }
-};
-
-/**
- * Draws a bullet.
- * @param {Array.<number>} coords The coordinates of the center of the
- *   bullet.
- * @param {number} orientation The orientation of the bullet from 0 to 2 * PI
- */
-Drawing.prototype.drawBullet = function(coords, orientation) {
-  this.context.save();
-  this.context.translate(coords[0], coords[1]);
-  this.context.rotate(orientation);
-  var bullet = this.images['bullet'];
-  this.context.drawImage(bullet, -bullet.width / 2, -bullet.height / 2);
-  this.context.restore();
-};
+}
 
 /**
  * Draws a powerup.
@@ -186,32 +141,14 @@ Drawing.prototype.drawBullet = function(coords, orientation) {
  *   powerup
  * @param {string} name The name of the powerup to draw.
  */
-Drawing.prototype.drawPowerup = function(coords, name) {
-  this.context.save();
-  this.context.translate(coords[0], coords[1]);
-  var powerup = new Image();
-  /**
-   * TODO: store all powerup images during initialization
-   */
-  powerup.src = Drawing.BASE_IMG_URL + name + '.png';
-  this.context.drawImage(powerup, -powerup.width / 2, -powerup.height / 2);
-  this.context.restore();
-};
-
-/**
- * This function draws the background tiles on the canvas.
- * @param {number} minX The minimum canvas x coordinate to start drawing from.
- * @param {number} minY The minimum canvas y coordinate to start drawing from.
- * @param {number} maxX The maximum canvas x coordinate to draw to.
- * @param {number} maxY The maximum canvas y coordinate to draw to.
- */
-Drawing.prototype.drawTiles = function(minX, minY, maxX, maxY) {
-  this.context.save();
-  var tile = this.images['tile'];
-  for (var x = minX; x < maxX; x += Drawing.TILE_SIZE) {
-    for (var y = minY; y < maxY; y += Drawing.TILE_SIZE) {
-      this.context.drawImage(tile, x, y);
-    }
-  }
-  this.context.restore();
-};
+// Drawing.prototype.drawPowerup = function(coords, name) {
+//   this.context.save();
+//   this.context.translate(coords[0], coords[1]);
+//   var powerup = new Image();
+//   /**
+//    * TODO: store all powerup images during initialization
+//    */
+//   powerup.src = Drawing.BASE_IMG_URL + name + '.png';
+//   this.context.drawImage(powerup, -powerup.width / 2, -powerup.height / 2);
+//   this.context.restore();
+// };
