@@ -1,11 +1,11 @@
 /**
- * Wrapper class for all entities on the server.
+ * Wrapper class for all entities that need basic physics.
  * @author alvin.lin.dev@gmail.com (Alvin Lin)
  */
 
-const Constants = require('../shared/Constants')
-const Util = require('../shared/Util')
-const Vector = require('../shared/Vector')
+const Constants = require('./Constants')
+const Util = require('./Util')
+const Vector = require('./Vector')
 
 /**
  * Entity class.
