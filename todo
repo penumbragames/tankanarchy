@@ -1,8 +1,0 @@
-#!/bin/bash
-# TODO: reorganize powerups and factor out all the constants. Give each powerup a callback function that can modify a player attribute instead
-# TODO: The player's internal powerup object should be key:value mapped to the
-# powerup name and the Powerup object itself and not a subset of the Powerup's
-# fields. The Powerup should have a function that returns a function which
-# is used to modify the Player's attributes.
-
-git grep -i todo
