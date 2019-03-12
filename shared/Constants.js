@@ -11,7 +11,12 @@ module.exports = {
   CANVAS_WIDTH: 800,
   CANVAS_HEIGHT: 600,
 
-  SOCKET_MESSAGE_UPDATE: 'update',
+  SOCKET_UPDATE: 'update',
+  SOCKET_NEW_PLAYER: 'new-player',
+  SOCKET_PLAYER_ACTION: 'player-action',
+  SOCKET_CHAT_CLIENT_SERVER: 'chat-client-to-server',
+  SOCKET_CHAT_SERVER_CLIENT: 'chat-server-to-client',
+  SOCKET_DISCONNECT: 'disconnect',
 
   PLAYER_TURN_RATE: 0.005,
   PLAYER_DEFAULT_SPEED: 300,
