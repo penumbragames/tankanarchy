@@ -3,8 +3,8 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-const Entity = require('../../lib/Entity')
-const Vector = require('../../lib/Vector')
+const Entity = require('../../../lib/Entity')
+const Vector = require('../../../lib/Vector')
 
 /**
  * Viewport class.
