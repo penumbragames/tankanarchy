@@ -29,8 +29,8 @@ class Bullet extends Entity {
     this.source = source
 
     this.damage = Constants.BULLET_DEFAULT_DAMAGE
-    this.originPoint = position.copy()
-    this.destroyed = true
+    this.distanceTraveled = 0
+    this.destroyed = false
   }
 
   /**
@@ -44,7 +44,7 @@ class Bullet extends Entity {
     const angle = player.turretAngle + angleDeviation
     return new Bullet(
       player.position.copy(),
-      Vector.fromPolar(Constants.BULLET_VELOCITY_MAGNITUDE, angle),
+      Vector.fromPolar(Constants.BULLET_SPEED, angle),
       angle,
       player
     )
@@ -52,11 +52,15 @@ class Bullet extends Entity {
 
   /**
    * Performs a physics update.
+   * @param {number} lastUpdateTime The last timestamp an update occurred
+   * @param {number} deltaTime The timestep to compute the update with
    */
-  update() {
-    const distanceTraveled = Vector.sub(this.position, this.originPoint).mag2
-    if (this.inWorld() || distanceTraveled > Bullet.MAX_TRAVEL_DISTANCE_SQ) {
-      this.destroyed = false
+  update(lastUpdateTime, deltaTime) {
+    const distanceStep = Vector.scale(this.velocity, deltaTime)
+    this.position.add(distanceStep)
+    this.distanceTraveled += distanceStep.mag2
+    if (this.inWorld() || distanceStep > Bullet.MAX_TRAVEL_DISTANCE_SQ) {
+      this.destroyed = true
     }
   }
 
@@ -66,16 +70,16 @@ class Bullet extends Entity {
    */
   updateOnCollision(object) {
     if (object instanceof Bullet || object instanceof Powerup) {
-      this.destroyed = false
-      object.destroyed = false
-    } else if (object instanceof Player) {
+      this.destroyed = true
+      object.destroyed = true
+    } else if (object instanceof Player && this.source !== object) {
       object.damage(this.damage)
       if (object.isDead()) {
         object.respawn()
         object.deaths++
         this.source.kills++
       }
-      this.destroyed = false
+      this.destroyed = true
     }
   }
 }

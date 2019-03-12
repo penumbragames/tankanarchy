@@ -31,6 +31,7 @@ class Player extends Entity {
     this.name = name
     this.socketID = socketID
 
+    this.lastUpdateTime = 0
     this.tankAngle = 0
     this.turretAngle = 0
     this.turnRate = 0
@@ -98,6 +99,7 @@ class Player extends Entity {
    * @param {number} deltaTime The timestep to compute the update with
    */
   update(lastUpdateTime, deltaTime) {
+    this.lastUpdateTime = lastUpdateTime
     this.position.add(Vector.scale(this.velocity, deltaTime))
     this.boundToWorld()
     this.tankAngle += this.turnRate * deltaTime
@@ -164,7 +166,7 @@ class Player extends Entity {
    * @return {boolean}
    */
   canShoot() {
-    return this.currentTime > this.lastShotTime + this.shotCooldown
+    return this.lastUpdateTime > this.lastShotTime + this.shotCooldown
   }
 
   /**
@@ -174,19 +176,13 @@ class Player extends Entity {
    * @return {Array<Bullet>}
    */
   getProjectilesFromShot() {
-    const bullets = [
-      Bullet.create(this.position, this.turretAngle, this.socketId)]
+    const bullets = [Bullet.createFromPlayer(this)]
     const shotgunPowerup = this.powerups[Powerup.SHOTGUN]
     if (shotgunPowerup) {
       for (let i = 1; i <= shotgunPowerup.data; ++i) {
         const angleDeviation = i * Math.PI / 9
-        bullets.push(
-          Bullet.create(this.position, this.turretAngle - angleDeviation,
-            this.socketId))
-        bullets.push(
-          Bullet.create(this.position, this.turretAngle + angleDeviation,
-            this.socketId)
-        )
+        bullets.push(Bullet.createFromPlayer(this, -angleDeviation))
+        bullets.push(Bullet.createFromPlayer(this, angleDeviation))
       }
     }
     this.lastShotTime = this.lastUpdateTime

@@ -69,11 +69,11 @@ class Game {
    */
   removePlayer(socketID) {
     if (this.clients.has(socketID)) {
-      this.clients.remove(socketID)
+      this.clients.delete(socketID)
     }
     if (this.players.has(socketID)) {
       const player = this.players.get(socketID)
-      this.players.remove(socketID)
+      this.players.delete(socketID)
       return player.name
     }
   }
@@ -137,7 +137,7 @@ class Game {
      * Filters out destroyed projectiles and picked up powerups.
      */
     this.projectiles = this.projectiles.filter(
-      projectile => projectile.destroyed)
+      projectile => !projectile.destroyed)
     this.powerups = this.powerups.filter(
       powerup => powerup.pickupTime === null)
 
