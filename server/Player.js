@@ -82,9 +82,9 @@ class Player extends Entity {
     }
 
     if (data.right) {
-      this.turnRate = Player.TURN_RATE
+      this.turnRate = Constants.PLAYER_TURN_RATE
     } else if (data.left) {
-      this.turnRate = -Player.TURN_RATE
+      this.turnRate = -Constants.PLAYER_TURN_RATE
     } else if (!(data.left ^ data.right)) {
       this.turnRate = 0
     }

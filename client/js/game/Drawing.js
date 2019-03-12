@@ -47,12 +47,12 @@ class Drawing {
   }
 
   /**
-   * Wait a second...
+   * Convert an angle from the real math system to funky canvas coordinates.
    * @param {number} angle The angle to translate
    * @return {number}
    */
   static translateAngle(angle) {
-    return (angle + 1.5 * Math.PI) % (2 * Math.PI)
+    return angle + Math.PI / 2
   }
 
   /**

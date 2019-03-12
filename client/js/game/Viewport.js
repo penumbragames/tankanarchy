@@ -3,6 +3,7 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
+const Constants = require('../../../lib/Constants')
 const Entity = require('../../../lib/Entity')
 const Vector = require('../../../lib/Vector')
 
@@ -42,7 +43,6 @@ class Viewport extends Entity {
    */
   updateTrackingPosition(player) {
     this.playerPosition = Vector.sub(player.position, this.canvasOffset)
-    this.position = player.position
   }
 
   /**
@@ -50,9 +50,9 @@ class Viewport extends Entity {
    * @param {number} deltaTime The timestep to perform the update with
    */
   update(deltaTime) {
-    this.velocity = Vector.sub(this.position, this.playerPosition).scale(
-      0.001 * deltaTime)
-    // this.position.add(this.velocity)
+    this.velocity = Vector.sub(this.playerPosition, this.position).scale(
+      Constants.VIEWPORT_STICKINESS * deltaTime)
+    this.position.add(this.velocity)
   }
 
   /**

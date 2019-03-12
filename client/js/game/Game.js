@@ -120,7 +120,7 @@ class Game {
 
       const absoluteMouseCoords = this.viewport.toWorld(
         Vector.fromArray(this.input.mouseCoords))
-      const playerToMouseVector = Vector.fromArray(this.input.mouseCoords).sub(
+      const playerToMouseVector = Vector.sub(this.self.position,
         absoluteMouseCoords)
 
       this.socket.emit(Constants.SOCKET_PLAYER_ACTION, {
@@ -129,7 +129,7 @@ class Game {
         left: this.input.left,
         right: this.input.right,
         shoot: this.input.mouseDown,
-        turretAngle: playerToMouseVector.angle
+        turretAngle: playerToMouseVector.angle + Math.PI / 2
       })
     }
   }

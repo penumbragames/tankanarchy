@@ -122,7 +122,7 @@ class Game {
       ...this.projectiles
     ]
     entities.forEach(
-      entity => entity.update(this.lastUpdateTime, this.deltaTime))
+      entity => { entity.update(this.lastUpdateTime, this.deltaTime) })
     entities.forEach(entity1 => {
       entities.forEach(entity2 => {
         if (entity1 !== entity2) {
@@ -139,7 +139,7 @@ class Game {
     this.projectiles = this.projectiles.filter(
       projectile => projectile.destroyed)
     this.powerups = this.powerups.filter(
-      powerup => powerup.pickupTime !== null)
+      powerup => powerup.pickupTime === null)
 
     /**
      * Repopulate the world with new powerups.
