@@ -33,7 +33,7 @@ $(document).ready(() => {
       socket.emit('new-player', { name }, () => {
         $('#name-prompt-overlay').fadeOut(500)
         $('#canvas').focus()
-        game.animate()
+        game.run()
       })
     } else {
       window.alert('Your name cannot be blank or over 20 characters.')

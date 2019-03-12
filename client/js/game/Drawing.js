@@ -102,7 +102,7 @@ class Drawing {
       isSelf ? Constants.DRAWING_IMG_SELF_TANK :
         Constants.DRAWING_IMG_OTHER_TANK
     ])
-    this.context.rotate(this.translateAngle(
+    this.context.rotate(Drawing.translateAngle(
       player.turretAngle - player.tankAngle))
     this.drawCenteredImage(this.images[
       // eslint-disable-next-line multiline-ternary
@@ -111,7 +111,7 @@ class Drawing {
     ])
 
     if (player.powerups[Constants.POWERUP_SHIELD] !== null) {
-      this.context.rotate(-this.translateAngle(-player.turretAngle))
+      this.context.rotate(-Drawing.translateAngle(-player.turretAngle))
       this.drawCenteredImage(this.images[Constants.DRAWING_IMG_SHIELD])
     }
 
@@ -139,7 +139,7 @@ class Drawing {
     this.context.save()
     const canvasCoords = this.viewport.toCanvas(powerup.position)
     this.context.translate(canvasCoords.x, canvasCoords.y)
-    this.context.drawCenteredImage(this.images[powerup.type])
+    this.drawCenteredImage(this.images[powerup.type])
     this.context.restore()
   }
 

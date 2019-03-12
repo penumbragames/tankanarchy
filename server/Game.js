@@ -58,7 +58,7 @@ class Game {
    */
   addNewPlayer(name, socket) {
     this.clients.set(socket.id, socket)
-    this.players.set(socket.id, Player.generateNewPlayer(name, socket.id))
+    this.players.set(socket.id, Player.create(name, socket.id))
   }
 
   /**
@@ -156,7 +156,7 @@ class Game {
     const players = [...this.players.values()]
     this.clients.forEach((client, socketID) => {
       const currentPlayer = this.players.get(socketID)
-      this.clients.get(socketID).emit(Constants.SOCKET_MESSAGE_UPDATE, {
+      this.clients.get(socketID).emit(Constants.SOCKET_UPDATE, {
         self: currentPlayer,
         players: players,
         projectiles: this.projectiles,

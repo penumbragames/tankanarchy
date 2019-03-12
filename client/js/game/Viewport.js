@@ -37,11 +37,12 @@ class Viewport extends Entity {
   }
 
   /**
-   * Update the position of the player that the viewport should track.
-   * @param {Vector} playerPosition The position of the player to track
+   * Update the viewport with the relative player position it should track.
+   * @param {Player} player The player to track
    */
-  updateTrackingPosition(playerPosition) {
-    this.playerPosition = Vector.sub(playerPosition, this.canvasOffset)
+  updateTrackingPosition(player) {
+    this.playerPosition = Vector.sub(player.position, this.canvasOffset)
+    this.position = player.position
   }
 
   /**
@@ -51,7 +52,7 @@ class Viewport extends Entity {
   update(deltaTime) {
     this.velocity = Vector.sub(this.position, this.playerPosition).scale(
       0.001 * deltaTime)
-    this.position.add(this.velocity)
+    // this.position.add(this.velocity)
   }
 
   /**

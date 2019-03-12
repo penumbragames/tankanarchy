@@ -100,7 +100,7 @@ class Player extends Entity {
   update(lastUpdateTime, deltaTime) {
     this.position.add(Vector.scale(this.velocity, deltaTime))
     this.boundToWorld()
-    this.orientation += this.turnRate * deltaTime
+    this.tankAngle += this.turnRate * deltaTime
   }
 
   /**

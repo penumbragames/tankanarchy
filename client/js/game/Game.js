@@ -61,10 +61,9 @@ class Game {
     const drawing = Drawing.create(canvas, viewport)
     const input = Input.create(document, canvas)
 
-    const leaderboardElement = document.getElementById(leaderboardElementID)
-    const leaderboard = Leaderboard.create(leaderboardElement)
+    const leaderboard = Leaderboard.create(leaderboardElementID)
 
-    const game = new Game(socket, drawing, input, leaderboard)
+    const game = new Game(socket, viewport, drawing, input, leaderboard)
     game.init()
     return game
   }
@@ -74,7 +73,8 @@ class Game {
    */
   init() {
     this.lastUpdateTime = Date.now()
-    this.socket.on('update', this.onReceiveGameState.bind(this))
+    this.socket.on(Constants.SOCKET_UPDATE,
+      this.onReceiveGameState.bind(this))
   }
 
   /**
@@ -123,7 +123,7 @@ class Game {
       const playerToMouseVector = Vector.fromArray(this.input.mouseCoords).sub(
         absoluteMouseCoords)
 
-      this.socket.emit('player-action', {
+      this.socket.emit(Constants.SOCKET_PLAYER_ACTION, {
         up: this.input.up,
         down: this.input.down,
         left: this.input.left,
@@ -143,12 +143,12 @@ class Game {
 
       this.drawing.drawTiles()
 
-      this.projectiles.forEach(this.drawing.drawBullet)
+      this.projectiles.forEach(this.drawing.drawBullet.bind(this.drawing))
 
-      this.powerups.forEach(this.drawing.drawPowerup)
+      this.powerups.forEach(this.drawing.drawPowerup.bind(this.drawing))
 
       this.drawing.drawTank(true, this.self)
-      this.players.forEach(tank => this.drawTank(false, tank))
+      this.players.forEach(tank => this.drawing.drawTank(false, tank))
     }
   }
 }
