@@ -3,8 +3,8 @@
  * @author kennethli.3470@gmail.com (Kenneth Li)
  */
 
-const Entity = require('../../shared/Entity')
-const Vector = require('../../shared/Vector')
+const Entity = require('../../lib/Entity')
+const Vector = require('../../lib/Vector')
 
 /**
  * Viewport class.

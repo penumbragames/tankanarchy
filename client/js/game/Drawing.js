@@ -3,7 +3,7 @@
  * @author kennethli.3470@gmail.com (Kenneth Li)
  */
 
-const Constants = require('../../shared/Constants')
+const Constants = require('../../lib/Constants')
 
 /**
  * Drawing class.

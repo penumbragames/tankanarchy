@@ -7,7 +7,7 @@
 const Player = require('./Player')
 const Powerup = require('./Powerup')
 
-const Constants = require('../shared/Constants')
+const Constants = require('../lib/Constants')
 
 /**
  * Game class.

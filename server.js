@@ -14,9 +14,9 @@ const morgan = require('morgan')
 const path = require('path')
 const socketIO = require('socket.io')
 
-const Game = require('./lib/Game')
+const Game = require('./server/Game')
 
-const Constants = require('./shared/Constants')
+const Constants = require('./lib/Constants')
 
 // Initialization.
 const app = express()

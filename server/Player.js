@@ -7,10 +7,10 @@
 const Bullet = require('./Bullet')
 const Powerup = require('./Powerup')
 
-const Constants = require('../shared/Constants')
-const Entity = require('../shared/Entity')
-const Util = require('../shared/Util')
-const Vector = require('../shared/Vector')
+const Constants = require('../lib/Constants')
+const Entity = require('../lib/Entity')
+const Util = require('../lib/Util')
+const Vector = require('../lib/Vector')
 
 /**
  * Player class.

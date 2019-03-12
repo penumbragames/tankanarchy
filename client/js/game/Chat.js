@@ -4,7 +4,7 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-const Constants = require('../../shared/Constants')
+const Constants = require('../../lib/Constants')
 
 /**
  * Chat class.
