@@ -1,49 +1,46 @@
 /**
  * This class handles the rendering and updating of the leaderboard.
- * @author alvin.lin.dev@gmail.com (Alvin Lin)
+ * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
 /**
- * Constructor for the Leaderboard object.
- * @constructor
- * @param {Element} element The container element of the leaderboard. This
- *   element should be an unordered list.
+ * Leaderboard class.
  */
-function Leaderboard(element) {
-  this.element = element;
+class Leaderboard {
+  /**
+   * Constructor for the Leaderboard class.
+   * @param {container} container The container element for the leaderboard
+   */
+  constructor(container) {
+    this.container = container
+  }
 
   /**
-   * @type {Array<Object>}
+   * Factory method for creating a Leaderboard object.
+   * @param {string} containerElementID The ID of the container element
+   * @return {Leaderboard}
    */
-  this.players = [];
+  static create(containerElementID) {
+    return new Leaderboard(document.getElementByID(containerElementID))
+  }
+
+  /**
+   * Updates the leaderboard with the list of current players.
+   * @param {Array<Player>} players The list of current players
+   */
+  update(players) {
+    while (this.container.firstChild) {
+      this.container.removeChild(this.container.firstChild)
+    }
+    players.sort((a, b) => { return b.kills - a.kills })
+    players.slice(0, 10).forEach(player => {
+      const containercontainer = document.createElement('li')
+      const text =
+        `${player.name} - Kills: ${player.kills} Deaths: ${player.deaths}`
+      containercontainer.appendChild(document.createTextNode(text))
+      this.container.appendChild(containercontainer)
+    })
+  }
 }
 
-/**
- * Factory method for a Leaderboard object.
- * @param {Element} element The container element of the leaderboard. This
- *   element should be an unordered list.
- * @return {Leaderboard}
- */
-Leaderboard.create = function(element) {
-  return new Leaderboard(element);
-};
-
-/**
- * Updates the leaderboard.
- * @param {Array.<Object>} players A sorted array of the top ten players.
- */
-Leaderboard.prototype.update = function(players) {
-  this.players = players;
-
-  while (this.element.firstChild) {
-    this.element.removeChild(this.element.firstChild);
-  }
-
-  for (var i = 0; i < this.players.length; ++i) {
-    var playerElement = document.createElement('li');
-    playerElement.appendChild(document.createTextNode(
-        this.players[i]['name'] + ' - Kills: ' + this.players[i]['kills'] +
-        ' Deaths: ' + this.players[i]['deaths']));
-    this.element.appendChild(playerElement);
-  }
-};
+module.exports = Leaderboard
