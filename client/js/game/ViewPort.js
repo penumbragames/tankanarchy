@@ -27,12 +27,12 @@ class Viewport extends Entity {
 
   /**
    * Create a Viewport object.
-   * @param {Vector} position The starting position of the viewport
    * @param {Element} canvas The canvas element this viewport represents
    * @return {Viewport}
    */
-  static create(position, canvas) {
-    return new Viewport(position, Vector.zero(), canvas.width, canvas.height)
+  static create(canvas) {
+    return new Viewport(
+      Vector.zero(), Vector.zero(), canvas.width, canvas.height)
   }
 
   /**
@@ -56,6 +56,16 @@ class Viewport extends Entity {
    */
   toCanvas(position) {
     return Vector.sub(position, this.position)
+  }
+
+  /**
+   * Converts a canvas coordinate to an absolute world coordinate in this
+   * viewport's field of view.
+   * @param {Vector} position The canvas coordinate to convert
+   * @return {Vector}
+   */
+  toWorld(position) {
+    return Vector.add(position, this.position)
   }
 }
 

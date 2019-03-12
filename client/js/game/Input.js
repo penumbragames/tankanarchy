@@ -17,8 +17,22 @@ class Input {
     this.left = false
     this.right = false
 
-    this.shoot = false
-    this.mouse = [0, 0]
+    this.mouseDown = false
+    this.mouseCoords = [0, 0]
+  }
+
+  /**
+   * Factory method for creating an Input class.
+   * @param {Element} keyElement The element to listen for keypresses and
+   *   mouse clicks on
+   * @param {Element} mouseMoveElement The element to track mouse coordinates
+   *   relative to
+   * @return {Input}
+   */
+  static create(keyElement, mouseMoveElement) {
+    const input = new Input()
+    input.applyEventHandlers(keyElement, keyElement, mouseMoveElement)
+    return input
   }
 
   /**
@@ -91,7 +105,7 @@ class Input {
    */
   onMouseDown(event) {
     if (event.which === 1) {
-      this.shoot = true
+      this.mouseDown = true
     }
   }
 
@@ -101,7 +115,7 @@ class Input {
    */
   onMouseUp(event) {
     if (event.which === 1) {
-      this.shoot = false
+      this.mouseDown = false
     }
   }
 
@@ -110,7 +124,7 @@ class Input {
    * @param {Event} event The event passed to the event handler
    */
   onMouseMove(event) {
-    this.mouse = [event.offsetX, event.offsetY]
+    this.mouseCoords = [event.offsetX, event.offsetY]
   }
 
   /**

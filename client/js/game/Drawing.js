@@ -3,8 +3,6 @@
  * @author kennethli.3470@gmail.com (Kenneth Li)
  */
 
-const Viewport = require('./Viewport')
-
 const Constants = require('../../shared/Constants')
 
 /**
@@ -30,9 +28,10 @@ class Drawing {
   /**
    * Factory method for creating a Drawing object.
    * @param {Element} canvas The canvas element to draw to
+   * @param {Viewport} viewport The viewport object for coordinate translation
    * @return {Drawing}
    */
-  static create(canvas) {
+  static create(canvas, viewport) {
     const context = canvas.getContext('2d')
     const images = {}
     for (const key of Constants.DRAWING_IMG_KEYS) {
@@ -44,7 +43,6 @@ class Drawing {
       images[type].src =
         `${Constants.DRAWING_IMG_BASE_PATH}/${type}_powerup.png`
     }
-    const viewport = new Viewport()
     return new Drawing(canvas, context, images, viewport)
   }
 
