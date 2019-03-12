@@ -39,6 +39,8 @@ class Game {
     this.powerups = []
 
     this.animationFrameId = null
+    this.lastUpdateTime = 0
+    this.deltaTime = 0
   }
 
   /**
@@ -71,6 +73,7 @@ class Game {
    * Initializes the Game object and binds the socket event listener.
    */
   init() {
+    this.lastUpdateTime = Date.now()
     this.socket.on('update', this.onReceiveGameState.bind(this))
   }
 
@@ -84,13 +87,18 @@ class Game {
     this.projectiles = state.projectiles
     this.powerups = state.powerups
 
-    this.leaderboard.update(state.leaderboard)
+    this.viewport.updateTrackingPosition(state.self)
+    this.leaderboard.update(state.players)
   }
 
   /**
    * Starts the animation and update loop to run the game.
    */
   run() {
+    const currentTime = Date.now()
+    this.deltaTime = currentTime - this.lastUpdateTime
+    this.lastUpdateTime = currentTime
+
     this.update()
     this.draw()
     this.animationFrameId = window.requestAnimationFrame(this.run.bind(this))
@@ -108,7 +116,7 @@ class Game {
    */
   update() {
     if (this.self) {
-      this.viewport.update(this.self.position)
+      this.viewport.update(this.deltaTime)
 
       const absoluteMouseCoords = this.viewport.toWorld(
         Vector.fromArray(this.input.mouseCoords))

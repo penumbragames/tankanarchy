@@ -1,6 +1,6 @@
 /**
  * Manages the player viewport when they move around.
- * @author kennethli.3470@gmail.com (Kenneth Li)
+ * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
 const Entity = require('../../lib/Entity')
@@ -22,6 +22,7 @@ class Viewport extends Entity {
   constructor(position, velocity, canvasWidth, canvasHeight) {
     super(position, velocity)
 
+    this.playerPosition = null
     this.canvasOffset = new Vector(canvasWidth / 2, canvasHeight / 2)
   }
 
@@ -36,15 +37,20 @@ class Viewport extends Entity {
   }
 
   /**
-   * Updates the velocity nad position of the viewport.
-   * @param {Vector} playerPosition The absolute world coordinates of the
-   *   player
+   * Update the position of the player that the viewport should track.
+   * @param {Vector} playerPosition The position of the player to track
    */
-  update(playerPosition) {
-    super.update()
-    const translatedPlayer = Vector.sub(playerPosition, this.canvasOffset)
-    this.velocity = Vector.sub(this.position, translatedPlayer).scale(
-      0.001 * this.deltaTime)
+  updateTrackingPosition(playerPosition) {
+    this.playerPosition = Vector.sub(playerPosition, this.canvasOffset)
+  }
+
+  /**
+   * Updates the velocity and position of the viewport.
+   * @param {number} deltaTime The timestep to perform the update with
+   */
+  update(deltaTime) {
+    this.velocity = Vector.sub(this.position, this.playerPosition).scale(
+      0.001 * deltaTime)
     this.position.add(this.velocity)
   }
 
