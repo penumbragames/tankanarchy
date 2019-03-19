@@ -17,7 +17,7 @@ the same time.
   - Search for TODOs using git grep.
   - Your code will be reviewed and must be approved before it is merged.
   - Please use ESLint to lint your code and follow the stylistic guidelines
-    set in our .eslintrc.
+    set in our `.eslintrc` file.
 
 # Creators:
   - Alvin Lin (omgimanerd)
