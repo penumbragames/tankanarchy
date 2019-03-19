@@ -4,6 +4,7 @@
  */
 
 const Constants = require('../../../lib/Constants')
+const Util = require('../../../lib/Util')
 
 /**
  * Drawing class.
@@ -52,7 +53,7 @@ class Drawing {
    * @return {number}
    */
   static translateAngle(angle) {
-    return angle + Math.PI / 2
+    return Util.normalizeAngle(angle + Math.PI / 2)
   }
 
   /**
@@ -102,15 +103,16 @@ class Drawing {
       isSelf ? Constants.DRAWING_IMG_SELF_TANK :
         Constants.DRAWING_IMG_OTHER_TANK
     ])
-    this.context.rotate(Drawing.translateAngle(
-      player.turretAngle - player.tankAngle))
+    this.context.rotate(-Drawing.translateAngle(player.tankAngle))
+
+    this.context.rotate(Drawing.translateAngle(player.turretAngle))
     this.drawCenteredImage(this.images[
       // eslint-disable-next-line multiline-ternary
       isSelf ? Constants.DRAWING_IMG_SELF_TURRET :
         Constants.DRAWING_IMG_OTHER_TURRET
     ])
 
-    if (player.powerups[Constants.POWERUP_SHIELD] !== null) {
+    if (player.powerups[Constants.POWERUP_SHIELD]) {
       this.context.rotate(-Drawing.translateAngle(-player.turretAngle))
       this.drawCenteredImage(this.images[Constants.DRAWING_IMG_SHIELD])
     }

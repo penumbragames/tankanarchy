@@ -11,6 +11,7 @@ const Viewport = require('./Viewport')
 
 const Constants = require('../../../lib/Constants')
 const Vector = require('../../../lib/Vector')
+const Util = require('../../../lib/Util')
 
 /**
  * Game class.
@@ -129,7 +130,7 @@ class Game {
         left: this.input.left,
         right: this.input.right,
         shoot: this.input.mouseDown,
-        turretAngle: playerToMouseVector.angle + Math.PI / 2
+        turretAngle: Util.normalizeAngle(playerToMouseVector.angle + Math.PI)
       })
     }
   }

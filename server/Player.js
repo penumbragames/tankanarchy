@@ -102,7 +102,8 @@ class Player extends Entity {
     this.lastUpdateTime = lastUpdateTime
     this.position.add(Vector.scale(this.velocity, deltaTime))
     this.boundToWorld()
-    this.tankAngle += this.turnRate * deltaTime
+    this.tankAngle = Util.normalizeAngle(
+      this.tankAngle + this.turnRate * deltaTime)
   }
 
   /**
