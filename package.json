@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "postinstall": "bower install; gulp"
+    "postinstall": "webpack"
   },
   "repository": {
     "type": "git",
