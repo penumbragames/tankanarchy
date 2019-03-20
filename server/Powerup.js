@@ -15,16 +15,19 @@ const Vector = require('../lib/Vector')
 class Powerup extends Entity {
   /**
    * Constructor for a Powerup object.
+   * @param {Vector} position The position of the powerup
+   * @param {string} type The type of powerup
+   * @param {?} data Data associated with the powerup
+   * @param {number} duration How long the powerup will last in milliseconds
    */
-  constructor() {
-    super(Vector.zero(), Vector.zero(), Vector.zero(),
-      Constants.POWERUP_HITBOX_SIZE)
+  constructor(position, type, data, duration) {
+    super(position, null, null, Constants.POWERUP_HITBOX_SIZE)
 
-    this.name = null
-    this.data = null
-    this.duration = null
+    this.type = type
+    this.data = data
+    this.duration = duration
+    this.expirationTime = 0
 
-    this.expirationTime = null
     this.destroyed = false
   }
 
@@ -33,40 +36,41 @@ class Powerup extends Entity {
    * @return {Powerup}
    */
   static create() {
-    const powerup = new Powerup()
-    powerup.randomizeAttributes()
-    return powerup
-  }
-
-  /**
-   * Randomizes the position, type, data, and duration of the powerup.
-   */
-  randomizeAttributes() {
-    this.position = new Vector(
+    const position = new Vector(
       Util.randRange(Constants.WORLD_MIN + Constants.WORLD_PADDING,
         Constants.WORLD_MAX - Constants.WORLD_PADDING),
       Util.randRange(Constants.WORLD_MIN + Constants.WORLD_PADDING,
         Constants.WORLD_MAX - Constants.WORLD_PADDING))
-    this.type = Util.choiceArray(Constants.POWERUP_KEYS)
-    const dataRanges = Constants.POWERUP_DATA[this.type]
-    switch (this.type) {
+    const type = Util.choiceArray(Constants.POWERUP_KEYS)
+    const dataRanges = Constants.POWERUP_DATA[type]
+    let data = null
+    switch (type) {
     case Constants.POWERUP_HEALTHPACK:
-      this.data = Util.randRangeInt(dataRanges.MIN, dataRanges.MAX + 1)
+      data = Util.randRangeInt(dataRanges.MIN, dataRanges.MAX + 1)
       break
     case Constants.POWERUP_SHOTGUN:
-      this.data = Util.randRangeInt(dataRanges.MIN, dataRanges.MAX + 1)
+      data = Util.randRangeInt(dataRanges.MIN, dataRanges.MAX + 1)
       break
     case Constants.POWERUP_RAPIDFIRE:
-      this.data = Util.randRange(dataRanges.MIN, dataRanges.MAX)
+      data = Util.randRange(dataRanges.MIN, dataRanges.MAX)
       break
     case Constants.POWERUP_SPEEDBOOST:
-      this.data = Util.randRange(dataRanges.MIN, dataRanges.MAX)
+      data = Util.randRange(dataRanges.MIN, dataRanges.MAX)
       break
     case Constants.POWERUP_SHIELD:
-      this.data = Util.randRangeInt(dataRanges.MIN, dataRanges.MAX + 1)
+      data = Util.randRangeInt(dataRanges.MIN, dataRanges.MAX + 1)
       break
     }
-    this.duration = Util.randRange(Powerup.MIN_DURATION, Powerup.MAX_DURATION)
+    const duration = Util.randRange(Powerup.MIN_DURATION, Powerup.MAX_DURATION)
+    return new Powerup(position, type, data, duration)
+  }
+
+  /**
+   * Updates this Powerup's expiration time.
+   * @param {number} lastUpdateTime The last timestamp an update occurred
+   */
+  update(lastUpdateTime) {
+    this.expirationTime = lastUpdateTime + this.duration
   }
 }
 
