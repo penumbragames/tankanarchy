@@ -94,7 +94,7 @@ class Drawing {
       } else {
         this.context.fillStyle = Constants.DRAWING_HP_MISSING_COLOR
       }
-      this.context.fillRect(-25 + 5 * i, -24, 5, 4)
+      this.context.fillRect(-25 + 5 * i, -40, 5, 4)
     }
 
     this.context.rotate(Drawing.translateAngle(player.tankAngle))
