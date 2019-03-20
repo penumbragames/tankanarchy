@@ -4,6 +4,7 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
+const Bullet = require('./Bullet')
 const Player = require('./Player')
 const Powerup = require('./Powerup')
 
@@ -123,23 +124,62 @@ class Game {
     ]
     entities.forEach(
       entity => { entity.update(this.lastUpdateTime, this.deltaTime) })
-    entities.forEach(entity1 => {
-      entities.forEach(entity2 => {
-        if (entity1 !== entity2) {
-          if (entity1.collided(entity2)) {
-            entity1.updateOnCollision(entity2, this.lastUpdateTime)
-          }
+    for (let i = 0; i < entities.length; ++i) {
+      for (let j = i + 1; j < entities.length; ++j) {
+        let e1 = entities[i]
+        let e2 = entities[j]
+        if (!e1.collided(e2)) {
+          continue
         }
-      })
-    })
+
+        // Player-Bullet collision interaction
+        if (e1 instanceof Bullet && e2 instanceof Player) {
+          e1 = entities[j]
+          e2 = entities[i]
+        }
+        if (e1 instanceof Player && e2 instanceof Bullet &&
+          e2.source !== e1) {
+          e1.damage(e2.damage)
+          if (e1.isDead()) {
+            e1.spawn()
+            e1.deaths++
+            e2.source.kills++
+          }
+          e2.destroyed = true
+        }
+
+        // Player-Powerup collision interaction
+        if (e1 instanceof Powerup && e2 instanceof Player) {
+          e1 = entities[j]
+          e2 = entities[i]
+        }
+        if (e1 instanceof Player && e2 instanceof Powerup) {
+          e1.applyPowerup(e2)
+          e2.destroyed = true
+        }
+
+        // Bullet-Bullet interaction
+        if (e1 instanceof Bullet && e2 instanceof Bullet) {
+          e1.destroyed = true
+          e2.destroyed = true
+        }
+
+        // Bullet-Powerup interaction
+        if (e1 instanceof Powerup && e2 instanceof Bullet ||
+          e1 instanceof Bullet && e2 instanceof Powerup) {
+          e1.destroyed = true
+          e2.destroyed = true
+        }
+      }
+    }
 
     /**
-     * Filters out destroyed projectiles and picked up powerups.
+     * Filters out destroyed projectiles and powerups.
      */
     this.projectiles = this.projectiles.filter(
       projectile => !projectile.destroyed)
     this.powerups = this.powerups.filter(
-      powerup => powerup.pickupTime === null)
+      powerup => !powerup.destroyed)
 
     /**
      * Repopulate the world with new powerups.

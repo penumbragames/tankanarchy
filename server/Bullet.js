@@ -3,9 +3,6 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-const Player = require('./Player')
-const Powerup = require('./Powerup')
-
 const Constants = require('../lib/Constants')
 const Entity = require('../lib/Entity')
 const Vector = require('../lib/Vector')
@@ -23,7 +20,7 @@ class Bullet extends Entity {
    * @param {Player} source The Player object firing the bullet
    */
   constructor(position, velocity, angle, source) {
-    super(position, velocity)
+    super(position, velocity, Vector.zero(), Constants.BULLET_HITBOX_SIZE)
 
     this.angle = angle
     this.source = source
@@ -60,25 +57,6 @@ class Bullet extends Entity {
     this.position.add(distanceStep)
     this.distanceTraveled += distanceStep.mag2
     if (this.inWorld() || distanceStep > Bullet.MAX_TRAVEL_DISTANCE_SQ) {
-      this.destroyed = true
-    }
-  }
-
-  /**
-   * Performs a collision update with another Entity.
-   * @param {Entity} object The colliding Entity
-   */
-  updateOnCollision(object) {
-    if (object instanceof Bullet || object instanceof Powerup) {
-      this.destroyed = true
-      object.destroyed = true
-    } else if (object instanceof Player && this.source !== object) {
-      object.damage(this.damage)
-      if (object.isDead()) {
-        object.respawn()
-        object.deaths++
-        this.source.kills++
-      }
       this.destroyed = true
     }
   }

@@ -3,8 +3,6 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-const Player = require('./Player')
-
 const Constants = require('../lib/Constants')
 const Entity = require('../lib/Entity')
 const Util = require('../lib/Util')
@@ -19,14 +17,15 @@ class Powerup extends Entity {
    * Constructor for a Powerup object.
    */
   constructor() {
-    super()
+    super(Vector.zero(), Vector.zero(), Vector.zero(),
+      Constants.POWERUP_HITBOX_SIZE)
 
     this.name = null
     this.data = null
     this.duration = null
-    this.pickupTime = null
 
-    this.hitboxSize = Constants.POWERUP_HITBOX_SIZE
+    this.expirationTime = null
+    this.destroyed = false
   }
 
   /**
@@ -37,20 +36,6 @@ class Powerup extends Entity {
     const powerup = new Powerup()
     powerup.randomizeAttributes()
     return powerup
-  }
-
-  /**
-   * Performs a collision update with another Entity. If the powerup is picked
-   * up by a player, then it will be recycled by randomizing position to
-   * simulate another powerup spawn.
-   * @param {Entity} object The colliding Entity
-   * @param {number} timestamp The timestamp of the collision
-   */
-  updateOnCollision(object, timestamp) {
-    if (object instanceof Player) {
-      object.applyPowerup(this)
-      this.pickupTime = timestamp
-    }
   }
 
   /**

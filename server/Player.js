@@ -104,6 +104,8 @@ class Player extends Entity {
     this.boundToWorld()
     this.tankAngle = Util.normalizeAngle(
       this.tankAngle + this.turnRate * deltaTime)
+
+    this.updatePowerups()
   }
 
   /**
@@ -112,6 +114,9 @@ class Player extends Entity {
   updatePowerups() {
     for (const type of Constants.POWERUP_KEYS) {
       const powerup = this.powerups[type]
+      if (!powerup) {
+        continue
+      }
       switch (type) {
       case Powerup.HEALTHPACK:
         this.health = Math.min(this.health + powerup.data, Player.MAX_HEALTH)
@@ -159,6 +164,7 @@ class Player extends Entity {
    * @param {Powerup} powerup The Powerup object.
    */
   applyPowerup(powerup) {
+    powerup.expirationTime = this.lastUpdateTime + powerup.duration
     this.powerups[powerup.type] = powerup
   }
 
