@@ -101,7 +101,8 @@ class Game {
     if (player) {
       player.updateOnInput(data)
       if (data.shoot && player.canShoot()) {
-        this.projectiles.push(...player.getProjectilesFromShot())
+        const projectiles = player.getProjectilesFromShot()
+        this.projectiles.push(...projectiles)
       }
     }
   }

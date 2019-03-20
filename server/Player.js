@@ -118,19 +118,20 @@ class Player extends Entity {
         continue
       }
       switch (type) {
-      case Powerup.HEALTHPACK:
-        this.health = Math.min(this.health + powerup.data, Player.MAX_HEALTH)
+      case Constants.POWERUP_HEALTHPACK:
+        this.health = Math.min(
+          this.health + powerup.data, Constants.PLAYER_MAX_HEALTH)
         this.powerups[type] = null
         break
-      case Powerup.SHOTGUN:
+      case Constants.POWERUP_SHOTGUN:
         break
-      case Powerup.RAPIDFIRE:
+      case Constants.POWERUP_RAPIDFIRE:
         this.shotCooldown = Constants.PLAYER_SHOT_COOLDOWN / powerup.data
         break
-      case Powerup.SPEEDBOOST:
+      case Constants.POWERUP_SPEEDBOOST:
         this.speed = Constants.PLAYER_DEFAULT_SPEED * powerup.data
         break
-      case Powerup.SHIELD:
+      case Constants.POWERUP_SHIELD:
         this.hitboxSize = Constants.PLAYER_SHIELD_HITBOX_SIZE
         if (powerup.data <= 0) {
           this.powerups[type] = null
@@ -140,18 +141,18 @@ class Player extends Entity {
       }
       if (this.lastUpdateTime > powerup.expirationTime) {
         switch (type) {
-        case Powerup.HEALTHPACK:
+        case Constants.POWERUP_HEALTHPACK:
           break
-        case Powerup.SHOTGUN:
+        case Constants.POWERUP_SHOTGUN:
           break
-        case Powerup.RAPIDFIRE:
-          this.shotCooldown = Player.DEFAULT_SHOT_COOLDOWN
+        case Constants.POWERUP_RAPIDFIRE:
+          this.shotCooldown = Constants.PLAYER_SHOT_COOLDOWN
           break
-        case Powerup.SPEEDBOOST:
-          this.speed = Player.DEFAULT_VELOCITY_MAGNITUDE
+        case Constants.POWERUP_SPEEDBOOST:
+          this.speed = Constants.PLAYER_DEFAULT_SPEED
           break
-        case Powerup.SHIELD:
-          this.hitboxSize = Player.DEFAULT_HITBOX_SIZE
+        case Constants.POWERUP_SHIELD:
+          this.hitboxSize = Constants.PLAYER_DEFAULT_HITBOX_SIZE
           break
         }
         this.powerups[type] = null
@@ -184,7 +185,7 @@ class Player extends Entity {
    */
   getProjectilesFromShot() {
     const bullets = [Bullet.createFromPlayer(this)]
-    const shotgunPowerup = this.powerups[Powerup.SHOTGUN]
+    const shotgunPowerup = this.powerups[Constants.POWERUP_SHOTGUN]
     if (shotgunPowerup) {
       for (let i = 1; i <= shotgunPowerup.data; ++i) {
         const angleDeviation = i * Math.PI / 9

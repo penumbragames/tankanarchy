@@ -61,7 +61,8 @@ class Powerup extends Entity {
       data = Util.randRangeInt(dataRanges.MIN, dataRanges.MAX + 1)
       break
     }
-    const duration = Util.randRange(Powerup.MIN_DURATION, Powerup.MAX_DURATION)
+    const duration = Util.randRange(
+      Constants.POWERUP_MIN_DURATION, Constants.POWERUP_MAX_DURATION)
     return new Powerup(position, type, data, duration)
   }
 
