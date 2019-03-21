@@ -161,7 +161,8 @@ class Game {
         }
 
         // Bullet-Bullet interaction
-        if (e1 instanceof Bullet && e2 instanceof Bullet) {
+        if (e1 instanceof Bullet && e2 instanceof Bullet &&
+          e1.source !== e2.source) {
           e1.destroyed = true
           e2.destroyed = true
         }

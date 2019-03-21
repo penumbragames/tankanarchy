@@ -41,16 +41,6 @@ class Player extends Entity {
     this.health = Constants.PLAYER_MAX_HEALTH
     this.hitboxSize = Constants.PLAYER_DEFAULT_HITBOX_SIZE
 
-    /**
-     * The variable this.powerups is a JSON Object of the format:
-     * { 'powerup' : { 'name' : name,
-     *                 'data' : data,
-     *                 'expirationTime' : expirationTime },
-     *   'powerup' : { 'name' : name,
-     *                 'data' : data,
-     *                 'expirationTime' : expirationTime }
-     * }
-     */
     this.powerups = {}
 
     this.kills = 0
