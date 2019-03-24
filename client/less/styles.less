@@ -8,85 +8,67 @@ html, body {
   height: 100%;
   text-align: center;
 
-  box-sizing: border-box;
   user-select: none;
 }
 
 *, *:before, *:after {
-  box-sizing: inherit;
+  box-sizing: border-box;
 }
 
 #name-prompt-overlay {
+  width: 100%;
+  height: 100%;
+
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+
   background-color: rgba(49, 49, 49, 0.5);
-  z-index: 100;
+  z-index: 1;
 }
 
 #name-prompt-container {
   position: absolute;
   width: 490px;
   height: 100px;
+
   top: 50%;
   right: 0;
   left: 0;
 
-  margin:  -50px auto;
-  padding: 33px;
+  margin: -50px auto;
+  padding: 30px;
   background: #bbb;
-  z-index: 101;
+  z-index: 2;
 
   border-radius: 10px;
-}
 
-#name-submit:hover {
-  cursor: pointer;
+  #name-submit:hover {
+    cursor: pointer;
+  }
 }
 
 #container {
-  width: 100%;
-  margin: auto;
-  border: 0;
-}
-
-#content {
-  margin: auto;
-
-  th {
-    text-align: center;
-  }
-
-  td {
-    height: 600px;
-    padding: 0;
-    margin: 0;
+  table {
+    margin: auto;
+    border-collapse: separate;
   }
 }
 
 #leaderboard-container {
-  box-sizing: border-box;
-
-  div {
-    height: 600px;
-    border: 1px solid black;
-    border-right-style: none;
-  }
+  width: 200px;
+  height: 600px;
+  border: 1px solid black;
 
   h3 {
-    width: 200px;
     height: 50px;
-    margin: 0;
     padding: 5px;
   }
 
   #leaderboard {
-    width: 200px;
-    height: 550px;
+    height: 400px;
     margin: 0;
     padding: 5px;
 
@@ -101,59 +83,62 @@ html, body {
   }
 }
 
-#canvas {
-  width: 800px;
+#canvas-container {
+  width: 802px;
+  height: 602px;
+  margin: 1px solid black;
+  padding: 0;
+
+  #canvas {
+    width: 800px;
+    height: 600px;
+    margin: 0;
+
+    background-color: #fff;
+    cursor: crosshair;
+  }
+}
+
+#chat-container {
+  width: 200px;
   height: 600px;
   border: 1px solid black;
-  // This margin hack is necessary to straighten out the <td> element
-  // because of bootstrap.
-  margin-bottom: -5px;
-  background-color: #fff;
-  cursor: crosshair;
-}
 
-#chat-display {
-  height: 570px;
-  width: 250px;
-  border: 1px solid black;
-  border-left-style: none;
-  border-bottom-style: none;
-  padding: 0;
-  margin: 0;
-  text-align: left;
-  overflow-y: scroll;
+  #chat-display {
+    height: 570px;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    overflow-y: scroll;
 
-  li {
-    list-style-type: none;
+    li {
+      list-style-type: none;
+      padding: 5px;
+    }
+
+    li:nth-child(even) {
+      background: #ccc;
+    }
+
+    li:nth-child(odd) {
+      background: #aaa;
+    }
+
+    .notification {
+      font-weight: bold;
+      color: #b30000;
+      padding: 6px;
+    }
+  }
+
+  #chat-input {
+    width: 100%;
+    height: 30px;
     padding: 5px;
-  }
-
-  li:nth-child(even) {
-    background: #ccc;
-  }
-
-  li:nth-child(odd) {
-    background: #aaa;
-  }
-
-  .notification {
-    font-weight: bold;
-    color: #b30000;
-    padding: 6px;
+    border-top: 1px solid black;
   }
 }
 
-#chat-input {
-  width: 100%;
-  height: 30px;
-  padding: 5px;
-  border: 1px solid black;
-  border-left-style: none;
-}
-
-.howto {
-  div {
-    display: inline-block;
-    margin: 0 20px;
-  }
+#icons-container > div {
+  display: inline-block;
 }
