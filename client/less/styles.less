@@ -5,14 +5,9 @@
 
 html, body {
   width: 100%;
-  height: 100%;
   text-align: center;
 
   user-select: none;
-}
-
-*, *:before, *:after {
-  box-sizing: border-box;
 }
 
 #name-prompt-overlay {
@@ -27,26 +22,30 @@ html, body {
 
   background-color: rgba(49, 49, 49, 0.5);
   z-index: 1;
-}
 
-#name-prompt-container {
-  position: absolute;
-  width: 490px;
-  height: 100px;
+  #name-prompt-container {
+    position: absolute;
+    width: 490px;
+    height: 100px;
 
-  top: 50%;
-  right: 0;
-  left: 0;
+    top: 50%;
+    right: 0;
+    left: 0;
 
-  margin: -50px auto;
-  padding: 30px;
-  background: #bbb;
-  z-index: 2;
+    margin: -50px auto;
+    padding: 30px;
+    background: #bbb;
+    z-index: 2;
 
-  border-radius: 10px;
+    border-radius: 10px;
 
-  #name-submit:hover {
-    cursor: pointer;
+    input, input:focus {
+      outline: none;
+    }
+
+    #name-submit:hover {
+      cursor: pointer;
+    }
   }
 }
 
@@ -84,15 +83,14 @@ html, body {
 }
 
 #canvas-container {
-  width: 802px;
-  height: 602px;
-  margin: 1px solid black;
+  border: 1px solid black;
   padding: 0;
 
   #canvas {
     width: 800px;
     height: 600px;
     margin: 0;
+    outline: none;
 
     background-color: #fff;
     cursor: crosshair;
@@ -101,7 +99,8 @@ html, body {
 
 #chat-container {
   width: 200px;
-  height: 600px;
+  height: 596px;
+  padding: 0;
   border: 1px solid black;
 
   #chat-display {
@@ -132,6 +131,8 @@ html, body {
   }
 
   #chat-input {
+    box-sizing: border-box;
+
     width: 100%;
     height: 30px;
     padding: 5px;

@@ -4,7 +4,6 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-require('bootstrap')
 require('../less/styles.less')
 
 const $ = require('jquery')
@@ -31,7 +30,7 @@ $(document).ready(() => {
       $('#name-prompt-container').append(
         $('<span>').addClass('fa fa-2x fa-spinner fa-pulse'))
       socket.emit('new-player', { name }, () => {
-        $('#name-prompt-overlay').fadeOut(500)
+        $('#name-prompt-overlay').remove()
         $('#canvas').focus()
         game.run()
       })
