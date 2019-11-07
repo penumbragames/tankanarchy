@@ -19,7 +19,7 @@
   "homepage": "https://github.com/penumbragames/tankanarchy#readme",
   "dependencies": {
     "express": "^4.16.4",
-    "jquery": "^3.3.1",
+    "jquery": "^3.4.0",
     "morgan": "^1.9.1",
     "popper.js": "^1.14.7",
     "pug": "^2.0.3",
