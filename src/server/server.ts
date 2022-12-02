@@ -82,6 +82,5 @@ setInterval(() => {
 
 // Starts the server.
 httpServer.listen(PORT, () => {
-  // eslint-disable-next-line no-console
   console.log(`Starting server on port ${PORT}`)
 })
