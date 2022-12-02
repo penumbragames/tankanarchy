@@ -3,23 +3,21 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-const Constants = require('../lib/Constants')
-const Entity = require('../lib/Entity')
-const Vector = require('../lib/Vector')
+import * as Constants from '../lib/Constants'
+import Entity from '../lib/Entity'
+import Player from './Player'
+import Vector from '../lib/Vector'
 
-/**
- * Bullet class.
- */
 class Bullet extends Entity {
-  /**
-   * Constructor for a Bullet object.
-   * @constructor
-   * @param {Vector} position The starting position vector
-   * @param {Vector} velocity The starting velocity vector
-   * @param {number} angle The orientation of the bullet
-   * @param {Player} source The Player object firing the bullet
-   */
-  constructor(position, velocity, angle, source) {
+  angle: number
+  source: Player
+
+  damage: number
+  distanceTraveled: number
+  destroyed: boolean
+
+  constructor(position: Vector, velocity: Vector, angle: number,
+    source: Player) {
     super(position, velocity, Vector.zero(), Constants.BULLET_HITBOX_SIZE)
 
     this.angle = angle
@@ -35,9 +33,8 @@ class Bullet extends Entity {
    * @param {Player} player The Player object firing the bullet
    * @param {number} [angleDeviation=0] The angle deviation if the bullet is
    *   not traveling in the direction of the turret
-   * @return {Bullet}
    */
-  static createFromPlayer(player, angleDeviation = 0) {
+  static createFromPlayer(player: Player, angleDeviation: number = 0) {
     const angle = player.turretAngle + angleDeviation
     return new Bullet(
       player.position.copy(),
@@ -49,17 +46,19 @@ class Bullet extends Entity {
 
   /**
    * Performs a physics update.
-   * @param {number} lastUpdateTime The last timestamp an update occurred
+   * @param {number} _lastUpdateTime The last timestamp an update occurred,
+   * unused
    * @param {number} deltaTime The timestep to compute the update with
    */
-  update(lastUpdateTime, deltaTime) {
+  update(_lastUpdateTime: number, deltaTime: number) {
     const distanceStep = Vector.scale(this.velocity, deltaTime)
     this.position.add(distanceStep)
     this.distanceTraveled += distanceStep.mag2
-    if (this.inWorld() || distanceStep > Bullet.MAX_TRAVEL_DISTANCE_SQ) {
+    if (this.inWorld() ||
+      this.distanceTraveled > Constants.BULLET_MAX_TRAVEL_DISTANCE_SQ) {
       this.destroyed = true
     }
   }
 }
 
-module.exports = Bullet
+export default Bullet

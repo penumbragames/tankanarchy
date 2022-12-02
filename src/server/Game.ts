@@ -1,32 +1,31 @@
+'use strict'
 /**
  * Game class on the server to manage the state of existing players and
  * and entities.
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-const Bullet = require('./Bullet')
-const Player = require('./Player')
-const Powerup = require('./Powerup')
+import * as socket from 'socket.io'
+import * as Constants from '../lib/Constants'
+import Bullet from './Bullet'
+import Player from './Player'
+import Powerup from './Powerup'
 
-const Constants = require('../lib/Constants')
-
-/**
- * Game class.
- */
 class Game {
-  /**
-   * Constructor for a Game object.
-   */
+  clients: Map<string, socket.Socket>
+
+  players: Map<string, Player>
+  projectiles: Bullet[]
+  powerups: Powerup[]
+
+  lastUpdateTime: number
+  deltaTime: number
+
   constructor() {
-    /**
-     * This is a Map containing all the connected socket ids and socket
-     * instances.
-     */
+    // Contains all the connected socket ids and socket instances.
     this.clients = new Map()
-    /**
-     * This is a Map containing all the connected socket ids and the players
-     * associated with them. This should always be parallel with sockets.
-     */
+    // Contains all the connected socket ids and the players associated with
+    // them. This should always be parallel with sockets.
     this.players = new Map()
     this.projectiles = []
     this.powerups = []
@@ -35,19 +34,12 @@ class Game {
     this.deltaTime = 0
   }
 
-  /**
-   * Creates a new Game object.
-   * @return {Game}
-   */
-  static create() {
+  static create(): Game {
     const game = new Game()
     game.init()
     return game
   }
 
-  /**
-   * Initializes the game state.
-   */
   init() {
     this.lastUpdateTime = Date.now()
   }
@@ -57,7 +49,7 @@ class Game {
    * @param {string} name The display name of the player.
    * @param {Object} socket The socket object of the player.
    */
-  addNewPlayer(name, socket) {
+  addNewPlayer(name: string, socket: socket.Socket): void {
     this.clients.set(socket.id, socket)
     this.players.set(socket.id, Player.create(name, socket.id))
   }
@@ -68,15 +60,19 @@ class Game {
    * @param {string} socketID The socket ID of the player to remove.
    * @return {string}
    */
-  removePlayer(socketID) {
+  removePlayer(socketID: string): string {
     if (this.clients.has(socketID)) {
       this.clients.delete(socketID)
     }
     if (this.players.has(socketID)) {
-      const player = this.players.get(socketID)
-      this.players.delete(socketID)
-      return player.name
+      const p = this.players.get(socketID)
+      if (p) {
+        this.players.delete(socketID)
+        return p.name
+      }
+      return ""
     }
+    return ""
   }
 
   /**
@@ -84,10 +80,9 @@ class Game {
    * @param {string} socketID The socket id to look up.
    * @return {string}
    */
-  getPlayerNameBySocketId(socketID) {
-    if (this.players.has(socketID)) {
-      return this.players.get(socketID).name
-    }
+  getPlayerNameBySocketId(socketID: string): string {
+    const p = this.players.get(socketID)
+    return p ? p.name : ""
   }
 
   /**
@@ -96,7 +91,8 @@ class Game {
    * @param {string} socketID The socket ID of the player to update
    * @param {Object} data The player's input state
    */
-  updatePlayerOnInput(socketID, data) {
+  // TODO: define interfaces for client to server user input
+  updatePlayerOnInput(socketID: string, data: any): void {
     const player = this.players.get(socketID)
     if (player) {
       player.updateOnInput(data)
@@ -110,7 +106,7 @@ class Game {
   /**
    * Updates the state of all the objects in the game.
    */
-  update() {
+  update(): void {
     const currentTime = Date.now()
     this.deltaTime = currentTime - this.lastUpdateTime
     this.lastUpdateTime = currentTime
@@ -124,6 +120,7 @@ class Game {
       ...this.projectiles,
       ...this.powerups
     ]
+    // TODO: Use quadtree for collision update
     entities.forEach(
       entity => { entity.update(this.lastUpdateTime, this.deltaTime) })
     for (let i = 0; i < entities.length; ++i) {
@@ -195,11 +192,11 @@ class Game {
   /**
    * Sends the state of the game to all connected players.
    */
-  sendState() {
+  sendState(): void {
     const players = [...this.players.values()]
-    this.clients.forEach((client, socketID) => {
+    this.clients.forEach((_client, socketID) => {
       const currentPlayer = this.players.get(socketID)
-      this.clients.get(socketID).emit(Constants.SOCKET_UPDATE, {
+      this.clients.get(socketID)!.emit(Constants.SOCKET.UPDATE, {
         self: currentPlayer,
         players: players,
         projectiles: this.projectiles,
@@ -209,4 +206,4 @@ class Game {
   }
 }
 
-module.exports = Game
+export default Game

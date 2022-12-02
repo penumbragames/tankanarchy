@@ -4,29 +4,34 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-const Bullet = require('./Bullet')
-const Powerup = require('./Powerup')
+import Bullet from './Bullet'
+import Entity from '../lib/Entity'
+import * as Constants from '../lib/Constants'
+import Powerup from './Powerup'
+import Util from '../lib/Util'
+import Vector from '../lib/Vector'
 
-const Constants = require('../lib/Constants')
-const Entity = require('../lib/Entity')
-const Util = require('../lib/Util')
-const Vector = require('../lib/Vector')
-
-/**
- * Player class.
- * @extends Entity
- */
 class Player extends Entity {
-  /**
-   * Constructor for a Player object.
-   * @constructor
-   * @param {string} name The display name of the player
-   * @param {string} socketID The associated socket ID
-   * @param {Vector} position The player's starting location
-   * @param {number} angle The player's starting tank angle
-   */
-  constructor(name, socketID) {
-    super()
+  name: string
+  socketID: string
+
+  lastUpdateTime: number
+  tankAngle: number
+  turretAngle: number
+  turnRate: number
+  speed: number
+  shotCooldown: number
+  lastShotTime: number
+  health: number
+
+  powerups: Map<string, Powerup>
+
+  kills: number
+  deaths: number
+
+  constructor(name: string, socketID: string) {
+    super(Vector.zero(), Vector.zero(), Vector.zero(),
+      Constants.PLAYER_DEFAULT_HITBOX_SIZE)
 
     this.name = name
     this.socketID = socketID
@@ -39,9 +44,8 @@ class Player extends Entity {
     this.shotCooldown = Constants.PLAYER_SHOT_COOLDOWN
     this.lastShotTime = 0
     this.health = Constants.PLAYER_MAX_HEALTH
-    this.hitboxSize = Constants.PLAYER_DEFAULT_HITBOX_SIZE
 
-    this.powerups = {}
+    this.powerups = new Map()
 
     this.kills = 0
     this.deaths = 0
@@ -51,9 +55,8 @@ class Player extends Entity {
    * Creates a new Player object.
    * @param {string} name The display name of the player
    * @param {string} socketID The associated socket ID
-   * @return {Player}
    */
-  static create(name, socketID) {
+  static create(name: string, socketID: string): Player {
     const player = new Player(name, socketID)
     player.spawn()
     return player
@@ -63,12 +66,13 @@ class Player extends Entity {
    * Update this player given the client's input data from Input.js
    * @param {Object} data A JSON Object storing the input state
    */
-  updateOnInput(data) {
+  // TODO: implement socket communication interface
+  updateOnInput(data: Constants.PLAYER_INPUTS): void {
     if (data.up) {
       this.velocity = Vector.fromPolar(this.speed, this.tankAngle)
     } else if (data.down) {
       this.velocity = Vector.fromPolar(-this.speed, this.tankAngle)
-    } else if (!(data.up ^ data.down)) {
+    } else if (data.up && data.down) {
       this.velocity = Vector.zero()
     }
 
@@ -76,7 +80,7 @@ class Player extends Entity {
       this.turnRate = Constants.PLAYER_TURN_RATE
     } else if (data.left) {
       this.turnRate = -Constants.PLAYER_TURN_RATE
-    } else if (!(data.left ^ data.right)) {
+    } else if (data.left && data.right) {
       this.turnRate = 0
     }
 
@@ -88,7 +92,7 @@ class Player extends Entity {
    * @param {number} lastUpdateTime The last timestamp an update occurred
    * @param {number} deltaTime The timestep to compute the update with
    */
-  update(lastUpdateTime, deltaTime) {
+  update(lastUpdateTime: number, deltaTime: number): void {
     this.lastUpdateTime = lastUpdateTime
     this.position.add(Vector.scale(this.velocity, deltaTime))
     this.boundToWorld()
@@ -101,51 +105,48 @@ class Player extends Entity {
   /**
    * Updates the Player's powerups.
    */
-  updatePowerups() {
-    for (const type of Constants.POWERUP_KEYS) {
-      const powerup = this.powerups[type]
-      if (!powerup) {
-        continue
-      }
+  updatePowerups(): void {
+    for (const type of Object.keys(Constants.POWERUP_TYPES)) {
+      const powerup = this.powerups.get(type)!
       switch (type) {
-      case Constants.POWERUP_HEALTHPACK:
-        this.health = Math.min(
-          this.health + powerup.data, Constants.PLAYER_MAX_HEALTH)
-        this.powerups[type] = null
-        break
-      case Constants.POWERUP_SHOTGUN:
-        break
-      case Constants.POWERUP_RAPIDFIRE:
-        this.shotCooldown = Constants.PLAYER_SHOT_COOLDOWN / powerup.data
-        break
-      case Constants.POWERUP_SPEEDBOOST:
-        this.speed = Constants.PLAYER_DEFAULT_SPEED * powerup.data
-        break
-      case Constants.POWERUP_SHIELD:
-        this.hitboxSize = Constants.PLAYER_SHIELD_HITBOX_SIZE
-        if (powerup.data <= 0) {
-          this.powerups[type] = null
-          this.hitboxSize = Constants.PLAYER_DEFAULT_HITBOX_SIZE
-        }
-        break
+        case Constants.POWERUP_TYPES.HEALTH_PACK:
+          this.health = Math.min(
+            this.health + powerup.data, Constants.PLAYER_MAX_HEALTH)
+          this.powerups.delete(type)
+          break
+        case Constants.POWERUP_TYPES.SHOTGUN:
+          break
+        case Constants.POWERUP_TYPES.RAPIDFIRE:
+          this.shotCooldown = Constants.PLAYER_SHOT_COOLDOWN / powerup.data
+          break
+        case Constants.POWERUP_TYPES.SPEEDBOOST:
+          this.speed = Constants.PLAYER_DEFAULT_SPEED * powerup.data
+          break
+        case Constants.POWERUP_TYPES.SHIELD:
+          this.hitboxSize = Constants.PLAYER_SHIELD_HITBOX_SIZE
+          if (powerup.data <= 0) {
+            this.powerups.delete(type)
+            this.hitboxSize = Constants.PLAYER_DEFAULT_HITBOX_SIZE
+          }
+          break
       }
       if (this.lastUpdateTime > powerup.expirationTime) {
         switch (type) {
-        case Constants.POWERUP_HEALTHPACK:
-          break
-        case Constants.POWERUP_SHOTGUN:
-          break
-        case Constants.POWERUP_RAPIDFIRE:
-          this.shotCooldown = Constants.PLAYER_SHOT_COOLDOWN
-          break
-        case Constants.POWERUP_SPEEDBOOST:
-          this.speed = Constants.PLAYER_DEFAULT_SPEED
-          break
-        case Constants.POWERUP_SHIELD:
-          this.hitboxSize = Constants.PLAYER_DEFAULT_HITBOX_SIZE
-          break
+          case Constants.POWERUP_TYPES.HEALTH_PACK:
+            break
+          case Constants.POWERUP_TYPES.SHOTGUN:
+            break
+          case Constants.POWERUP_TYPES.RAPIDFIRE:
+            this.shotCooldown = Constants.PLAYER_SHOT_COOLDOWN
+            break
+          case Constants.POWERUP_TYPES.SPEEDBOOST:
+            this.speed = Constants.PLAYER_DEFAULT_SPEED
+            break
+          case Constants.POWERUP_TYPES.SHIELD:
+            this.hitboxSize = Constants.PLAYER_DEFAULT_HITBOX_SIZE
+            break
         }
-        this.powerups[type] = null
+        this.powerups.delete(type)
       }
     }
   }
@@ -154,16 +155,16 @@ class Player extends Entity {
    * Applies a Powerup to this player.
    * @param {Powerup} powerup The Powerup object.
    */
-  applyPowerup(powerup) {
+  applyPowerup(powerup: Powerup): void {
     powerup.expirationTime = this.lastUpdateTime + powerup.duration
-    this.powerups[powerup.type] = powerup
+    this.powerups.set(powerup.type, powerup)
   }
 
   /**
    * Returns a boolean indicating if the player can shoot.
    * @return {boolean}
    */
-  canShoot() {
+  canShoot(): boolean {
     return this.lastUpdateTime > this.lastShotTime + this.shotCooldown
   }
 
@@ -173,9 +174,9 @@ class Player extends Entity {
    * perform a shot cooldown check and resets the shot cooldown.
    * @return {Array<Bullet>}
    */
-  getProjectilesFromShot() {
+  getProjectilesFromShot(): Bullet[] {
     const bullets = [Bullet.createFromPlayer(this)]
-    const shotgunPowerup = this.powerups[Constants.POWERUP_SHOTGUN]
+    const shotgunPowerup = this.powerups.get(Constants.POWERUP_TYPES.SHOTGUN)
     if (shotgunPowerup) {
       for (let i = 1; i <= shotgunPowerup.data; ++i) {
         const angleDeviation = i * Math.PI / 9
@@ -187,11 +188,7 @@ class Player extends Entity {
     return bullets
   }
 
-  /**
-   * Returns a boolean determining if the player is dead or not.
-   * @return {boolean}
-   */
-  isDead() {
+  isDead(): boolean {
     return this.health <= 0
   }
 
@@ -199,9 +196,10 @@ class Player extends Entity {
    * Damages the player by the given amount, factoring in shields.
    * @param {number} amount The amount to damage the player by
    */
-  damage(amount) {
-    if (this.powerups[Powerup.SHIELD]) {
-      this.powerups[Powerup.SHIELD].data -= 1
+  damage(amount: number): void {
+    const shield = this.powerups.get(Constants.POWERUP_TYPES.SHIELD)
+    if (shield) {
+      shield.data -= 1
     } else {
       this.health -= amount
     }
@@ -216,9 +214,9 @@ class Player extends Entity {
         Constants.WORLD_MAX - Constants.WORLD_PADDING),
       Util.randRange(Constants.WORLD_MIN + Constants.WORLD_PADDING,
         Constants.WORLD_MAX - Constants.WORLD_PADDING))
-    this.angle = Util.randRange(0, 2 * Math.PI)
+    this.tankAngle = Util.randRange(0, 2 * Math.PI)
     this.health = Constants.PLAYER_MAX_HEALTH
   }
 }
 
-module.exports = Player
+export default Player
