@@ -4,21 +4,24 @@
  */
 
 import * as Constants from '../lib/Constants'
+import Bullet from '../server/Bullet'
 import Player from '../server/Player'
+import Powerup from '../server/Powerup'
 import Util from '../lib/Util'
 import Vector from '../lib/Vector'
 import Viewport from './Viewport'
 
 class Drawing {
   context: CanvasRenderingContext2D
-  images: Map<string, HTMLImageElement>
+  images: Map<Constants.DRAWING_IMG_KEYS, HTMLImageElement>
   viewport: Viewport
 
   width: number
   height: number
 
   constructor(context: CanvasRenderingContext2D,
-              images: Map<string, HTMLImageElement>, viewport: Viewport) {
+              images: Map<Constants.DRAWING_IMG_KEYS, HTMLImageElement>,
+              viewport: Viewport) {
     this.context = context
     this.images = images
     this.viewport = viewport
@@ -91,22 +94,24 @@ class Drawing {
       this.context.fillRect(-25 + (5 * i), -40, 5, 4)
     }
 
-    this.context.rotate(Drawing.translateAngle(player.tankAngle!))
-    this.drawCenteredImage(this.images[
+    this.context.rotate(Drawing.translateAngle(player.tankAngle))
+    this.drawCenteredImage(this.images.get(
       isSelf ? Constants.DRAWING_IMG_KEYS.SELF_TANK :
-        Constants.DRAWING_IMG_KEYS.OTHER_TANK
-    ])
-    this.context.rotate(-Drawing.translateAngle(player.tankAngle!))
+        Constants.DRAWING_IMG_KEYS.OTHER_TANK,
+    )!)
+    this.context.rotate(-Drawing.translateAngle(player.tankAngle))
 
-    this.context.rotate(Drawing.translateAngle(player.turretAngle!))
-    this.drawCenteredImage(this.images[
+    this.context.rotate(Drawing.translateAngle(player.turretAngle))
+    this.drawCenteredImage(this.images.get(
       isSelf ? Constants.DRAWING_IMG_KEYS.SELF_TURRET :
-        Constants.DRAWING_IMG_KEYS.OTHER_TURRET
-    ])
+        Constants.DRAWING_IMG_KEYS.OTHER_TURRET,
+    )!)
 
-    if (player.powerups![Constants.POWERUP_TYPES.SHIELD]) {
-      this.context.rotate(-Drawing.translateAngle(-player.turretAngle!))
-      this.drawCenteredImage(this.images[Constants.DRAWING_IMG_KEYS.SHIELD])
+    if (player.powerups.get(Constants.POWERUP_TYPES.SHIELD)) {
+      this.context.rotate(-Drawing.translateAngle(-player.turretAngle))
+      this.drawCenteredImage(
+        this.images.get(Constants.DRAWING_IMG_KEYS.SHIELD)!,
+      )
     }
 
     this.context.restore()
@@ -116,12 +121,12 @@ class Drawing {
    * Draws a bullet (tank shell) to the canvas.
    * @param {Bullet} bullet The bullet to draw to the canvas
    */
-  drawBullet(bullet) {
+  drawBullet(bullet:Bullet) {
     this.context.save()
     const canvasCoords = this.viewport.toCanvas(bullet.position)
     this.context.translate(canvasCoords.x, canvasCoords.y)
     this.context.rotate(Drawing.translateAngle(bullet.angle))
-    this.drawCenteredImage(this.images[Constants.DRAWING_IMG_KEYS.BULLET])
+    this.drawCenteredImage(this.images.get(Constants.DRAWING_IMG_KEYS.BULLET)!)
     this.context.restore()
   }
 
@@ -129,11 +134,11 @@ class Drawing {
    * Draws a powerup to the canvas.
    * @param {Powerup} powerup The powerup to draw
    */
-  drawPowerup(powerup) {
+  drawPowerup(powerup:Powerup) {
     this.context.save()
     const canvasCoords = this.viewport.toCanvas(powerup.position)
     this.context.translate(canvasCoords.x, canvasCoords.y)
-    this.drawCenteredImage(this.images[powerup.type])
+    // this.drawCenteredImage(this.images.get(powerup.type))
     this.context.restore()
   }
 
@@ -150,7 +155,7 @@ class Drawing {
     for (let x = start.x; x < end.x; x += Constants.DRAWING_TILE_SIZE) {
       for (let y = start.y; y < end.y; y += Constants.DRAWING_TILE_SIZE) {
         this.context.drawImage(
-          this.images[Constants.DRAWING_IMG_KEYS.TILE], x, y,
+          this.images.get(Constants.DRAWING_IMG_KEYS.TILE)!, x, y,
         )
       }
     }

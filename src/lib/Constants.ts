@@ -3,9 +3,9 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import Entity from './Entity'
-import Player from '../server/Player'
-import Powerup from '../server/Powerup'
+import Entity from './Entity.js'
+import Player from '../server/Player.js'
+import Powerup from '../server/Powerup.js'
 
 export const WORLD_MIN = 0
 export const WORLD_MAX = 5000
@@ -54,11 +54,16 @@ export interface CHAT_MESSAGE {
   message: string,
   isNotification:boolean,
 }
+export interface GAME_STATE {
+  self: Player,
+  players: Player[],
+  projectiles: Entity[],
+  powerups: Powerup[],
+}
 
 // Interfaces for each of the socket.io communication types
 export interface SERVER_TO_CLIENT_EVENTS {
-  [SOCKET.UPDATE]: (self: Player, players: Player[], projectiles: Entity[],
-        powerups: Powerup[]) => void,
+  [SOCKET.UPDATE]: (state:GAME_STATE) => void,
   [SOCKET.CHAT_SERVER_CLIENT]: (data:CHAT_MESSAGE) => void,
 }
 export interface CLIENT_TO_SERVER_EVENTS {

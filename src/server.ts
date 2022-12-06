@@ -3,21 +3,22 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import * as Constants from '../lib/Constants'
-
-import * as express from 'express'
+import * as Constants from './lib/Constants.js'
 import * as http from 'http'
-import * as morgan from 'morgan'
 import * as path from 'path'
 import * as socketIO from 'socket.io'
+import * as url from 'url'
 
-import Game from './Game'
+import Game from './server/Game.js'
+import express from 'express'
+import morgan from 'morgan'
 
 const PORT = process.env.PORT || 5000
 const FRAME_RATE = 1000 / 60
 const CHAT_TAG = '[Tank Anarchy]'
+const DIRNAME = path.dirname(url.fileURLToPath(import.meta.url))
 
-const app = express()
+const app:express.Application = express()
 const httpServer = http.createServer(app)
 const io = new socketIO.Server<
   Constants.CLIENT_TO_SERVER_EVENTS, Constants.SERVER_TO_CLIENT_EVENTS,
@@ -27,11 +28,11 @@ const game = new Game()
 app.set('port', PORT)
 
 app.use(morgan('dev'))
-app.use('/dist', express.static(path.join(__dirname, '/dist')))
+app.use('/dist', express.static(path.join(DIRNAME, '/dist')))
 
 // Routing
 app.get('/', (_request: express.Request, response: express.Response) => {
-  response.sendFile(path.join(__dirname, 'views/index.html'))
+  response.sendFile(path.join(DIRNAME, 'views/index.html'))
 })
 
 /**

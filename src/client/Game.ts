@@ -76,7 +76,7 @@ class Game {
                    this.onReceiveGameState.bind(this))
   }
 
-  onReceiveGameState(state) {
+  onReceiveGameState(state:Constants.GAME_STATE) {
     this.self = state.self
     this.players = state.players
     this.projectiles = state.projectiles

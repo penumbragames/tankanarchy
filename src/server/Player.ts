@@ -4,13 +4,13 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import * as Constants from '../lib/Constants'
+import * as Constants from '../lib/Constants.js'
 
-import Bullet from './Bullet'
-import Entity from '../lib/Entity'
-import Powerup from './Powerup'
-import Util from '../lib/Util'
-import Vector from '../lib/Vector'
+import Bullet from './Bullet.js'
+import Entity from '../lib/Entity.js'
+import Powerup from './Powerup.js'
+import Util from '../lib/Util.js'
+import Vector from '../lib/Vector.js'
 
 class Player extends Entity {
   name: string
