@@ -4,34 +4,28 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-require('../less/styles.less')
+import * as Constants from '../lib/Constants'
+import * as socketIO from 'socket.io-client'
+import Chat from './Chat'
+import Game from './Game'
 
-const $ = require('jquery')
-const io = require('socket.io-client')
-
-const Chat = require('./game/Chat')
-const Game = require('./game/Game')
-
-$(document).ready(() => {
-  const socket = io()
+window.onload = (): void => {
+  const socket = socketIO.io()
   const game = Game.create(socket, 'canvas', 'leaderboard')
   Chat.create(socket, 'chat-display', 'chat-input')
 
-  $('#name-input').focus()
+  const nameInputElement = <HTMLInputElement>document.getElementById(
+    'name-input',
+  )!
+  nameInputElement.focus()
 
-  /**
-   * Function to send the player name to the server.
-   * @return {false}
-   */
-  const sendName = () => {
-    const name = $('#name-input').val()
+  const sendName = (): boolean => {
+    const name = nameInputElement.value
+    document.getElementById('name-prompt-container')!.innerHTML = ''
     if (name && name.length < 20) {
-      $('#name-prompt-container').empty()
-      $('#name-prompt-container').append(
-        $('<span>').addClass('fa fa-2x fa-spinner fa-pulse'))
-      socket.emit('new-player', { name }, () => {
-        $('#name-prompt-overlay').remove()
-        $('#canvas').focus()
+      socket.emit(Constants.SOCKET.NEW_PLAYER, {name}, () => {
+        document.getElementById('name-prompt-overlay')!.remove()
+        document.getElementById('canvas')!.focus()
         game.run()
       })
     } else {
@@ -39,6 +33,6 @@ $(document).ready(() => {
     }
     return false
   }
-  $('#name-form').submit(sendName)
-  $('#name-submit').click(sendName)
-})
+  document.getElementById('name-form')!.addEventListener('submit', sendName)
+  document.getElementById('name-submit')!.addEventListener('click', sendName)
+}

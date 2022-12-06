@@ -4,13 +4,17 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-/**
- * Input class.
- */
+import Vector from '../lib/Vector'
+
 class Input {
-  /**
-   * Constructor for the Input class.
-   */
+  up: boolean
+  down: boolean
+  left: boolean
+  right: boolean
+
+  mouseDown: boolean
+  mouseCoords: Vector
+
   constructor() {
     this.up = false
     this.down = false
@@ -18,18 +22,10 @@ class Input {
     this.right = false
 
     this.mouseDown = false
-    this.mouseCoords = [0, 0]
+    this.mouseCoords = Vector.zero()
   }
 
-  /**
-   * Factory method for creating an Input class.
-   * @param {Element} keyElement The element to listen for keypresses and
-   *   mouse clicks on
-   * @param {Element} mouseMoveElement The element to track mouse coordinates
-   *   relative to
-   * @return {Input}
-   */
-  static create(keyElement, mouseMoveElement) {
+  static create(keyElement:HTMLElement, mouseMoveElement:HTMLElement):Input {
     const input = new Input()
     input.applyEventHandlers(keyElement, keyElement, mouseMoveElement)
     return input
@@ -39,72 +35,30 @@ class Input {
    * Key down event handler.
    * @param {Event} event The event passed to the event handler
    */
-  onKeyDown(event) {
-    /* eslint-disable no-fallthrough */
-    switch (event.keyCode) {
-    case 37:
-    case 65:
-    case 97:
-      this.left = true
-      break
-    case 38:
-    case 87:
-    case 199:
-      this.up = true
-      break
-    case 39:
-    case 68:
-    case 100:
-      this.right = true
-      break
-    case 40:
-    case 83:
-    case 115:
-      this.down = true
-    default:
-      break
-    }
-    /* eslint-enable no-fallthrough */
+  onKeyDown(event:KeyboardEvent) {
+    this.left = event.code === 'KeyA' || event.code === 'ArrowLeft'
+    this.up = event.code === 'KeyW' || event.code === 'ArrowUp'
+    this.right = event.code === 'KeyD' || event.code === 'ArrowRight'
+    this.down = event.code === 'KeyS' || event.code === 'ArrowDown'
   }
 
   /**
    * Key up event handler.
    * @param {Event} event The event passed to the event handler
    */
-  onKeyUp(event) {
-    /* eslint-disable no-fallthrough */
-    switch (event.keyCode) {
-    case 37:
-    case 65:
-    case 97:
-      this.left = false
-      break
-    case 38:
-    case 87:
-    case 199:
-      this.up = false
-      break
-    case 39:
-    case 68:
-    case 100:
-      this.right = false
-      break
-    case 40:
-    case 83:
-    case 115:
-      this.down = false
-    default:
-      break
-    }
-    /* eslint-enable no-fallthrough */
+  onKeyUp(event:KeyboardEvent) {
+    this.left = !(event.code === 'KeyA' || event.code === 'ArrowLeft')
+    this.up = !(event.code === 'KeyW' || event.code === 'ArrowUp')
+    this.right = !(event.code === 'KeyD' || event.code === 'ArrowRight')
+    this.down = !(event.code === 'KeyS' || event.code === 'ArrowDown')
   }
 
   /**
    * Mouse down event handler.
    * @param {Event} event The event passed to the event handler
    */
-  onMouseDown(event) {
-    if (event.which === 1) {
+  onMouseDown(event:MouseEvent) {
+    if (event.button === 1) {
       this.mouseDown = true
     }
   }
@@ -113,8 +67,8 @@ class Input {
    * Mouse up event handler.
    * @param {Event} event The event passed to the event handler
    */
-  onMouseUp(event) {
-    if (event.which === 1) {
+  onMouseUp(event:MouseEvent) {
+    if (event.button === 1) {
       this.mouseDown = false
     }
   }
@@ -123,8 +77,9 @@ class Input {
    * Mouse move event handler.
    * @param {Event} event The event passed to the event handler
    */
-  onMouseMove(event) {
-    this.mouseCoords = [event.offsetX, event.offsetY]
+  onMouseMove(event:MouseEvent) {
+    this.mouseCoords.x = event.offsetX
+    this.mouseCoords.y = event.offsetY
   }
 
   /**
@@ -134,14 +89,15 @@ class Input {
    * @param {Element} mouseMoveElement The element to track mouse movement
    *   relative to
    */
-  applyEventHandlers(keyElement, mouseClickElement, mouseMoveElement) {
+  applyEventHandlers(keyElement:HTMLElement, mouseClickElement:HTMLElement,
+                     mouseMoveElement:HTMLElement) {
     keyElement.addEventListener('keydown', this.onKeyDown.bind(this))
     keyElement.addEventListener('keyup', this.onKeyUp.bind(this))
     mouseClickElement.addEventListener('mousedown', this.onMouseDown.bind(this))
     mouseClickElement.addEventListener('mouseup', this.onMouseUp.bind(this))
-    mouseMoveElement.setAttribute('tabindex', 1)
+    mouseMoveElement.setAttribute('tabindex', '1')
     mouseMoveElement.addEventListener('mousemove', this.onMouseMove.bind(this))
   }
 }
 
-module.exports = Input
+export default Input

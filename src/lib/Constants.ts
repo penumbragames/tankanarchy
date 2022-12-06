@@ -30,14 +30,6 @@ export enum DRAWING_IMG_KEYS {
 export const DRAWING_TILE_SIZE = 100
 export const VIEWPORT_STICKINESS = 0.004
 
-export interface PLAYER_INPUTS {
-  up: boolean,
-  down: boolean,
-  right: boolean,
-  left: boolean,
-  turretAngle: number,
-  shoot: boolean,
-}
 
 // Socket events we can listen for.
 export enum SOCKET {
@@ -48,18 +40,31 @@ export enum SOCKET {
   CHAT_SERVER_CLIENT = 'chatServerToClient',
   DISCONNECT = 'disconnect',
 }
+// Interfaces for objects that can be sent via socket
+export interface PLAYER_INPUTS {
+  up: boolean,
+  down: boolean,
+  right: boolean,
+  left: boolean,
+  turretAngle: number,
+  shoot: boolean,
+}
+export interface CHAT_MESSAGE {
+  name: string,
+  message: string,
+  isNotification:boolean,
+}
 
 // Interfaces for each of the socket.io communication types
 export interface SERVER_TO_CLIENT_EVENTS {
   [SOCKET.UPDATE]: (self: Player, players: Player[], projectiles: Entity[],
         powerups: Powerup[]) => void,
-  [SOCKET.CHAT_SERVER_CLIENT]: (name: string, message:string,
-    isNotification: boolean) => void,
+  [SOCKET.CHAT_SERVER_CLIENT]: (data:CHAT_MESSAGE) => void,
 }
 export interface CLIENT_TO_SERVER_EVENTS {
   [SOCKET.NEW_PLAYER]: (name: string) => boolean,
   [SOCKET.PLAYER_ACTION]: (data: PLAYER_INPUTS) => void,
-  [SOCKET.CHAT_CLIENT_SERVER]: (message:string) => void,
+  [SOCKET.CHAT_CLIENT_SERVER]: (data:CHAT_MESSAGE) => void,
   [SOCKET.DISCONNECT]: () => void,
 }
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

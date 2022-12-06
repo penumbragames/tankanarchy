@@ -3,36 +3,28 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-/**
- * Leaderboard class.
- */
+import Player from '../server/Player'
+
 class Leaderboard {
-  /**
-   * Constructor for the Leaderboard class.
-   * @param {container} container The container element for the leaderboard
-   */
-  constructor(container) {
+  container:HTMLElement
+
+  constructor(container:HTMLElement) {
     this.container = container
   }
 
-  /**
-   * Factory method for creating a Leaderboard object.
-   * @param {string} containerElementID The ID of the container element
-   * @return {Leaderboard}
-   */
-  static create(containerElementID) {
-    return new Leaderboard(document.getElementById(containerElementID))
+  static create(containerElementID:string) {
+    return new Leaderboard(document.getElementById(containerElementID)!)
   }
 
   /**
    * Updates the leaderboard with the list of current players.
    * @param {Array<Player>} players The list of current players
    */
-  update(players) {
+  update(players:Player[]) {
     while (this.container.firstChild) {
       this.container.removeChild(this.container.firstChild)
     }
-    players.sort((a, b) => { return b.kills - a.kills })
+    players.sort((a:Player, b:Player) => b.kills - a.kills)
     players.slice(0, 10).forEach(player => {
       const containercontainer = document.createElement('li')
       const text =
@@ -43,4 +35,4 @@ class Leaderboard {
   }
 }
 
-module.exports = Leaderboard
+export default Leaderboard

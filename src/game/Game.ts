@@ -4,29 +4,39 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-const Drawing = require('./Drawing')
-const Input = require('./Input')
-const Leaderboard = require('./Leaderboard')
-const Viewport = require('./Viewport')
+import * as Constants from '../lib/Constants'
+import * as socketIO from 'socket.io-client'
 
-const Constants = require('../../../lib/Constants')
-const Vector = require('../../../lib/Vector')
-const Util = require('../../../lib/Util')
+import Drawing from './Drawing'
+import Entity from '../lib/Entity'
+import Input from './Input'
+import Leaderboard from './Leaderboard'
+import Player from '../server/Player'
+import Powerup from '../server/Powerup'
+import Util from '../lib/Util'
+import Vector from '../lib/Vector'
+import Viewport from './Viewport'
 
-/**
- * Game class.
- */
 class Game {
-  /**
-   * Creates a Game class.
-   * @param {Socket} socket The socket connected to the server
-   * @param {Viewport} viewport The Viewport object for coordinate translation
-   * @param {Drawing} drawing The Drawing object for canvas rendering
-   * @param {Input} input The Input object for tracking user input
-   * @param {Leaderboard} leaderboard The Leaderboard object handling the
-   *   leaderboard update
-   */
-  constructor(socket, viewport, drawing, input, leaderboard) {
+  socket: socketIO.Socket<
+    Constants.SERVER_TO_CLIENT_EVENTS, Constants.CLIENT_TO_SERVER_EVENTS>
+
+  viewport: Viewport
+  drawing: Drawing
+  input: Input
+  leaderboard: Leaderboard
+
+  self: Player | null
+  players: Player[]
+  projectiles: Entity[]
+  powerups: Powerup[]
+
+  animationFrameId: number
+  lastUpdateTime: number
+  deltaTime: number
+
+  constructor(socket:socketIO.Socket, viewport:Viewport, drawing:Drawing,
+              input:Input, leaderboard:Leaderboard) {
     this.socket = socket
 
     this.viewport = viewport
@@ -39,29 +49,20 @@ class Game {
     this.projectiles = []
     this.powerups = []
 
-    this.animationFrameId = null
+    this.animationFrameId = 0
     this.lastUpdateTime = 0
     this.deltaTime = 0
   }
 
-  /**
-   * Factory method for creating a Game class instance.
-   * @param {Socket} socket The socket connected to the server
-   * @param {string} canvasElementID The ID of the canvas element to render the
-   *   game to
-   * @param {string} leaderboardElementID The ID of the DOM element which will
-   *   hold the leaderboard
-   * @return {Game}
-   */
-  static create(socket, canvasElementID, leaderboardElementID) {
-    const canvas = document.getElementById(canvasElementID)
+  static create(socket:socketIO.Socket, canvasElementID:string,
+                leaderboardElementID:string):Game {
+    const canvas = <HTMLCanvasElement>document.getElementById(canvasElementID)
     canvas.width = Constants.CANVAS_WIDTH
     canvas.height = Constants.CANVAS_HEIGHT
 
     const viewport = Viewport.create(canvas)
     const drawing = Drawing.create(canvas, viewport)
-    const input = Input.create(document, canvas)
-
+    const input = Input.create(<HTMLElement>document.body, canvas)
     const leaderboard = Leaderboard.create(leaderboardElementID)
 
     const game = new Game(socket, viewport, drawing, input, leaderboard)
@@ -69,19 +70,12 @@ class Game {
     return game
   }
 
-  /**
-   * Initializes the Game object and binds the socket event listener.
-   */
   init() {
     this.lastUpdateTime = Date.now()
-    this.socket.on(Constants.SOCKET_UPDATE,
-      this.onReceiveGameState.bind(this))
+    this.socket.on(Constants.SOCKET.UPDATE,
+                   this.onReceiveGameState.bind(this))
   }
 
-  /**
-   * Socket event handler.
-   * @param {Object} state The game state received from the server
-   */
   onReceiveGameState(state) {
     this.self = state.self
     this.players = state.players
@@ -92,9 +86,6 @@ class Game {
     this.leaderboard.update(state.players)
   }
 
-  /**
-   * Starts the animation and update loop to run the game.
-   */
   run() {
     const currentTime = Date.now()
     this.deltaTime = currentTime - this.lastUpdateTime
@@ -105,39 +96,28 @@ class Game {
     this.animationFrameId = window.requestAnimationFrame(this.run.bind(this))
   }
 
-  /**
-   * Stops the animation and update loop for the game.
-   */
   stop() {
     window.cancelAnimationFrame(this.animationFrameId)
   }
 
-  /**
-   * Updates the client state of the game and sends user input to the server.
-   */
   update() {
     if (this.self) {
       this.viewport.update(this.deltaTime)
-
-      const absoluteMouseCoords = this.viewport.toWorld(
-        Vector.fromArray(this.input.mouseCoords))
+      const absoluteMouseCoords = this.viewport.toWorld(this.input.mouseCoords)
       const playerToMouseVector = Vector.sub(this.self.position,
-        absoluteMouseCoords)
+                                             absoluteMouseCoords)
 
-      this.socket.emit(Constants.SOCKET_PLAYER_ACTION, {
+      this.socket.emit(Constants.SOCKET.PLAYER_ACTION, {
         up: this.input.up,
         down: this.input.down,
         left: this.input.left,
         right: this.input.right,
         shoot: this.input.mouseDown,
-        turretAngle: Util.normalizeAngle(playerToMouseVector.angle + Math.PI)
+        turretAngle: Util.normalizeAngle(playerToMouseVector.angle + Math.PI),
       })
     }
   }
 
-  /**
-   * Draws the state of the game to the canvas.
-   */
   draw() {
     if (this.self) {
       this.drawing.clear()
@@ -154,4 +134,4 @@ class Game {
   }
 }
 
-module.exports = Game
+export default Game

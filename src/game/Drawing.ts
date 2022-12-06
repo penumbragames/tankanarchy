@@ -3,21 +3,22 @@
  * @author kennethli.3470@gmail.com (Kenneth Li)
  */
 
-const Constants = require('../../../lib/Constants')
-const Util = require('../../../lib/Util')
+import * as Constants from '../lib/Constants'
+import Player from '../server/Player'
+import Util from '../lib/Util'
+import Vector from '../lib/Vector'
+import Viewport from './Viewport'
 
-/**
- * Drawing class.
- */
 class Drawing {
-  /**
-   * Constructor for the Drawing class.
-   * @param {CanvasRenderingContext2D} context The canvas context to draw to
-   * @param {Object<string, Image>} images The image assets for each entity
-   * @param {Viewport} viewport The viewport class to translate from absolute
-   *   world coordinates to relative cannon coordinates.
-   */
-  constructor(context, images, viewport) {
+  context: CanvasRenderingContext2D
+  images: Map<string, HTMLImageElement>
+  viewport: Viewport
+
+  width: number
+  height: number
+
+  constructor(context: CanvasRenderingContext2D,
+              images: Map<string, HTMLImageElement>, viewport: Viewport) {
     this.context = context
     this.images = images
     this.viewport = viewport
@@ -26,23 +27,19 @@ class Drawing {
     this.height = context.canvas.height
   }
 
-  /**
-   * Factory method for creating a Drawing object.
-   * @param {Element} canvas The canvas element to draw to
-   * @param {Viewport} viewport The viewport object for coordinate translation
-   * @return {Drawing}
-   */
-  static create(canvas, viewport) {
-    const context = canvas.getContext('2d')
-    const images = {}
-    for (const key of Constants.DRAWING_IMG_KEYS) {
-      images[key] = new Image()
-      images[key].src = `${Constants.DRAWING_IMG_BASE_PATH}/${key}.png`
+  static create(canvas: HTMLCanvasElement, viewport: Viewport) {
+    const context = canvas.getContext('2d')!
+    const images = new Map()
+    for (const key of Object.keys(Constants.DRAWING_IMG_KEYS)) {
+      const img = new Image()
+      img.src = `${Constants.DRAWING_IMG_BASE_PATH}/${key}.png`
+      images.set(key, img)
     }
-    for (const type of Constants.POWERUP_KEYS) {
-      images[type] = new Image()
-      images[type].src =
+    for (const type of Object.keys(Constants.POWERUP_TYPES)) {
+      const img = new Image()
+      img.src =
         `${Constants.DRAWING_IMG_BASE_PATH}/${type}_powerup.png`
+      images.set(type, img)
     }
     return new Drawing(context, images, viewport)
   }
@@ -52,22 +49,19 @@ class Drawing {
    * @param {number} angle The angle to translate
    * @return {number}
    */
-  static translateAngle(angle) {
-    return Util.normalizeAngle(angle + Math.PI / 2)
+  static translateAngle(angle: number): number {
+    return Util.normalizeAngle(angle + (Math.PI / 2))
   }
 
   /**
    * Draws an image on the canvas at the centered at the origin.
    * @param {Image} image The image to draw on the canvas
    */
-  drawCenteredImage(image) {
+  drawCenteredImage(image: HTMLImageElement): void {
     this.context.drawImage(image, -image.width / 2, -image.height / 2)
   }
 
-  /**
-   * Clears the canvas.
-   */
-  clear() {
+  clear(): void {
     this.context.clearRect(0, 0, this.width, this.height)
   }
 
@@ -78,7 +72,7 @@ class Drawing {
    *   denote an enemy tank.
    * @param {Player} player The player object to draw.
    */
-  drawTank(isSelf, player) {
+  drawTank(isSelf: boolean, player: Player) {
     this.context.save()
     const canvasCoords = this.viewport.toCanvas(player.position)
     this.context.translate(canvasCoords.x, canvasCoords.y)
@@ -86,7 +80,7 @@ class Drawing {
     this.context.textAlign = 'center'
     this.context.font = Constants.DRAWING_NAME_FONT
     this.context.fillStyle = Constants.DRAWING_NAME_COLOR
-    this.context.fillText(player.name, 0, -50)
+    this.context.fillText(player.name as string, 0, -50)
 
     for (let i = 0; i < 10; ++i) {
       if (i < player.health) {
@@ -94,27 +88,25 @@ class Drawing {
       } else {
         this.context.fillStyle = Constants.DRAWING_HP_MISSING_COLOR
       }
-      this.context.fillRect(-25 + 5 * i, -40, 5, 4)
+      this.context.fillRect(-25 + (5 * i), -40, 5, 4)
     }
 
-    this.context.rotate(Drawing.translateAngle(player.tankAngle))
+    this.context.rotate(Drawing.translateAngle(player.tankAngle!))
     this.drawCenteredImage(this.images[
-      // eslint-disable-next-line multiline-ternary
-      isSelf ? Constants.DRAWING_IMG_SELF_TANK :
-        Constants.DRAWING_IMG_OTHER_TANK
+      isSelf ? Constants.DRAWING_IMG_KEYS.SELF_TANK :
+        Constants.DRAWING_IMG_KEYS.OTHER_TANK
     ])
-    this.context.rotate(-Drawing.translateAngle(player.tankAngle))
+    this.context.rotate(-Drawing.translateAngle(player.tankAngle!))
 
-    this.context.rotate(Drawing.translateAngle(player.turretAngle))
+    this.context.rotate(Drawing.translateAngle(player.turretAngle!))
     this.drawCenteredImage(this.images[
-      // eslint-disable-next-line multiline-ternary
-      isSelf ? Constants.DRAWING_IMG_SELF_TURRET :
-        Constants.DRAWING_IMG_OTHER_TURRET
+      isSelf ? Constants.DRAWING_IMG_KEYS.SELF_TURRET :
+        Constants.DRAWING_IMG_KEYS.OTHER_TURRET
     ])
 
-    if (player.powerups[Constants.POWERUP_SHIELD]) {
-      this.context.rotate(-Drawing.translateAngle(-player.turretAngle))
-      this.drawCenteredImage(this.images[Constants.DRAWING_IMG_SHIELD])
+    if (player.powerups![Constants.POWERUP_TYPES.SHIELD]) {
+      this.context.rotate(-Drawing.translateAngle(-player.turretAngle!))
+      this.drawCenteredImage(this.images[Constants.DRAWING_IMG_KEYS.SHIELD])
     }
 
     this.context.restore()
@@ -129,7 +121,7 @@ class Drawing {
     const canvasCoords = this.viewport.toCanvas(bullet.position)
     this.context.translate(canvasCoords.x, canvasCoords.y)
     this.context.rotate(Drawing.translateAngle(bullet.angle))
-    this.drawCenteredImage(this.images[Constants.DRAWING_IMG_BULLET])
+    this.drawCenteredImage(this.images[Constants.DRAWING_IMG_KEYS.BULLET])
     this.context.restore()
   }
 
@@ -149,16 +141,20 @@ class Drawing {
    * Draws the background tiles to the canvas.
    */
   drawTiles() {
-    const start = this.viewport.toCanvas(
-      { x: Constants.WORLD_MIN, y: Constants.WORLD_MIN })
-    const end = this.viewport.toCanvas(
-      { x: Constants.WORLD_MAX, y: Constants.WORLD_MAX })
+    const start = this.viewport.toCanvas(new Vector(
+      Constants.WORLD_MIN, Constants.WORLD_MIN,
+    ))
+    const end = this.viewport.toCanvas(new Vector(
+      Constants.WORLD_MIN, Constants.WORLD_MIN,
+    ))
     for (let x = start.x; x < end.x; x += Constants.DRAWING_TILE_SIZE) {
       for (let y = start.y; y < end.y; y += Constants.DRAWING_TILE_SIZE) {
-        this.context.drawImage(this.images[Constants.DRAWING_IMG_TILE], x, y)
+        this.context.drawImage(
+          this.images[Constants.DRAWING_IMG_KEYS.TILE], x, y,
+        )
       }
     }
   }
 }
 
-module.exports = Drawing
+export default Drawing
