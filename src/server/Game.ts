@@ -1,12 +1,12 @@
-'use strict'
 /**
  * Game class on the server to manage the state of existing players and
  * and entities.
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import * as socket from 'socket.io'
 import * as Constants from '../lib/Constants'
+import * as socket from 'socket.io'
+
 import Bullet from './Bullet'
 import Player from './Player'
 import Powerup from './Powerup'
@@ -47,11 +47,11 @@ class Game {
   /**
    * Creates a new player with the given name and ID.
    * @param {string} name The display name of the player.
-   * @param {Object} socket The socket object of the player.
+   * @param {Object} playerSocket The socket object of the player.
    */
-  addNewPlayer(name: string, socket: socket.Socket): void {
-    this.clients.set(socket.id, socket)
-    this.players.set(socket.id, Player.create(name, socket.id))
+  addNewPlayer(name: string, playerSocket: socket.Socket): void {
+    this.clients.set(playerSocket.id, playerSocket)
+    this.players.set(playerSocket.id, Player.create(name, playerSocket.id))
   }
 
   /**
@@ -70,9 +70,9 @@ class Game {
         this.players.delete(socketID)
         return p.name
       }
-      return ""
+      return ''
     }
-    return ""
+    return ''
   }
 
   /**
@@ -82,7 +82,7 @@ class Game {
    */
   getPlayerNameBySocketId(socketID: string): string {
     const p = this.players.get(socketID)
-    return p ? p.name : ""
+    return p ? p.name : ''
   }
 
   /**
@@ -92,7 +92,8 @@ class Game {
    * @param {Object} data The player's input state
    */
   // TODO: define interfaces for client to server user input
-  updatePlayerOnInput(socketID: string, data: any): void {
+  updatePlayerOnInput(socketID: string,
+                      data: Constants.PLAYER_INPUTS): void {
     const player = this.players.get(socketID)
     if (player) {
       player.updateOnInput(data)
@@ -118,11 +119,14 @@ class Game {
     const entities = [
       ...this.players.values(),
       ...this.projectiles,
-      ...this.powerups
+      ...this.powerups,
     ]
     // TODO: Use quadtree for collision update
     entities.forEach(
-      entity => { entity.update(this.lastUpdateTime, this.deltaTime) })
+      entity => {
+        entity.update(this.lastUpdateTime, this.deltaTime)
+      },
+    )
     for (let i = 0; i < entities.length; ++i) {
       for (let j = i + 1; j < entities.length; ++j) {
         let e1 = entities[i]
@@ -165,8 +169,8 @@ class Game {
         }
 
         // Bullet-Powerup interaction
-        if (e1 instanceof Powerup && e2 instanceof Bullet ||
-          e1 instanceof Bullet && e2 instanceof Powerup) {
+        if ((e1 instanceof Powerup && e2 instanceof Bullet) ||
+          (e1 instanceof Bullet && e2 instanceof Powerup)) {
           e1.destroyed = true
           e2.destroyed = true
         }
@@ -177,9 +181,11 @@ class Game {
      * Filters out destroyed projectiles and powerups.
      */
     this.projectiles = this.projectiles.filter(
-      projectile => !projectile.destroyed)
+      projectile => !projectile.destroyed,
+    )
     this.powerups = this.powerups.filter(
-      powerup => !powerup.destroyed)
+      powerup => !powerup.destroyed,
+    )
 
     /**
      * Repopulate the world with new powerups.
@@ -200,7 +206,7 @@ class Game {
         self: currentPlayer,
         players: players,
         projectiles: this.projectiles,
-        powerups: this.powerups
+        powerups: this.powerups,
       })
     })
   }

@@ -17,7 +17,7 @@ class Bullet extends Entity {
   destroyed: boolean
 
   constructor(position: Vector, velocity: Vector, angle: number,
-    source: Player) {
+              source: Player) {
     super(position, velocity, Vector.zero(), Constants.BULLET_HITBOX_SIZE)
 
     this.angle = angle
@@ -34,13 +34,13 @@ class Bullet extends Entity {
    * @param {number} [angleDeviation=0] The angle deviation if the bullet is
    *   not traveling in the direction of the turret
    */
-  static createFromPlayer(player: Player, angleDeviation: number = 0) {
+  static createFromPlayer(player: Player, angleDeviation = 0) {
     const angle = player.turretAngle + angleDeviation
     return new Bullet(
       player.position.copy(),
       Vector.fromPolar(Constants.BULLET_SPEED, angle),
       angle,
-      player
+      player,
     )
   }
 
