@@ -14,10 +14,8 @@ class Entity {
   hitboxSize: number
   destroyed: boolean
 
-  constructor(position: Vector = Vector.zero(),
-    velocity: Vector = Vector.zero(),
-    acceleration: Vector = Vector.zero(),
-    hitboxSize: number) {
+  constructor(position: Vector, velocity: Vector, acceleration: Vector,
+              hitboxSize: number) {
     this.position = position
     this.velocity = velocity
     this.acceleration = acceleration
@@ -40,8 +38,8 @@ class Entity {
    */
   inWorld() {
     return Util.inBound(
-      this.position.x, Constants.WORLD_MIN, Constants.WORLD_MAX) &&
-      Util.inBound(this.position.y, Constants.WORLD_MIN, Constants.WORLD_MAX)
+      this.position.x, Constants.WORLD_MIN, Constants.WORLD_MAX,
+    ) && Util.inBound(this.position.y, Constants.WORLD_MIN, Constants.WORLD_MAX)
   }
 
   /**
@@ -50,9 +48,11 @@ class Entity {
    */
   boundToWorld() {
     this.position.x = Util.clamp(
-      this.position.x, Constants.WORLD_MIN, Constants.WORLD_MAX)
+      this.position.x, Constants.WORLD_MIN, Constants.WORLD_MAX,
+    )
     this.position.y = Util.clamp(
-      this.position.y, Constants.WORLD_MIN, Constants.WORLD_MAX)
+      this.position.y, Constants.WORLD_MIN, Constants.WORLD_MAX,
+    )
   }
 }
 

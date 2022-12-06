@@ -3,6 +3,10 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
+import Entity from './Entity'
+import Player from '../server/Player'
+import Powerup from '../server/Powerup'
+
 export const WORLD_MIN = 0
 export const WORLD_MAX = 5000
 export const WORLD_PADDING = 30
@@ -14,14 +18,6 @@ export const DRAWING_NAME_COLOR = 'black'
 export const DRAWING_HP_COLOR = 'green'
 export const DRAWING_HP_MISSING_COLOR = 'red'
 export const DRAWING_IMG_BASE_PATH = '/client/img'
-
-// export DRAWING_IMG_SELF_TANK = 'self_tank'
-// export DRAWING_IMG_SELF_TURRET = 'self_turret'
-// export DRAWING_IMG_OTHER_TANK = 'other_tank'
-// export DRAWING_IMG_OTHER_TURRET = 'other_turret'
-// export DRAWING_IMG_SHIELD = 'shield'
-// export DRAWING_IMG_BULLET = 'bullet'
-// export DRAWING_IMG_TILE = 'tile'
 export enum DRAWING_IMG_KEYS {
   SELF_TANK = 'self_tank',
   SELF_TURRET = 'self_turret',
@@ -31,18 +27,45 @@ export enum DRAWING_IMG_KEYS {
   BULLET = 'bullet',
   TILE = 'tile',
 }
-
 export const DRAWING_TILE_SIZE = 100
 export const VIEWPORT_STICKINESS = 0.004
 
+export interface PLAYER_INPUTS {
+  up: boolean,
+  down: boolean,
+  right: boolean,
+  left: boolean,
+  turretAngle: number,
+  shoot: boolean,
+}
+
+// Socket events we can listen for.
 export enum SOCKET {
   UPDATE = 'update',
-  NEW_PLAYER = 'new-player',
-  PLAYER_ACTION = 'player-action',
-  CHAT_CLIENT_SERVER = 'chat-client-to-server',
-  CHAT_SERVER_CLIENT = 'chat-server-to-client',
+  NEW_PLAYER = 'newPlayer',
+  PLAYER_ACTION = 'playerAction',
+  CHAT_CLIENT_SERVER = 'chatClientToServer',
+  CHAT_SERVER_CLIENT = 'chatServerToClient',
   DISCONNECT = 'disconnect',
 }
+
+// Interfaces for each of the socket.io communication types
+export interface SERVER_TO_CLIENT_EVENTS {
+  [SOCKET.UPDATE]: (self: Player, players: Player[], projectiles: Entity[],
+        powerups: Powerup[]) => void,
+  [SOCKET.CHAT_SERVER_CLIENT]: (name: string, message:string,
+    isNotification: boolean) => void,
+}
+export interface CLIENT_TO_SERVER_EVENTS {
+  [SOCKET.NEW_PLAYER]: (name: string) => boolean,
+  [SOCKET.PLAYER_ACTION]: (data: PLAYER_INPUTS) => void,
+  [SOCKET.CHAT_CLIENT_SERVER]: (message:string) => void,
+  [SOCKET.DISCONNECT]: () => void,
+}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface SERVER_TO_SERVER_EVENTS {}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface SOCKET_DATA {}
 
 export const PLAYER_TURN_RATE = 0.005
 export const PLAYER_DEFAULT_SPEED = 0.4
@@ -50,13 +73,6 @@ export const PLAYER_SHOT_COOLDOWN = 800
 export const PLAYER_DEFAULT_HITBOX_SIZE = 20
 export const PLAYER_SHIELD_HITBOX_SIZE = 45
 export const PLAYER_MAX_HEALTH = 10
-export interface PLAYER_INPUTS {
-  up: boolean,
-  down: boolean,
-  right: boolean,
-  left: boolean,
-  turretAngle: number,
-}
 
 export const BULLET_DEFAULT_DAMAGE = 1
 export const BULLET_SPEED = 1.2
@@ -68,7 +84,7 @@ export const POWERUP_MAX_COUNT = 50
 export const POWERUP_MIN_DURATION = 5000
 export const POWERUP_MAX_DURATION = 15000
 export enum POWERUP_TYPES {
-  HEALTH_PACK = "health_pack",
+  HEALTH_PACK = 'health_pack',
   SHOTGUN = 'shotgun',
   RAPIDFIRE = 'rapidfire',
   SPEEDBOOST = 'speedboost',
@@ -80,9 +96,9 @@ export interface POWERUP_DATA {
   max: number,
 }
 export const POWERUP_DATA_RANGES = new Map<POWERUP_TYPES, POWERUP_DATA>([
-  [POWERUP_TYPES.HEALTH_PACK, { min: 1, max: 4 }],
-  [POWERUP_TYPES.SHOTGUN, { min: 1, max: 2 }],
-  [POWERUP_TYPES.RAPIDFIRE, { min: 2, max: 4 }],
-  [POWERUP_TYPES.SPEEDBOOST, { min: 1.2, max: 1.8 }],
-  [POWERUP_TYPES.SHIELD, { min: 1, max: 4 }],
+  [POWERUP_TYPES.HEALTH_PACK, {min: 1, max: 4}],
+  [POWERUP_TYPES.SHOTGUN, {min: 1, max: 2}],
+  [POWERUP_TYPES.RAPIDFIRE, {min: 2, max: 4}],
+  [POWERUP_TYPES.SPEEDBOOST, {min: 1.2, max: 1.8}],
+  [POWERUP_TYPES.SHIELD, {min: 1, max: 4}],
 ])

@@ -10,6 +10,7 @@
  */
 const normalizeAngle = (angle: number): number => {
   while (angle < 0) {
+    // eslint-disable-next-line no-param-reassign
     angle += Math.PI * 2
   }
   return angle % (Math.PI * 2)
@@ -44,9 +45,9 @@ const clamp = (val: number, min: number, max: number): number => {
  */
 const randRange = (min: number, max: number): number => {
   if (min >= max) {
-    return Math.random() * (min - max) + max
+    return (Math.random() * (min - max)) + max
   }
-  return Math.random() * (max - min) + min
+  return (Math.random() * (max - min)) + min
 }
 
 /**
@@ -63,9 +64,8 @@ const randRangeInt = (min: number, max: number): number => {
 /**
  * Returns a random element in a given array.
  */
-const choiceArray = (array: any[]): any => {
-  return array[randRangeInt(0, array.length)]
-}
+const choiceArray = <Type>(array: Type[]): Type => array[
+  randRangeInt(0, array.length)]
 
 export default {
   normalizeAngle,
@@ -73,5 +73,5 @@ export default {
   clamp,
   randRange,
   randRangeInt,
-  choiceArray
+  choiceArray,
 }
