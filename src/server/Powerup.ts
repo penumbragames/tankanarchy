@@ -3,10 +3,10 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import * as Constants from '../lib/Constants.js'
-import Entity from '../lib/Entity.js'
-import Util from '../lib/Util.js'
-import Vector from '../lib/Vector.js'
+import * as Constants from '../lib/Constants'
+import Entity from '../lib/Entity'
+import Util from '../lib/Util'
+import Vector from '../lib/Vector'
 
 class Powerup extends Entity {
   position: Vector

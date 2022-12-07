@@ -3,13 +3,13 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import * as Constants from './lib/Constants.js'
+import * as Constants from './lib/Constants'
 import * as http from 'http'
 import * as path from 'path'
 import * as socketIO from 'socket.io'
 import * as url from 'url'
 
-import Game from './server/Game.js'
+import Game from './server/Game'
 import express from 'express'
 import morgan from 'morgan'
 
@@ -28,11 +28,11 @@ const game = new Game()
 app.set('port', PORT)
 
 app.use(morgan('dev'))
-app.use('/dist', express.static(path.join(DIRNAME, '/dist')))
+app.use(express.static(DIRNAME))
 
 // Routing
 app.get('/', (_request: express.Request, response: express.Response) => {
-  response.sendFile(path.join(DIRNAME, 'views/index.html'))
+  response.sendFile(path.join(DIRNAME, 'html/index.html'))
 })
 
 /**

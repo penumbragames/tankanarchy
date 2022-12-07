@@ -3,9 +3,9 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import * as Constants from '../lib/Constants.js'
-import Util from '../lib/Util.js'
-import Vector from '../lib/Vector.js'
+import * as Constants from '../lib/Constants'
+import Util from '../lib/Util'
+import Vector from '../lib/Vector'
 
 class Entity {
   position: Vector

@@ -4,13 +4,12 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import * as Constants from '../lib/Constants.js'
-
-import Bullet from './Bullet.js'
-import Entity from '../lib/Entity.js'
-import Powerup from './Powerup.js'
-import Util from '../lib/Util.js'
-import Vector from '../lib/Vector.js'
+import * as Constants from '../lib/Constants'
+import Bullet from './Bullet'
+import Entity from '../lib/Entity'
+import Powerup from './Powerup'
+import Util from '../lib/Util'
+import Vector from '../lib/Vector'
 
 class Player extends Entity {
   name: string
@@ -67,7 +66,7 @@ class Player extends Entity {
   }
 
   /**
-   * Update this player given the client's input data from Input.js
+   * Update this player given the client's input data from Input
    * @param {Object} data A JSON Object storing the input state
    */
   // TODO: implement socket communication interface

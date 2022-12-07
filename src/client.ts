@@ -4,10 +4,10 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import * as Constants from '../lib/Constants'
+import * as Constants from './lib/Constants'
 import * as socketIO from 'socket.io-client'
-import Chat from './Chat'
-import Game from './Game'
+import Chat from './client/Chat'
+import Game from './client/Game'
 
 window.onload = (): void => {
   const socket = socketIO.io()

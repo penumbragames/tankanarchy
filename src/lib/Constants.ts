@@ -3,9 +3,9 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import Entity from './Entity.js'
-import Player from '../server/Player.js'
-import Powerup from '../server/Powerup.js'
+import Entity from './Entity'
+import Player from '../server/Player'
+import Powerup from '../server/Powerup'
 
 export const WORLD_MIN = 0
 export const WORLD_MAX = 5000
@@ -17,7 +17,7 @@ export const DRAWING_NAME_FONT = '14px Helvetica'
 export const DRAWING_NAME_COLOR = 'black'
 export const DRAWING_HP_COLOR = 'green'
 export const DRAWING_HP_MISSING_COLOR = 'red'
-export const DRAWING_IMG_BASE_PATH = '/client/img'
+export const DRAWING_IMG_BASE_PATH = '/img'
 export enum DRAWING_IMG_KEYS {
   SELF_TANK = 'self_tank',
   SELF_TURRET = 'self_turret',

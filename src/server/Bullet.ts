@@ -3,10 +3,10 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import * as Constants from '../lib/Constants.js'
-import Entity from '../lib/Entity.js'
-import Player from './Player.js'
-import Vector from '../lib/Vector.js'
+import * as Constants from '../lib/Constants'
+import Entity from '../lib/Entity'
+import Player from './Player'
+import Vector from '../lib/Vector'
 
 class Bullet extends Entity {
   angle: number
