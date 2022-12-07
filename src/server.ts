@@ -40,14 +40,14 @@ app.get('/', (_request: express.Request, response: express.Response) => {
  * game based on the input it receives.
  */
 io.on('connection', (socket:socketIO.Socket) => {
-  socket.on(Constants.SOCKET.NEW_PLAYER, (name:string) => {
+  socket.on(Constants.SOCKET.NEW_PLAYER, (name:string, callback:() => void) => {
     game.addNewPlayer(name, socket)
     io.emit(Constants.SOCKET.CHAT_SERVER_CLIENT, {
       name: CHAT_TAG,
       message: `${name} has joined the game.`,
       isNotification: true,
     })
-    return true
+    callback()
   })
 
   socket.on(Constants.SOCKET.PLAYER_ACTION,

@@ -36,10 +36,24 @@ class Input {
    * @param {Event} event The event passed to the event handler
    */
   onKeyDown(event:KeyboardEvent) {
-    this.left = event.code === 'KeyA' || event.code === 'ArrowLeft'
-    this.up = event.code === 'KeyW' || event.code === 'ArrowUp'
-    this.right = event.code === 'KeyD' || event.code === 'ArrowRight'
-    this.down = event.code === 'KeyS' || event.code === 'ArrowDown'
+    switch (event.code) {
+    case 'KeyA':
+    case 'ArrowLeft':
+      this.left = true
+      break
+    case 'KeyW':
+    case 'ArrowUp':
+      this.up = true
+      break
+    case 'KeyD':
+    case 'ArrowRight':
+      this.right = true
+      break
+    case 'KeyS':
+    case 'ArrowDown':
+      this.down = true
+      break
+    }
   }
 
   /**
@@ -47,10 +61,24 @@ class Input {
    * @param {Event} event The event passed to the event handler
    */
   onKeyUp(event:KeyboardEvent) {
-    this.left = !(event.code === 'KeyA' || event.code === 'ArrowLeft')
-    this.up = !(event.code === 'KeyW' || event.code === 'ArrowUp')
-    this.right = !(event.code === 'KeyD' || event.code === 'ArrowRight')
-    this.down = !(event.code === 'KeyS' || event.code === 'ArrowDown')
+    switch (event.code) {
+    case 'KeyA':
+    case 'ArrowLeft':
+      this.left = false
+      break
+    case 'KeyW':
+    case 'ArrowUp':
+      this.up = false
+      break
+    case 'KeyD':
+    case 'ArrowRight':
+      this.right = false
+      break
+    case 'KeyS':
+    case 'ArrowDown':
+      this.down = false
+      break
+    }
   }
 
   /**

@@ -7,7 +7,7 @@ import * as Constants from '../lib/Constants'
 import Util from '../lib/Util'
 import Vector from '../lib/Vector'
 
-class Entity {
+abstract class Entity {
   position: Vector
   velocity: Vector
   acceleration: Vector
@@ -21,6 +21,8 @@ class Entity {
     this.acceleration = acceleration
     this.hitboxSize = hitboxSize
   }
+
+  abstract update(lastUpdateTime: number, deltaTime: number):void
 
   /**
    * Returns true if this Entity's hitbox is overlapping or touching another

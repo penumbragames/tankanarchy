@@ -67,7 +67,7 @@ export interface SERVER_TO_CLIENT_EVENTS {
   [SOCKET.CHAT_SERVER_CLIENT]: (data:CHAT_MESSAGE) => void,
 }
 export interface CLIENT_TO_SERVER_EVENTS {
-  [SOCKET.NEW_PLAYER]: (name: string) => boolean,
+  [SOCKET.NEW_PLAYER]: (name: string, callback:() => void) => void,
   [SOCKET.PLAYER_ACTION]: (data: PLAYER_INPUTS) => void,
   [SOCKET.CHAT_CLIENT_SERVER]: (data:CHAT_MESSAGE) => void,
   [SOCKET.DISCONNECT]: () => void,

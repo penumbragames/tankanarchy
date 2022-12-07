@@ -33,12 +33,12 @@ class Drawing {
   static create(canvas: HTMLCanvasElement, viewport: Viewport) {
     const context = canvas.getContext('2d')!
     const images = new Map()
-    for (const key of Object.keys(Constants.DRAWING_IMG_KEYS)) {
+    for (const key of Object.values(Constants.DRAWING_IMG_KEYS)) {
       const img = new Image()
       img.src = `${Constants.DRAWING_IMG_BASE_PATH}/${key}.png`
       images.set(key, img)
     }
-    for (const type of Object.keys(Constants.POWERUP_TYPES)) {
+    for (const type of Object.values(Constants.POWERUP_TYPES)) {
       const img = new Image()
       img.src =
         `${Constants.DRAWING_IMG_BASE_PATH}/${type}_powerup.png`
@@ -106,13 +106,12 @@ class Drawing {
       isSelf ? Constants.DRAWING_IMG_KEYS.SELF_TURRET :
         Constants.DRAWING_IMG_KEYS.OTHER_TURRET,
     )!)
-
-    if (player.powerups.get(Constants.POWERUP_TYPES.SHIELD)) {
-      this.context.rotate(-Drawing.translateAngle(-player.turretAngle))
-      this.drawCenteredImage(
-        this.images.get(Constants.DRAWING_IMG_KEYS.SHIELD)!,
-      )
-    }
+    // if (player.powerups.get(Constants.POWERUP_TYPES.SHIELD)) {
+    //   this.context.rotate(-Drawing.translateAngle(-player.turretAngle))
+    //   this.drawCenteredImage(
+    //     this.images.get(Constants.DRAWING_IMG_KEYS.SHIELD)!,
+    //   )
+    // }
 
     this.context.restore()
   }
