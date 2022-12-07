@@ -149,7 +149,7 @@ class Drawing {
       Constants.WORLD_MIN, Constants.WORLD_MIN,
     ))
     const end = this.viewport.toCanvas(new Vector(
-      Constants.WORLD_MIN, Constants.WORLD_MIN,
+      Constants.WORLD_MAX, Constants.WORLD_MAX,
     ))
     for (let x = start.x; x < end.x; x += Constants.DRAWING_TILE_SIZE) {
       for (let y = start.y; y < end.y; y += Constants.DRAWING_TILE_SIZE) {
