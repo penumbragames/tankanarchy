@@ -97,7 +97,6 @@ class Game {
     if (player) {
       player.updateOnInput(data)
       if (data.shoot && player.canShoot()) {
-        console.log('shootaction')
         const projectiles = player.getProjectilesFromShot()
         this.projectiles.push(...projectiles)
       }
@@ -121,6 +120,7 @@ class Game {
       ...this.projectiles,
       ...this.powerups,
     ]
+
     // TODO: Use quadtree for collision update
     entities.forEach(
       entity => {

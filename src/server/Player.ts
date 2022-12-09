@@ -182,7 +182,7 @@ class Player extends Entity {
    * @return {Array<Bullet>}
    */
   getProjectilesFromShot(): Bullet[] {
-    const bullets = [Bullet.createFromPlayer(this)]
+    const bullets = [Bullet.createFromPlayer(this, 0)]
     const shotgunPowerup = this.powerups.get(Constants.POWERUP_TYPES.SHOTGUN)
     if (shotgunPowerup) {
       for (let i = 1; i <= shotgunPowerup.data; ++i) {

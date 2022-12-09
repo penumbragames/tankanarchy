@@ -34,7 +34,7 @@ class Bullet extends Entity {
    * @param {number} [angleDeviation=0] The angle deviation if the bullet is
    *   not traveling in the direction of the turret
    */
-  static createFromPlayer(player: Player, angleDeviation = 0) {
+  static createFromPlayer(player: Player, angleDeviation: number) {
     const angle = player.turretAngle + angleDeviation
     return new Bullet(
       player.position.copy(),
@@ -53,9 +53,12 @@ class Bullet extends Entity {
   update(_lastUpdateTime: number, deltaTime: number) {
     const distanceStep = Vector.scale(this.velocity, deltaTime)
     this.position.add(distanceStep)
+    if (!this.inWorld()) {
+      this.destroyed = true
+      return
+    }
     this.distanceTraveled += distanceStep.mag2
-    if (this.inWorld() ||
-      this.distanceTraveled > Constants.BULLET_MAX_TRAVEL_DISTANCE_SQ) {
+    if (this.distanceTraveled > Constants.BULLET_MAX_TRAVEL_DISTANCE ** 2) {
       this.destroyed = true
     }
   }

@@ -13,7 +13,6 @@ import Input from './Input'
 import Leaderboard from './Leaderboard'
 import Player from '../server/Player'
 import Powerup from '../server/Powerup'
-import Util from '../lib/Util'
 import Vector from '../lib/Vector'
 import Viewport from './Viewport'
 
@@ -112,7 +111,7 @@ class Game {
         left: this.input.left,
         right: this.input.right,
         shoot: this.input.mouseDown,
-        turretAngle: Util.normalizeAngle(playerToMouseVector.angle),
+        turretAngle: playerToMouseVector.angle,
       })
     }
   }
@@ -122,10 +121,13 @@ class Game {
       this.drawing.clear()
       this.drawing.drawTiles()
 
+      console.log(this.projectiles)
+
       this.projectiles.forEach(this.drawing.drawBullet.bind(this.drawing))
       this.powerups.forEach(this.drawing.drawPowerup.bind(this.drawing))
       this.drawing.drawTank(true, this.self)
-      this.players.forEach(tank => this.drawing.drawTank(false, tank))
+      this.players.filter(player => player.socketID !== this.self?.socketID)
+        .forEach(tank => this.drawing.drawTank(false, tank))
     }
   }
 }
