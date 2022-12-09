@@ -7,7 +7,6 @@ import * as Constants from '../lib/Constants'
 import Bullet from '../server/Bullet'
 import Player from '../server/Player'
 import Powerup from '../server/Powerup'
-import Util from '../lib/Util'
 import Vector from '../lib/Vector'
 import Viewport from './Viewport'
 
@@ -45,15 +44,6 @@ class Drawing {
       images.set(type, img)
     }
     return new Drawing(context, images, viewport)
-  }
-
-  /**
-   * Convert an angle from the real math system to funky canvas coordinates.
-   * @param {number} angle The angle to translate
-   * @return {number}
-   */
-  static translateAngle(angle: number): number {
-    return Util.normalizeAngle(angle + (Math.PI / 2))
   }
 
   /**
@@ -124,7 +114,7 @@ class Drawing {
     this.context.save()
     const canvasCoords = this.viewport.toCanvas(bullet.position)
     this.context.translate(canvasCoords.x, canvasCoords.y)
-    this.context.rotate(Drawing.translateAngle(bullet.angle))
+    this.context.rotate(bullet.angle)
     this.drawCenteredImage(this.images.get(Constants.DRAWING_IMG_KEYS.BULLET)!)
     this.context.restore()
   }

@@ -46,17 +46,17 @@ class Vector {
   }
 
   /**
-     * Adds two vectors and returns a new Vector object without mutating the
-     * arguments.
-     */
+   * Adds two vectors and returns a new Vector object without mutating the
+   * arguments.
+   */
   static add(v1: Vector, v2: Vector): Vector {
     return new Vector(v1.x + v2.x, v1.y + v2.y)
   }
 
   /**
-     * Adds another Vector object to this one, returning this Vector for method
-     * chaining.
-     */
+   * Adds another Vector object to this one, returning this Vector for method
+   * chaining.
+   */
   add(other: Vector): Vector {
     this.x += other.x
     this.y += other.y
@@ -64,16 +64,16 @@ class Vector {
   }
 
   /**
-     * Scales a given Vector by a scalar constant, returning a new Vector.
-     */
+   * Scales a given Vector by a scalar constant, returning a new Vector.
+   */
   static scale(v: Vector, c: number): Vector {
     return new Vector(v.x * c, v.y * c)
   }
 
   /**
-     * Scales this Vector by a scalar constant, returning this Vector for
-     * method chaining.
-     */
+   * Scales this Vector by a scalar constant, returning this Vector for
+   * method chaining.
+   */
   scale(c: number): Vector {
     this.x *= c
     this.y *= c
@@ -81,16 +81,16 @@ class Vector {
   }
 
   /**
-     * Subtracts one Vector from another, returning a new Vector.
-     */
+   * Subtracts one Vector from another, returning a new Vector.
+   */
   static sub(v1: Vector, v2: Vector): Vector {
     return new Vector(v1.x - v2.x, v1.y - v2.y)
   }
 
   /**
-     * Subtracts another Vector from this Vector, returning this Vector for
-     * method chaining.
-     */
+   * Subtracts another Vector from this Vector, returning this Vector for
+   * method chaining.
+   */
   sub(other: Vector): Vector {
     this.x -= other.x
     this.y -= other.y
