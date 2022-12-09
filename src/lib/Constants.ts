@@ -85,7 +85,7 @@ export const PLAYER_MAX_HEALTH = 10
 
 export const BULLET_DEFAULT_DAMAGE = 1
 export const BULLET_SPEED = 1.2
-export const BULLET_MAX_TRAVEL_DISTANCE_SQ = 1000 * 1000
+export const BULLET_MAX_TRAVEL_DISTANCE = 1000
 export const BULLET_HITBOX_SIZE = 10
 
 export const POWERUP_HITBOX_SIZE = 5
@@ -93,11 +93,11 @@ export const POWERUP_MAX_COUNT = 50
 export const POWERUP_MIN_DURATION = 5000
 export const POWERUP_MAX_DURATION = 15000
 export enum POWERUP_TYPES {
-  HEALTH_PACK = 'health_pack',
-  SHOTGUN = 'shotgun',
-  RAPIDFIRE = 'rapidfire',
-  SPEEDBOOST = 'speedboost',
-  SHIELD = 'shield',
+  HEALTH_PACK = 'health_pack_powerup',
+  SHOTGUN = 'shotgun_powerup',
+  RAPIDFIRE = 'rapidfire_powerup',
+  SPEEDBOOST = 'speedboost_powerup',
+  SHIELD = 'shield_powerup',
 }
 
 export interface POWERUP_DATA {

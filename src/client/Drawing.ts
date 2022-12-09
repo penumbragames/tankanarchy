@@ -12,7 +12,9 @@ import Viewport from './Viewport'
 
 class Drawing {
   context: CanvasRenderingContext2D
-  images: Map<Constants.DRAWING_IMG_KEYS, HTMLImageElement>
+  images: Map<Constants.DRAWING_IMG_KEYS | Constants.POWERUP_TYPES,
+              HTMLImageElement>
+
   viewport: Viewport
 
   width: number
@@ -32,16 +34,16 @@ class Drawing {
   static create(canvas: HTMLCanvasElement, viewport: Viewport) {
     const context = canvas.getContext('2d')!
     const images = new Map()
-    for (const key of Object.values(Constants.DRAWING_IMG_KEYS)) {
+    for (const [, name] of Object.entries(Constants.DRAWING_IMG_KEYS)) {
       const img = new Image()
-      img.src = `${Constants.DRAWING_IMG_BASE_PATH}/${key}.png`
-      images.set(key, img)
+      img.src = `${Constants.DRAWING_IMG_BASE_PATH}/${name}.png`
+      images.set(name, img)
     }
-    for (const type of Object.values(Constants.POWERUP_TYPES)) {
+    for (const [, name] of Object.entries(Constants.POWERUP_TYPES)) {
       const img = new Image()
       img.src =
-        `${Constants.DRAWING_IMG_BASE_PATH}/${type}_powerup.png`
-      images.set(type, img)
+        `${Constants.DRAWING_IMG_BASE_PATH}/${name}.png`
+      images.set(name, img)
     }
     return new Drawing(context, images, viewport)
   }
@@ -96,12 +98,13 @@ class Drawing {
       isSelf ? Constants.DRAWING_IMG_KEYS.SELF_TURRET :
         Constants.DRAWING_IMG_KEYS.OTHER_TURRET,
     )!)
-    // if (player.powerups.get(Constants.POWERUP_TYPES.SHIELD)) {
-    //   this.context.rotate(--player.turretAngle)
-    //   this.drawCenteredImage(
-    //     this.images.get(Constants.DRAWING_IMG_KEYS.SHIELD)!,
-    //   )
-    // }
+    const powerupsMap = new Map(Object.entries(player.powerups))
+    if (powerupsMap.get(Constants.POWERUP_TYPES.SHIELD)) {
+      this.context.rotate(-player.turretAngle)
+      this.drawCenteredImage(
+        this.images.get(Constants.DRAWING_IMG_KEYS.SHIELD)!,
+      )
+    }
 
     this.context.restore()
   }
@@ -127,7 +130,11 @@ class Drawing {
     this.context.save()
     const canvasCoords = this.viewport.toCanvas(powerup.position)
     this.context.translate(canvasCoords.x, canvasCoords.y)
-    // this.drawCenteredImage(this.images.get(powerup.type))
+    // Reverse lookup enum since it becomes the JSONified value in the request.
+    const powerupType = Object.entries(Constants.POWERUP_TYPES).find(
+      ([k]) => k === powerup.type,
+    )![1]
+    this.drawCenteredImage(this.images.get(powerupType)!)
     this.context.restore()
   }
 
