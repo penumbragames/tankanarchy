@@ -5,8 +5,8 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "node server.js",
-    "postinstall": "webpack"
+    "start": "node --experimental-specifier-resolution=node dist/server.js",
+    "watch": "nodemon --experimental-specifier-resolution=node dist/server.js"
   },
   "repository": {
     "type": "git",

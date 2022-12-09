@@ -75,7 +75,7 @@ class Drawing {
    *   denote an enemy tank.
    * @param {Player} player The player object to draw.
    */
-  drawTank(isSelf: boolean, player: Player) {
+  drawTank(isSelf: boolean, player: Player): void {
     this.context.save()
     const canvasCoords = this.viewport.toCanvas(player.position)
     this.context.translate(canvasCoords.x, canvasCoords.y)
@@ -94,20 +94,20 @@ class Drawing {
       this.context.fillRect(-25 + (5 * i), -40, 5, 4)
     }
 
-    this.context.rotate(Drawing.translateAngle(player.tankAngle))
+    this.context.rotate(player.tankAngle)
     this.drawCenteredImage(this.images.get(
       isSelf ? Constants.DRAWING_IMG_KEYS.SELF_TANK :
         Constants.DRAWING_IMG_KEYS.OTHER_TANK,
     )!)
-    this.context.rotate(-Drawing.translateAngle(player.tankAngle))
+    this.context.rotate(-player.tankAngle)
 
-    this.context.rotate(Drawing.translateAngle(player.turretAngle))
+    this.context.rotate(player.turretAngle)
     this.drawCenteredImage(this.images.get(
       isSelf ? Constants.DRAWING_IMG_KEYS.SELF_TURRET :
         Constants.DRAWING_IMG_KEYS.OTHER_TURRET,
     )!)
     // if (player.powerups.get(Constants.POWERUP_TYPES.SHIELD)) {
-    //   this.context.rotate(-Drawing.translateAngle(-player.turretAngle))
+    //   this.context.rotate(--player.turretAngle)
     //   this.drawCenteredImage(
     //     this.images.get(Constants.DRAWING_IMG_KEYS.SHIELD)!,
     //   )
@@ -120,7 +120,7 @@ class Drawing {
    * Draws a bullet (tank shell) to the canvas.
    * @param {Bullet} bullet The bullet to draw to the canvas
    */
-  drawBullet(bullet:Bullet) {
+  drawBullet(bullet:Bullet): void {
     this.context.save()
     const canvasCoords = this.viewport.toCanvas(bullet.position)
     this.context.translate(canvasCoords.x, canvasCoords.y)
@@ -133,7 +133,7 @@ class Drawing {
    * Draws a powerup to the canvas.
    * @param {Powerup} powerup The powerup to draw
    */
-  drawPowerup(powerup:Powerup) {
+  drawPowerup(powerup:Powerup): void {
     this.context.save()
     const canvasCoords = this.viewport.toCanvas(powerup.position)
     this.context.translate(canvasCoords.x, canvasCoords.y)
@@ -144,7 +144,7 @@ class Drawing {
   /**
    * Draws the background tiles to the canvas.
    */
-  drawTiles() {
+  drawTiles(): void {
     const start = this.viewport.toCanvas(new Vector(
       Constants.WORLD_MIN, Constants.WORLD_MIN,
     ))

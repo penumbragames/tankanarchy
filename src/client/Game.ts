@@ -103,17 +103,16 @@ class Game {
   update() {
     if (this.self) {
       this.viewport.update(this.deltaTime)
-      const absoluteMouseCoords = this.viewport.toWorld(this.input.mouseCoords)
-      const playerToMouseVector = Vector.sub(this.self.position,
-                                             absoluteMouseCoords)
-
+      const worldMouseCoords = this.viewport.toWorld(this.input.mouseCoords)
+      const playerToMouseVector = Vector.sub(worldMouseCoords,
+                                             this.self.position)
       this.socket.emit(Constants.SOCKET.PLAYER_ACTION, {
         up: this.input.up,
         down: this.input.down,
         left: this.input.left,
         right: this.input.right,
         shoot: this.input.mouseDown,
-        turretAngle: Util.normalizeAngle(playerToMouseVector.angle + Math.PI),
+        turretAngle: Util.normalizeAngle(playerToMouseVector.angle),
       })
     }
   }
@@ -121,13 +120,10 @@ class Game {
   draw() {
     if (this.self) {
       this.drawing.clear()
-
       this.drawing.drawTiles()
 
       this.projectiles.forEach(this.drawing.drawBullet.bind(this.drawing))
-
       this.powerups.forEach(this.drawing.drawPowerup.bind(this.drawing))
-
       this.drawing.drawTank(true, this.self)
       this.players.forEach(tank => this.drawing.drawTank(false, tank))
     }

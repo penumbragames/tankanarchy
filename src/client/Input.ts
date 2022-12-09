@@ -14,6 +14,7 @@ class Input {
 
   mouseDown: boolean
   mouseCoords: Vector
+  canvasOffset: Vector
 
   constructor() {
     this.up = false
@@ -23,19 +24,17 @@ class Input {
 
     this.mouseDown = false
     this.mouseCoords = Vector.zero()
+    this.canvasOffset = Vector.zero()
   }
 
-  static create(keyElement:HTMLElement, mouseMoveElement:HTMLElement):Input {
+  static create(keyElement:HTMLElement,
+                mouseTrackerElement:HTMLCanvasElement): Input {
     const input = new Input()
-    input.applyEventHandlers(keyElement, keyElement, mouseMoveElement)
+    input.applyEventHandlers(keyElement, mouseTrackerElement)
     return input
   }
 
-  /**
-   * Key down event handler.
-   * @param {Event} event The event passed to the event handler
-   */
-  onKeyDown(event:KeyboardEvent) {
+  onKeyDown(event:KeyboardEvent): void {
     switch (event.code) {
     case 'KeyA':
     case 'ArrowLeft':
@@ -56,11 +55,7 @@ class Input {
     }
   }
 
-  /**
-   * Key up event handler.
-   * @param {Event} event The event passed to the event handler
-   */
-  onKeyUp(event:KeyboardEvent) {
+  onKeyUp(event:KeyboardEvent): void {
     switch (event.code) {
     case 'KeyA':
     case 'ArrowLeft':
@@ -81,50 +76,42 @@ class Input {
     }
   }
 
-  /**
-   * Mouse down event handler.
-   * @param {Event} event The event passed to the event handler
-   */
-  onMouseDown(event:MouseEvent) {
-    if (event.button === 1) {
+  onMouseDown(event:MouseEvent): void {
+    if (event.button === 0) {
       this.mouseDown = true
     }
   }
 
-  /**
-   * Mouse up event handler.
-   * @param {Event} event The event passed to the event handler
-   */
-  onMouseUp(event:MouseEvent) {
-    if (event.button === 1) {
+  onMouseUp(event:MouseEvent): void {
+    if (event.button === 0) {
       this.mouseDown = false
     }
   }
 
-  /**
-   * Mouse move event handler.
-   * @param {Event} event The event passed to the event handler
-   */
-  onMouseMove(event:MouseEvent) {
-    this.mouseCoords.x = event.offsetX
-    this.mouseCoords.y = event.offsetY
+  onMouseMove(event:MouseEvent): void {
+    this.mouseCoords = new Vector(event.offsetX, event.offsetY)
+      .sub(this.canvasOffset)
   }
 
   /**
    * Applies the event handlers to elements in the DOM.
-   * @param {Element} keyElement The element to track keypresses on
-   * @param {Element} mouseClickElement The element to track mouse clicks on
-   * @param {Element} mouseMoveElement The element to track mouse movement
-   *   relative to
+   * @param {HTMLElement} keyElement The element to track keypresses on
+   * @param {HTMLElement} mouseTrackerElement The element to track mouse clicks
+   *   and movement on, mouse coordinates will be tracked relative to this
+   *   element.
    */
-  applyEventHandlers(keyElement:HTMLElement, mouseClickElement:HTMLElement,
-                     mouseMoveElement:HTMLElement) {
+  applyEventHandlers(keyElement:HTMLElement,
+                     mouseTrackerElement:HTMLCanvasElement) {
     keyElement.addEventListener('keydown', this.onKeyDown.bind(this))
     keyElement.addEventListener('keyup', this.onKeyUp.bind(this))
-    mouseClickElement.addEventListener('mousedown', this.onMouseDown.bind(this))
-    mouseClickElement.addEventListener('mouseup', this.onMouseUp.bind(this))
-    mouseMoveElement.setAttribute('tabindex', '1')
-    mouseMoveElement.addEventListener('mousemove', this.onMouseMove.bind(this))
+    mouseTrackerElement.addEventListener('mousedown',
+                                         this.onMouseDown.bind(this))
+    mouseTrackerElement.addEventListener('mouseup',
+                                         this.onMouseUp.bind(this))
+    mouseTrackerElement.addEventListener('mousemove',
+                                         this.onMouseMove.bind(this))
+    this.canvasOffset = new Vector(mouseTrackerElement.offsetLeft,
+                                   mouseTrackerElement.offsetTop)
   }
 }
 

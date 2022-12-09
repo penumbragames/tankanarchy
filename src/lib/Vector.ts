@@ -17,13 +17,11 @@ class Vector {
     return new Vector(r * Math.cos(theta), r * Math.sin(theta))
   }
 
-  // Returns the Vector <0, 0>
-  static zero() {
+  static zero(): Vector {
     return new Vector(0, 0)
   }
 
-  // Returns the Vector <1, 1>
-  static one() {
+  static one(): Vector {
     return new Vector(1, 1)
   }
 

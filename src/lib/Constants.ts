@@ -30,7 +30,6 @@ export enum DRAWING_IMG_KEYS {
 export const DRAWING_TILE_SIZE = 100
 export const VIEWPORT_STICKINESS = 0.004
 
-
 // Socket events we can listen for.
 export enum SOCKET {
   UPDATE = 'update',

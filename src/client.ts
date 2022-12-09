@@ -23,7 +23,7 @@ window.onload = (): void => {
     const name = nameInputElement.value
     document.getElementById('name-prompt-container')!.innerHTML = ''
     if (name && name.length < 20) {
-      socket.emit(Constants.SOCKET.NEW_PLAYER, {name}, () => {
+      socket.emit(Constants.SOCKET.NEW_PLAYER, name, () => {
         document.getElementById('name-prompt-overlay')!.remove()
         document.getElementById('canvas')!.focus()
         game.run()
