@@ -6,13 +6,13 @@
 import Player from '../server/Player'
 
 class Leaderboard {
-  container:HTMLElement
+  container: HTMLElement
 
-  constructor(container:HTMLElement) {
+  constructor(container: HTMLElement) {
     this.container = container
   }
 
-  static create(containerElementID:string) {
+  static create(containerElementID: string): Leaderboard {
     return new Leaderboard(document.getElementById(containerElementID)!)
   }
 
@@ -20,15 +20,15 @@ class Leaderboard {
    * Updates the leaderboard with the list of current players.
    * @param {Array<Player>} players The list of current players
    */
-  update(players:Player[]) {
+  update(players: Player[]): void {
     while (this.container.firstChild) {
       this.container.removeChild(this.container.firstChild)
     }
-    players.sort((a:Player, b:Player) => b.kills - a.kills)
-    players.slice(0, 10).forEach(player => {
+    players.sort((a: Player, b: Player) => b.kills - a.kills)
+    players.slice(0, 10).forEach((player) => {
       const containercontainer = document.createElement('li')
-      const text =
-        `${player.name} - Kills: ${player.kills} Deaths: ${player.deaths}`
+      const kdtext = `Kills: ${player.kills} Deaths: ${player.deaths}`
+      const text = `${player.name} - ${kdtext}`
       containercontainer.appendChild(document.createTextNode(text))
       this.container.appendChild(containercontainer)
     })

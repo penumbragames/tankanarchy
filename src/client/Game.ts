@@ -16,9 +16,13 @@ import Powerup from '../server/Powerup'
 import Vector from '../lib/Vector'
 import Viewport from './Viewport'
 
+type ClientSocket = socketIO.Socket<
+  Constants.SERVER_TO_CLIENT_EVENTS,
+  Constants.CLIENT_TO_SERVER_EVENTS
+>
+
 class Game {
-  socket: socketIO.Socket<
-    Constants.SERVER_TO_CLIENT_EVENTS, Constants.CLIENT_TO_SERVER_EVENTS>
+  socket: ClientSocket
 
   viewport: Viewport
   drawing: Drawing
@@ -34,8 +38,13 @@ class Game {
   lastUpdateTime: number
   deltaTime: number
 
-  constructor(socket:socketIO.Socket, viewport:Viewport, drawing:Drawing,
-              input:Input, leaderboard:Leaderboard) {
+  constructor(
+    socket: ClientSocket,
+    viewport: Viewport,
+    drawing: Drawing,
+    input: Input,
+    leaderboard: Leaderboard,
+  ) {
     this.socket = socket
 
     this.viewport = viewport
@@ -53,8 +62,11 @@ class Game {
     this.deltaTime = 0
   }
 
-  static create(socket:socketIO.Socket, canvasElementID:string,
-                leaderboardElementID:string):Game {
+  static create(
+    socket: socketIO.Socket,
+    canvasElementID: string,
+    leaderboardElementID: string,
+  ): Game {
     const canvas = <HTMLCanvasElement>document.getElementById(canvasElementID)
     canvas.width = Constants.CANVAS_WIDTH
     canvas.height = Constants.CANVAS_HEIGHT
@@ -69,13 +81,12 @@ class Game {
     return game
   }
 
-  init() {
+  init(): void {
     this.lastUpdateTime = Date.now()
-    this.socket.on(Constants.SOCKET.UPDATE,
-                   this.onReceiveGameState.bind(this))
+    this.socket.on(Constants.SOCKET.UPDATE, this.onReceiveGameState.bind(this))
   }
 
-  onReceiveGameState(state:Constants.GAME_STATE) {
+  onReceiveGameState(state: Constants.GAME_STATE): void {
     this.self = state.self
     this.players = state.players
     this.projectiles = state.projectiles
@@ -85,7 +96,7 @@ class Game {
     this.leaderboard.update(state.players)
   }
 
-  run() {
+  run(): void {
     const currentTime = Date.now()
     this.deltaTime = currentTime - this.lastUpdateTime
     this.lastUpdateTime = currentTime
@@ -95,16 +106,18 @@ class Game {
     this.animationFrameId = window.requestAnimationFrame(this.run.bind(this))
   }
 
-  stop() {
+  stop(): void {
     window.cancelAnimationFrame(this.animationFrameId)
   }
 
-  update() {
+  update(): void {
     if (this.self) {
       this.viewport.update(this.deltaTime)
       const worldMouseCoords = this.viewport.toWorld(this.input.mouseCoords)
-      const playerToMouseVector = Vector.sub(worldMouseCoords,
-                                             this.self.position)
+      const playerToMouseVector = Vector.sub(
+        worldMouseCoords,
+        this.self.position,
+      )
       this.socket.emit(Constants.SOCKET.PLAYER_ACTION, {
         up: this.input.up,
         down: this.input.down,
@@ -116,7 +129,7 @@ class Game {
     }
   }
 
-  draw() {
+  draw(): void {
     if (this.self) {
       this.drawing.clear()
       this.drawing.drawTiles()
@@ -124,8 +137,9 @@ class Game {
       this.projectiles.forEach(this.drawing.drawBullet.bind(this.drawing))
       this.powerups.forEach(this.drawing.drawPowerup.bind(this.drawing))
       this.drawing.drawTank(true, this.self)
-      this.players.filter(player => player.socketID !== this.self?.socketID)
-        .forEach(tank => this.drawing.drawTank(false, tank))
+      this.players
+        .filter((player) => player.socketID !== this.self?.socketID)
+        .forEach((tank) => this.drawing.drawTank(false, tank))
     }
   }
 }

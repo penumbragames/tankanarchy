@@ -69,7 +69,6 @@ class Player extends Entity {
    * Update this player given the client's input data from Input
    * @param {Object} data A JSON Object storing the input state
    */
-  // TODO: implement socket communication interface
   updateOnInput(data: Constants.PLAYER_INPUTS): void {
     if ((data.up && data.down) || (!data.up && !data.down)) {
       this.velocity = Vector.zero()
@@ -100,57 +99,57 @@ class Player extends Entity {
     this.position.add(Vector.scale(this.velocity, deltaTime))
     this.boundToWorld()
     this.tankAngle = Util.normalizeAngle(
+      // prettier-ignore
       this.tankAngle + (this.turnRate * deltaTime),
     )
 
     this.updatePowerups()
   }
 
-  /**
-   * Updates the Player's powerups.
-   */
   updatePowerups(): void {
+    console.log(this.socketID, this.powerups)
     for (const type of Object.values(Constants.POWERUP_TYPES)) {
       const powerup = this.powerups.get(type)
       if (powerup) {
         switch (type) {
-        case Constants.POWERUP_TYPES.HEALTH_PACK:
-          this.health = Math.min(
-            this.health + powerup.data, Constants.PLAYER_MAX_HEALTH,
-          )
-          this.powerups.delete(type)
-          break
-        case Constants.POWERUP_TYPES.SHOTGUN:
-          break
-        case Constants.POWERUP_TYPES.RAPIDFIRE:
-          this.shotCooldown = Constants.PLAYER_SHOT_COOLDOWN / powerup.data
-          break
-        case Constants.POWERUP_TYPES.SPEEDBOOST:
-          this.speed = Constants.PLAYER_DEFAULT_SPEED * powerup.data
-          break
-        case Constants.POWERUP_TYPES.SHIELD:
-          this.hitboxSize = Constants.PLAYER_SHIELD_HITBOX_SIZE
-          if (powerup.data <= 0) {
-            this.powerups.delete(type)
-            this.hitboxSize = Constants.PLAYER_DEFAULT_HITBOX_SIZE
-          }
-          break
-        }
-        if (this.lastUpdateTime > powerup.expirationTime) {
-          switch (type) {
           case Constants.POWERUP_TYPES.HEALTH_PACK:
+            this.health = Math.min(
+              this.health + powerup.data,
+              Constants.PLAYER_MAX_HEALTH,
+            )
+            this.powerups.delete(type)
             break
           case Constants.POWERUP_TYPES.SHOTGUN:
             break
           case Constants.POWERUP_TYPES.RAPIDFIRE:
-            this.shotCooldown = Constants.PLAYER_SHOT_COOLDOWN
+            this.shotCooldown = Constants.PLAYER_SHOT_COOLDOWN / powerup.data
             break
           case Constants.POWERUP_TYPES.SPEEDBOOST:
-            this.speed = Constants.PLAYER_DEFAULT_SPEED
+            this.speed = Constants.PLAYER_DEFAULT_SPEED * powerup.data
             break
           case Constants.POWERUP_TYPES.SHIELD:
-            this.hitboxSize = Constants.PLAYER_DEFAULT_HITBOX_SIZE
+            this.hitboxSize = Constants.PLAYER_SHIELD_HITBOX_SIZE
+            if (powerup.data <= 0) {
+              this.powerups.delete(type)
+              this.hitboxSize = Constants.PLAYER_DEFAULT_HITBOX_SIZE
+            }
             break
+        }
+        if (this.lastUpdateTime > powerup.expirationTime) {
+          switch (type) {
+            case Constants.POWERUP_TYPES.HEALTH_PACK:
+              break
+            case Constants.POWERUP_TYPES.SHOTGUN:
+              break
+            case Constants.POWERUP_TYPES.RAPIDFIRE:
+              this.shotCooldown = Constants.PLAYER_SHOT_COOLDOWN
+              break
+            case Constants.POWERUP_TYPES.SPEEDBOOST:
+              this.speed = Constants.PLAYER_DEFAULT_SPEED
+              break
+            case Constants.POWERUP_TYPES.SHIELD:
+              this.hitboxSize = Constants.PLAYER_DEFAULT_HITBOX_SIZE
+              break
           }
           this.powerups.delete(type)
         }
@@ -186,7 +185,7 @@ class Player extends Entity {
     const shotgunPowerup = this.powerups.get(Constants.POWERUP_TYPES.SHOTGUN)
     if (shotgunPowerup) {
       for (let i = 1; i <= shotgunPowerup.data; ++i) {
-        const angleDeviation = i * Math.PI / 9
+        const angleDeviation = (i * Math.PI) / 9
         bullets.push(Bullet.createFromPlayer(this, -angleDeviation))
         bullets.push(Bullet.createFromPlayer(this, angleDeviation))
       }
@@ -215,7 +214,7 @@ class Player extends Entity {
   /**
    * Handles the spawning (and respawning) of the player.
    */
-  spawn() {
+  spawn(): void {
     this.position = new Vector(
       Util.randRange(
         Constants.WORLD_MIN + Constants.WORLD_PADDING,

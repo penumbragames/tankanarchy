@@ -12,17 +12,21 @@ import Viewport from './Viewport'
 
 class Drawing {
   context: CanvasRenderingContext2D
-  images: Map<Constants.DRAWING_IMG_KEYS | Constants.POWERUP_TYPES,
-              HTMLImageElement>
+  images: Map<
+    Constants.DRAWING_IMG_KEYS | Constants.POWERUP_TYPES,
+    HTMLImageElement
+  >
 
   viewport: Viewport
 
   width: number
   height: number
 
-  constructor(context: CanvasRenderingContext2D,
-              images: Map<Constants.DRAWING_IMG_KEYS, HTMLImageElement>,
-              viewport: Viewport) {
+  constructor(
+    context: CanvasRenderingContext2D,
+    images: Map<Constants.DRAWING_IMG_KEYS, HTMLImageElement>,
+    viewport: Viewport,
+  ) {
     this.context = context
     this.images = images
     this.viewport = viewport
@@ -31,7 +35,7 @@ class Drawing {
     this.height = context.canvas.height
   }
 
-  static create(canvas: HTMLCanvasElement, viewport: Viewport) {
+  static create(canvas: HTMLCanvasElement, viewport: Viewport): Drawing {
     const context = canvas.getContext('2d')!
     const images = new Map()
     for (const [, name] of Object.entries(Constants.DRAWING_IMG_KEYS)) {
@@ -41,8 +45,7 @@ class Drawing {
     }
     for (const [, name] of Object.entries(Constants.POWERUP_TYPES)) {
       const img = new Image()
-      img.src =
-        `${Constants.DRAWING_IMG_BASE_PATH}/${name}.png`
+      img.src = `${Constants.DRAWING_IMG_BASE_PATH}/${name}.png`
       images.set(name, img)
     }
     return new Drawing(context, images, viewport)
@@ -83,22 +86,31 @@ class Drawing {
       } else {
         this.context.fillStyle = Constants.DRAWING_HP_MISSING_COLOR
       }
+      // prettier-ignore
       this.context.fillRect(-25 + (5 * i), -40, 5, 4)
     }
 
     this.context.rotate(player.tankAngle)
-    this.drawCenteredImage(this.images.get(
-      isSelf ? Constants.DRAWING_IMG_KEYS.SELF_TANK :
-        Constants.DRAWING_IMG_KEYS.OTHER_TANK,
-    )!)
+    this.drawCenteredImage(
+      this.images.get(
+        isSelf
+          ? Constants.DRAWING_IMG_KEYS.SELF_TANK
+          : Constants.DRAWING_IMG_KEYS.OTHER_TANK,
+      )!,
+    )
     this.context.rotate(-player.tankAngle)
 
     this.context.rotate(player.turretAngle)
-    this.drawCenteredImage(this.images.get(
-      isSelf ? Constants.DRAWING_IMG_KEYS.SELF_TURRET :
-        Constants.DRAWING_IMG_KEYS.OTHER_TURRET,
-    )!)
+    this.drawCenteredImage(
+      this.images.get(
+        isSelf
+          ? Constants.DRAWING_IMG_KEYS.SELF_TURRET
+          : Constants.DRAWING_IMG_KEYS.OTHER_TURRET,
+      )!,
+    )
+    // TODO: JSONified map does not carry data!
     const powerupsMap = new Map(Object.entries(player.powerups))
+    console.log(powerupsMap)
     if (powerupsMap.get(Constants.POWERUP_TYPES.SHIELD)) {
       this.context.rotate(-player.turretAngle)
       this.drawCenteredImage(
@@ -113,7 +125,7 @@ class Drawing {
    * Draws a bullet (tank shell) to the canvas.
    * @param {Bullet} bullet The bullet to draw to the canvas
    */
-  drawBullet(bullet:Bullet): void {
+  drawBullet(bullet: Bullet): void {
     this.context.save()
     const canvasCoords = this.viewport.toCanvas(bullet.position)
     this.context.translate(canvasCoords.x, canvasCoords.y)
@@ -126,7 +138,7 @@ class Drawing {
    * Draws a powerup to the canvas.
    * @param {Powerup} powerup The powerup to draw
    */
-  drawPowerup(powerup:Powerup): void {
+  drawPowerup(powerup: Powerup): void {
     this.context.save()
     const canvasCoords = this.viewport.toCanvas(powerup.position)
     this.context.translate(canvasCoords.x, canvasCoords.y)
@@ -142,16 +154,18 @@ class Drawing {
    * Draws the background tiles to the canvas.
    */
   drawTiles(): void {
-    const start = this.viewport.toCanvas(new Vector(
-      Constants.WORLD_MIN, Constants.WORLD_MIN,
-    ))
-    const end = this.viewport.toCanvas(new Vector(
-      Constants.WORLD_MAX, Constants.WORLD_MAX,
-    ))
+    const start = this.viewport.toCanvas(
+      new Vector(Constants.WORLD_MIN, Constants.WORLD_MIN),
+    )
+    const end = this.viewport.toCanvas(
+      new Vector(Constants.WORLD_MAX, Constants.WORLD_MAX),
+    )
     for (let x = start.x; x < end.x; x += Constants.DRAWING_TILE_SIZE) {
       for (let y = start.y; y < end.y; y += Constants.DRAWING_TILE_SIZE) {
         this.context.drawImage(
-          this.images.get(Constants.DRAWING_IMG_KEYS.TILE)!, x, y,
+          this.images.get(Constants.DRAWING_IMG_KEYS.TILE)!,
+          x,
+          y,
         )
       }
     }

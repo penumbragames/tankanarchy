@@ -4,26 +4,24 @@
  */
 
 module.exports = {
-  'root': true,
-  'env': {
-    'browser': true,
-    'node': true,
-    'es2021': true,
+  root: true,
+  env: {
+    browser: true,
+    node: true,
+    es2021: true,
   },
-  'extends': [
+  extends: [
     'eslint:recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
   ],
-  'parserOptions': {
-    'ecmaVersion': 11,
-    'sourceType': 'module',
+  parserOptions: {
+    ecmaVersion: 11,
+    sourceType: 'module',
   },
-  'parser': '@typescript-eslint/parser',
-  'plugins': [
-    '@typescript-eslint',
-    'prettier',
-  ],
-  'rules': {
+  parser: '@typescript-eslint/parser',
+  plugins: ['@typescript-eslint', 'prettier'],
+  rules: {
     // Possible Problems
     'array-callback-return': 'warn',
     'no-await-in-loop': 'warn',
@@ -41,14 +39,14 @@ module.exports = {
     // Suggestions
     'arrow-body-style': ['warn', 'as-needed'],
     'block-scoped-var': 'warn',
-    'camelcase': 'warn',
+    camelcase: 'warn',
     'class-methods-use-this': 'warn',
     'consistent-this': 'error',
-    'curly': ['warn', 'all'],
+    curly: ['warn', 'all'],
     'default-case-last': 'error',
     'default-param-last': 'error',
     'dot-notation': 'error',
-    'eqeqeq': ['error', 'always'],
+    eqeqeq: ['error', 'always'],
     'func-names': ['warn', 'never'],
     'grouped-accessor-pairs': ['warn', 'getBeforeSet'],
     'logical-assignment-operators': 'warn',
@@ -78,8 +76,9 @@ module.exports = {
     'no-lonely-if': 'warn',
     'no-loop-func': 'warn',
     'no-mixed-operators': [
-      'warn', {
-        'allowSamePrecedence': true,
+      'warn',
+      {
+        allowSamePrecedence: true,
       },
     ],
     'no-multi-str': 'warn',
@@ -107,19 +106,19 @@ module.exports = {
     'prefer-exponentiation-operator': 'warn',
     'prefer-numeric-literals': 'warn',
     'prefer-rest-params': 'warn',
-    'radix': 'warn',
+    radix: 'warn',
     'require-await': 'error',
     'sort-imports': 'warn',
     'spaced-comment': 'warn',
-    'strict': 'warn',
+    strict: 'warn',
     'vars-on-top': 'warn',
-    'yoda': 'warn',
+    yoda: 'warn',
 
     // Layout & Formatting
-    'array-bracket-newline': ['warn', {'multiline': true}],
+    'array-bracket-newline': ['warn', { multiline: true }],
     'array-bracket-spacing': ['warn', 'never'],
     'array-element-newline': ['warn', 'consistent'],
-    'arrow-parens': ['warn', 'as-needed'],
+    'arrow-parens': ['warn', 'always'],
     'block-spacing': 'warn',
     'brace-style': ['warn', '1tbs'],
     'comma-dangle': ['warn', 'always-multiline'],
@@ -132,31 +131,31 @@ module.exports = {
     'function-call-argument-newline': ['warn', 'consistent'],
     'function-paren-newline': ['warn', 'consistent'],
     'generator-star-spacing': 'warn',
-    'implicit-arrow-linebreak': 'warn',
-    'indent': [
+    indent: [
       'error',
       2,
       {
-        'VariableDeclarator': 'first',
-        'outerIIFEBody': 1,
-        'MemberExpression': 1,
-        'FunctionDeclaration': {
-          'body': 1,
-          'parameters': 'first',
+        SwitchCase: 1,
+        VariableDeclarator: 'first',
+        outerIIFEBody: 1,
+        MemberExpression: 1,
+        FunctionDeclaration: {
+          body: 1,
+          parameters: 'first',
         },
-        'FunctionExpression': {
-          'body': 1,
-          'parameters': 'first',
+        FunctionExpression: {
+          body: 1,
+          parameters: 'first',
         },
-        'StaticBlock': {
-          'body': 1,
+        StaticBlock: {
+          body: 1,
         },
-        'CallExpression': {
-          'arguments': 'first',
+        CallExpression: {
+          arguments: 'first',
         },
-        'ArrayExpression': 1,
-        'ObjectExpression': 1,
-        'ImportDeclaration': 1,
+        ArrayExpression: 1,
+        ObjectExpression: 1,
+        ImportDeclaration: 1,
       },
     ],
     'jsx-quotes': ['warn', 'prefer-single'],
@@ -166,15 +165,17 @@ module.exports = {
       'warn',
       'always',
       {
-        'exceptAfterSingleLine': true,
+        exceptAfterSingleLine: true,
       },
     ],
     'max-len': ['error', 80],
     'new-parens': 'warn',
     'newline-per-chained-call': 'warn',
     'no-extra-parens': [
-      'warn', 'all', {
-        'nestedBinaryExpressions': false,
+      'warn',
+      'all',
+      {
+        nestedBinaryExpressions: false,
       },
     ],
     'no-multi-spaces': 'warn',
@@ -184,18 +185,18 @@ module.exports = {
     'no-whitespace-before-property': 'warn',
     'nonblock-statement-body-position': 'warn',
     'object-curly-newline': 'warn',
-    'object-curly-spacing': 'warn',
+    'object-curly-spacing': ['warn', 'always'],
     'object-property-newline': [
       'warn',
       {
-        'allowAllPropertiesOnSameLine': true,
+        allowAllPropertiesOnSameLine: true,
       },
     ],
-    'operator-linebreak': ['warn', 'after'],
+    'operator-linebreak': ['warn', 'before'],
     'padded-blocks': ['warn', 'never'],
-    'quotes': ['warn', 'single'],
+    quotes: ['warn', 'single'],
     'rest-spread-spacing': 'warn',
-    'semi': ['error', 'never'],
+    semi: ['error', 'never'],
     'space-before-blocks': 'warn',
     'space-before-function-paren': ['warn', 'never'],
     'space-in-parens': 'warn',
@@ -203,8 +204,8 @@ module.exports = {
     'space-unary-ops': [
       'warn',
       {
-        'words': true,
-        'nonwords': false,
+        words: true,
+        nonwords: false,
       },
     ],
     'switch-colon-spacing': 'warn',
@@ -215,6 +216,7 @@ module.exports = {
 
     // Typescript Rules
     '@typescript-eslint/adjacent-overload-signatures': 'warn',
+    '@typescript-eslint/explicit-function-return-type': 'warn',
     '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/no-shadow': 'warn',
   },

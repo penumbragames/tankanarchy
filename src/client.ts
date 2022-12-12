@@ -14,9 +14,9 @@ window.onload = (): void => {
   const game = Game.create(socket, 'canvas', 'leaderboard')
   Chat.create(socket, 'chat-display', 'chat-input')
 
-  const nameInputElement = <HTMLInputElement>document.getElementById(
-    'name-input',
-  )!
+  const nameInputElement = <HTMLInputElement>(
+    document.getElementById('name-input')!
+  )
   nameInputElement.focus()
 
   const sendName = (): boolean => {

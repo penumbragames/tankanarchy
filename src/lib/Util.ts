@@ -45,8 +45,10 @@ const clamp = (val: number, min: number, max: number): number => {
  */
 const randRange = (min: number, max: number): number => {
   if (min >= max) {
+    // prettier-ignore
     return (Math.random() * (min - max)) + max
   }
+  // prettier-ignore
   return (Math.random() * (max - min)) + min
 }
 
@@ -64,8 +66,8 @@ const randRangeInt = (min: number, max: number): number => {
 /**
  * Returns a random element in a given array.
  */
-const choiceArray = <Type>(array: Type[]): Type => array[
-  randRangeInt(0, array.length)]
+const choiceArray = <Type>(array: Type[]): Type =>
+  array[randRangeInt(0, array.length)]
 
 export default {
   normalizeAngle,

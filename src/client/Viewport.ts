@@ -21,25 +21,32 @@ class Viewport extends Entity {
    * @param {number} canvasWidth The width of the canvas for this viewport
    * @param {number} canvasHeight The height of the canvas for this viewport
    */
-  constructor(position:Vector, velocity:Vector, canvasWidth:number,
-              canvasHeight:number) {
+  constructor(
+    position: Vector,
+    velocity: Vector,
+    canvasWidth: number,
+    canvasHeight: number,
+  ) {
     super(position, velocity, Vector.zero(), 0)
 
     this.playerPosition = Vector.zero()
     this.canvasOffset = new Vector(canvasWidth / 2, canvasHeight / 2)
   }
 
-  static create(canvas:HTMLCanvasElement):Viewport {
+  static create(canvas: HTMLCanvasElement): Viewport {
     return new Viewport(
-      Vector.zero(), Vector.zero(), canvas.width, canvas.height,
+      Vector.zero(),
+      Vector.zero(),
+      canvas.width,
+      canvas.height,
     )
   }
 
-  updateTrackingPosition(player:Player):void {
+  updateTrackingPosition(player: Player): void {
     this.playerPosition = Vector.sub(player.position, this.canvasOffset)
   }
 
-  update(deltaTime:number) {
+  update(deltaTime: number): void {
     this.velocity = Vector.sub(this.playerPosition, this.position).scale(
       Constants.VIEWPORT_STICKINESS * deltaTime,
     )
@@ -52,7 +59,7 @@ class Viewport extends Entity {
    * @param {Vector} position The absolute world coordinate to convert.
    * @return {Vector}
    */
-  toCanvas(position:Vector):Vector {
+  toCanvas(position: Vector): Vector {
     return Vector.sub(position, this.position)
   }
 
@@ -62,7 +69,7 @@ class Viewport extends Entity {
    * @param {Vector} position The canvas coordinate to convert
    * @return {Vector}
    */
-  toWorld(position:Vector):Vector {
+  toWorld(position: Vector): Vector {
     return Vector.add(position, this.position)
   }
 }

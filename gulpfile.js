@@ -2,6 +2,7 @@
  * @fileoverview Gulpfile for compiling project assets.
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import * as del from 'del'
 import browserify from 'browserify'
@@ -25,45 +26,52 @@ const serverTypescriptFiles = [
   './src/server/*.ts',
   './src/lib/*.ts',
 ]
-const compileTypescriptServer = () => gulp.src(serverTypescriptFiles,
-                                               {base: './src'})
-  .pipe(gulpTypescript({
-    noImplicitAny: true,
-    target: 'es2015',
-    rootDir: './src',
-    removeComments: true,
-    moduleResolution: 'node',
-    module: 'es2020',
-    allowSyntheticDefaultImports: true,
-  }))
-  .pipe(gulp.dest('dist'))
-const watchTypescriptServer = () => gulp.watch(
-  serverTypescriptFiles, compileTypescriptServer,
-)
+const compileTypescriptServer = () =>
+  gulp
+    .src(serverTypescriptFiles, { base: './src' })
+    .pipe(
+      gulpTypescript({
+        noImplicitAny: true,
+        target: 'es2015',
+        rootDir: './src',
+        removeComments: true,
+        moduleResolution: 'node',
+        module: 'es2020',
+        allowSyntheticDefaultImports: true,
+      }),
+    )
+    .pipe(gulp.dest('dist'))
+const watchTypescriptServer = () =>
+  gulp.watch(serverTypescriptFiles, compileTypescriptServer)
 
-const compileTypescriptClient = () => browserify({
-  entries: ['./src/client.ts'],
-  debug: true,
-  cache: {},
-  packageCache: {},
-}).plugin(tsify, {noImplicitAny: true, target: 'es2015'})
-  .transform('babelify', {
-    presets: ['es2015'],
-    extensions: ['.ts'],
+const compileTypescriptClient = () =>
+  browserify({
+    entries: ['./src/client.ts'],
+    debug: true,
+    cache: {},
+    packageCache: {},
   })
-  .bundle()
-  .pipe(vinylStream('client.js'))
-  .pipe(vinylBuffer())
-  .pipe(gulp.dest('dist'))
-const watchTypescriptClient = () => gulp.watch(
-  ['./src/client/*.ts', './src/client.ts', './src/lib/*.ts'],
-  compileTypescriptClient,
-)
+    .plugin(tsify, { noImplicitAny: true, target: 'es2015' })
+    .transform('babelify', {
+      presets: ['es2015'],
+      extensions: ['.ts'],
+    })
+    .bundle()
+    .pipe(vinylStream('client.js'))
+    .pipe(vinylBuffer())
+    .pipe(gulp.dest('dist'))
+const watchTypescriptClient = () =>
+  gulp.watch(
+    ['./src/client/*.ts', './src/client.ts', './src/lib/*.ts'],
+    compileTypescriptClient,
+  )
 
-const compileLess = () => gulp.src('./less/*.less')
-  .pipe(gulpLess())
-  .pipe(gulpCssnano())
-  .pipe(gulp.dest('dist/css'))
+const compileLess = () =>
+  gulp
+    .src('./less/*.less')
+    .pipe(gulpLess())
+    .pipe(gulpCssnano())
+    .pipe(gulp.dest('dist/css'))
 const watchLess = () => gulp.watch('./less/*.less', compileLess)
 
 const compile = gulp.parallel(
@@ -75,9 +83,11 @@ const compile = gulp.parallel(
 )
 
 const watch = gulp.parallel(
-  watchTypescriptServer, watchTypescriptClient, watchLess, watchHTML,
+  watchTypescriptServer,
+  watchTypescriptClient,
+  watchLess,
+  watchHTML,
 )
-
 
 export {
   clean,

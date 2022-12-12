@@ -18,11 +18,14 @@ const FRAME_RATE = 1000 / 60
 const CHAT_TAG = '[Tank Anarchy]'
 const DIRNAME = path.dirname(url.fileURLToPath(import.meta.url))
 
-const app:express.Application = express()
+const app: express.Application = express()
 const httpServer = http.createServer(app)
 const io = new socketIO.Server<
-  Constants.CLIENT_TO_SERVER_EVENTS, Constants.SERVER_TO_CLIENT_EVENTS,
-  Constants.SERVER_TO_SERVER_EVENTS, Constants.SOCKET_DATA>(httpServer)
+  Constants.CLIENT_TO_SERVER_EVENTS,
+  Constants.SERVER_TO_CLIENT_EVENTS,
+  Constants.SERVER_TO_SERVER_EVENTS,
+  Constants.SOCKET_DATA
+>(httpServer)
 const game = new Game()
 
 app.set('port', PORT)
@@ -39,30 +42,31 @@ app.get('/', (_request: express.Request, response: express.Response) => {
  * Server side input handler, modifies the state of the players and the
  * game based on the input it receives.
  */
-io.on('connection', (socket:socketIO.Socket) => {
-  socket.on(Constants.SOCKET.NEW_PLAYER, (name:string, callback:() => void) => {
-    game.addNewPlayer(name, socket)
-    io.emit(Constants.SOCKET.CHAT_SERVER_CLIENT, {
-      name: CHAT_TAG,
-      message: `${name} has joined the game.`,
-      isNotification: true,
-    })
-    callback()
+io.on('connection', (socket: socketIO.Socket) => {
+  socket.on(
+    Constants.SOCKET.NEW_PLAYER,
+    (name: string, callback: () => void) => {
+      game.addNewPlayer(name, socket)
+      io.emit(Constants.SOCKET.CHAT_SERVER_CLIENT, {
+        name: CHAT_TAG,
+        message: `${name} has joined the game.`,
+        isNotification: true,
+      })
+      callback()
+    },
+  )
+
+  socket.on(Constants.SOCKET.PLAYER_ACTION, (data: Constants.PLAYER_INPUTS) => {
+    game.updatePlayerOnInput(socket.id, data)
   })
 
-  socket.on(Constants.SOCKET.PLAYER_ACTION,
-            (data:Constants.PLAYER_INPUTS) => {
-              game.updatePlayerOnInput(socket.id, data)
-            })
-
-  socket.on(Constants.SOCKET.CHAT_CLIENT_SERVER,
-            (message:string) => {
-              io.emit(Constants.SOCKET.CHAT_SERVER_CLIENT, {
-                name: game.getPlayerNameBySocketId(socket.id),
-                message: message,
-                isNotification: false,
-              })
-            })
+  socket.on(Constants.SOCKET.CHAT_CLIENT_SERVER, (message: string) => {
+    io.emit(Constants.SOCKET.CHAT_SERVER_CLIENT, {
+      name: game.getPlayerNameBySocketId(socket.id),
+      message: message,
+      isNotification: false,
+    })
+  })
 
   socket.on(Constants.SOCKET.DISCONNECT, () => {
     const name = game.removePlayer(socket.id)

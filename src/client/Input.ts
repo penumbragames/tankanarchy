@@ -27,70 +27,73 @@ class Input {
     this.canvasOffset = Vector.zero()
   }
 
-  static create(keyElement:HTMLElement,
-                mouseTrackerElement:HTMLCanvasElement): Input {
+  static create(
+    keyElement: HTMLElement,
+    mouseTrackerElement: HTMLCanvasElement,
+  ): Input {
     const input = new Input()
     input.applyEventHandlers(keyElement, mouseTrackerElement)
     return input
   }
 
-  onKeyDown(event:KeyboardEvent): void {
+  onKeyDown(event: KeyboardEvent): void {
     switch (event.code) {
-    case 'KeyA':
-    case 'ArrowLeft':
-      this.left = true
-      break
-    case 'KeyW':
-    case 'ArrowUp':
-      this.up = true
-      break
-    case 'KeyD':
-    case 'ArrowRight':
-      this.right = true
-      break
-    case 'KeyS':
-    case 'ArrowDown':
-      this.down = true
-      break
+      case 'KeyA':
+      case 'ArrowLeft':
+        this.left = true
+        break
+      case 'KeyW':
+      case 'ArrowUp':
+        this.up = true
+        break
+      case 'KeyD':
+      case 'ArrowRight':
+        this.right = true
+        break
+      case 'KeyS':
+      case 'ArrowDown':
+        this.down = true
+        break
     }
   }
 
-  onKeyUp(event:KeyboardEvent): void {
+  onKeyUp(event: KeyboardEvent): void {
     switch (event.code) {
-    case 'KeyA':
-    case 'ArrowLeft':
-      this.left = false
-      break
-    case 'KeyW':
-    case 'ArrowUp':
-      this.up = false
-      break
-    case 'KeyD':
-    case 'ArrowRight':
-      this.right = false
-      break
-    case 'KeyS':
-    case 'ArrowDown':
-      this.down = false
-      break
+      case 'KeyA':
+      case 'ArrowLeft':
+        this.left = false
+        break
+      case 'KeyW':
+      case 'ArrowUp':
+        this.up = false
+        break
+      case 'KeyD':
+      case 'ArrowRight':
+        this.right = false
+        break
+      case 'KeyS':
+      case 'ArrowDown':
+        this.down = false
+        break
     }
   }
 
-  onMouseDown(event:MouseEvent): void {
+  onMouseDown(event: MouseEvent): void {
     if (event.button === 0) {
       this.mouseDown = true
     }
   }
 
-  onMouseUp(event:MouseEvent): void {
+  onMouseUp(event: MouseEvent): void {
     if (event.button === 0) {
       this.mouseDown = false
     }
   }
 
-  onMouseMove(event:MouseEvent): void {
-    this.mouseCoords = new Vector(event.offsetX, event.offsetY)
-      .sub(this.canvasOffset)
+  onMouseMove(event: MouseEvent): void {
+    this.mouseCoords = new Vector(event.offsetX, event.offsetY).sub(
+      this.canvasOffset,
+    )
   }
 
   /**
@@ -100,18 +103,25 @@ class Input {
    *   and movement on, mouse coordinates will be tracked relative to this
    *   element.
    */
-  applyEventHandlers(keyElement:HTMLElement,
-                     mouseTrackerElement:HTMLCanvasElement) {
+  applyEventHandlers(
+    keyElement: HTMLElement,
+    mouseTrackerElement: HTMLCanvasElement,
+  ): void {
     keyElement.addEventListener('keydown', this.onKeyDown.bind(this))
     keyElement.addEventListener('keyup', this.onKeyUp.bind(this))
-    mouseTrackerElement.addEventListener('mousedown',
-                                         this.onMouseDown.bind(this))
-    mouseTrackerElement.addEventListener('mouseup',
-                                         this.onMouseUp.bind(this))
-    mouseTrackerElement.addEventListener('mousemove',
-                                         this.onMouseMove.bind(this))
-    this.canvasOffset = new Vector(mouseTrackerElement.offsetLeft,
-                                   mouseTrackerElement.offsetTop)
+    mouseTrackerElement.addEventListener(
+      'mousedown',
+      this.onMouseDown.bind(this),
+    )
+    mouseTrackerElement.addEventListener('mouseup', this.onMouseUp.bind(this))
+    mouseTrackerElement.addEventListener(
+      'mousemove',
+      this.onMouseMove.bind(this),
+    )
+    this.canvasOffset = new Vector(
+      mouseTrackerElement.offsetLeft,
+      mouseTrackerElement.offsetTop,
+    )
   }
 }
 
