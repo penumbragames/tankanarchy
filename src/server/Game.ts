@@ -90,7 +90,6 @@ class Game {
    * @param {string} socketID The socket ID of the player to update
    * @param {Object} data The player's input state
    */
-  // TODO: define interfaces for client to server user input
   updatePlayerOnInput(socketID: string, data: Constants.PLAYER_INPUTS): void {
     const player = this.players.get(socketID)
     if (player) {

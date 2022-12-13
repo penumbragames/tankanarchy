@@ -51,11 +51,7 @@ const compileTypescriptClient = () =>
     cache: {},
     packageCache: {},
   })
-    .plugin(tsify, { noImplicitAny: true, target: 'es2015' })
-    .transform('babelify', {
-      presets: ['es2015'],
-      extensions: ['.ts'],
-    })
+    .plugin(tsify, { noImplicitAny: true, target: 'es6' })
     .bundle()
     .pipe(vinylStream('client.js'))
     .pipe(vinylBuffer())

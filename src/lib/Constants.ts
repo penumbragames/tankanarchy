@@ -18,6 +18,10 @@ export const DRAWING_NAME_COLOR = 'black'
 export const DRAWING_HP_COLOR = 'green'
 export const DRAWING_HP_MISSING_COLOR = 'red'
 export const DRAWING_IMG_BASE_PATH = '/img'
+/**
+ * TODO: make the enum keys match the values, and create a separate mapping
+ * of key to image name.
+ */
 export enum DRAWING_IMG_KEYS {
   SELF_TANK = 'self_tank',
   SELF_TURRET = 'self_turret',

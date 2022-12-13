@@ -109,14 +109,14 @@ class Drawing {
       )!,
     )
     // TODO: JSONified map does not carry data!
-    const powerupsMap = new Map(Object.entries(player.powerups))
+    const powerupsMap = player.powerups
     console.log(powerupsMap)
-    if (powerupsMap.get(Constants.POWERUP_TYPES.SHIELD)) {
-      this.context.rotate(-player.turretAngle)
-      this.drawCenteredImage(
-        this.images.get(Constants.DRAWING_IMG_KEYS.SHIELD)!,
-      )
-    }
+    // if (powerupsMap.get(Constants.POWERUP_TYPES.SHIELD)) {
+    //   this.context.rotate(-player.turretAngle)
+    //   this.drawCenteredImage(
+    //     this.images.get(Constants.DRAWING_IMG_KEYS.SHIELD)!,
+    //   )
+    // }
 
     this.context.restore()
   }

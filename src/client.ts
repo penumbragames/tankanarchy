@@ -6,11 +6,14 @@
 
 import * as Constants from './lib/Constants'
 import * as socketIO from 'socket.io-client'
+import * as socketIOParser from './lib/CustomSocketParser'
 import Chat from './client/Chat'
 import Game from './client/Game'
 
 window.onload = (): void => {
-  const socket = socketIO.io()
+  const socket = socketIO.io({
+    parser: socketIOParser,
+  })
   const game = Game.create(socket, 'canvas', 'leaderboard')
   Chat.create(socket, 'chat-display', 'chat-input')
 

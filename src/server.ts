@@ -7,6 +7,7 @@ import * as Constants from './lib/Constants'
 import * as http from 'http'
 import * as path from 'path'
 import * as socketIO from 'socket.io'
+import * as socketIOParser from './lib/CustomSocketParser'
 import * as url from 'url'
 
 import Game from './server/Game'
@@ -25,7 +26,9 @@ const io = new socketIO.Server<
   Constants.SERVER_TO_CLIENT_EVENTS,
   Constants.SERVER_TO_SERVER_EVENTS,
   Constants.SOCKET_DATA
->(httpServer)
+>(httpServer, {
+  parser: socketIOParser,
+})
 const game = new Game()
 
 app.set('port', PORT)
