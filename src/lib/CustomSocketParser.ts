@@ -8,41 +8,56 @@ import * as socketIOParser from 'socket.io-parser'
 
 /**
  * The enum names and their string values must exactly match each other because
- * this will be sent across the wire as JSON.
+ * this will be sent across the wire as JSON. This enum contains the custom data
+ * types that we will write custom encoding logic.
  */
-enum CustomSerializableType {
+enum CustomSerializableTypes {
   MAP = 'MAP',
 }
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/**
+ * This interface defines the object that will be sent across the wire in place
+ * of any object that cannot be serialized normally.
+ */
 interface CustomSerializationObject {
-  datatype: CustomSerializableType
+  datatype: CustomSerializableTypes
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   value: any
 }
+
+/**
+ * Custom replacer function that is passed into JSON.stringify in order to
+ * transform types that we specify in CustomSerializableTypes.
+ */
 function replacer(_key: string, value: any): any | CustomSerializationObject {
+  /**
+   * The usage of datatype as a field name in the custom data object means
+   * 'datatype' cannot be used as a field name anywhere else in any other object
+   * that will be serialized or deserialized across the wire.
+   */
   if (value.datatype) {
     throw new Error(
       'Objects that are sent through socket.io cannot have a datatype field',
     )
   }
   if (value instanceof Map) {
-    /**
-     * The usage of datatype as a field name in the custom data object means
-     * 'datatype' cannot be used as a field name anywhere else in any other
-     * object that will be serialized or deserialized across the wire.
-     */
     return {
-      datatype: CustomSerializableType.MAP,
+      datatype: CustomSerializableTypes.MAP,
       value: Array.from(value.entries()),
     }
   }
   return value
 }
+
+/**
+ * Custom reviver function that is passed into JSON.parse to deserialize the
+ * CustomSerializationObject back into the original type.
+ */
 function reviver(_key: string, value: any): any {
   if (value && typeof value === 'object' && value.datatype && value.value) {
     const cast = <CustomSerializationObject>value
-    if (cast.datatype === CustomSerializableType.MAP) {
+    if (cast.datatype === CustomSerializableTypes.MAP) {
       return new Map(value.value)
     }
   }
@@ -50,12 +65,15 @@ function reviver(_key: string, value: any): any {
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
+/**
+ * Export subclasses of the default socket-io.parser encoder and decoder so that
+ * we can use this module as a drop-in replacement.
+ */
 export class Encoder extends socketIOParser.Encoder {
   constructor() {
     super(replacer)
   }
 }
-
 export class Decoder extends socketIOParser.Decoder {
   constructor() {
     super(reviver)
