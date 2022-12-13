@@ -16,8 +16,12 @@ class Bullet extends Entity {
   distanceTraveled: number
   destroyed: boolean
 
-  constructor(position: Vector, velocity: Vector, angle: number,
-              source: Player) {
+  constructor(
+    position: Vector,
+    velocity: Vector,
+    angle: number,
+    source: Player,
+  ) {
     super(position, velocity, Vector.zero(), Constants.BULLET_HITBOX_SIZE)
 
     this.angle = angle
@@ -34,7 +38,7 @@ class Bullet extends Entity {
    * @param {number} [angleDeviation=0] The angle deviation if the bullet is
    *   not traveling in the direction of the turret
    */
-  static createFromPlayer(player: Player, angleDeviation: number) {
+  static createFromPlayer(player: Player, angleDeviation: number): Bullet {
     const angle = player.turretAngle + angleDeviation
     return new Bullet(
       player.position.copy(),
@@ -50,7 +54,7 @@ class Bullet extends Entity {
    * unused
    * @param {number} deltaTime The timestep to compute the update with
    */
-  update(_lastUpdateTime: number, deltaTime: number) {
+  update(_lastUpdateTime: number, deltaTime: number): void {
     const distanceStep = Vector.scale(this.velocity, deltaTime)
     this.position.add(distanceStep)
     if (!this.inWorld()) {

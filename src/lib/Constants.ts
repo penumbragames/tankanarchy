@@ -41,35 +41,35 @@ export enum SOCKET {
 }
 // Interfaces for objects that can be sent via socket
 export interface PLAYER_INPUTS {
-  up: boolean,
-  down: boolean,
-  right: boolean,
-  left: boolean,
-  turretAngle: number,
-  shoot: boolean,
+  up: boolean
+  down: boolean
+  right: boolean
+  left: boolean
+  turretAngle: number
+  shoot: boolean
 }
 export interface CHAT_MESSAGE {
-  name: string,
-  message: string,
-  isNotification:boolean,
+  name: string
+  message: string
+  isNotification: boolean
 }
 export interface GAME_STATE {
-  self: Player,
-  players: Player[],
-  projectiles: Entity[],
-  powerups: Powerup[],
+  self: Player
+  players: Player[]
+  projectiles: Entity[]
+  powerups: Powerup[]
 }
 
 // Interfaces for each of the socket.io communication types
 export interface SERVER_TO_CLIENT_EVENTS {
-  [SOCKET.UPDATE]: (state:GAME_STATE) => void,
-  [SOCKET.CHAT_SERVER_CLIENT]: (data:CHAT_MESSAGE) => void,
+  [SOCKET.UPDATE]: (state: GAME_STATE) => void
+  [SOCKET.CHAT_SERVER_CLIENT]: (data: CHAT_MESSAGE) => void
 }
 export interface CLIENT_TO_SERVER_EVENTS {
-  [SOCKET.NEW_PLAYER]: (name: string, callback:() => void) => void,
-  [SOCKET.PLAYER_ACTION]: (data: PLAYER_INPUTS) => void,
-  [SOCKET.CHAT_CLIENT_SERVER]: (data:CHAT_MESSAGE) => void,
-  [SOCKET.DISCONNECT]: () => void,
+  [SOCKET.NEW_PLAYER]: (name: string, callback: () => void) => void
+  [SOCKET.PLAYER_ACTION]: (data: PLAYER_INPUTS) => void
+  [SOCKET.CHAT_CLIENT_SERVER]: (data: CHAT_MESSAGE) => void
+  [SOCKET.DISCONNECT]: () => void
 }
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface SERVER_TO_SERVER_EVENTS {}
@@ -101,13 +101,13 @@ export enum POWERUP_TYPES {
 }
 
 export interface POWERUP_DATA {
-  min: number,
-  max: number,
+  min: number
+  max: number
 }
 export const POWERUP_DATA_RANGES = new Map<POWERUP_TYPES, POWERUP_DATA>([
-  [POWERUP_TYPES.HEALTH_PACK, {min: 1, max: 4}],
-  [POWERUP_TYPES.SHOTGUN, {min: 1, max: 2}],
-  [POWERUP_TYPES.RAPIDFIRE, {min: 2, max: 4}],
-  [POWERUP_TYPES.SPEEDBOOST, {min: 1.2, max: 1.8}],
-  [POWERUP_TYPES.SHIELD, {min: 1, max: 4}],
+  [POWERUP_TYPES.HEALTH_PACK, { min: 1, max: 4 }],
+  [POWERUP_TYPES.SHOTGUN, { min: 1, max: 2 }],
+  [POWERUP_TYPES.RAPIDFIRE, { min: 2, max: 4 }],
+  [POWERUP_TYPES.SPEEDBOOST, { min: 1.2, max: 1.8 }],
+  [POWERUP_TYPES.SHIELD, { min: 1, max: 4 }],
 ])

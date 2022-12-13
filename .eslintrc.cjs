@@ -192,7 +192,6 @@ module.exports = {
         allowAllPropertiesOnSameLine: true,
       },
     ],
-    'operator-linebreak': ['warn', 'before'],
     'padded-blocks': ['warn', 'never'],
     quotes: ['warn', 'single'],
     'rest-spread-spacing': 'warn',

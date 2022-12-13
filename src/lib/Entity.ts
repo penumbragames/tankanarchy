@@ -55,7 +55,7 @@ abstract class Entity {
    * Clamps this Entity's position within the game world if it is outside of the
    * game world.
    */
-  boundToWorld() {
+  boundToWorld(): void {
     this.position.x = Util.clamp(
       this.position.x,
       Constants.WORLD_MIN,

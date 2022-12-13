@@ -39,7 +39,7 @@ class Game {
     return game
   }
 
-  init() {
+  init(): void {
     this.lastUpdateTime = Date.now()
   }
 
@@ -91,8 +91,7 @@ class Game {
    * @param {Object} data The player's input state
    */
   // TODO: define interfaces for client to server user input
-  updatePlayerOnInput(socketID: string,
-                      data: Constants.PLAYER_INPUTS): void {
+  updatePlayerOnInput(socketID: string, data: Constants.PLAYER_INPUTS): void {
     const player = this.players.get(socketID)
     if (player) {
       player.updateOnInput(data)
@@ -122,11 +121,9 @@ class Game {
     ]
 
     // TODO: Use quadtree for collision update
-    entities.forEach(
-      entity => {
-        entity.update(this.lastUpdateTime, this.deltaTime)
-      },
-    )
+    entities.forEach((entity) => {
+      entity.update(this.lastUpdateTime, this.deltaTime)
+    })
     for (let i = 0; i < entities.length; ++i) {
       for (let j = i + 1; j < entities.length; ++j) {
         let e1 = entities[i]
@@ -140,8 +137,7 @@ class Game {
           e1 = entities[j]
           e2 = entities[i]
         }
-        if (e1 instanceof Player && e2 instanceof Bullet &&
-          e2.source !== e1) {
+        if (e1 instanceof Player && e2 instanceof Bullet && e2.source !== e1) {
           e1.damage(e2.damage)
           if (e1.isDead()) {
             e1.spawn()
@@ -162,15 +158,20 @@ class Game {
         }
 
         // Bullet-Bullet interaction
-        if (e1 instanceof Bullet && e2 instanceof Bullet &&
-          e1.source !== e2.source) {
+        if (
+          e1 instanceof Bullet &&
+          e2 instanceof Bullet &&
+          e1.source !== e2.source
+        ) {
           e1.destroyed = true
           e2.destroyed = true
         }
 
         // Bullet-Powerup interaction
-        if ((e1 instanceof Powerup && e2 instanceof Bullet) ||
-          (e1 instanceof Bullet && e2 instanceof Powerup)) {
+        if (
+          (e1 instanceof Powerup && e2 instanceof Bullet) ||
+          (e1 instanceof Bullet && e2 instanceof Powerup)
+        ) {
           e1.destroyed = true
           e2.destroyed = true
         }
@@ -181,11 +182,9 @@ class Game {
      * Filters out destroyed projectiles and powerups.
      */
     this.projectiles = this.projectiles.filter(
-      projectile => !projectile.destroyed,
+      (projectile) => !projectile.destroyed,
     )
-    this.powerups = this.powerups.filter(
-      powerup => !powerup.destroyed,
-    )
+    this.powerups = this.powerups.filter((powerup) => !powerup.destroyed)
 
     /**
      * Repopulate the world with new powerups.
