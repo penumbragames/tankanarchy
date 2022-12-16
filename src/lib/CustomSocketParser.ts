@@ -27,55 +27,61 @@ interface CustomSerializationObject {
 }
 
 /**
- * Custom replacer function that is passed into JSON.stringify in order to
- * transform types that we specify in CustomSerializableTypes.
- */
-function replacer(_key: string, value: any): any | CustomSerializationObject {
-  /**
-   * The usage of datatype as a field name in the custom data object means
-   * 'datatype' cannot be used as a field name anywhere else in any other object
-   * that will be serialized or deserialized across the wire.
-   */
-  if (value.datatype) {
-    throw new Error(
-      'Objects that are sent through socket.io cannot have a datatype field',
-    )
-  }
-  if (value instanceof Map) {
-    return {
-      datatype: CustomSerializableTypes.MAP,
-      value: Array.from(value.entries()),
-    }
-  }
-  return value
-}
-
-/**
- * Custom reviver function that is passed into JSON.parse to deserialize the
- * CustomSerializationObject back into the original type.
- */
-function reviver(_key: string, value: any): any {
-  if (value && typeof value === 'object' && value.datatype && value.value) {
-    const cast = <CustomSerializationObject>value
-    if (cast.datatype === CustomSerializableTypes.MAP) {
-      return new Map(value.value)
-    }
-  }
-  return value
-}
-/* eslint-enable @typescript-eslint/no-explicit-any */
-
-/**
- * Export subclasses of the default socket-io.parser encoder and decoder so that
- * we can use this module as a drop-in replacement.
+ * Subclass of the default socket-io.parser encoder that can be used as a
+ * drop-in replacement.
  */
 export class Encoder extends socketIOParser.Encoder {
   constructor() {
-    super(replacer)
+    super(Encoder.replacer)
+  }
+
+  /**
+   * Custom replacer function that is passed into JSON.stringify in order to
+   * transform types that we specify in CustomSerializableTypes.
+   */
+  static replacer(_key: string, value: any): any | CustomSerializationObject {
+    /**
+     * The usage of datatype as a field name in the custom data object means
+     * 'datatype' cannot be used as a field name anywhere else in any other
+     * object that will be serialized or deserialized across the wire.
+     */
+    if (value.datatype) {
+      throw new Error(
+        'Objects that are sent through socket.io cannot have a datatype field',
+      )
+    }
+    if (value instanceof Map) {
+      return {
+        datatype: CustomSerializableTypes.MAP,
+        value: Array.from(value.entries()),
+      }
+    }
+    return value
   }
 }
+
+/**
+ * Subclass of the default socket-io.parser decoder that can be used as a
+ * drop-in replacement.
+ */
 export class Decoder extends socketIOParser.Decoder {
   constructor() {
-    super(reviver)
+    super(Decoder.reviver)
+  }
+
+  /**
+   * Custom reviver function that is passed into JSON.parse to deserialize the
+   * CustomSerializationObject back into the original type.
+   */
+  static reviver(_key: string, value: any): any {
+    if (value && typeof value === 'object' && value.datatype && value.value) {
+      const cast = <CustomSerializationObject>value
+      if (cast.datatype === CustomSerializableTypes.MAP) {
+        return new Map(value.value)
+      }
+    }
+    return value
   }
 }
+
+/* eslint-enable @typescript-eslint/no-explicit-any */
