@@ -38,15 +38,10 @@ class Drawing {
   static create(canvas: HTMLCanvasElement, viewport: Viewport): Drawing {
     const context = canvas.getContext('2d')!
     const images = new Map()
-    for (const [, name] of Object.entries(Constants.DRAWING_IMG_KEYS)) {
+    for (const [key, filename] of Constants.DRAWING_IMG_KEY_TO_ASSET) {
       const img = new Image()
-      img.src = `${Constants.DRAWING_IMG_BASE_PATH}/${name}.png`
-      images.set(name, img)
-    }
-    for (const [, name] of Object.entries(Constants.POWERUP_TYPES)) {
-      const img = new Image()
-      img.src = `${Constants.DRAWING_IMG_BASE_PATH}/${name}.png`
-      images.set(name, img)
+      img.src = `${Constants.DRAWING_IMG_BASE_PATH}/${filename}`
+      images.set(key, img)
     }
     return new Drawing(context, images, viewport)
   }

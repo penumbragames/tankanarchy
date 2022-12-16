@@ -107,7 +107,6 @@ class Player extends Entity {
   }
 
   updatePowerups(): void {
-    console.log(this.socketID, this.powerups)
     for (const type of Object.values(Constants.POWERUP_TYPES)) {
       const powerup = this.powerups.get(type)
       if (powerup) {

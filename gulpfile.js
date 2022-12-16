@@ -44,6 +44,7 @@ const compileTypescriptServer = () =>
 const watchTypescriptServer = () =>
   gulp.watch(serverTypescriptFiles, compileTypescriptServer)
 
+// TODO(omgimanerd): Catch errors in stream and fail gracefully
 const compileTypescriptClient = () =>
   browserify({
     entries: ['./src/client.ts'],
