@@ -97,7 +97,7 @@ export const WORLD_PADDING = 30
 
 export const CANVAS_WIDTH = 800
 export const CANVAS_HEIGHT = 600
-export const DRAWING_NAME_FONT = '14px Impact'
+export const DRAWING_NAME_FONT = '14px Helvetica'
 export const DRAWING_NAME_COLOR = 'black'
 export const DRAWING_HP_COLOR = 'green'
 export const DRAWING_HP_MISSING_COLOR = 'red'

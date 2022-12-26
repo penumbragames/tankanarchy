@@ -107,51 +107,41 @@ class Player extends Entity {
   }
 
   updatePowerups(): void {
-    for (const type of Object.values(Constants.POWERUP_TYPES)) {
-      const powerup = this.powerups.get(type)
-      if (powerup) {
-        switch (type) {
-          case Constants.POWERUP_TYPES.HEALTH_PACK:
-            this.health = Math.min(
-              this.health + powerup.data,
-              Constants.PLAYER_MAX_HEALTH,
-            )
-            this.powerups.delete(type)
-            break
-          case Constants.POWERUP_TYPES.SHOTGUN:
-            break
-          case Constants.POWERUP_TYPES.RAPIDFIRE:
-            this.shotCooldown = Constants.PLAYER_SHOT_COOLDOWN / powerup.data
-            break
-          case Constants.POWERUP_TYPES.SPEEDBOOST:
-            this.speed = Constants.PLAYER_DEFAULT_SPEED * powerup.data
-            break
-          case Constants.POWERUP_TYPES.SHIELD:
-            this.hitboxSize = Constants.PLAYER_SHIELD_HITBOX_SIZE
-            if (powerup.data <= 0) {
-              this.powerups.delete(type)
-              this.hitboxSize = Constants.PLAYER_DEFAULT_HITBOX_SIZE
-            }
-            break
-        }
-        if (this.lastUpdateTime > powerup.expirationTime) {
-          switch (type) {
-            case Constants.POWERUP_TYPES.HEALTH_PACK:
-              break
-            case Constants.POWERUP_TYPES.SHOTGUN:
-              break
-            case Constants.POWERUP_TYPES.RAPIDFIRE:
-              this.shotCooldown = Constants.PLAYER_SHOT_COOLDOWN
-              break
-            case Constants.POWERUP_TYPES.SPEEDBOOST:
-              this.speed = Constants.PLAYER_DEFAULT_SPEED
-              break
-            case Constants.POWERUP_TYPES.SHIELD:
-              this.hitboxSize = Constants.PLAYER_DEFAULT_HITBOX_SIZE
-              break
-          }
+    for (const [type, powerup] of this.powerups) {
+      const expired = this.lastUpdateTime > powerup.expirationTime
+      switch (type) {
+        case Constants.POWERUP_TYPES.HEALTH_PACK:
+          this.health = Math.min(
+            this.health + powerup.data,
+            Constants.PLAYER_MAX_HEALTH,
+          )
           this.powerups.delete(type)
-        }
+          break
+        case Constants.POWERUP_TYPES.SHOTGUN:
+          break
+        case Constants.POWERUP_TYPES.RAPIDFIRE:
+          if (!expired) {
+            this.shotCooldown = Constants.PLAYER_SHOT_COOLDOWN / powerup.data
+          } else {
+            this.shotCooldown = Constants.PLAYER_SHOT_COOLDOWN
+            this.powerups.delete(type)
+          }
+          break
+        case Constants.POWERUP_TYPES.SPEEDBOOST:
+          if (!expired) {
+            this.speed = Constants.PLAYER_DEFAULT_SPEED * powerup.data
+          } else {
+            this.speed = Constants.PLAYER_DEFAULT_SPEED
+            this.powerups.delete(type)
+          }
+          break
+        case Constants.POWERUP_TYPES.SHIELD:
+          this.hitboxSize = Constants.PLAYER_SHIELD_HITBOX_SIZE
+          if (expired || powerup.data <= 0) {
+            this.hitboxSize = Constants.PLAYER_DEFAULT_HITBOX_SIZE
+            this.powerups.delete(type)
+          }
+          break
       }
     }
   }
