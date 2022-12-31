@@ -16,7 +16,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
   ],
   parserOptions: {
-    ecmaVersion: 11,
+    ecmaVersion: 2022,
     sourceType: 'module',
   },
   parser: '@typescript-eslint/parser',
