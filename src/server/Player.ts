@@ -118,6 +118,9 @@ class Player extends Entity {
           this.powerups.delete(type)
           break
         case Constants.POWERUP_TYPES.SHOTGUN:
+          if (expired) {
+            this.powerups.delete(type)
+          }
           break
         case Constants.POWERUP_TYPES.RAPIDFIRE:
           if (!expired) {

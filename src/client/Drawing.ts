@@ -103,15 +103,12 @@ class Drawing {
           : Constants.DRAWING_IMG_KEYS.OTHER_TURRET,
       )!,
     )
-    // TODO: JSONified map does not carry data!
-    const powerupsMap = player.powerups
-    console.log(powerupsMap)
-    // if (powerupsMap.get(Constants.POWERUP_TYPES.SHIELD)) {
-    //   this.context.rotate(-player.turretAngle)
-    //   this.drawCenteredImage(
-    //     this.images.get(Constants.DRAWING_IMG_KEYS.SHIELD)!,
-    //   )
-    // }
+    if (player.powerups.get(Constants.POWERUP_TYPES.SHIELD)) {
+      this.context.rotate(-player.turretAngle)
+      this.drawCenteredImage(
+        this.images.get(Constants.DRAWING_IMG_KEYS.PLAYER_SHIELD)!,
+      )
+    }
 
     this.context.restore()
   }
