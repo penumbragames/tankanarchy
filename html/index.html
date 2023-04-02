@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tank Anarchy</title>
+    <link rel='icon' type='image/png' href='/img/favicon.png' />
+    <link rel='stylesheet' type='text/css' href='/css/styles.css' />
+  </head>
+
+  <body oncontextmenu='return false;'>
+    <div id='name-prompt-overlay'>
+      <div id='name-prompt-container'>
+        <form id='name-form'>
+          <input type='text' id='name-input' placeholder='Nickname'
+            autocomplete='off' />
+          <button id='name-submit'>
+            Play
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div id='container'>
+      <table>
+        <tr>
+          <th colspan='3'>
+            <h1>Tank Anarchy</h1>
+          </th>
+        </tr>
+        <tr>
+          <td id='leaderboard-container'>
+            <h3>Leaderboard:</h3>
+            <ul id='leaderboard'></ul>
+          </td>
+          <td id='canvas-container'>
+            <canvas id='canvas'></canvas>
+          </td>
+          <td id='chat-container'>
+            <ul id='chat-display'>
+            </ul>
+            <input id='chat-input' type='text'
+              placeholder='Press Enter to send' name='chat' />
+          </td>
+        </tr>
+        <tr>
+          <td id='icons-container' colspan='3'>
+            <div>
+              <img src='/img/favicon.png' />
+              <div>Your Tank</div>
+            </div>
+            <div>
+              <img src='/img/health_pack_powerup.png' />
+              <div>Healthpack Powerup</div>
+            </div>
+            <div>
+              <img src='/img/rapidfire_powerup.png' />
+              <div>Rapidfire Powerup</div>
+            </div>
+            <div>
+              <img src='/img/shield_powerup.png' />
+              <div>Shield Powerup</div>
+            </div>
+            <div>
+              <img src='/img/shotgun_powerup.png' />
+              <div>Shotgun Powerup</div>
+            </div>
+            <div>
+              <img src='/img/speedboost_powerup.png' />
+              <div>Speedboost Powerup</div>
+            </div>
+          </td>
+        </tr>
+      </table>
+      <div id='copyright'>
+        &copy; 2015 Alvin Lin and Kenneth Li. All Rights Reserved.
+      </div>
+    </div>
+
+    <script src='/client.js'></script>
+  </body>
+</html>
