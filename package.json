@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node --experimental-specifier-resolution=node dist/server.js",
     "watch": "nodemon --experimental-specifier-resolution=node dist/server.js",
-    "pm2": "PORT=5001 pm2 start dist/server.js --name tankanarchy --node-args='--experimental-specifier-resolution-node'"
+    "pm2": "PORT=5001 pm2 start dist/server.js --name tankanarchy --node-args='--experimental-specifier-resolution=node'"
   },
   "repository": {
     "type": "git",
