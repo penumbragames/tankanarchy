@@ -14,7 +14,6 @@ class Bullet extends Entity {
 
   damage: number
   distanceTraveled: number
-  destroyed: boolean
 
   constructor(
     position: Vector,

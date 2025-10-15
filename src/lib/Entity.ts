@@ -24,6 +24,7 @@ abstract class Entity {
     this.velocity = velocity
     this.acceleration = acceleration
     this.hitboxSize = hitboxSize
+    this.destroyed = false
   }
 
   abstract update(lastUpdateTime: number, deltaTime: number): void
