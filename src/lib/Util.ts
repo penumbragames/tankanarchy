@@ -9,11 +9,8 @@
  * 0 to 2 PI and returns the normalized angle.
  */
 const normalizeAngle = (angle: number): number => {
-  while (angle < 0) {
-    // eslint-disable-next-line no-param-reassign
-    angle += Math.PI * 2
-  }
-  return angle % (Math.PI * 2)
+  const twoPi = Math.PI * 2
+  return ((angle % twoPi) + twoPi) % twoPi
 }
 
 /**
