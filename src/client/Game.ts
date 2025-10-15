@@ -15,6 +15,7 @@ import Player from '../server/Player'
 import Powerup from '../server/Powerup'
 import Vector from '../lib/Vector'
 import Viewport from './Viewport'
+import Bullet from '../server/Bullet'
 
 type ClientSocket = socketIO.Socket<
   Constants.SERVER_TO_CLIENT_EVENTS,
@@ -31,7 +32,7 @@ class Game {
 
   self: Player | null
   players: Player[]
-  projectiles: Entity[]
+  projectiles: Bullet[]
   powerups: Powerup[]
 
   animationFrameId: number

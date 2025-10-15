@@ -8,9 +8,8 @@
     "start": "bun run ./src/server.ts",
     "dev": "bun run --watch ./src/server.ts",
     "build": "npm run build:client",
-    "build:client": "npm run tsc && npm run html && npm run less",
+    "build:client": "npm run tsc && npm run less",
     "tsc": "bun build ./src/client.ts --outdir ./dist",
-    "html": "cp ./html/index.html dist/index.html",
     "less": "lessc ./less/styles.less ./dist/css/styles.css",
     "clean": "rm -rf dist/"
   },
