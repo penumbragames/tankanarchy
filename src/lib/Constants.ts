@@ -6,6 +6,7 @@
 import Entity from './Entity'
 import Player from '../server/Player'
 import Powerup from '../server/Powerup'
+import Bullet from '../server/Bullet'
 
 // Socket events we can listen for.
 export enum SOCKET {
@@ -33,7 +34,7 @@ export interface CHAT_MESSAGE {
 export interface GAME_STATE {
   self: Player
   players: Player[]
-  projectiles: Entity[]
+  projectiles: Bullet[]
   powerups: Powerup[]
 }
 
@@ -49,9 +50,9 @@ export interface CLIENT_TO_SERVER_EVENTS {
   [SOCKET.DISCONNECT]: () => void
 }
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface SERVER_TO_SERVER_EVENTS {}
+export interface SERVER_TO_SERVER_EVENTS { }
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface SOCKET_DATA {}
+export interface SOCKET_DATA { }
 
 export const PLAYER_TURN_RATE = 0.005
 export const PLAYER_DEFAULT_SPEED = 0.4
@@ -133,14 +134,14 @@ export const DRAWING_IMG_KEY_TO_ASSET = new Map<
 export const DRAWING_TILE_SIZE = 100
 export const VIEWPORT_STICKINESS = 0.004
 
-// Validation code in anonymous function, module will break on import if invalid
-;((): void => {
-  const m = new Set(Object.keys(DRAWING_IMG_KEYS))
-  for (const v in POWERUP_TYPES) {
-    if (m.has(v)) {
-      throw new Error(
-        'Keys in POWERUP_TYPES cannot intersect with DRAWING_IMG_KEYS',
-      )
+  // Validation code in anonymous function, module will break on import if invalid
+  ; ((): void => {
+    const m = new Set(Object.keys(DRAWING_IMG_KEYS))
+    for (const v in POWERUP_TYPES) {
+      if (m.has(v)) {
+        throw new Error(
+          'Keys in POWERUP_TYPES cannot intersect with DRAWING_IMG_KEYS',
+        )
+      }
     }
-  }
-})()
+  })()

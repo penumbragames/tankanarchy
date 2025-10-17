@@ -9,7 +9,6 @@ import Util from '../lib/Util'
 import Vector from '../lib/Vector'
 
 class Powerup extends Entity {
-  position: Vector
   type: Constants.POWERUP_TYPES
   data: number
   duration: number

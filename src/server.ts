@@ -20,7 +20,7 @@ const CHAT_TAG = '[Tank Anarchy]'
 const DIRNAME = path.dirname(url.fileURLToPath(import.meta.url))
 
 const app: express.Application = express()
-const httpServer = http.createServer(app)
+const httpServer = http.createServer(app);
 const io = new socketIO.Server<
   Constants.CLIENT_TO_SERVER_EVENTS,
   Constants.SERVER_TO_CLIENT_EVENTS,
@@ -28,8 +28,8 @@ const io = new socketIO.Server<
   Constants.SOCKET_DATA
 >(httpServer, {
   parser: socketIOParser,
-})
-const game = new Game()
+});
+const game = new Game();
 
 app.set('port', PORT)
 
@@ -37,9 +37,16 @@ app.use(morgan('dev'))
 app.use(express.static(DIRNAME))
 
 // Routing
-app.get('/', (_request: express.Request, response: express.Response) => {
-  response.sendFile(path.join(DIRNAME, 'html/index.html'))
+app.get('/', (_, res) => {
+  res.sendFile(path.join(DIRNAME, '../html/index.html'))
 })
+app.get('/css/styles.css', (_, res) => {
+  res.sendFile(path.join(DIRNAME, '../dist/css/styles.css'))
+})
+app.get('/client.js', (_, res) => {
+  res.sendFile(path.join(DIRNAME, '../dist/client.js'))
+})
+app.use('/img/', express.static(path.join(DIRNAME, '../img/')))
 
 /**
  * Server side input handler, modifies the state of the players and the
@@ -85,12 +92,19 @@ io.on('connection', (socket: socketIO.Socket) => {
  * Server side game loop, runs at 60Hz and sends out update packets to all
  * clients every update.
  */
-setInterval(() => {
+const gameLoop = () => {
   game.update()
   game.sendState()
-}, FRAME_RATE)
+  setTimeout(gameLoop, FRAME_RATE);
+}
+gameLoop();
+
+httpServer.on('error', e => {
+  console.error(e);
+})
 
 // Starts the server.
 httpServer.listen(PORT, () => {
   console.log(`Starting server on port ${PORT}`)
 })
+

@@ -11,7 +11,7 @@ versions.
 
 ```
 npm install
-gulp compile
+npm run build
 ```
 
 Run script:
