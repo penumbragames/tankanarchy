@@ -8,7 +8,6 @@ import * as Constants from '../lib/Constants'
 import * as socketIO from 'socket.io-client'
 
 import Drawing from './Drawing'
-import Entity from '../lib/Entity'
 import Input from './Input'
 import Leaderboard from './Leaderboard'
 import Player from '../server/Player'

@@ -14,7 +14,6 @@ class Input {
 
   mouseDown: boolean
   mouseCoords: Vector
-  canvasOffset: Vector
 
   constructor() {
     this.up = false
@@ -24,7 +23,6 @@ class Input {
 
     this.mouseDown = false
     this.mouseCoords = Vector.zero()
-    this.canvasOffset = Vector.zero()
   }
 
   static create(
@@ -91,9 +89,7 @@ class Input {
   }
 
   onMouseMove(event: MouseEvent): void {
-    this.mouseCoords = new Vector(event.offsetX, event.offsetY).sub(
-      this.canvasOffset,
-    )
+    this.mouseCoords = new Vector(event.offsetX, event.offsetY)
   }
 
   /**
@@ -117,10 +113,6 @@ class Input {
     mouseTrackerElement.addEventListener(
       'mousemove',
       this.onMouseMove.bind(this),
-    )
-    this.canvasOffset = new Vector(
-      mouseTrackerElement.offsetLeft,
-      mouseTrackerElement.offsetTop,
     )
   }
 }

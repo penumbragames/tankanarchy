@@ -20,7 +20,7 @@ const CHAT_TAG = '[Tank Anarchy]'
 const DIRNAME = path.dirname(url.fileURLToPath(import.meta.url))
 
 const app: express.Application = express()
-const httpServer = http.createServer(app);
+const httpServer = http.createServer(app)
 const io = new socketIO.Server<
   Constants.CLIENT_TO_SERVER_EVENTS,
   Constants.SERVER_TO_CLIENT_EVENTS,
@@ -28,8 +28,8 @@ const io = new socketIO.Server<
   Constants.SOCKET_DATA
 >(httpServer, {
   parser: socketIOParser,
-});
-const game = new Game();
+})
+const game = new Game()
 
 app.set('port', PORT)
 
@@ -95,16 +95,15 @@ io.on('connection', (socket: socketIO.Socket) => {
 const gameLoop = () => {
   game.update()
   game.sendState()
-  setTimeout(gameLoop, FRAME_RATE);
+  setTimeout(gameLoop, FRAME_RATE)
 }
-gameLoop();
+gameLoop()
 
-httpServer.on('error', e => {
-  console.error(e);
+httpServer.on('error', (e) => {
+  console.error(e)
 })
 
 // Starts the server.
 httpServer.listen(PORT, () => {
   console.log(`Starting server on port ${PORT}`)
 })
-

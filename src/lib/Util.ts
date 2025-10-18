@@ -9,8 +9,7 @@
  * 0 to 2 PI and returns the normalized angle.
  */
 const normalizeAngle = (angle: number): number => {
-  const twoPi = Math.PI * 2
-  return ((angle % twoPi) + twoPi) % twoPi
+  return angle < 0 ? angle + Math.ceil(-angle / Math.PI) : angle % (Math.PI * 2)
 }
 
 /**
