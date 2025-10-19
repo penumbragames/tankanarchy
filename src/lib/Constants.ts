@@ -50,9 +50,9 @@ export interface CLIENT_TO_SERVER_EVENTS {
   [SOCKET.DISCONNECT]: () => void
 }
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface SERVER_TO_SERVER_EVENTS { }
+export interface SERVER_TO_SERVER_EVENTS {}
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface SOCKET_DATA { }
+export interface SOCKET_DATA {}
 
 export const PLAYER_TURN_RATE = 0.005
 export const PLAYER_DEFAULT_SPEED = 0.4
@@ -132,16 +132,16 @@ export const DRAWING_IMG_KEY_TO_ASSET = new Map<
   [POWERUP_TYPES.SPEEDBOOST, 'speedboost_powerup.png'],
 ])
 export const DRAWING_TILE_SIZE = 100
-export const VIEWPORT_STICKINESS = 0.004
+export const VIEWPORT_STICKINESS = 0.005
 
-  // Validation code in anonymous function, module will break on import if invalid
-  ; ((): void => {
-    const m = new Set(Object.keys(DRAWING_IMG_KEYS))
-    for (const v in POWERUP_TYPES) {
-      if (m.has(v)) {
-        throw new Error(
-          'Keys in POWERUP_TYPES cannot intersect with DRAWING_IMG_KEYS',
-        )
-      }
+// Validation code in anonymous function, module will break on import if invalid
+;((): void => {
+  const m = new Set(Object.keys(DRAWING_IMG_KEYS))
+  for (const v in POWERUP_TYPES) {
+    if (m.has(v)) {
+      throw new Error(
+        'Keys in POWERUP_TYPES cannot intersect with DRAWING_IMG_KEYS',
+      )
     }
-  })()
+  }
+})()

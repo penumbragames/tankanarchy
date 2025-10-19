@@ -12,6 +12,8 @@ class Viewport extends Entity {
   playerPosition: Vector
   canvasOffset: Vector
 
+  static readonly UNINITIALIZED: Vector = new Vector(-99999, -99999)
+
   /**
    * Constructor for a Viewport object. The position of the viewport will hold
    * the absolute world coordinates for the top left of the view (which
@@ -35,8 +37,8 @@ class Viewport extends Entity {
 
   static create(canvas: HTMLCanvasElement): Viewport {
     return new Viewport(
-      Vector.zero(),
-      Vector.zero(),
+      Viewport.UNINITIALIZED,
+      Viewport.UNINITIALIZED,
       canvas.width,
       canvas.height,
     )
@@ -47,6 +49,14 @@ class Viewport extends Entity {
   }
 
   update(deltaTime: number): void {
+    if (
+      this.position == Viewport.UNINITIALIZED ||
+      this.velocity == Viewport.UNINITIALIZED
+    ) {
+      this.position = this.playerPosition
+      this.velocity = Vector.zero()
+      return
+    }
     this.velocity = Vector.sub(this.playerPosition, this.position).scale(
       Constants.VIEWPORT_STICKINESS * deltaTime,
     )

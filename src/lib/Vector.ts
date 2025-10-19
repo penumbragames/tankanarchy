@@ -34,8 +34,7 @@ class Vector {
   }
 
   get mag2(): number {
-    // prettier-ignore
-    return (this.x ** 2) + (this.y ** 2)
+    return this.x ** 2 + this.y ** 2
   }
 
   get neg(): Vector {
