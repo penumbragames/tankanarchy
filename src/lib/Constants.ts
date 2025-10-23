@@ -3,10 +3,12 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import Entity from './Entity'
 import Player from '../server/Player'
 import Powerup from '../server/Powerup'
 import Bullet from '../server/Bullet'
+
+// Separate
+export const DEBUG_MODE = false
 
 // Socket events we can listen for.
 export enum SOCKET {
