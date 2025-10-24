@@ -100,7 +100,7 @@ export const WORLD_PADDING = 30
 
 export const DRAWING_NAME_FONT = '14px Helvetica'
 export const DRAWING_NAME_COLOR = 'black'
-export const DRAWING_HP_COLOR = 'red'
+export const DRAWING_HP_COLOR = '#ce0a17ff'
 export const DRAWING_HP_MISSING_COLOR = 'grey'
 export const DRAWING_IMG_BASE_PATH = '/img'
 // This enum cannot share any values with POWERUP_TYPES above since they will

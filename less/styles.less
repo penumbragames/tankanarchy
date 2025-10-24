@@ -9,6 +9,8 @@ html, body {
   margin: 0;
   padding: 0;
 
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
   text-align: center;
   user-select: none;
   overflow: hidden;
@@ -17,6 +19,7 @@ html, body {
 #name-prompt-overlay {
   width: 100vw;
   height: 100vh;
+  z-index: 100;
 
   position: absolute;
   inset: 0;
@@ -57,35 +60,57 @@ html, body {
   position: absolute;
   inset: 0;
 
-  justify-content: center;
-  align-items: center;
-
   & > div {
     position: absolute;
   }
 }
 
 #leaderboard-container {
-  inset: 1em 1em 0 0;
   width: max(10%, 40ch);
+  height: auto;
+  top: 1rem;
+  left: 1rem;
+
 
   h3 {
-    height: 50px;
-    padding: 5px;
+    background-color: #a51705b9;
+    margin: 0;
+    border-radius: 5px;
+    clip-path: polygon(1.5% 0, 100% 0%, 98.5% 100%, 0% 100%);
   }
 
   #leaderboard {
-    height: 400px;
     margin: 0;
-    padding: 5px;
+    padding: 0;
 
     li {
+      width: 80%;
       list-style-type: none;
-      background-color: #b9b9b9;
-      margin-right: 5px;
-      padding: 3px;
+      margin: 4px 0;
+      padding: 0px 4px;
 
-      border-radius: 2px;
+      border-radius: 5px;
+      clip-path: polygon(1.5% 0, 100% 0%, 98.5% 100%, 0% 100%);
+
+      &:nth-child(1) {
+        background-color: #b30000e3;
+      }
+
+      &:nth-child(2) {
+        background-color: #e94022c2;
+      }
+
+      &:nth-child(3) {
+        background-color: #f5570ecb;
+      }
+
+      &:nth-child(4) {
+        background-color: #e2a83de3;
+      }
+
+      &:nth-child(5) {
+        background-color: #db9840e3;
+      }
     }
   }
 }
