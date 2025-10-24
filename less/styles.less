@@ -23,9 +23,9 @@ html, body {
 
   position: absolute;
   inset: 0;
+  z-index: 4;
 
-  background-color: rgba(49, 49, 49, 0.5);
-  z-index: 1;
+  background-color: rgb(121, 117, 117);
 
   #name-prompt-container {
     position: absolute;
@@ -70,12 +70,12 @@ html, body {
   height: auto;
   top: 1rem;
   left: 1rem;
-
+  z-index: 2;
 
   h3 {
-    background-color: #a51705b9;
+    background-color: #0c5aa3b0;
     margin: 0;
-    border-radius: 5px;
+    border-radius: 8px;
     clip-path: polygon(1.5% 0, 100% 0%, 98.5% 100%, 0% 100%);
   }
 
@@ -87,7 +87,7 @@ html, body {
       width: 80%;
       list-style-type: none;
       margin: 4px 0;
-      padding: 0px 4px;
+      padding: 4px 0px;
 
       border-radius: 5px;
       clip-path: polygon(1.5% 0, 100% 0%, 98.5% 100%, 0% 100%);
@@ -119,39 +119,43 @@ html, body {
   width: max(100vw, 800px);
   height: max(100vh, 600px);
   inset: 0;
+  z-index: 1;
 
   #canvas {
     width: 100%;
     height: 100%;
     outline: none;
 
-    background-color: #fff;
+    background-color: #7a3b07f3;
     cursor: crosshair;
   }
 }
 
 #chat-container {
-  right: 10px;
-  width: max(20%, 200px);
+  left: 1rem;
+  bottom: 1rem;
+  width: 50ch;
+  height: max(40%, 15rem);
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 
   #chat-display {
-    height: 570px;
+    height: 100%;
     padding: 0;
     margin: 0;
     text-align: left;
-    overflow-y: scroll;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
 
     li {
       list-style-type: none;
       padding: 5px;
-    }
-
-    li:nth-child(even) {
-      background: #ccc;
-    }
-
-    li:nth-child(odd) {
-      background: #aaa;
     }
 
     .notification {
@@ -163,11 +167,22 @@ html, body {
 
   #chat-input {
     box-sizing: border-box;
+    border: none;
+    outline: none;
+    background-color: #ffffff13;
 
     width: 100%;
     height: 30px;
     padding: 5px;
-    border-top: 1px solid black;
+
+    &:focus {
+      background-color: #302a2a56;
+    }
+
+    &::placeholder {
+      font-weight: bold;
+      color: #161111af;
+    }
   }
 }
 
