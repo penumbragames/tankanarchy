@@ -24,6 +24,7 @@ type ClientSocket = socketIO.Socket<
 class Game {
   socket: ClientSocket
 
+  canvas: HTMLCanvasElement
   viewport: Viewport
   drawing: Drawing
   input: Input
@@ -40,6 +41,7 @@ class Game {
 
   constructor(
     socket: ClientSocket,
+    canvas: HTMLCanvasElement,
     viewport: Viewport,
     drawing: Drawing,
     input: Input,
@@ -47,6 +49,7 @@ class Game {
   ) {
     this.socket = socket
 
+    this.canvas = canvas
     this.viewport = viewport
     this.drawing = drawing
     this.input = input
@@ -68,22 +71,34 @@ class Game {
     leaderboardElementID: string,
   ): Game {
     const canvas = <HTMLCanvasElement>document.getElementById(canvasElementID)
-    canvas.width = Constants.CANVAS_WIDTH
-    canvas.height = Constants.CANVAS_HEIGHT
+    canvas.width = canvas.offsetWidth
+    canvas.height = canvas.offsetHeight
 
     const viewport = Viewport.create(canvas)
     const drawing = Drawing.create(canvas, viewport)
     const input = Input.create(<HTMLElement>document.body, canvas)
     const leaderboard = Leaderboard.create(leaderboardElementID)
 
-    const game = new Game(socket, viewport, drawing, input, leaderboard)
+    const game = new Game(socket, canvas, viewport, drawing, input, leaderboard)
     game.init()
+    game.bindListeners()
     return game
   }
 
   init(): void {
     this.lastUpdateTime = Date.now()
     this.socket.on(Constants.SOCKET.UPDATE, this.onReceiveGameState.bind(this))
+  }
+
+  bindListeners(): void {
+    window.addEventListener(
+      'resize',
+      () => {
+        this.canvas.height = this.canvas.offsetHeight
+        this.canvas.width = this.canvas.offsetWidth
+      },
+      true,
+    )
   }
 
   onReceiveGameState(state: Constants.GAME_STATE): void {

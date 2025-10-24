@@ -98,8 +98,6 @@ export const WORLD_MIN = 0
 export const WORLD_MAX = 5000
 export const WORLD_PADDING = 30
 
-export const CANVAS_WIDTH = 800
-export const CANVAS_HEIGHT = 600
 export const DRAWING_NAME_FONT = '14px Helvetica'
 export const DRAWING_NAME_COLOR = 'black'
 export const DRAWING_HP_COLOR = 'red'

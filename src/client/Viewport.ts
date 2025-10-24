@@ -10,7 +10,7 @@ import Vector from '../lib/Vector'
 
 class Viewport extends Entity {
   playerPosition: Vector
-  canvasOffset: Vector
+  canvas: HTMLCanvasElement
 
   static readonly UNINITIALIZED: Vector = new Vector(-99999, -99999)
 
@@ -20,32 +20,24 @@ class Viewport extends Entity {
    * correspond to canvas coordinates [width / 2, height / 2]).
    * @param {Vector} position The starting position of the viewport
    * @param {Vector} velocity The starting velocity of the viewport
-   * @param {number} canvasWidth The width of the canvas for this viewport
-   * @param {number} canvasHeight The height of the canvas for this viewport
+   * @param {HTMLCanvasElement} canvas The canvas that the game is rendering on
    */
-  constructor(
-    position: Vector,
-    velocity: Vector,
-    canvasWidth: number,
-    canvasHeight: number,
-  ) {
+  constructor(position: Vector, velocity: Vector, canvas: HTMLCanvasElement) {
     super(position, velocity, Vector.zero(), 0)
 
     this.playerPosition = Vector.zero()
-    this.canvasOffset = new Vector(canvasWidth / 2, canvasHeight / 2)
+    this.canvas = canvas
   }
 
   static create(canvas: HTMLCanvasElement): Viewport {
-    return new Viewport(
-      Viewport.UNINITIALIZED,
-      Viewport.UNINITIALIZED,
-      canvas.width,
-      canvas.height,
-    )
+    return new Viewport(Viewport.UNINITIALIZED, Viewport.UNINITIALIZED, canvas)
   }
 
   updateTrackingPosition(player: Player): void {
-    this.playerPosition = Vector.sub(player.position, this.canvasOffset)
+    this.playerPosition = Vector.sub(
+      player.position,
+      new Vector(this.canvas.width / 2, this.canvas.height / 2),
+    )
   }
 
   update(deltaTime: number): void {

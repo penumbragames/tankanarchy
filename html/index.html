@@ -4,6 +4,8 @@
     <title>Tank Anarchy</title>
     <link rel='icon' type='image/png' href='/img/favicon.png' />
     <link rel='stylesheet' type='text/css' href='/css/styles.css' />
+
+    <script src='/client.js'></script>
   </head>
 
   <body oncontextmenu='return false;'>
@@ -20,29 +22,29 @@
     </div>
 
     <div id='container'>
-      <table>
+      <div id='canvas-container'>
+        <canvas id='canvas'></canvas>
+      </div>
+      <div id='leaderboard-container'>
+        <h3>Leaderboard:</h3>
+        <ul id='leaderboard'></ul>
+      </div>
+      <div id='chat-container'>
+        <ul id='chat-display'>
+        </ul>
+        <input id='chat-input' type='text'
+          placeholder='Press Enter to send' name='chat' />
+      </div>
+      <!-- <table>
         <tr>
           <th colspan='3'>
             <h1>Tank Anarchy</h1>
           </th>
         </tr>
         <tr id="main-row">
-          <td id='leaderboard-container'>
-            <h3>Leaderboard:</h3>
-            <ul id='leaderboard'></ul>
-          </td>
-          <td id='canvas-container'>
-            <canvas id='canvas'></canvas>
-          </td>
-          <td id='chat-container'>
-            <ul id='chat-display'>
-            </ul>
-            <input id='chat-input' type='text'
-              placeholder='Press Enter to send' name='chat' />
-          </td>
         </tr>
         <tr>
-          <td id='icons-container' colspan='3'>
+          <div id='icons-container' colspan='3'>
             <div>
               <img src='/img/favicon.png' />
               <div>Your Tank</div>
@@ -67,18 +69,16 @@
               <img src='/img/speedboost_powerup.png' />
               <div>Speedboost Powerup</div>
             </div>
-          </td>
+          </div>
         </tr>
         <tr>
-          <td colspan="3">
+          <div colspan="3">
             <div id='copyright'>
             &copy; 2015 Alvin Lin and Kenneth Li. All Rights Reserved.
             </div>
-          </td>
+          </div>
         </tr>
-      </table>
+      </table> -->
     </div>
-
-    <script src='/client.js'></script>
   </body>
 </html>

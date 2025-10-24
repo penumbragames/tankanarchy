@@ -4,24 +4,22 @@
  */
 
 html, body {
-  width: max(100%, 1200px);
   height: 100%;
+  width: 100%;
   margin: 0;
   padding: 0;
 
   text-align: center;
   user-select: none;
+  overflow: hidden;
 }
 
 #name-prompt-overlay {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
 
   position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
 
   background-color: rgba(49, 49, 49, 0.5);
   z-index: 1;
@@ -53,36 +51,23 @@ html, body {
 }
 
 #container {
-  width: max(100%, 1200px);
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
 
-  display: flex;
+  position: absolute;
+  inset: 0;
+
   justify-content: center;
   align-items: center;
 
-  table {
-    width: max(90%, 1200px);
-    box-sizing: border-box;
-    border-collapse: collapse;
-    border-spacing: 0px;
-  }
-}
-
-#main-row {
-  display: inline-block;
-  white-space: nowrap;
-
-  td {
-    display: inline-block;
-    height: 600px;
-    border: 1px solid black;
-    margin: 0;
-    padding: 0;
+  & > div {
+    position: absolute;
   }
 }
 
 #leaderboard-container {
-  width: max(20%, 200px);
+  inset: 1em 1em 0 0;
+  width: max(10%, 40ch);
 
   h3 {
     height: 50px;
@@ -106,12 +91,13 @@ html, body {
 }
 
 #canvas-container {
-  width: 800px;
+  width: max(100vw, 800px);
+  height: max(100vh, 600px);
+  inset: 0;
 
   #canvas {
-    width: 800px;
-    height: 600px;
-    margin: 0;
+    width: 100%;
+    height: 100%;
     outline: none;
 
     background-color: #fff;
@@ -120,6 +106,7 @@ html, body {
 }
 
 #chat-container {
+  right: 10px;
   width: max(20%, 200px);
 
   #chat-display {
