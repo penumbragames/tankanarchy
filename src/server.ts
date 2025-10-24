@@ -106,4 +106,7 @@ httpServer.on('error', (e) => {
 // Starts the server.
 httpServer.listen(PORT, () => {
   console.log(`Starting server on port ${PORT}`)
+  if (Constants.DEBUG_MODE) {
+    console.warn('DEBUG MODE ENABLED')
+  }
 })
