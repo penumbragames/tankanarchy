@@ -4,11 +4,12 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import * as Constants from './lib/Constants'
 import * as socketIO from 'socket.io-client'
-import * as socketIOParser from './lib/CustomSocketParser'
-import Chat from './client/Chat'
-import Game from './client/Game'
+
+import Chat from 'client/Chat'
+import Game from 'client/Game'
+import * as Constants from 'lib/Constants'
+import * as socketIOParser from 'lib/CustomSocketParser'
 
 window.onload = (): void => {
   const socket = socketIO.io({

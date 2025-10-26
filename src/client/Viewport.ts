@@ -3,10 +3,10 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import * as Constants from '../lib/Constants'
-import Entity from '../lib/Entity'
-import Player from '../server/Player'
-import Vector from '../lib/Vector'
+import * as Constants from 'lib/Constants'
+import Entity from 'lib/Entity'
+import Vector from 'lib/Vector'
+import Player from 'server/Player'
 
 class Viewport extends Entity {
   playerPosition: Vector

@@ -3,7 +3,7 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import Player from '../server/Player'
+import Player from 'server/Player'
 
 class Leaderboard {
   container: HTMLElement

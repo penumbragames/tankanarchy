@@ -3,10 +3,10 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import * as Constants from '../lib/Constants'
-import Entity from '../lib/Entity'
-import Util from '../lib/Util'
-import Vector from '../lib/Vector'
+import * as Constants from 'lib/Constants'
+import Entity from 'lib/Entity'
+import Util from 'lib/Util'
+import Vector from 'lib/Vector'
 
 class Powerup extends Entity {
   type: Constants.POWERUP_TYPES

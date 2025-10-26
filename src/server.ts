@@ -3,15 +3,15 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import * as Constants from './lib/Constants'
+import express from 'express'
 import * as http from 'http'
+import morgan from 'morgan'
 import * as path from 'path'
 import * as socketIO from 'socket.io'
-import * as socketIOParser from './lib/CustomSocketParser'
 
-import Game from './server/Game'
-import express from 'express'
-import morgan from 'morgan'
+import * as Constants from 'lib/Constants'
+import * as socketIOParser from 'lib/CustomSocketParser'
+import Game from 'server/Game'
 
 const PORT = process.env.PORT || 5000
 const FRAME_RATE = 1000 / 60

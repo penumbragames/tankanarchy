@@ -4,17 +4,17 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import * as Constants from '../lib/Constants'
 import * as socketIO from 'socket.io-client'
 
-import Drawing from './Drawing'
-import Input from './Input'
-import Leaderboard from './Leaderboard'
-import Player from '../server/Player'
-import Powerup from '../server/Powerup'
-import Vector from '../lib/Vector'
-import Viewport from './Viewport'
-import Bullet from '../server/Bullet'
+import Drawing from 'client/Drawing'
+import Input from 'client/Input'
+import Leaderboard from 'client/Leaderboard'
+import Viewport from 'client/Viewport'
+import * as Constants from 'lib/Constants'
+import Vector from 'lib/Vector'
+import Bullet from 'server/Bullet'
+import Player from 'server/Player'
+import Powerup from 'server/Powerup'
 
 type ClientSocket = socketIO.Socket<
   Constants.SERVER_TO_CLIENT_EVENTS,

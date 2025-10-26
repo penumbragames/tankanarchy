@@ -3,12 +3,12 @@
  * @author kennethli.3470@gmail.com (Kenneth Li)
  */
 
-import * as Constants from '../lib/Constants'
-import Bullet from '../server/Bullet'
-import Player from '../server/Player'
-import Powerup from '../server/Powerup'
-import Vector from '../lib/Vector'
-import Viewport from './Viewport'
+import Viewport from 'client/Viewport'
+import * as Constants from 'lib/Constants'
+import Vector from 'lib/Vector'
+import Bullet from 'server/Bullet'
+import Player from 'server/Player'
+import Powerup from 'server/Powerup'
 
 class Drawing {
   context: CanvasRenderingContext2D

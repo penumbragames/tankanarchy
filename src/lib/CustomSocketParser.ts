@@ -5,8 +5,9 @@
  */
 
 import * as socketIOParser from 'socket.io-parser'
-import Vector from '../lib/Vector'
-import { getReplacerReviver } from './CustomObjectSerialization'
+
+import { getReplacerReviver } from 'lib/CustomObjectSerialization'
+import Vector from 'lib/Vector'
 
 const { replacer, reviver } = getReplacerReviver({ Vector })
 

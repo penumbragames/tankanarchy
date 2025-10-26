@@ -4,12 +4,12 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import * as Constants from '../lib/Constants'
-import Bullet from './Bullet'
-import Entity from '../lib/Entity'
-import Powerup from './Powerup'
-import Util from '../lib/Util'
-import Vector from '../lib/Vector'
+import * as Constants from 'lib/Constants'
+import Entity from 'lib/Entity'
+import Util from 'lib/Util'
+import Vector from 'lib/Vector'
+import Bullet from 'server/Bullet'
+import Powerup from 'server/Powerup'
 
 class Player extends Entity {
   name: string

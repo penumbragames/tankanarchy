@@ -4,7 +4,7 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import * as Constants from '../lib/Constants'
+import * as Constants from 'lib/Constants'
 import * as socketIO from 'socket.io-client'
 
 class Chat {
@@ -12,15 +12,21 @@ class Chat {
   displayElement: HTMLElement
   inputElement: HTMLInputElement
 
-  constructor(socket: socketIO.Socket, displayElement: HTMLElement,
-              inputElement: HTMLInputElement) {
+  constructor(
+    socket: socketIO.Socket,
+    displayElement: HTMLElement,
+    inputElement: HTMLInputElement,
+  ) {
     this.socket = socket
     this.displayElement = displayElement
     this.inputElement = inputElement
   }
 
-  static create(socket: socketIO.Socket, displayElementID: string,
-                inputElementID: string) {
+  static create(
+    socket: socketIO.Socket,
+    displayElementID: string,
+    inputElementID: string,
+  ) {
     const displayElement = document.getElementById(displayElementID)!
     const inputElement = document.getElementById(inputElementID)!
     if (!(inputElement instanceof HTMLInputElement)) {
@@ -35,10 +41,14 @@ class Chat {
    * Binds the event handlers to initialize the Chat class.
    */
   init() {
-    this.inputElement.addEventListener('keydown',
-                                       this.onInputKeyDown.bind(this))
-    this.socket.on(Constants.SOCKET.CHAT_SERVER_CLIENT,
-                   this.onChatReceive.bind(this))
+    this.inputElement.addEventListener(
+      'keydown',
+      this.onInputKeyDown.bind(this),
+    )
+    this.socket.on(
+      Constants.SOCKET.CHAT_SERVER_CLIENT,
+      this.onChatReceive.bind(this),
+    )
   }
 
   /**

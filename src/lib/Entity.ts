@@ -3,9 +3,9 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import * as Constants from '../lib/Constants'
-import Util from '../lib/Util'
-import Vector from '../lib/Vector'
+import * as Constants from 'lib/Constants'
+import Util from 'lib/Util'
+import Vector from 'lib/Vector'
 
 abstract class Entity {
   position: Vector

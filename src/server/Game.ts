@@ -4,11 +4,12 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import * as Constants from '../lib/Constants'
 import * as socket from 'socket.io'
-import Bullet from './Bullet'
-import Player from './Player'
-import Powerup from './Powerup'
+
+import * as Constants from 'lib/Constants'
+import Bullet from 'server/Bullet'
+import Player from 'server/Player'
+import Powerup from 'server/Powerup'
 
 class Game {
   clients: Map<string, socket.Socket>

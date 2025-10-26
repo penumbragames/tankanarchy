@@ -3,9 +3,9 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import Player from '../server/Player'
-import Powerup from '../server/Powerup'
-import Bullet from '../server/Bullet'
+import Bullet from 'server/Bullet'
+import Player from 'server/Player'
+import Powerup from 'server/Powerup'
 
 // Socket events we can listen for.
 export enum SOCKET {
