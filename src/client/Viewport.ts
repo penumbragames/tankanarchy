@@ -3,6 +3,7 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
+import Canvas from 'client/Canvas'
 import * as Constants from 'lib/Constants'
 import Entity from 'lib/Entity'
 import Vector from 'lib/Vector'
@@ -10,7 +11,7 @@ import Player from 'server/Player'
 
 class Viewport extends Entity {
   playerPosition: Vector
-  canvas: HTMLCanvasElement
+  canvas: Canvas
 
   static readonly UNINITIALIZED: Vector = new Vector(-99999, -99999)
 
@@ -20,24 +21,21 @@ class Viewport extends Entity {
    * correspond to canvas coordinates [width / 2, height / 2]).
    * @param {Vector} position The starting position of the viewport
    * @param {Vector} velocity The starting velocity of the viewport
-   * @param {HTMLCanvasElement} canvas The canvas that the game is rendering on
+   * @param {Canvas} canvas The canvas that the game is rendering on
    */
-  constructor(position: Vector, velocity: Vector, canvas: HTMLCanvasElement) {
+  constructor(position: Vector, velocity: Vector, canvas: Canvas) {
     super(position, velocity, Vector.zero(), 0)
 
     this.playerPosition = Vector.zero()
     this.canvas = canvas
   }
 
-  static create(canvas: HTMLCanvasElement): Viewport {
+  static create(canvas: Canvas): Viewport {
     return new Viewport(Viewport.UNINITIALIZED, Viewport.UNINITIALIZED, canvas)
   }
 
   updateTrackingPosition(player: Player): void {
-    this.playerPosition = Vector.sub(
-      player.position,
-      new Vector(this.canvas.width / 2, this.canvas.height / 2),
-    )
+    this.playerPosition = Vector.sub(player.position, this.canvas.center)
   }
 
   update(deltaTime: number): void {

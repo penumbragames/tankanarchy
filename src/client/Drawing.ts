@@ -3,6 +3,7 @@
  * @author kennethli.3470@gmail.com (Kenneth Li)
  */
 
+import Canvas from 'client/Canvas'
 import Viewport from 'client/Viewport'
 import * as Constants from 'lib/Constants'
 import Vector from 'lib/Vector'
@@ -35,8 +36,8 @@ class Drawing {
     this.height = context.canvas.height
   }
 
-  static create(canvas: HTMLCanvasElement, viewport: Viewport): Drawing {
-    const context = canvas.getContext('2d')!
+  static create(canvas: Canvas, viewport: Viewport): Drawing {
+    const context = canvas.context
     const images = new Map()
     for (const [key, filename] of Constants.DRAWING_IMG_KEY_TO_ASSET) {
       const img = new Image()

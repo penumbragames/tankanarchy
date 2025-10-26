@@ -27,10 +27,10 @@ class Input {
 
   static create(
     keyElement: HTMLElement,
-    mouseTrackerElement: HTMLCanvasElement,
+    mouseTrackerElement: HTMLElement,
   ): Input {
     const input = new Input()
-    input.applyEventHandlers(keyElement, mouseTrackerElement)
+    input.applyEventHandlers(keyElement, <HTMLElement>mouseTrackerElement)
     return input
   }
 
@@ -101,7 +101,7 @@ class Input {
    */
   applyEventHandlers(
     keyElement: HTMLElement,
-    mouseTrackerElement: HTMLCanvasElement,
+    mouseTrackerElement: HTMLElement,
   ): void {
     keyElement.addEventListener('keydown', this.onKeyDown.bind(this))
     keyElement.addEventListener('keyup', this.onKeyUp.bind(this))

@@ -3,6 +3,8 @@
  * @author omgimanerd (alvin@omgimanerd.tech)
  */
 
+import Vector from 'lib/Vector'
+
 export default class Canvas {
   canvas: HTMLCanvasElement
 
@@ -14,23 +16,27 @@ export default class Canvas {
     return new Canvas(document.getElementById(id) as HTMLCanvasElement)
   }
 
+  matchCanvasSize() {
+    this.width = this.elementWidth
+    this.height = this.elementHeight
+  }
+
   bindResizeListener() {
     window.addEventListener(
       'resize',
       () => {
-        this.width = this.elementWidth
-        this.height = this.elementHeight
+        this.matchCanvasSize()
       },
       true,
     )
   }
 
-  get raw() {
+  get element() {
     return this.canvas
   }
 
-  get context() {
-    return this.canvas.getContext('2d')
+  get context(): CanvasRenderingContext2D {
+    return <CanvasRenderingContext2D>this.canvas.getContext('2d')
   }
 
   get width() {
@@ -49,6 +55,10 @@ export default class Canvas {
     this.canvas.height = height
   }
 
+  get center() {
+    return new Vector(this.width / 2, this.height / 2)
+  }
+
   get aspectRatio() {
     return this.width / this.height
   }
@@ -63,5 +73,9 @@ export default class Canvas {
 
   get elementAspectRatio() {
     return this.elementWidth / this.elementHeight
+  }
+
+  get elementCenter() {
+    return new Vector(this.elementWidth / 2, this.elementHeight / 2)
   }
 }
