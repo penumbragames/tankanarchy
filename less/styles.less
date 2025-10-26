@@ -66,17 +66,21 @@ html, body {
 }
 
 #leaderboard-container {
-  width: max(10%, 40ch);
+  width: max(10%, 50ch);
   height: auto;
   top: 1rem;
   left: 1rem;
   z-index: 2;
+  text-align: left;
+
+  --slanted: polygon(4px 0, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+  --leftpad: 5ch;
 
   h3 {
     background-color: #0c5aa3b0;
     margin: 0;
-    border-radius: 8px;
-    clip-path: polygon(1.5% 0, 100% 0%, 98.5% 100%, 0% 100%);
+    padding-left: var(--leftpad);
+    clip-path: var(--slanted);
   }
 
   #leaderboard {
@@ -87,10 +91,9 @@ html, body {
       width: 80%;
       list-style-type: none;
       margin: 4px 0;
-      padding: 4px 0px;
+      padding: 2px 0 2px var(--leftpad);
 
-      border-radius: 5px;
-      clip-path: polygon(1.5% 0, 100% 0%, 98.5% 100%, 0% 100%);
+      clip-path: var(--slanted);
 
       &:nth-child(1) {
         background-color: #b30000e3;
@@ -126,7 +129,7 @@ html, body {
     height: 100%;
     outline: none;
 
-    background-color: #7a3b07f3;
+    background-color: #140a02f3;
     cursor: crosshair;
   }
 }
