@@ -22,13 +22,7 @@ export default class Canvas {
   }
 
   bindResizeListener() {
-    window.addEventListener(
-      'resize',
-      () => {
-        this.matchCanvasSize()
-      },
-      true,
-    )
+    window.addEventListener('resize', this.matchCanvasSize.bind(this), true)
   }
 
   get element() {

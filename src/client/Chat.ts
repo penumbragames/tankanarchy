@@ -29,10 +29,11 @@ class Chat {
   ) {
     const displayElement = document.getElementById(displayElementID)!
     const inputElement = document.getElementById(inputElementID)!
-    if (!(inputElement instanceof HTMLInputElement)) {
-      throw new Error(`Input element ID ${inputElementID}`)
-    }
-    const chat = new Chat(socket, displayElement, inputElement)
+    const chat = new Chat(
+      socket,
+      displayElement,
+      <HTMLInputElement>inputElement,
+    )
     chat.init()
     return chat
   }
@@ -41,14 +42,29 @@ class Chat {
    * Binds the event handlers to initialize the Chat class.
    */
   init() {
+    document.addEventListener('keydown', this.onDocumentKeyDown.bind(this))
     this.inputElement.addEventListener(
       'keydown',
       this.onInputKeyDown.bind(this),
+      true,
     )
     this.socket.on(
       Constants.SOCKET.CHAT_SERVER_CLIENT,
       this.onChatReceive.bind(this),
     )
+  }
+
+  /**
+   * Event handler for a key down event when the input chat is not focused to
+   * switch focus to the chat.
+   */
+  onDocumentKeyDown(event: KeyboardEvent) {
+    if (
+      event.code === 'Enter' &&
+      document.activeElement !== this.inputElement
+    ) {
+      this.inputElement.focus()
+    }
   }
 
   /**
@@ -59,7 +75,9 @@ class Chat {
       const text = this.inputElement.value
       this.inputElement.value = ''
       this.socket.emit(Constants.SOCKET.CHAT_CLIENT_SERVER, text)
+      this.inputElement.blur()
     }
+    event.stopPropagation()
   }
 
   /**
