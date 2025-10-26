@@ -23,7 +23,7 @@ window.onload = (): void => {
   nameInputElement.focus()
 
   const sendName = (): boolean => {
-    const name = Constants.DEBUG_MODE ? 'DEBUG_PLAYER' : nameInputElement.value
+    const name = DEBUG ? 'DEBUG_PLAYER' : nameInputElement.value
     document.getElementById('name-prompt-container')!.innerHTML = ''
     if (name && name.length < 20) {
       socket.emit(Constants.SOCKET.NEW_PLAYER, name, () => {
@@ -37,7 +37,7 @@ window.onload = (): void => {
     return false
   }
 
-  if (Constants.DEBUG_MODE) {
+  if (DEBUG) {
     sendName()
   } else {
     document.getElementById('name-form')!.addEventListener('submit', sendName)

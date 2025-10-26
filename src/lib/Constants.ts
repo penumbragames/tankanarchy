@@ -7,9 +7,6 @@ import Player from '../server/Player'
 import Powerup from '../server/Powerup'
 import Bullet from '../server/Bullet'
 
-// Do not compile into production build.
-export const DEBUG_MODE = false
-
 // Socket events we can listen for.
 export enum SOCKET {
   UPDATE = 'update',

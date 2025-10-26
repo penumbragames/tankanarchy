@@ -5,11 +5,13 @@
   "main": "src/server.ts",
   "type": "module",
   "scripts": {
-    "start": "bun run ./src/server.ts",
+    "start": "bun run --define DEBUG=false ./src/server.ts",
+    "start:debug": "bun run --define DEBUG=true server/server.ts",
     "watch": "concurrently 'bun run --watch ./src/server.ts' 'bun build  --watch ./src/client.ts --outdir ./dist' 'lessc-watch less/styles.less dist/css/styles.css'",
-    "build": "npm run build:client",
-    "build:client": "bun build ./src/client.ts --outdir ./dist && lessc ./less/styles.less ./dist/css/styles.css",
-    "clean": "rm -rf dist/*"
+    "watch:debug": "concurrently 'bun run --watch --define DEBUG=true ./src/server.ts' 'bun build --watch --define DEBUG=true --outdir ./dist ./src/client.ts' 'lessc-watch less/styles.less dist/css/styles.css' 'tsc --noEmit'",
+    "build": "bun build ./src/client.ts --outdir ./dist && lessc ./less/styles.less ./dist/css/styles.css",
+    "clean": "rm -rf dist/*",
+    "tsc": "tsc --noEmit"
   },
   "repository": {
     "type": "git",
@@ -41,6 +43,6 @@
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
     "socket.io-parser": "^4.2.4",
-    "typescript": "^4.9.5"
+    "typescript": "^5.9.3"
   }
 }
