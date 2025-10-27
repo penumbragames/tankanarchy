@@ -39,7 +39,7 @@ app.use(express.static(DIRNAME))
 app.get('/', (_, res) => {
   res.sendFile(path.join(DIRNAME, '../html/index.html'))
 })
-app.get('/css/styles.css', (_, res) => {
+app.get('/styles.css', (_, res) => {
   res.sendFile(path.join(DIRNAME, '../dist/styles.css'))
 })
 app.get('/client.js', (_, res) => {

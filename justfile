@@ -21,7 +21,7 @@ watchClientTs:
   bun build {{define_flag}} --watch --outdir dist src/client.ts
 
 watchLess:
-  lessc-watch less/styles.less dist/css/styles.css
+  lessc-watch less/styles.less dist/styles.css
 
 [parallel]
 build: buildClientTs buildLess
