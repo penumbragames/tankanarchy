@@ -7,6 +7,7 @@
 import * as socket from 'socket.io'
 
 import * as Constants from 'lib/Constants'
+import * as Interfaces from 'lib/Interfaces'
 import Bullet from 'server/Bullet'
 import Player from 'server/Player'
 import Powerup from 'server/Powerup'
@@ -91,7 +92,7 @@ class Game {
    * @param {string} socketID The socket ID of the player to update
    * @param {Object} data The player's input state
    */
-  updatePlayerOnInput(socketID: string, data: Constants.PLAYER_INPUTS): void {
+  updatePlayerOnInput(socketID: string, data: Interfaces.PLAYER_INPUTS): void {
     const player = this.players.get(socketID)
     if (player) {
       player.updateOnInput(data)
@@ -201,7 +202,7 @@ class Game {
     const players = [...this.players.values()]
     this.clients.forEach((_client, socketID) => {
       const currentPlayer = this.players.get(socketID)
-      this.clients.get(socketID)!.emit(Constants.SOCKET.UPDATE, {
+      this.clients.get(socketID)!.emit(Interfaces.SOCKET.UPDATE, {
         self: currentPlayer,
         players: players,
         projectiles: this.projectiles,

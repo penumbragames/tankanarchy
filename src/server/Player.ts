@@ -6,6 +6,7 @@
 
 import * as Constants from 'lib/Constants'
 import Entity from 'lib/Entity'
+import * as Interfaces from 'lib/Interfaces'
 import Util from 'lib/Util'
 import Vector from 'lib/Vector'
 import Bullet from 'server/Bullet'
@@ -69,7 +70,7 @@ class Player extends Entity {
    * Update this player given the client's input data from Input
    * @param {Object} data A JSON Object storing the input state
    */
-  updateOnInput(data: Constants.PLAYER_INPUTS): void {
+  updateOnInput(data: Interfaces.PLAYER_INPUTS): void {
     if ((data.up && data.down) || (!data.up && !data.down)) {
       this.velocity = Vector.zero()
     } else if (data.up) {

@@ -11,15 +11,15 @@ import Drawing from 'client/Drawing'
 import Input from 'client/Input'
 import Leaderboard from 'client/Leaderboard'
 import Viewport from 'client/Viewport'
-import * as Constants from 'lib/Constants'
+import * as Interfaces from 'lib/Interfaces'
 import Vector from 'lib/Vector'
 import Bullet from 'server/Bullet'
 import Player from 'server/Player'
 import Powerup from 'server/Powerup'
 
 type ClientSocket = socketIO.Socket<
-  Constants.SERVER_TO_CLIENT_EVENTS,
-  Constants.CLIENT_TO_SERVER_EVENTS
+  Interfaces.SERVER_TO_CLIENT_EVENTS,
+  Interfaces.CLIENT_TO_SERVER_EVENTS
 >
 
 class Game {
@@ -87,10 +87,10 @@ class Game {
 
   init(): void {
     this.lastUpdateTime = Date.now()
-    this.socket.on(Constants.SOCKET.UPDATE, this.onReceiveGameState.bind(this))
+    this.socket.on(Interfaces.SOCKET.UPDATE, this.onReceiveGameState.bind(this))
   }
 
-  onReceiveGameState(state: Constants.GAME_STATE): void {
+  onReceiveGameState(state: Interfaces.GAME_STATE): void {
     this.self = state.self
     this.players = state.players
     this.projectiles = state.projectiles
@@ -122,7 +122,7 @@ class Game {
         worldMouseCoords,
         this.self.position,
       )
-      this.socket.emit(Constants.SOCKET.PLAYER_ACTION, {
+      this.socket.emit(Interfaces.SOCKET.PLAYER_ACTION, {
         up: this.input.up,
         down: this.input.down,
         left: this.input.left,
