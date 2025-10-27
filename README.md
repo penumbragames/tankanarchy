@@ -1,33 +1,21 @@
 # Tank Anarchy
 
-Tank Anarchy is an online multiplayer tank battle arena game that takes place
-in a single large world. Anyone who logs on can battle anyone else that's online at
+Tank Anarchy is an online multiplayer tank battle arena game that takes place in
+a single large world. Anyone who logs on can battle anyone else that's online at
 the same time.
 
 # Setting Up:
 
-I am developing this project on node v18.12.1 but it should be compatible with most other
-versions.
+I am developing this project on node v20.19.5. This project uses
+[`bun`](https://bun.com/) and [`justfile`](https://just.systems/man/en/) for
+build/compilation.
 
 ```
 npm install
-npm run build
+just build
+just start
 ```
 
-Run script:
-
-```
-npm run start
-```
-
-# Contributing:
-
-- Fork this repository and set it up on your computer.
-- Commit to your own fork and send a pull request to the master repository.
-- Search for TODOs using git grep.
-- Your code will be reviewed and must be approved before it is merged.
-- Please use ESLint to lint your code and follow the stylistic guidelines
-  set in our `.eslintrc` file.
 
 # Creators:
 
