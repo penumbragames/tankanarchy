@@ -48,9 +48,7 @@ export interface CLIENT_TO_SERVER_EVENTS {
   [SOCKET.CHAT_CLIENT_SERVER]: (data: CHAT_MESSAGE) => void
   [SOCKET.DISCONNECT]: () => void
 }
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface SERVER_TO_SERVER_EVENTS {}
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface SOCKET_DATA {}
 
 export const PLAYER_TURN_RATE = 0.005
