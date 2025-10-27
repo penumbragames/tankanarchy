@@ -40,7 +40,7 @@ app.get('/', (_, res) => {
   res.sendFile(path.join(DIRNAME, '../html/index.html'))
 })
 app.get('/css/styles.css', (_, res) => {
-  res.sendFile(path.join(DIRNAME, '../dist/css/styles.css'))
+  res.sendFile(path.join(DIRNAME, '../dist/styles.css'))
 })
 app.get('/client.js', (_, res) => {
   res.sendFile(path.join(DIRNAME, '../dist/client.js'))
