@@ -40,9 +40,7 @@ tsc:
 
 BUN_PATH := `which bun`
 
-pm2start $PORT='5001':
+pm2 $PORT='5001': clean build
+  -pm2 del tankanarchy
   pm2 start --interpreter {{BUN_PATH}} --interpreter-args='{{define_flag}}' \
     src/server.ts --name tankanarchy
-
-pm2restart $PORT='5001':
-  pm2 restart tankanarchy
