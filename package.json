@@ -5,13 +5,15 @@
   "main": "src/server.ts",
   "type": "module",
   "scripts": {
-    "start": "bun run --define DEBUG=false ./src/server.ts",
-    "start:debug": "bun run --define DEBUG=true server/server.ts",
-    "watch": "concurrently 'bun run --watch ./src/server.ts' 'bun build  --watch ./src/client.ts --outdir ./dist' 'lessc-watch less/styles.less dist/css/styles.css'",
-    "watch:debug": "concurrently 'bun run --watch --define DEBUG=true ./src/server.ts' 'bun build --watch --define DEBUG=true --outdir ./dist ./src/client.ts' 'lessc-watch less/styles.less dist/css/styles.css' 'tsc --noEmit'",
+    "start": "bun run --define DEBUG=false src/server.ts",
+    "start:debug": "bun run --define DEBUG=true src/server.ts",
+    "watch": "concurrently 'bun run --watch src/server.ts' 'bun build  --watch ./src/client.ts --outdir ./dist' 'lessc-watch less/styles.less dist/css/styles.css'",
+    "watch:debug": "concurrently 'bun run --watch --define DEBUG=true src/server.ts' 'bun build --watch --define DEBUG=true --outdir ./dist ./src/client.ts' 'lessc-watch less/styles.less dist/css/styles.css' 'tsc --noEmit'",
     "build": "bun build ./src/client.ts --outdir ./dist && lessc ./less/styles.less ./dist/css/styles.css",
     "clean": "rm -rf dist/*",
-    "tsc": "tsc --noEmit"
+    "tsc": "tsc --noEmit",
+    "pm2:start": "PORT=5001 pm2 start --interpreter ~/.bin/bin/bun src/server.ts --name tankanarchy",
+    "pm2:restart": "PORT=5001 pm2 restart tankanarchy"
   },
   "repository": {
     "type": "git",
