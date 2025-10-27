@@ -12,6 +12,8 @@ class Chat {
   displayElement: HTMLElement
   inputElement: HTMLInputElement
 
+  static readonly LIMIT = 40
+
   constructor(
     socket: socketIO.Socket,
     displayElement: HTMLElement,
@@ -93,6 +95,9 @@ class Chat {
       document.createTextNode(`${data.name}: ${data.message}`),
     )
     this.displayElement.appendChild(element)
+    if (this.displayElement.children.length > Chat.LIMIT) {
+      this.displayElement.lastChild?.remove()
+    }
   }
 }
 
