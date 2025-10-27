@@ -21,8 +21,6 @@
     "@typescript-eslint/parser": "^5.62.0",
     "bun": "^1.3.0",
     "concurrently": "^9.2.1",
-    "eslint": "^8.57.1",
-    "eslint-plugin-prettier": "^4.2.5",
     "less": "^4.4.2",
     "lessc-watch": "^1.2.0",
     "prettier": "^2.8.8",
