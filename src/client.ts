@@ -16,14 +16,13 @@ window.onload = (): void => {
     parser: socketIOParser,
   })
   const game = Game.create(socket, 'canvas', 'leaderboard')
-  Chat.create(socket, 'chat-display', 'chat-input')
 
   const nameInputElement = <HTMLInputElement>(
     document.getElementById('name-input')!
   )
   nameInputElement.focus()
 
-  const sendName = (): boolean => {
+  const sendName = () => {
     const name = DEBUG ? 'DEBUG_PLAYER' : nameInputElement.value
     document.getElementById('name-prompt-container')!.innerHTML = ''
     if (name && name.length < 20) {
@@ -31,17 +30,16 @@ window.onload = (): void => {
         document.getElementById('name-prompt-overlay')!.remove()
         document.getElementById('canvas')!.focus()
         game.run()
+        Chat.create(socket, 'chat-display', 'chat-input')
       })
     } else {
       window.alert('Your name cannot be blank or over 20 characters.')
     }
-    return false
   }
 
   if (DEBUG) {
     sendName()
   } else {
     document.getElementById('name-form')!.addEventListener('submit', sendName)
-    document.getElementById('name-submit')!.addEventListener('click', sendName)
   }
 }

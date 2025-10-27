@@ -4,9 +4,9 @@
  */
 
 import express from 'express'
-import * as http from 'http'
+import http from 'http'
 import morgan from 'morgan'
-import * as path from 'path'
+import path from 'node:path'
 import * as socketIO from 'socket.io'
 
 import * as Constants from 'lib/Constants'
