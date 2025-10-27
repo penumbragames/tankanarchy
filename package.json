@@ -24,7 +24,7 @@
     "less": "^4.4.2",
     "lessc-watch": "^1.2.0",
     "prettier": "^2.8.8",
-    "rust-just": "^1.40.0"
+    "rust-just": "^1.43.0"
   },
   "dependencies": {
     "express": "^4.21.2",
