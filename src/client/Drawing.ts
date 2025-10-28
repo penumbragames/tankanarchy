@@ -12,39 +12,33 @@ import Player from 'server/Player'
 import Powerup from 'server/Powerup'
 
 class Drawing {
+  canvas: Canvas
   context: CanvasRenderingContext2D
   images: Map<
     Constants.DRAWING_IMG_KEYS | Constants.POWERUP_TYPES,
     HTMLImageElement
   >
-
   viewport: Viewport
 
-  width: number
-  height: number
-
   constructor(
-    context: CanvasRenderingContext2D,
+    canvas: Canvas,
     images: Map<Constants.DRAWING_IMG_KEYS, HTMLImageElement>,
     viewport: Viewport,
   ) {
-    this.context = context
+    this.canvas = canvas
+    this.context = canvas.context
     this.images = images
     this.viewport = viewport
-
-    this.width = context.canvas.width
-    this.height = context.canvas.height
   }
 
   static create(canvas: Canvas, viewport: Viewport): Drawing {
-    const context = canvas.context
     const images = new Map()
     for (const [key, filename] of Constants.DRAWING_IMG_KEY_TO_ASSET) {
       const img = new Image()
       img.src = `${Constants.DRAWING_IMG_BASE_PATH}/${filename}`
       images.set(key, img)
     }
-    return new Drawing(context, images, viewport)
+    return new Drawing(canvas, images, viewport)
   }
 
   /**
@@ -56,7 +50,7 @@ class Drawing {
   }
 
   clear(): void {
-    this.context.clearRect(0, 0, this.width, this.height)
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
   }
 
   /**
@@ -112,6 +106,53 @@ class Drawing {
     }
 
     this.context.restore()
+  }
+
+  getBuffAlpha(remainingSeconds: number): number {
+    return (
+      Math.sin(Constants.DRAWING_POWERUP_FADE_EXPONENTIAL / remainingSeconds) /
+        2 +
+      0.5
+    )
+  }
+
+  /**
+   * Draws the status of the current player's buffs to the top right.
+   * @param {Player} self
+   */
+  drawBuffStatus(self: Player): void {
+    // Iterate through the powerup types to render them in a deterministic
+    // order.
+    let offset =
+      this.canvas.width -
+      Constants.DRAWING_DEFAULT_PADDING -
+      Constants.DRAWING_POWERUP_BUFF_SIZE
+    for (const powerupType of Object.values(Constants.POWERUP_TYPES)) {
+      if (powerupType === Constants.POWERUP_TYPES.HEALTH_PACK) continue
+      let powerup
+      if ((powerup = self.powerups.get(powerupType))) {
+        // Compute the alpha of the buff based on how close we are to expiring.
+        // We only begin fading the buff close to actual expiration.
+        // We cannot use the powerup method calls here because the object is
+        // not actually fully deserialized into the class instance.
+        const remainingSeconds = (powerup.expirationTime - Date.now()) / 1000
+        this.context.globalAlpha =
+          remainingSeconds < Constants.DRAWING_POWERUP_FADE_CUTOFF
+            ? this.getBuffAlpha(remainingSeconds)
+            : 1
+
+        this.context.drawImage(
+          <HTMLImageElement>this.images.get(powerupType),
+          offset,
+          Constants.DRAWING_DEFAULT_PADDING,
+          Constants.DRAWING_POWERUP_BUFF_SIZE,
+          Constants.DRAWING_POWERUP_BUFF_SIZE,
+        )
+        offset -= Constants.DRAWING_POWERUP_BUFF_SIZE
+      }
+    }
+    // Reset the global alpha.
+    this.context.globalAlpha = 1
   }
 
   /**

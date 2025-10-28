@@ -79,6 +79,12 @@ export const DRAWING_IMG_KEY_TO_ASSET = new Map<
   [POWERUP_TYPES.SPEEDBOOST, 'speedboost_powerup.png'],
 ])
 export const DRAWING_TILE_SIZE = 100
+
+export const DRAWING_DEFAULT_PADDING = 0
+export const DRAWING_POWERUP_FADE_CUTOFF = 3
+export const DRAWING_POWERUP_FADE_EXPONENTIAL = 50
+export const DRAWING_POWERUP_BUFF_SIZE = 55
+
 export const VIEWPORT_STICKINESS = 0.005
 
 // Validation code in anonymous function, module will break on import if invalid

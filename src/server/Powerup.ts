@@ -8,7 +8,7 @@ import Entity from 'lib/Entity'
 import Util from 'lib/Util'
 import Vector from 'lib/Vector'
 
-class Powerup extends Entity {
+export default class Powerup extends Entity {
   type: Constants.POWERUP_TYPES
   data: number
   duration: number
@@ -25,6 +25,8 @@ class Powerup extends Entity {
     this.type = type
     this.data = data
     this.duration = duration
+
+    // This is set when the powerup is picked up by a player.
     this.expirationTime = 0
 
     this.destroyed = false
@@ -72,12 +74,15 @@ class Powerup extends Entity {
     return new Powerup(position, type, data, duration)
   }
 
-  /**
-   * Updates this Powerup's expiration time.
-   */
   update(lastUpdateTime: number): void {
-    this.expirationTime = lastUpdateTime + this.duration
+    // Empty update stub.
+  }
+
+  get remainingMs() {
+    return this.expirationTime - Date.now()
+  }
+
+  get remainingSeconds() {
+    return this.remainingMs / 1000
   }
 }
-
-export default Powerup

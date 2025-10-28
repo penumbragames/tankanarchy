@@ -144,6 +144,8 @@ class Game {
       this.players
         .filter((player) => player.socketID !== this.self?.socketID)
         .forEach((tank) => this.drawing.drawTank(false, tank))
+
+      this.drawing.drawBuffStatus(this.self)
     }
   }
 }
