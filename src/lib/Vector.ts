@@ -30,7 +30,7 @@ class Vector {
   }
 
   get mag(): number {
-    return Math.sqrt(this.mag)
+    return Math.sqrt(this.mag2)
   }
 
   get mag2(): number {
