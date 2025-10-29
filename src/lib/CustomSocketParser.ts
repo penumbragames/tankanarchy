@@ -15,7 +15,7 @@ const { replacer, reviver } = getReplacerReviver({ Vector })
  * Subclass of the default socket-io.parser encoder that can be used as a
  * drop-in replacement.
  */
-export class Encoder extends socketIOParser.Encoder {
+class Encoder extends socketIOParser.Encoder {
   constructor() {
     super(replacer)
   }
@@ -25,10 +25,10 @@ export class Encoder extends socketIOParser.Encoder {
  * Subclass of the default socket-io.parser decoder that can be used as a
  * drop-in replacement.
  */
-export class Decoder extends socketIOParser.Decoder {
+class Decoder extends socketIOParser.Decoder {
   constructor() {
     super(reviver)
   }
 }
 
-/* eslint-enable @typescript-eslint/no-explicit-any */
+export default { Encoder, Decoder }

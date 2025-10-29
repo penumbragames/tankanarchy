@@ -64,7 +64,6 @@ export function getReplacerReviver(
   )
 
   return {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     replacer(_key: string, value: any): any {
       if (!value) {
         return value
@@ -98,7 +97,6 @@ export function getReplacerReviver(
       }
       return value
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     reviver(_key: string, value: any): any {
       if (!value) {
         return value

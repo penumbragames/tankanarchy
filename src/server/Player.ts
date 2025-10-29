@@ -4,6 +4,8 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
+import { Exclude, Type } from 'class-transformer'
+
 import * as Constants from 'lib/Constants'
 import Entity from 'lib/Entity'
 import * as Interfaces from 'lib/Interfaces'
@@ -12,18 +14,22 @@ import Vector from 'lib/Vector'
 import Bullet from 'server/Bullet'
 import Powerup from 'server/Powerup'
 
-class Player extends Entity {
+export default class Player extends Entity {
   name: string
-  socketID: string
+  @Exclude() socketID: string
 
-  lastUpdateTime: number
+  @Exclude() lastUpdateTime: number
+
   tankAngle: number
   turretAngle: number
   turnRate: number
+
   speed: number
-  shotCooldown: number
-  lastShotTime: number
+  @Exclude() shotCooldown: number
+  @Exclude() lastShotTime: number
   health: number
+
+  @Type(() => Powerup)
   powerups: Map<Constants.POWERUP_TYPES, Powerup>
 
   kills: number
@@ -100,8 +106,7 @@ class Player extends Entity {
     this.position.add(Vector.scale(this.velocity, deltaTime))
     this.boundToWorld()
     this.tankAngle = Util.normalizeAngle(
-      // prettier-ignore
-      this.tankAngle + (this.turnRate * deltaTime),
+      this.tankAngle + (this.turnRate * deltaTime), // prettier-ignore
     )
 
     this.updatePowerups()
@@ -222,5 +227,3 @@ class Player extends Entity {
     this.health = Constants.PLAYER_MAX_HEALTH
   }
 }
-
-export default Player
