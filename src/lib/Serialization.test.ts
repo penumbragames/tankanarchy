@@ -6,13 +6,14 @@ import { beforeEach, describe, expect, setSystemTime, test } from 'bun:test'
 import { instanceToPlain, plainToInstance } from 'class-transformer'
 import { POWERUP_TYPES } from 'lib/Constants'
 
+import { getReplacerReviver } from 'lib/CustomObjectSerialization'
 import Vector from 'lib/Vector'
 import Player from 'server/Player'
 import Powerup from 'server/Powerup'
 
-describe('Test serializing/deserializing class instances', () => {
-  const UNIXTIME_1 = new Date('1970-01-01T00:00:00.001Z')
+const UNIXTIME_1 = new Date('1970-01-01T00:00:00.001Z')
 
+describe('Test serializing/deserializing class instances', () => {
   beforeEach(() => {
     setSystemTime(UNIXTIME_1)
   })
@@ -72,7 +73,9 @@ describe('Test serializing/deserializing class instances', () => {
   test('Player', () => {
     const name = 'test_player'
     const p = Player.create(name, 'stub_socket_id')
+    // Set the position and tank angle to override the random initial values.
     p.position = Vector.zero()
+    p.tankAngle = 2
     const powerup = new Powerup(Vector.one(), POWERUP_TYPES.HEALTH_PACK, 1, 2)
     p.applyPowerup(powerup)
     const serializedP = instanceToPlain(p)
@@ -117,7 +120,7 @@ describe('Test serializing/deserializing class instances', () => {
           },
         },
         "speed": 0.4,
-        "tankAngle": 6.110729655359472,
+        "tankAngle": 2,
         "turnRate": 0,
         "turretAngle": 0,
         "velocity": {
@@ -129,6 +132,7 @@ describe('Test serializing/deserializing class instances', () => {
 
     const deserializedP = plainToInstance(Player, serializedP)
     // Test that the methods work.
+    expect(deserializedP.position.mag).toBe(0)
     expect(deserializedP.isDead()).toBe(false)
     // Check that the nested objects deserialize properly.
     const powerups = deserializedP.powerups
@@ -136,5 +140,50 @@ describe('Test serializing/deserializing class instances', () => {
 
     expect(healthpack!.remainingMs).toBe(1)
     expect(healthpack!.remainingSeconds).toBe(0.001)
+  })
+})
+
+describe('Test the custom replacer/reviver functions', () => {
+  // test('test', () => {
+  //   const { replacer, reviver } = getReplacerReviver({
+  //     Vector,
+  //     Powerup,
+  //     Player,
+  //   })
+  //   const v = new Vector(1, 2)
+
+  //   console.log(v)
+
+  //   let s = JSON.stringify(v, replacer)
+  //   console.log(s)
+
+  //   let r = JSON.parse(s, reviver)
+  //   console.log(r)
+  //   console.log(r.mag)
+  // })
+
+  test('test player', () => {
+    const { replacer, reviver } = getReplacerReviver({
+      Vector,
+      Powerup,
+      Player,
+    })
+
+    const p = Player.create('test_player', 'socket')
+    let g = JSON.stringify(
+      {
+        self: p,
+        players: [p],
+        projectiles: [],
+        powerups: [],
+      },
+      replacer,
+    )
+
+    console.log(g)
+    const j = JSON.parse(g, reviver)
+    console.log('REPARSED')
+    console.log(j.self)
+    console.log(j.self.velocity.mag)
   })
 })

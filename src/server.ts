@@ -3,6 +3,8 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
+import 'reflect-metadata'
+
 import express from 'express'
 import http from 'http'
 import morgan from 'morgan'

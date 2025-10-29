@@ -8,14 +8,16 @@ import * as socketIOParser from 'socket.io-parser'
 
 import { getReplacerReviver } from 'lib/CustomObjectSerialization'
 import Vector from 'lib/Vector'
+import Player from 'server/Player'
+import Powerup from 'server/Powerup'
 
-const { replacer, reviver } = getReplacerReviver({ Vector })
+const { replacer, reviver } = getReplacerReviver({ Vector, Player, Powerup })
 
 /**
  * Subclass of the default socket-io.parser encoder that can be used as a
  * drop-in replacement.
  */
-class Encoder extends socketIOParser.Encoder {
+export class Encoder extends socketIOParser.Encoder {
   constructor() {
     super(replacer)
   }
@@ -25,10 +27,8 @@ class Encoder extends socketIOParser.Encoder {
  * Subclass of the default socket-io.parser decoder that can be used as a
  * drop-in replacement.
  */
-class Decoder extends socketIOParser.Decoder {
+export class Decoder extends socketIOParser.Decoder {
   constructor() {
     super(reviver)
   }
 }
-
-export default { Encoder, Decoder }

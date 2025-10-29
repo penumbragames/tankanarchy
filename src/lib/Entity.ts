@@ -3,14 +3,15 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
+import { Type } from 'class-transformer'
 import * as Constants from 'lib/Constants'
 import Util from 'lib/Util'
 import Vector from 'lib/Vector'
 
 abstract class Entity {
-  position: Vector
-  velocity: Vector
-  acceleration: Vector
+  @Type(() => Vector) position: Vector
+  @Type(() => Vector) velocity: Vector
+  @Type(() => Vector) acceleration: Vector
   hitboxSize: number
   destroyed: boolean
 

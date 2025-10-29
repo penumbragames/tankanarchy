@@ -76,8 +76,7 @@ class Drawing {
       } else {
         this.context.fillStyle = Constants.DRAWING_HP_MISSING_COLOR
       }
-      // prettier-ignore
-      this.context.fillRect(-25 + (5 * i), -40, 5, 4)
+      this.context.fillRect(-25 + (5 * i), -40, 5, 4) // prettier-ignore
     }
 
     this.context.rotate(player.tankAngle)
@@ -135,7 +134,7 @@ class Drawing {
         // We only begin fading the buff close to actual expiration.
         // We cannot use the powerup method calls here because the object is
         // not actually fully deserialized into the class instance.
-        const remainingSeconds = (powerup.expirationTime - Date.now()) / 1000
+        const remainingSeconds = powerup.remainingSeconds
         this.context.globalAlpha =
           remainingSeconds < Constants.DRAWING_POWERUP_FADE_CUTOFF
             ? this.getBuffAlpha(remainingSeconds)

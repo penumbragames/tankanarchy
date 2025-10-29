@@ -4,6 +4,8 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
+import 'reflect-metadata'
+
 import * as socketIO from 'socket.io-client'
 
 import Chat from 'client/Chat'
