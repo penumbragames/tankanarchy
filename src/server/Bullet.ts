@@ -3,6 +3,8 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
+import { Type } from 'class-transformer'
+
 import * as Constants from 'lib/Constants'
 import Entity from 'lib/Entity'
 import Vector from 'lib/Vector'
@@ -10,7 +12,7 @@ import Player from 'server/Player'
 
 class Bullet extends Entity {
   angle: number
-  source: Player
+  @Type(() => Player) source: Player
 
   damage: number
   distanceTraveled: number

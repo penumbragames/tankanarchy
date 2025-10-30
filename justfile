@@ -38,6 +38,9 @@ clean:
 tsc:
   tsc --noEmit
 
+test: tsc
+  bun test
+
 BUN_PATH := `which bun`
 
 pm2 $PORT='5001': clean build

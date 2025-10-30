@@ -1,0 +1,165 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`Test serializing/deserializing basic class instances Player 2`] = `
+Player {
+  "acceleration": Vector {
+    "x": 0,
+    "y": 0,
+  },
+  "deaths": 0,
+  "destroyed": false,
+  "health": 10,
+  "hitboxSize": 20,
+  "kills": 0,
+  "lastShotTime": 0,
+  "lastUpdateTime": 0,
+  "name": "test_player",
+  "position": Vector {
+    "x": 3,
+    "y": 4,
+  },
+  "powerups": 
+Map {
+    "HEALTH_PACK" => Powerup {
+      "acceleration": Vector {
+        "x": 0,
+        "y": 0,
+      },
+      "data": 1,
+      "destroyed": false,
+      "duration": 2,
+      "expirationTime": 2,
+      "hitboxSize": 5,
+      "position": Vector {
+        "x": 1,
+        "y": 1,
+      },
+      "type": "HEALTH_PACK",
+      "velocity": Vector {
+        "x": 0,
+        "y": 0,
+      },
+    },
+  }
+,
+  "shotCooldown": 800,
+  "socketID": undefined,
+  "speed": 0.4,
+  "tankAngle": 2,
+  "turnRate": 0,
+  "turretAngle": 0,
+  "velocity": Vector {
+    "x": 0,
+    "y": 0,
+  },
+}
+`;
+
+exports[`Test serializing/deserializing complex objects Fake GameState object with one Player and one Bullet 1`] = `"{"self":{"hitboxSize":20,"destroyed":false,"position":{"x":3,"y":4},"velocity":{"x":0,"y":0},"acceleration":{"x":0,"y":0},"name":"test_player","tankAngle":2,"turretAngle":0,"turnRate":0,"speed":0.4,"health":10,"kills":0,"deaths":0,"powerups":{},"__type__":"Player"},"players":[],"projectiles":[{"hitboxSize":10,"destroyed":false,"position":{"x":3,"y":4},"velocity":{"x":-1.2,"y":1.4695761589768238e-16},"acceleration":{"x":0,"y":0},"angle":3.141592653589793,"damage":1,"distanceTraveled":0,"source":{"hitboxSize":20,"destroyed":false,"position":{"x":3,"y":4},"velocity":{"x":0,"y":0},"acceleration":{"x":0,"y":0},"name":"test_player","tankAngle":2,"turretAngle":0,"turnRate":0,"speed":0.4,"health":10,"kills":0,"deaths":0,"powerups":{}},"__type__":"Bullet"}],"powerups":[{"hitboxSize":5,"destroyed":false,"position":{"x":1,"y":1},"velocity":{"x":0,"y":0},"acceleration":{"x":0,"y":0},"type":"HEALTH_PACK","data":1,"duration":2,"expirationTime":0,"__type__":"Powerup"}]}"`;
+
+exports[`Test serializing/deserializing complex objects Fake GameState object with one Player and one Bullet 2`] = `
+{
+  "players": [],
+  "powerups": [
+    Powerup {
+      "acceleration": Vector {
+        "x": 0,
+        "y": 0,
+      },
+      "data": 1,
+      "destroyed": false,
+      "duration": 2,
+      "expirationTime": 0,
+      "hitboxSize": 5,
+      "position": Vector {
+        "x": 1,
+        "y": 1,
+      },
+      "type": "HEALTH_PACK",
+      "velocity": Vector {
+        "x": 0,
+        "y": 0,
+      },
+    },
+  ],
+  "projectiles": [
+    Bullet {
+      "acceleration": Vector {
+        "x": 0,
+        "y": 0,
+      },
+      "angle": 3.141592653589793,
+      "damage": 1,
+      "destroyed": false,
+      "distanceTraveled": 0,
+      "hitboxSize": 10,
+      "position": Vector {
+        "x": 3,
+        "y": 4,
+      },
+      "source": Player {
+        "acceleration": Vector {
+          "x": 0,
+          "y": 0,
+        },
+        "deaths": 0,
+        "destroyed": false,
+        "health": 10,
+        "hitboxSize": 20,
+        "kills": 0,
+        "lastShotTime": 0,
+        "lastUpdateTime": 0,
+        "name": "test_player",
+        "position": Vector {
+          "x": 3,
+          "y": 4,
+        },
+        "powerups": Map {},
+        "shotCooldown": 800,
+        "socketID": undefined,
+        "speed": 0.4,
+        "tankAngle": 2,
+        "turnRate": 0,
+        "turretAngle": 0,
+        "velocity": Vector {
+          "x": 0,
+          "y": 0,
+        },
+      },
+      "velocity": Vector {
+        "x": -1.2,
+        "y": 0.00000000000000014695761589768238,
+      },
+    },
+  ],
+  "self": Player {
+    "acceleration": Vector {
+      "x": 0,
+      "y": 0,
+    },
+    "deaths": 0,
+    "destroyed": false,
+    "health": 10,
+    "hitboxSize": 20,
+    "kills": 0,
+    "lastShotTime": 0,
+    "lastUpdateTime": 0,
+    "name": "test_player",
+    "position": Vector {
+      "x": 3,
+      "y": 4,
+    },
+    "powerups": Map {},
+    "shotCooldown": 800,
+    "socketID": undefined,
+    "speed": 0.4,
+    "tankAngle": 2,
+    "turnRate": 0,
+    "turretAngle": 0,
+    "velocity": Vector {
+      "x": 0,
+      "y": 0,
+    },
+  },
+}
+`;
