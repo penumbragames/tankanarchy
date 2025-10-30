@@ -4,6 +4,7 @@
  */
 
 import Canvas from 'client/Canvas'
+import * as Sprites from 'client/graphics/Sprites'
 import Viewport from 'client/Viewport'
 import * as Constants from 'lib/Constants'
 import Vector from 'lib/Vector'
@@ -11,42 +12,19 @@ import Bullet from 'server/Bullet'
 import Player from 'server/Player'
 import Powerup from 'server/Powerup'
 
-class Drawing {
+export default class Drawing {
   canvas: Canvas
   context: CanvasRenderingContext2D
-  images: Map<
-    Constants.DRAWING_IMG_KEYS | Constants.POWERUP_TYPES,
-    HTMLImageElement
-  >
   viewport: Viewport
 
-  constructor(
-    canvas: Canvas,
-    images: Map<Constants.DRAWING_IMG_KEYS, HTMLImageElement>,
-    viewport: Viewport,
-  ) {
+  constructor(canvas: Canvas, viewport: Viewport) {
     this.canvas = canvas
     this.context = canvas.context
-    this.images = images
     this.viewport = viewport
   }
 
   static create(canvas: Canvas, viewport: Viewport): Drawing {
-    const images = new Map()
-    for (const [key, filename] of Constants.DRAWING_IMG_KEY_TO_ASSET) {
-      const img = new Image()
-      img.src = `${Constants.DRAWING_IMG_BASE_PATH}/${filename}`
-      images.set(key, img)
-    }
-    return new Drawing(canvas, images, viewport)
-  }
-
-  /**
-   * Draws an image on the canvas at the centered at the origin.
-   * @param {Image} image The image to draw on the canvas
-   */
-  drawCenteredImage(image: HTMLImageElement): void {
-    this.context.drawImage(image, -image.width / 2, -image.height / 2)
+    return new Drawing(canvas, viewport)
   }
 
   clear(): void {
@@ -79,29 +57,14 @@ class Drawing {
       this.context.fillRect(-25 + (5 * i), -40, 5, 4) // prettier-ignore
     }
 
-    this.context.rotate(player.tankAngle)
-    this.drawCenteredImage(
-      this.images.get(
-        isSelf
-          ? Constants.DRAWING_IMG_KEYS.SELF_TANK
-          : Constants.DRAWING_IMG_KEYS.OTHER_TANK,
-      )!,
-    )
-    this.context.rotate(-player.tankAngle)
+    const tankSprite = isSelf ? Sprites.SELF_TANK : Sprites.OTHER_TANK
+    tankSprite.drawCenteredAt(this.context, 0, 0, player.tankAngle)
+    const turretSprite = isSelf ? Sprites.SELF_TURRET : Sprites.OTHER_TURRET
+    turretSprite.drawCenteredAt(this.context, 0, 0, player.turretAngle)
 
-    this.context.rotate(player.turretAngle)
-    this.drawCenteredImage(
-      this.images.get(
-        isSelf
-          ? Constants.DRAWING_IMG_KEYS.SELF_TURRET
-          : Constants.DRAWING_IMG_KEYS.OTHER_TURRET,
-      )!,
-    )
     if (player.powerups.get(Constants.POWERUP_TYPES.SHIELD)) {
       this.context.rotate(-player.turretAngle)
-      this.drawCenteredImage(
-        this.images.get(Constants.DRAWING_IMG_KEYS.PLAYER_SHIELD)!,
-      )
+      Sprites.SHIELD.drawCentered(this.context)
     }
 
     this.context.restore()
@@ -132,20 +95,16 @@ class Drawing {
       if ((powerup = self.powerups.get(powerupType))) {
         // Compute the alpha of the buff based on how close we are to expiring.
         // We only begin fading the buff close to actual expiration.
-        // We cannot use the powerup method calls here because the object is
-        // not actually fully deserialized into the class instance.
         const remainingSeconds = powerup.remainingSeconds
         this.context.globalAlpha =
           remainingSeconds < Constants.DRAWING_POWERUP_FADE_CUTOFF
             ? this.getBuffAlpha(remainingSeconds)
             : 1
 
-        this.context.drawImage(
-          <HTMLImageElement>this.images.get(powerupType),
+        Sprites.POWERUP_SPRITE_MAP[powerupType].drawAt(
+          this.context,
           offset,
           Constants.DRAWING_DEFAULT_PADDING,
-          Constants.DRAWING_POWERUP_BUFF_SIZE,
-          Constants.DRAWING_POWERUP_BUFF_SIZE,
         )
         offset -= Constants.DRAWING_POWERUP_BUFF_SIZE
       }
@@ -159,12 +118,13 @@ class Drawing {
    * @param {Bullet} bullet The bullet to draw to the canvas
    */
   drawBullet(bullet: Bullet): void {
-    this.context.save()
     const canvasCoords = this.viewport.toCanvas(bullet.position)
-    this.context.translate(canvasCoords.x, canvasCoords.y)
-    this.context.rotate(bullet.angle)
-    this.drawCenteredImage(this.images.get(Constants.DRAWING_IMG_KEYS.BULLET)!)
-    this.context.restore()
+    Sprites.BULLET.drawCenteredAt(
+      this.context,
+      canvasCoords.x,
+      canvasCoords.y,
+      bullet.angle,
+    )
   }
 
   /**
@@ -172,20 +132,14 @@ class Drawing {
    * @param {Powerup} powerup The powerup to draw
    */
   drawPowerup(powerup: Powerup): void {
-    this.context.save()
     const canvasCoords = this.viewport.toCanvas(powerup.position)
-    this.context.translate(canvasCoords.x, canvasCoords.y)
-    // Reverse lookup enum since it becomes the JSONified value in the request.
-    const powerupType = Object.entries(Constants.POWERUP_TYPES).find(
-      ([k]) => k === powerup.type,
-    )![1]
-    this.drawCenteredImage(this.images.get(powerupType)!)
-    this.context.restore()
+    Sprites.POWERUP_SPRITE_MAP[powerup.type].drawCenteredAt(
+      this.context,
+      canvasCoords.x,
+      canvasCoords.y,
+    )
   }
 
-  /**
-   * Draws the background tiles to the canvas.
-   */
   drawTiles(): void {
     const start = this.viewport.toCanvas(
       new Vector(Constants.WORLD_MIN, Constants.WORLD_MIN),
@@ -195,14 +149,8 @@ class Drawing {
     )
     for (let x = start.x; x < end.x; x += Constants.DRAWING_TILE_SIZE) {
       for (let y = start.y; y < end.y; y += Constants.DRAWING_TILE_SIZE) {
-        this.context.drawImage(
-          this.images.get(Constants.DRAWING_IMG_KEYS.TILE)!,
-          x,
-          y,
-        )
+        Sprites.TILE.drawAt(this.context, x, y)
       }
     }
   }
 }
-
-export default Drawing

@@ -15,7 +15,7 @@ start: build
 watch: watchServer watchClientTs watchLess
 
 watchServer:
-  bun run --watch {{define_flag}} --no-clear-scren src/server.ts
+  bun run --watch {{define_flag}} src/server.ts
 
 watchClientTs:
   bun build {{define_flag}} --watch --outdir dist src/client.ts

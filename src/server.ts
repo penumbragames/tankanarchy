@@ -39,12 +39,7 @@ app.use(express.static(DIRNAME))
 app.get('/', (_, res) => {
   res.sendFile(path.join(DIRNAME, '../html/index.html'))
 })
-app.get('/styles.css', (_, res) => {
-  res.sendFile(path.join(DIRNAME, '../dist/styles.css'))
-})
-app.get('/client.js', (_, res) => {
-  res.sendFile(path.join(DIRNAME, '../dist/client.js'))
-})
+app.use('/dist', express.static(path.join(DIRNAME, '../dist')))
 app.use('/img/', express.static(path.join(DIRNAME, '../img/')))
 
 /**
