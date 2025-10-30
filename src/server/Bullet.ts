@@ -10,9 +10,16 @@ import Entity from 'lib/Entity'
 import Vector from 'lib/Vector'
 import Player from 'server/Player'
 
-class Bullet extends Entity {
+// Workaround to reference the Player type without depending on load order.
+// TODO: Implement a kill attribution interface for the player to implement to
+// prevent this class from needing a reference to Player.
+// https://stackoverflow.com/a/77248059
+type Ref<T> = T
+
+export default class Bullet extends Entity {
   angle: number
-  @Type(() => Player) source: Player
+
+  @Type(() => Player) source: Ref<Player>
 
   damage: number
   distanceTraveled: number
@@ -68,5 +75,3 @@ class Bullet extends Entity {
     }
   }
 }
-
-export default Bullet
