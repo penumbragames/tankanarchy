@@ -7,17 +7,26 @@
 import * as socketIOParser from 'socket.io-parser'
 
 import { getReplacerReviver } from 'lib/serialization/ReplacerReviver'
+
 import Vector from 'lib/Vector'
+import Bullet from 'server/Bullet'
 import Player from 'server/Player'
 import Powerup from 'server/Powerup'
 
-const { replacer, reviver } = getReplacerReviver({ Vector, Player, Powerup })
+// All the custom serializable classes that should be preserved when sent over
+// the socket are listed here.
+const { replacer, reviver } = getReplacerReviver({
+  Bullet,
+  Player,
+  Powerup,
+  Vector,
+})
 
 /**
  * Subclass of the default socket-io.parser encoder that can be used as a
  * drop-in replacement.
  */
-export class Encoder extends socketIOParser.Encoder {
+class Encoder extends socketIOParser.Encoder {
   constructor() {
     super(replacer)
   }
@@ -27,8 +36,13 @@ export class Encoder extends socketIOParser.Encoder {
  * Subclass of the default socket-io.parser decoder that can be used as a
  * drop-in replacement.
  */
-export class Decoder extends socketIOParser.Decoder {
+class Decoder extends socketIOParser.Decoder {
   constructor() {
     super(reviver)
   }
+}
+
+export default {
+  Encoder,
+  Decoder,
 }

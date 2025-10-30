@@ -10,13 +10,11 @@ import * as socketIO from 'socket.io-client'
 
 import Chat from 'client/Chat'
 import Game from 'client/Game'
-import * as socketIOParser from 'lib/CustomSocketParser'
 import * as Interfaces from 'lib/Interfaces'
+import SocketParser from 'lib/serialization/SocketParser'
 
 window.onload = (): void => {
-  const socket = socketIO.io({
-    parser: socketIOParser,
-  })
+  const socket = socketIO.io({ parser: SocketParser })
   const game = Game.create(socket, 'canvas', 'leaderboard')
 
   const nameInputElement = <HTMLInputElement>(

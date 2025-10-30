@@ -11,8 +11,8 @@ import morgan from 'morgan'
 import path from 'node:path'
 import * as socketIO from 'socket.io'
 
-import * as socketIOParser from 'lib/CustomSocketParser'
 import * as Interfaces from 'lib/Interfaces'
+import SocketParser from 'lib/serialization/SocketParser'
 import Game from 'server/Game'
 
 const PORT = process.env.PORT || 5000
@@ -27,9 +27,7 @@ const io = new socketIO.Server<
   Interfaces.SERVER_TO_CLIENT_EVENTS,
   Interfaces.SERVER_TO_SERVER_EVENTS,
   Interfaces.SOCKET_DATA
->(httpServer, {
-  parser: socketIOParser,
-})
+>(httpServer, { parser: SocketParser })
 const game = new Game()
 
 app.set('port', PORT)
