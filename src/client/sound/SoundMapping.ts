@@ -4,9 +4,9 @@
  */
 
 import Sound from 'client/sound/Sound'
-import SOUNDS from 'client/sound/Sounds'
+import SOUNDS from 'lib/sound/Sounds'
 
-export const EXPLOSION = Sound.create('/sound/explosion.mp3')
+export const EXPLOSION = Sound.create('/sound/boom.mp3')
 export const TANK_SHOT = Sound.create('/sound/tankShot.mp3')
 
 export const SOUND_MAPPING = {

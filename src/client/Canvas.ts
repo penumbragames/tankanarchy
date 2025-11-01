@@ -3,7 +3,7 @@
  * @author omgimanerd (alvin@omgimanerd.tech)
  */
 
-import Vector from 'lib/Vector'
+import Vector from 'lib/math/Vector'
 
 export default class Canvas {
   canvas: HTMLCanvasElement

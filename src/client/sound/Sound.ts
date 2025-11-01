@@ -16,15 +16,9 @@ export default class Sound {
     return new Sound(sound)
   }
 
-  get volume() {
-    return this.sound.volume
-  }
-
-  set volume(volume: number) {
-    this.sound.volume = volume
-  }
-
-  play() {
-    ;(<HTMLAudioElement>this.sound.cloneNode()).play()
+  play(volume: number = 0.2) {
+    const clone: HTMLAudioElement = <HTMLAudioElement>this.sound.cloneNode()
+    clone.volume = volume
+    clone.play()
   }
 }

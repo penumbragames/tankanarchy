@@ -8,7 +8,7 @@ import * as socketIOParser from 'socket.io-parser'
 
 import { getReplacerReviver } from 'lib/serialization/ReplacerReviver'
 
-import Vector from 'lib/Vector'
+import Vector from 'lib/math/Vector'
 import Bullet from 'server/Bullet'
 import Player from 'server/Player'
 import Powerup from 'server/Powerup'

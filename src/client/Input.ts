@@ -4,7 +4,7 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import Vector from 'lib/Vector'
+import Vector from 'lib/math/Vector'
 
 class Input {
   up: boolean

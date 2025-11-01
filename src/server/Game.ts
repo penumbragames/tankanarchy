@@ -6,9 +6,9 @@
 
 import { Server, Socket } from 'socket.io'
 
-import SOUNDS from 'client/sound/Sounds'
 import * as Constants from 'lib/Constants'
 import * as Interfaces from 'lib/Interfaces'
+import SOUNDS from 'lib/sound/Sounds'
 import Bullet from 'server/Bullet'
 import Player from 'server/Player'
 import Powerup from 'server/Powerup'

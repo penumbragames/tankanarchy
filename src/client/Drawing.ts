@@ -7,12 +7,24 @@ import Canvas from 'client/Canvas'
 import * as Sprites from 'client/graphics/Sprites'
 import Viewport from 'client/Viewport'
 import * as Constants from 'lib/Constants'
-import Vector from 'lib/Vector'
+import Vector from 'lib/math/Vector'
 import Bullet from 'server/Bullet'
 import Player from 'server/Player'
 import Powerup from 'server/Powerup'
 
 export default class Drawing {
+  static readonly NAME_FONT = '14px Helvetica'
+  static readonly NAME_COLOR = 'black'
+
+  static readonly HP_COLOR = '#ce0a17ff'
+  static readonly HP_MISSING_COLOR = 'grey'
+  static readonly TILE_SIZE = 100
+
+  static readonly DEFAULT_PADDING = 0
+  static readonly POWERUP_FADE_CUTOFF = 3
+  static readonly POWERUP_FADE_EXPONENTIAL = 50
+  static readonly POWERUP_BUFF_SIZE = 55
+
   canvas: Canvas
   context: CanvasRenderingContext2D
   viewport: Viewport
@@ -44,15 +56,15 @@ export default class Drawing {
     this.context.translate(canvasCoords.x, canvasCoords.y)
 
     this.context.textAlign = 'center'
-    this.context.font = Constants.DRAWING_NAME_FONT
-    this.context.fillStyle = Constants.DRAWING_NAME_COLOR
+    this.context.font = Drawing.NAME_FONT
+    this.context.fillStyle = Drawing.NAME_COLOR
     this.context.fillText(player.name as string, 0, -50)
 
     for (let i = 0; i < 10; ++i) {
       if (i < player.health) {
-        this.context.fillStyle = Constants.DRAWING_HP_COLOR
+        this.context.fillStyle = Drawing.HP_COLOR
       } else {
-        this.context.fillStyle = Constants.DRAWING_HP_MISSING_COLOR
+        this.context.fillStyle = Drawing.HP_MISSING_COLOR
       }
       this.context.fillRect(-25 + (5 * i), -40, 5, 4) // prettier-ignore
     }
@@ -72,9 +84,7 @@ export default class Drawing {
 
   getBuffAlpha(remainingSeconds: number): number {
     return (
-      Math.sin(Constants.DRAWING_POWERUP_FADE_EXPONENTIAL / remainingSeconds) /
-        2 +
-      0.5
+      Math.sin(Drawing.POWERUP_FADE_EXPONENTIAL / remainingSeconds) / 2 + 0.5
     )
   }
 
@@ -86,9 +96,7 @@ export default class Drawing {
     // Iterate through the powerup types to render them in a deterministic
     // order.
     let offset =
-      this.canvas.width -
-      Constants.DRAWING_DEFAULT_PADDING -
-      Constants.DRAWING_POWERUP_BUFF_SIZE
+      this.canvas.width - Drawing.DEFAULT_PADDING - Drawing.POWERUP_BUFF_SIZE
     for (const powerupType of Object.values(Constants.POWERUP_TYPES)) {
       if (powerupType === Constants.POWERUP_TYPES.HEALTH_PACK) continue
       let powerup
@@ -97,15 +105,15 @@ export default class Drawing {
         // We only begin fading the buff close to actual expiration.
         const remainingSeconds = powerup.remainingSeconds
         this.context.globalAlpha =
-          remainingSeconds < Constants.DRAWING_POWERUP_FADE_CUTOFF
+          remainingSeconds < Drawing.POWERUP_FADE_CUTOFF
             ? this.getBuffAlpha(remainingSeconds)
             : 1
         Sprites.POWERUP_SPRITE_MAP[powerupType].drawAt(
           this.context,
           offset,
-          Constants.DRAWING_DEFAULT_PADDING,
+          Drawing.DEFAULT_PADDING,
         )
-        offset -= Constants.DRAWING_POWERUP_BUFF_SIZE
+        offset -= Drawing.POWERUP_BUFF_SIZE
       }
     }
     // Reset the global alpha.
@@ -146,8 +154,8 @@ export default class Drawing {
     const end = this.viewport.toCanvas(
       new Vector(Constants.WORLD_MAX, Constants.WORLD_MAX),
     )
-    for (let x = start.x; x < end.x; x += Constants.DRAWING_TILE_SIZE) {
-      for (let y = start.y; y < end.y; y += Constants.DRAWING_TILE_SIZE) {
+    for (let x = start.x; x < end.x; x += Drawing.TILE_SIZE) {
+      for (let y = start.y; y < end.y; y += Drawing.TILE_SIZE) {
         Sprites.TILE.drawAt(this.context, x, y)
       }
     }

@@ -5,8 +5,8 @@
 
 import * as Constants from 'lib/Constants'
 import Entity from 'lib/Entity'
-import Util from 'lib/Util'
-import Vector from 'lib/Vector'
+import Util from 'lib/math/Util'
+import Vector from 'lib/math/Vector'
 
 export default class Powerup extends Entity {
   type: Constants.POWERUP_TYPES

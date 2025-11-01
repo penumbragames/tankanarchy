@@ -1,6 +1,5 @@
 /**
- * This is a utility class containing utility methods used on the server and
- * client.
+ * Math utility functions.
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 

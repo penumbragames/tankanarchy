@@ -10,10 +10,10 @@ import Canvas from 'client/Canvas'
 import Drawing from 'client/Drawing'
 import Input from 'client/Input'
 import Leaderboard from 'client/Leaderboard'
-import SoundManager from 'client/sound/SoundManager'
+import SoundPlayer from 'client/sound/SoundPlayer'
 import Viewport from 'client/Viewport'
 import * as Interfaces from 'lib/Interfaces'
-import Vector from 'lib/Vector'
+import Vector from 'lib/math/Vector'
 import Bullet from 'server/Bullet'
 import Player from 'server/Player'
 import Powerup from 'server/Powerup'
@@ -32,7 +32,7 @@ class Game {
   drawing: Drawing
   input: Input
   leaderboard: Leaderboard
-  soundManager: SoundManager
+  soundManager: SoundPlayer
 
   // Internal state
   self: Player | null
@@ -51,7 +51,7 @@ class Game {
     drawing: Drawing,
     input: Input,
     leaderboard: Leaderboard,
-    soundManager: SoundManager,
+    soundManager: SoundPlayer,
   ) {
     this.socket = socket
 
@@ -86,7 +86,7 @@ class Game {
     const input = Input.create(<HTMLElement>document.body, canvas.element)
     const leaderboard = Leaderboard.create(leaderboardElementID)
 
-    const soundManager = new SoundManager(socket)
+    const soundManager = new SoundPlayer(socket)
 
     const game = new Game(
       socket,

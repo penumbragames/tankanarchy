@@ -1,5 +1,5 @@
 /**
- * Global store of sound objects on the client side to be used for playback.
+ * Enum used by both server and client to reference available sounds to play.
  * @author omgimanerd
  */
 

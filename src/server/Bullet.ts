@@ -7,7 +7,7 @@ import { Type } from 'class-transformer'
 
 import * as Constants from 'lib/Constants'
 import Entity from 'lib/Entity'
-import Vector from 'lib/Vector'
+import Vector from 'lib/math/Vector'
 import Player from 'server/Player'
 
 // Workaround to reference the Player type without depending on load order.

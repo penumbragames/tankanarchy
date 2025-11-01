@@ -12,7 +12,12 @@ class Vector {
     this.y = y
   }
 
-  // Returns a new Vector from polar coordinates r, theta.
+  /**
+   * Returns a new Vector from polar coordinates r and theta.
+   * @param r {number} Vector magnitude
+   * @param theta {number} Vector angle in radians
+   * @returns
+   */
   static fromPolar(r: number, theta: number): Vector {
     return new Vector(r * Math.cos(theta), r * Math.sin(theta))
   }

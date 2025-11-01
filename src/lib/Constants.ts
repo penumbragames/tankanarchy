@@ -40,16 +40,3 @@ export const POWERUP_DATA_RANGES = new Map<POWERUP_TYPES, POWERUP_DATA>([
 export const WORLD_MIN = 0
 export const WORLD_MAX = 5000
 export const WORLD_PADDING = 30
-
-export const DRAWING_NAME_FONT = '14px Helvetica'
-export const DRAWING_NAME_COLOR = 'black'
-export const DRAWING_HP_COLOR = '#ce0a17ff'
-export const DRAWING_HP_MISSING_COLOR = 'grey'
-export const DRAWING_TILE_SIZE = 100
-
-export const DRAWING_DEFAULT_PADDING = 0
-export const DRAWING_POWERUP_FADE_CUTOFF = 3
-export const DRAWING_POWERUP_FADE_EXPONENTIAL = 50
-export const DRAWING_POWERUP_BUFF_SIZE = 55
-
-export const VIEWPORT_STICKINESS = 0.005

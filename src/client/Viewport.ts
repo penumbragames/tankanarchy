@@ -4,16 +4,16 @@
  */
 
 import Canvas from 'client/Canvas'
-import * as Constants from 'lib/Constants'
 import Entity from 'lib/Entity'
-import Vector from 'lib/Vector'
+import Vector from 'lib/math/Vector'
 import Player from 'server/Player'
 
 class Viewport extends Entity {
+  static readonly UNINITIALIZED = new Vector(-99999, -99999)
+  static readonly STICKINESS = 0.005
+
   playerPosition: Vector
   canvas: Canvas
-
-  static readonly UNINITIALIZED: Vector = new Vector(-99999, -99999)
 
   /**
    * Constructor for a Viewport object. The position of the viewport will hold
@@ -48,7 +48,7 @@ class Viewport extends Entity {
       return
     }
     this.velocity = Vector.sub(this.playerPosition, this.position).scale(
-      Constants.VIEWPORT_STICKINESS * deltaTime,
+      Viewport.STICKINESS * deltaTime,
     )
     this.position.add(this.velocity)
   }

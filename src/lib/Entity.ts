@@ -5,8 +5,8 @@
 
 import { Type } from 'class-transformer'
 import * as Constants from 'lib/Constants'
-import Util from 'lib/Util'
-import Vector from 'lib/Vector'
+import Util from 'lib/math/Util'
+import Vector from 'lib/math/Vector'
 
 abstract class Entity {
   @Type(() => Vector) position: Vector
