@@ -4,8 +4,9 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import * as socket from 'socket.io'
+import { Server, Socket } from 'socket.io'
 
+import SOUNDS from 'client/sound/Sounds'
 import * as Constants from 'lib/Constants'
 import * as Interfaces from 'lib/Interfaces'
 import Bullet from 'server/Bullet'
@@ -13,7 +14,9 @@ import Player from 'server/Player'
 import Powerup from 'server/Powerup'
 
 class Game {
-  clients: Map<string, socket.Socket>
+  socketServer: Server
+
+  clients: Map<string, Socket>
 
   players: Map<string, Player>
   projectiles: Bullet[]
@@ -22,7 +25,9 @@ class Game {
   lastUpdateTime: number
   deltaTime: number
 
-  constructor() {
+  constructor(socket: Server) {
+    this.socketServer = socket
+
     // Contains all the connected socket ids and socket instances.
     this.clients = new Map()
     // Contains all the connected socket ids and the players associated with
@@ -35,8 +40,8 @@ class Game {
     this.deltaTime = 0
   }
 
-  static create(): Game {
-    const game = new Game()
+  static create(socketServer: Server): Game {
+    const game = new Game(socketServer)
     game.init()
     return game
   }
@@ -50,7 +55,7 @@ class Game {
    * @param {string} name The display name of the player.
    * @param {Object} playerSocket The socket object of the player.
    */
-  addNewPlayer(name: string, playerSocket: socket.Socket): void {
+  addNewPlayer(name: string, playerSocket: Socket): void {
     this.clients.set(playerSocket.id, playerSocket)
     this.players.set(playerSocket.id, Player.create(name, playerSocket.id))
   }
@@ -99,6 +104,11 @@ class Game {
       if (data.shoot && player.canShoot()) {
         const projectiles = player.getProjectilesFromShot()
         this.projectiles.push(...projectiles)
+        this.socketServer.sockets.emit(Interfaces.SOCKET.SOUND_EVENT, {
+          type: SOUNDS.TANK_SHOT,
+          volume: 100,
+          position: player.position,
+        })
       }
     }
   }
@@ -146,6 +156,11 @@ class Game {
             e2.source.kills++
           }
           e2.destroyed = true
+          this.socketServer.sockets.emit(Interfaces.SOCKET.SOUND_EVENT, {
+            type: SOUNDS.EXPLOSION,
+            volume: 100,
+            position: e1.position,
+          })
         }
 
         // Player-Powerup collision interaction
@@ -166,6 +181,11 @@ class Game {
         ) {
           e1.destroyed = true
           e2.destroyed = true
+          this.socketServer.sockets.emit(Interfaces.SOCKET.SOUND_EVENT, {
+            type: SOUNDS.EXPLOSION,
+            volume: 100,
+            position: e1.position,
+          })
         }
 
         // Bullet-Powerup interaction
@@ -175,6 +195,11 @@ class Game {
         ) {
           e1.destroyed = true
           e2.destroyed = true
+          this.socketServer.sockets.emit(Interfaces.SOCKET.SOUND_EVENT, {
+            type: SOUNDS.EXPLOSION,
+            volume: 100,
+            position: e1.position,
+          })
         }
       }
     }

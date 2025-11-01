@@ -10,6 +10,7 @@ import Canvas from 'client/Canvas'
 import Drawing from 'client/Drawing'
 import Input from 'client/Input'
 import Leaderboard from 'client/Leaderboard'
+import SoundManager from 'client/sound/SoundManager'
 import Viewport from 'client/Viewport'
 import * as Interfaces from 'lib/Interfaces'
 import Vector from 'lib/Vector'
@@ -25,12 +26,15 @@ type ClientSocket = socketIO.Socket<
 class Game {
   socket: ClientSocket
 
+  // Helper objects
   canvas: Canvas
   viewport: Viewport
   drawing: Drawing
   input: Input
   leaderboard: Leaderboard
+  soundManager: SoundManager
 
+  // Internal state
   self: Player | null
   players: Player[]
   projectiles: Bullet[]
@@ -47,6 +51,7 @@ class Game {
     drawing: Drawing,
     input: Input,
     leaderboard: Leaderboard,
+    soundManager: SoundManager,
   ) {
     this.socket = socket
 
@@ -55,6 +60,7 @@ class Game {
     this.drawing = drawing
     this.input = input
     this.leaderboard = leaderboard
+    this.soundManager = soundManager
 
     this.self = null
     this.players = []
@@ -80,7 +86,17 @@ class Game {
     const input = Input.create(<HTMLElement>document.body, canvas.element)
     const leaderboard = Leaderboard.create(leaderboardElementID)
 
-    const game = new Game(socket, canvas, viewport, drawing, input, leaderboard)
+    const soundManager = new SoundManager(socket)
+
+    const game = new Game(
+      socket,
+      canvas,
+      viewport,
+      drawing,
+      input,
+      leaderboard,
+      soundManager,
+    )
     game.init()
     return game
   }
@@ -88,6 +104,7 @@ class Game {
   init(): void {
     this.lastUpdateTime = Date.now()
     this.socket.on(Interfaces.SOCKET.UPDATE, this.onReceiveGameState.bind(this))
+    this.soundManager.bindClientListener()
   }
 
   onReceiveGameState(state: Interfaces.GAME_STATE): void {
@@ -117,6 +134,7 @@ class Game {
   update(): void {
     if (this.self) {
       this.viewport.update(this.deltaTime)
+      this.soundManager.update(this.self)
       const worldMouseCoords = this.viewport.toWorld(this.input.mouseCoords)
       const playerToMouseVector = Vector.sub(
         worldMouseCoords,

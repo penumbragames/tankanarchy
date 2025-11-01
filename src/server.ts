@@ -9,7 +9,7 @@ import express from 'express'
 import http from 'http'
 import morgan from 'morgan'
 import path from 'node:path'
-import * as socketIO from 'socket.io'
+import * as socket from 'socket.io'
 
 import * as Interfaces from 'lib/Interfaces'
 import SocketParser from 'lib/serialization/SocketParser'
@@ -22,13 +22,13 @@ const DIRNAME = import.meta.dirname
 
 const app: express.Application = express()
 const httpServer = http.createServer(app)
-const io = new socketIO.Server<
+const io = new socket.Server<
   Interfaces.CLIENT_TO_SERVER_EVENTS,
   Interfaces.SERVER_TO_CLIENT_EVENTS,
   Interfaces.SERVER_TO_SERVER_EVENTS,
   Interfaces.SOCKET_DATA
 >(httpServer, { parser: SocketParser })
-const game = new Game()
+const game = new Game(io)
 
 app.set('port', PORT)
 
@@ -41,12 +41,13 @@ app.get('/', (_, res) => {
 })
 app.use('/dist', express.static(path.join(DIRNAME, '../dist')))
 app.use('/img/', express.static(path.join(DIRNAME, '../img/')))
+app.use('/sound', express.static(path.join(DIRNAME, '../sound/')))
 
 /**
  * Server side input handler, modifies the state of the players and the
  * game based on the input it receives.
  */
-io.on('connection', (socket: socketIO.Socket) => {
+io.on('connection', (socket: socket.Socket) => {
   socket.on(
     Interfaces.SOCKET.NEW_PLAYER,
     (name: string, callback: () => void) => {

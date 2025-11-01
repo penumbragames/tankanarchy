@@ -14,9 +14,9 @@ export enum SOCKET {
   PLAYER_ACTION = 'playerAction',
   CHAT_CLIENT_SERVER = 'chatClientToServer',
   CHAT_SERVER_CLIENT = 'chatServerToClient',
+  SOUND_EVENT = 'soundEvent',
   DISCONNECT = 'disconnect',
 }
-// Interfaces for objects that can be sent via socket
 export interface PLAYER_INPUTS {
   up: boolean
   down: boolean

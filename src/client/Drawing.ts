@@ -100,7 +100,6 @@ export default class Drawing {
           remainingSeconds < Constants.DRAWING_POWERUP_FADE_CUTOFF
             ? this.getBuffAlpha(remainingSeconds)
             : 1
-
         Sprites.POWERUP_SPRITE_MAP[powerupType].drawAt(
           this.context,
           offset,
