@@ -7,11 +7,11 @@
 import { Server, Socket } from 'socket.io'
 
 import * as Constants from 'lib/Constants'
+import Bullet from 'lib/game/Bullet'
+import Player from 'lib/game/Player'
+import Powerup from 'lib/game/Powerup'
 import * as Interfaces from 'lib/Interfaces'
 import SOUNDS from 'lib/sound/Sounds'
-import Bullet from 'server/Bullet'
-import Player from 'server/Player'
-import Powerup from 'server/Powerup'
 
 class Game {
   socketServer: Server

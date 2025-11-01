@@ -8,11 +8,11 @@ import { Exclude, Type } from 'class-transformer'
 
 import * as Constants from 'lib/Constants'
 import Entity from 'lib/Entity'
+import Bullet from 'lib/game/Bullet'
+import Powerup from 'lib/game/Powerup'
 import * as Interfaces from 'lib/Interfaces'
 import Util from 'lib/math/Util'
 import Vector from 'lib/math/Vector'
-import Bullet from 'server/Bullet'
-import Powerup from 'server/Powerup'
 
 export default class Player extends Entity {
   name: string

@@ -5,8 +5,8 @@
 
 import Canvas from 'client/Canvas'
 import Entity from 'lib/Entity'
+import Player from 'lib/game/Player'
 import Vector from 'lib/math/Vector'
-import Player from 'server/Player'
 
 class Viewport extends Entity {
   static readonly UNINITIALIZED = new Vector(-99999, -99999)

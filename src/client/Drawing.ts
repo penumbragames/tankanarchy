@@ -7,10 +7,10 @@ import Canvas from 'client/Canvas'
 import * as Sprites from 'client/graphics/Sprites'
 import Viewport from 'client/Viewport'
 import * as Constants from 'lib/Constants'
+import Bullet from 'lib/game/Bullet'
+import Player from 'lib/game/Player'
+import Powerup from 'lib/game/Powerup'
 import Vector from 'lib/math/Vector'
-import Bullet from 'server/Bullet'
-import Player from 'server/Player'
-import Powerup from 'server/Powerup'
 
 export default class Drawing {
   static readonly NAME_FONT = '14px Helvetica'

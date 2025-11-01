@@ -9,7 +9,6 @@ import { SOUND_MAPPING } from 'client/sound/SoundMapping'
 import { SOCKET } from 'lib/Interfaces'
 import Vector from 'lib/math/Vector'
 import SOUNDS from 'lib/sound/Sounds'
-import Player from 'server/Player'
 
 type SOUND_EVENT = {
   type: SOUNDS
@@ -20,11 +19,11 @@ type SOUND_EVENT = {
 export default class SoundPlayer {
   socket: SocketClient | SocketServer
 
-  player: Player | null
+  listenerPosition: Vector | null
 
   constructor(socket: SocketClient | SocketServer) {
     this.socket = socket
-    this.player = null
+    this.listenerPosition = null
   }
 
   bindClientListener() {
@@ -35,7 +34,7 @@ export default class SoundPlayer {
     SOUND_MAPPING[data.type].play()
   }
 
-  update(player: Player) {
-    this.player = player
+  update(position: Vector) {
+    this.listenerPosition = position
   }
 }

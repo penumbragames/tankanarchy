@@ -12,11 +12,11 @@ import Input from 'client/Input'
 import Leaderboard from 'client/Leaderboard'
 import SoundPlayer from 'client/sound/SoundPlayer'
 import Viewport from 'client/Viewport'
+import Bullet from 'lib/game/Bullet'
+import Player from 'lib/game/Player'
+import Powerup from 'lib/game/Powerup'
 import * as Interfaces from 'lib/Interfaces'
 import Vector from 'lib/math/Vector'
-import Bullet from 'server/Bullet'
-import Player from 'server/Player'
-import Powerup from 'server/Powerup'
 
 type ClientSocket = socketIO.Socket<
   Interfaces.SERVER_TO_CLIENT_EVENTS,
@@ -134,7 +134,7 @@ class Game {
   update(): void {
     if (this.self) {
       this.viewport.update(this.deltaTime)
-      this.soundManager.update(this.self)
+      this.soundManager.update(this.self.position)
       const worldMouseCoords = this.viewport.toWorld(this.input.mouseCoords)
       const playerToMouseVector = Vector.sub(
         worldMouseCoords,

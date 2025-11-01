@@ -3,9 +3,9 @@
  * @author omgimanerd
  */
 
-import Bullet from 'server/Bullet'
-import Player from 'server/Player'
-import Powerup from 'server/Powerup'
+import Bullet from 'lib/game/Bullet'
+import Player from 'lib/game/Player'
+import Powerup from 'lib/game/Powerup'
 
 // Socket events we can listen for.
 export enum SOCKET {
