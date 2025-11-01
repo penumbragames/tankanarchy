@@ -6,8 +6,8 @@
 
 import * as socketIO from 'socket.io-client'
 
-import Canvas from 'client/Canvas'
-import Drawing from 'client/Drawing'
+import Canvas from 'client/graphics/Canvas'
+import Renderer from 'client/graphics/Renderer'
 import Input from 'client/Input'
 import Leaderboard from 'client/Leaderboard'
 import SoundPlayer from 'client/sound/SoundPlayer'
@@ -29,7 +29,7 @@ class Game {
   // Helper objects
   canvas: Canvas
   viewport: Viewport
-  drawing: Drawing
+  renderer: Renderer
   input: Input
   leaderboard: Leaderboard
   soundManager: SoundPlayer
@@ -48,7 +48,7 @@ class Game {
     socket: ClientSocket,
     canvas: Canvas,
     viewport: Viewport,
-    drawing: Drawing,
+    drawing: Renderer,
     input: Input,
     leaderboard: Leaderboard,
     soundManager: SoundPlayer,
@@ -57,7 +57,7 @@ class Game {
 
     this.canvas = canvas
     this.viewport = viewport
-    this.drawing = drawing
+    this.renderer = drawing
     this.input = input
     this.leaderboard = leaderboard
     this.soundManager = soundManager
@@ -82,7 +82,7 @@ class Game {
     canvas.bindResizeListener()
 
     const viewport = Viewport.create(canvas)
-    const drawing = Drawing.create(canvas, viewport)
+    const renderer = Renderer.create(canvas, viewport)
     const input = Input.create(<HTMLElement>document.body, canvas.element)
     const leaderboard = Leaderboard.create(leaderboardElementID)
 
@@ -92,7 +92,7 @@ class Game {
       socket,
       canvas,
       viewport,
-      drawing,
+      renderer,
       input,
       leaderboard,
       soundManager,
@@ -153,17 +153,17 @@ class Game {
 
   draw(): void {
     if (this.self) {
-      this.drawing.clear()
-      this.drawing.drawTiles()
+      this.renderer.clear()
+      this.renderer.drawTiles()
 
-      this.projectiles.forEach(this.drawing.drawBullet.bind(this.drawing))
-      this.powerups.forEach(this.drawing.drawPowerup.bind(this.drawing))
-      this.drawing.drawTank(true, this.self)
+      this.projectiles.forEach(this.renderer.drawBullet.bind(this.renderer))
+      this.powerups.forEach(this.renderer.drawPowerup.bind(this.renderer))
+      this.renderer.drawTank(true, this.self)
       this.players
         .filter((player) => player.socketID !== this.self?.socketID)
-        .forEach((tank) => this.drawing.drawTank(false, tank))
+        .forEach((tank) => this.renderer.drawTank(false, tank))
 
-      this.drawing.drawBuffStatus(this.self)
+      this.renderer.drawBuffStatus(this.self)
     }
   }
 }

@@ -4,7 +4,7 @@
  */
 
 import * as Constants from 'lib/Constants'
-import Entity from 'lib/Entity'
+import Entity from 'lib/game/Entity'
 import Util from 'lib/math/Util'
 import Vector from 'lib/math/Vector'
 

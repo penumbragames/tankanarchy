@@ -3,8 +3,8 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import Canvas from 'client/Canvas'
-import Entity from 'lib/Entity'
+import Canvas from 'client/graphics/Canvas'
+import Entity from 'lib/game/Entity'
 import Player from 'lib/game/Player'
 import Vector from 'lib/math/Vector'
 

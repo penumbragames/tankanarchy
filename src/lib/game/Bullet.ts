@@ -6,7 +6,7 @@
 import { Type } from 'class-transformer'
 
 import * as Constants from 'lib/Constants'
-import Entity from 'lib/Entity'
+import Entity from 'lib/game/Entity'
 import Player from 'lib/game/Player'
 import Vector from 'lib/math/Vector'
 
