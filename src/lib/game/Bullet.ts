@@ -5,7 +5,6 @@
 
 import { Type } from 'class-transformer'
 
-import * as Constants from 'lib/Constants'
 import Entity from 'lib/game/Entity'
 import Player from 'lib/game/Player'
 import Vector from 'lib/math/Vector'
@@ -17,6 +16,11 @@ import Vector from 'lib/math/Vector'
 type Ref<T> = T
 
 export default class Bullet extends Entity {
+  static readonly DEFAULT_DAMAGE = 1
+  static readonly SPEED = 1.2
+  static readonly MAX_TRAVEL_DISTANCE = 1000
+  static readonly HITBOX_SIZE = 10
+
   angle: number
 
   @Type(() => Player) source: Ref<Player>
@@ -30,12 +34,12 @@ export default class Bullet extends Entity {
     angle: number,
     source: Player,
   ) {
-    super(position, velocity, Vector.zero(), Constants.BULLET_HITBOX_SIZE)
+    super(position, velocity, Vector.zero(), Bullet.HITBOX_SIZE)
 
     this.angle = angle
     this.source = source
 
-    this.damage = Constants.BULLET_DEFAULT_DAMAGE
+    this.damage = Bullet.DEFAULT_DAMAGE
     this.distanceTraveled = 0
     this.destroyed = false
   }
@@ -50,7 +54,7 @@ export default class Bullet extends Entity {
     const angle = player.turretAngle + angleDeviation
     return new Bullet(
       player.position.copy(),
-      Vector.fromPolar(Constants.BULLET_SPEED, angle),
+      Vector.fromPolar(Bullet.SPEED, angle),
       angle,
       player,
     )
@@ -70,7 +74,7 @@ export default class Bullet extends Entity {
       return
     }
     this.distanceTraveled += distanceStep.mag2
-    if (this.distanceTraveled > Constants.BULLET_MAX_TRAVEL_DISTANCE ** 2) {
+    if (this.distanceTraveled > Bullet.MAX_TRAVEL_DISTANCE ** 2) {
       this.destroyed = true
     }
   }

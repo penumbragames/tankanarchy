@@ -6,10 +6,9 @@
 
 import { Server, Socket } from 'socket.io'
 
-import * as Constants from 'lib/Constants'
 import Bullet from 'lib/game/Bullet'
 import Player from 'lib/game/Player'
-import Powerup from 'lib/game/Powerup'
+import { Powerup } from 'lib/game/Powerup'
 import * as Interfaces from 'lib/Interfaces'
 import SOUNDS from 'lib/sound/Sounds'
 
@@ -215,7 +214,7 @@ class Game {
     /**
      * Repopulate the world with new powerups.
      */
-    while (this.powerups.length < Constants.POWERUP_MAX_COUNT) {
+    while (this.powerups.length < Powerup.MAX_COUNT) {
       this.powerups.push(Powerup.create())
     }
   }

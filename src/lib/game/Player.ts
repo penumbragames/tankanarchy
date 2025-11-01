@@ -9,12 +9,19 @@ import { Exclude, Type } from 'class-transformer'
 import * as Constants from 'lib/Constants'
 import Bullet from 'lib/game/Bullet'
 import Entity from 'lib/game/Entity'
-import Powerup from 'lib/game/Powerup'
+import { Powerup, POWERUP_TYPES } from 'lib/game/Powerup'
 import * as Interfaces from 'lib/Interfaces'
 import Util from 'lib/math/Util'
 import Vector from 'lib/math/Vector'
 
 export default class Player extends Entity {
+  static readonly TURN_RATE = 0.005
+  static readonly DEFAULT_SPEED = 0.4
+  static readonly SHOT_COOLDOWN = 800
+  static readonly DEFAULT_HITBOX_SIZE = 20
+  static readonly SHIELD_HITBOX_SIZE = 45
+  static readonly MAX_HEALTH = 10
+
   name: string
   @Exclude() socketID: string
 
@@ -30,7 +37,7 @@ export default class Player extends Entity {
   health: number
 
   @Type(() => Powerup)
-  powerups: Map<Constants.POWERUP_TYPES, Powerup>
+  powerups: Map<POWERUP_TYPES, Powerup>
 
   kills: number
   deaths: number
@@ -40,7 +47,7 @@ export default class Player extends Entity {
       Vector.zero(),
       Vector.zero(),
       Vector.zero(),
-      Constants.PLAYER_DEFAULT_HITBOX_SIZE,
+      Player.DEFAULT_HITBOX_SIZE,
     )
 
     this.name = name
@@ -50,10 +57,10 @@ export default class Player extends Entity {
     this.tankAngle = 0
     this.turretAngle = 0
     this.turnRate = 0
-    this.speed = Constants.PLAYER_DEFAULT_SPEED
-    this.shotCooldown = Constants.PLAYER_SHOT_COOLDOWN
+    this.speed = Player.DEFAULT_SPEED
+    this.shotCooldown = Player.SHOT_COOLDOWN
     this.lastShotTime = 0
-    this.health = Constants.PLAYER_MAX_HEALTH
+    this.health = Player.MAX_HEALTH
 
     this.powerups = new Map()
 
@@ -88,9 +95,9 @@ export default class Player extends Entity {
     if ((data.left && data.right) || (!data.left && !data.right)) {
       this.turnRate = 0
     } else if (data.right) {
-      this.turnRate = Constants.PLAYER_TURN_RATE
+      this.turnRate = Player.TURN_RATE
     } else if (data.left) {
-      this.turnRate = -Constants.PLAYER_TURN_RATE
+      this.turnRate = -Player.TURN_RATE
     }
 
     this.turretAngle = data.turretAngle
@@ -116,38 +123,35 @@ export default class Player extends Entity {
     for (const [type, powerup] of this.powerups) {
       const expired = this.lastUpdateTime > powerup.expirationTime
       switch (type) {
-        case Constants.POWERUP_TYPES.HEALTH_PACK:
-          this.health = Math.min(
-            this.health + powerup.data,
-            Constants.PLAYER_MAX_HEALTH,
-          )
+        case POWERUP_TYPES.HEALTH_PACK:
+          this.health = Math.min(this.health + powerup.data, Player.MAX_HEALTH)
           this.powerups.delete(type)
           break
-        case Constants.POWERUP_TYPES.SHOTGUN:
+        case POWERUP_TYPES.SHOTGUN:
           if (expired) {
             this.powerups.delete(type)
           }
           break
-        case Constants.POWERUP_TYPES.RAPIDFIRE:
+        case POWERUP_TYPES.RAPIDFIRE:
           if (!expired) {
-            this.shotCooldown = Constants.PLAYER_SHOT_COOLDOWN / powerup.data
+            this.shotCooldown = Player.SHOT_COOLDOWN / powerup.data
           } else {
-            this.shotCooldown = Constants.PLAYER_SHOT_COOLDOWN
+            this.shotCooldown = Player.SHOT_COOLDOWN
             this.powerups.delete(type)
           }
           break
-        case Constants.POWERUP_TYPES.SPEEDBOOST:
+        case POWERUP_TYPES.SPEEDBOOST:
           if (!expired) {
-            this.speed = Constants.PLAYER_DEFAULT_SPEED * powerup.data
+            this.speed = Player.DEFAULT_SPEED * powerup.data
           } else {
-            this.speed = Constants.PLAYER_DEFAULT_SPEED
+            this.speed = Player.DEFAULT_SPEED
             this.powerups.delete(type)
           }
           break
-        case Constants.POWERUP_TYPES.SHIELD:
-          this.hitboxSize = Constants.PLAYER_SHIELD_HITBOX_SIZE
+        case POWERUP_TYPES.SHIELD:
+          this.hitboxSize = Player.SHIELD_HITBOX_SIZE
           if (expired || powerup.data <= 0) {
-            this.hitboxSize = Constants.PLAYER_DEFAULT_HITBOX_SIZE
+            this.hitboxSize = Player.DEFAULT_HITBOX_SIZE
             this.powerups.delete(type)
           }
           break
@@ -180,7 +184,7 @@ export default class Player extends Entity {
    */
   getProjectilesFromShot(): Bullet[] {
     const bullets = [Bullet.createFromPlayer(this, 0)]
-    const shotgunPowerup = this.powerups.get(Constants.POWERUP_TYPES.SHOTGUN)
+    const shotgunPowerup = this.powerups.get(POWERUP_TYPES.SHOTGUN)
     if (shotgunPowerup) {
       for (let i = 1; i <= shotgunPowerup.data; ++i) {
         const angleDeviation = (i * Math.PI) / 9
@@ -201,7 +205,7 @@ export default class Player extends Entity {
    * @param {number} amount The amount to damage the player by
    */
   damage(amount: number): void {
-    const shield = this.powerups.get(Constants.POWERUP_TYPES.SHIELD)
+    const shield = this.powerups.get(POWERUP_TYPES.SHIELD)
     if (shield) {
       shield.data -= 1
     } else {
@@ -224,6 +228,6 @@ export default class Player extends Entity {
       ),
     )
     this.tankAngle = Util.randRange(0, 2 * Math.PI)
-    this.health = Constants.PLAYER_MAX_HEALTH
+    this.health = Player.MAX_HEALTH
   }
 }

@@ -1,9 +1,8 @@
 /**
- *
+ * Client side listener for sound events.
  */
 
-import { Socket as SocketServer } from 'socket.io'
-import { Socket as SocketClient } from 'socket.io-client'
+import { Socket } from 'socket.io-client'
 
 import { SOUND_MAPPING } from 'client/sound/SoundMapping'
 import { SOCKET } from 'lib/Interfaces'
@@ -17,11 +16,11 @@ type SOUND_EVENT = {
 }
 
 export default class SoundPlayer {
-  socket: SocketClient | SocketServer
+  socket: Socket
 
   listenerPosition: Vector | null
 
-  constructor(socket: SocketClient | SocketServer) {
+  constructor(socket: Socket) {
     this.socket = socket
     this.listenerPosition = null
   }

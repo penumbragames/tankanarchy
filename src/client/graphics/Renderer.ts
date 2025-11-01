@@ -9,7 +9,7 @@ import Viewport from 'client/Viewport'
 import * as Constants from 'lib/Constants'
 import Bullet from 'lib/game/Bullet'
 import Player from 'lib/game/Player'
-import Powerup from 'lib/game/Powerup'
+import { Powerup, POWERUP_TYPES } from 'lib/game/Powerup'
 import Vector from 'lib/math/Vector'
 
 export default class Renderer {
@@ -74,7 +74,7 @@ export default class Renderer {
     const turretSprite = isSelf ? Sprites.SELF_TURRET : Sprites.OTHER_TURRET
     turretSprite.drawCenteredAt(this.context, 0, 0, player.turretAngle)
 
-    if (player.powerups.get(Constants.POWERUP_TYPES.SHIELD)) {
+    if (player.powerups.get(POWERUP_TYPES.SHIELD)) {
       this.context.rotate(-player.turretAngle)
       Sprites.SHIELD.drawCentered(this.context)
     }
@@ -97,8 +97,8 @@ export default class Renderer {
     // order.
     let offset =
       this.canvas.width - Renderer.DEFAULT_PADDING - Renderer.POWERUP_BUFF_SIZE
-    for (const powerupType of Object.values(Constants.POWERUP_TYPES)) {
-      if (powerupType === Constants.POWERUP_TYPES.HEALTH_PACK) continue
+    for (const powerupType of Object.values(POWERUP_TYPES)) {
+      if (powerupType === POWERUP_TYPES.HEALTH_PACK) continue
       let powerup
       if ((powerup = self.powerups.get(powerupType))) {
         // Compute the alpha of the buff based on how close we are to expiring.

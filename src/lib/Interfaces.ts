@@ -5,7 +5,7 @@
 
 import Bullet from 'lib/game/Bullet'
 import Player from 'lib/game/Player'
-import Powerup from 'lib/game/Powerup'
+import { Powerup } from 'lib/game/Powerup'
 
 // Socket events we can listen for.
 export enum SOCKET {

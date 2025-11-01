@@ -14,7 +14,7 @@ import SoundPlayer from 'client/sound/SoundPlayer'
 import Viewport from 'client/Viewport'
 import Bullet from 'lib/game/Bullet'
 import Player from 'lib/game/Player'
-import Powerup from 'lib/game/Powerup'
+import { Powerup } from 'lib/game/Powerup'
 import * as Interfaces from 'lib/Interfaces'
 import Vector from 'lib/math/Vector'
 

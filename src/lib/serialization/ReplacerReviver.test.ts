@@ -2,10 +2,9 @@
 
 import { beforeEach, describe, expect, setSystemTime, test } from 'bun:test'
 
-import { POWERUP_TYPES } from 'lib/Constants'
 import Bullet from 'lib/game/Bullet'
 import Player from 'lib/game/Player'
-import Powerup from 'lib/game/Powerup'
+import { Powerup, POWERUP_TYPES } from 'lib/game/Powerup'
 import { GAME_STATE } from 'lib/Interfaces'
 import Vector from 'lib/math/Vector'
 import { getReplacerReviver } from 'lib/serialization/ReplacerReviver'
