@@ -4,6 +4,7 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
+import SOUNDS from 'lib/enums/Sounds'
 import Bullet from 'lib/game/Bullet'
 import Player from 'lib/game/Player'
 import { Powerup, POWERUP_TYPES } from 'lib/game/Powerup'
@@ -11,7 +12,6 @@ import Vector from 'lib/math/Vector'
 import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 import { PlayerInputs } from 'lib/socket/SocketInterfaces'
 import { Socket, SocketServer } from 'lib/socket/SocketServer'
-import SOUNDS from 'lib/sound/Sounds'
 
 class Game {
   socketServer: SocketServer

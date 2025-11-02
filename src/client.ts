@@ -8,10 +8,12 @@ import 'reflect-metadata'
 
 import Chat from 'client/Chat'
 import Game from 'client/Game'
+import { SpriteLoader } from 'client/graphics/SpriteLoader'
 import { getSocketClient, SocketClient } from 'lib/socket/SocketClient'
 import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 
-window.onload = (): void => {
+window.onload = async () => {
+  await SpriteLoader.loadAssets()
   const socket: SocketClient = getSocketClient()
   const game = Game.create(socket, 'canvas', 'leaderboard')
 

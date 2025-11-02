@@ -3,6 +3,7 @@
  * @author omgimanerd
  */
 
+import { loadImage } from 'client/graphics/ImageUtils'
 import { Drawable, Sprite } from 'client/graphics/Sprite'
 
 export default class StaticSprite extends Sprite {
@@ -13,10 +14,8 @@ export default class StaticSprite extends Sprite {
     this.image = image
   }
 
-  static create(src: string): StaticSprite {
-    const img = new Image()
-    img.src = src
-    return new StaticSprite(img)
+  static async create(src: string): Promise<StaticSprite> {
+    return new StaticSprite(await loadImage(src))
   }
 
   get width() {

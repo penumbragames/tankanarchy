@@ -4,9 +4,14 @@
  */
 
 import Canvas from 'client/graphics/Canvas'
-import * as Sprites from 'client/graphics/Sprites'
+import {
+  PowerupSprites,
+  SpriteLoader,
+  SpriteMap,
+} from 'client/graphics/SpriteLoader'
 import Viewport from 'client/Viewport'
 import * as Constants from 'lib/Constants'
+import SPRITES from 'lib/enums/Sprites'
 import Bullet from 'lib/game/Bullet'
 import Player from 'lib/game/Player'
 import { Powerup, POWERUP_TYPES } from 'lib/game/Powerup'
@@ -29,10 +34,15 @@ export default class Renderer {
   context: CanvasRenderingContext2D
   viewport: Viewport
 
+  sprites: SpriteMap
+  powerupSprites: PowerupSprites
+
   constructor(canvas: Canvas, viewport: Viewport) {
     this.canvas = canvas
     this.context = canvas.context
     this.viewport = viewport
+    this.sprites = SpriteLoader.sprites
+    this.powerupSprites = SpriteLoader.powerupSprites
   }
 
   static create(canvas: Canvas, viewport: Viewport): Renderer {
@@ -71,17 +81,20 @@ export default class Renderer {
       this.context.fillRect(-25 + (5 * i), -40, 5, 4) // prettier-ignore
     }
 
-    const tankSprite = isSelf ? Sprites.SELF_TANK : Sprites.OTHER_TANK
+    const tankSprite = isSelf
+      ? this.sprites[SPRITES.SELF_TANK]
+      : this.sprites[SPRITES.OTHER_TANK]
     tankSprite.draw(this.context, { centered: true, angle: player.tankAngle })
-    const turretSprite = isSelf ? Sprites.SELF_TURRET : Sprites.OTHER_TURRET
+    const turretSprite = isSelf
+      ? this.sprites[SPRITES.SELF_TURRET]
+      : this.sprites[SPRITES.OTHER_TURRET]
     turretSprite.draw(this.context, {
       centered: true,
       angle: player.turretAngle,
     })
 
     if (player.powerups.get(POWERUP_TYPES.SHIELD)) {
-      this.context.rotate(-player.turretAngle)
-      Sprites.SHIELD.draw(this.context, { centered: true })
+      this.sprites[SPRITES.SHIELD].draw(this.context, { centered: true })
     }
 
     this.context.restore()
@@ -109,9 +122,11 @@ export default class Renderer {
         // Compute the alpha of the buff based on how close we are to expiring.
         // We only begin fading the buff close to actual expiration.
         const remainingSeconds = powerup.remainingSeconds
-        Sprites.POWERUP_SPRITE_MAP[powerupType].draw(this.context, {
+        this.powerupSprites[powerupType].draw(this.context, {
           x: offset,
           y: Renderer.DEFAULT_PADDING,
+          width: Renderer.POWERUP_BUFF_SIZE,
+          height: Renderer.POWERUP_BUFF_SIZE,
           opacity:
             remainingSeconds < Renderer.POWERUP_FADE_CUTOFF
               ? this.getBuffAlpha(remainingSeconds)
@@ -128,7 +143,7 @@ export default class Renderer {
    */
   drawBullet(bullet: Bullet): void {
     const canvasCoords = this.viewport.toCanvas(bullet.position)
-    Sprites.BULLET.draw(this.context, {
+    this.sprites[SPRITES.BULLET].draw(this.context, {
       position: canvasCoords,
       centered: true,
       angle: bullet.angle,
@@ -141,8 +156,9 @@ export default class Renderer {
    */
   drawPowerup(powerup: Powerup): void {
     const canvasCoords = this.viewport.toCanvas(powerup.position)
-    Sprites.POWERUP_SPRITE_MAP[powerup.type].draw(this.context, {
+    this.powerupSprites[powerup.type].draw(this.context, {
       position: canvasCoords,
+      centered: true,
     })
   }
 
@@ -155,7 +171,7 @@ export default class Renderer {
     )
     for (let x = start.x; x < end.x; x += Renderer.TILE_SIZE) {
       for (let y = start.y; y < end.y; y += Renderer.TILE_SIZE) {
-        Sprites.TILE.draw(this.context, { x, y })
+        this.sprites[SPRITES.TILE].draw(this.context, { x, y })
       }
     }
   }

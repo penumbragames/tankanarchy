@@ -3,12 +3,12 @@
  * @author omgimanerd
  */
 
+import SOUNDS from 'lib/enums/Sounds'
 import Bullet from 'lib/game/Bullet'
 import Player from 'lib/game/Player'
 import { Powerup } from 'lib/game/Powerup'
 import Vector from 'lib/math/Vector'
 import SOCKET_EVENTS from 'lib/socket/SocketEvents'
-import SOUNDS from 'lib/sound/Sounds'
 
 /**
  * Interface for the PLAYER_ACTION socket event, sent from the client to the

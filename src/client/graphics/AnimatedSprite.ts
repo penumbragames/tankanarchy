@@ -3,7 +3,7 @@
  * @author omgimanerd
  */
 
-import sliceImage from 'client/graphics/BitmapSlicer'
+import { loadImage, sliceImage } from 'client/graphics/ImageUtils'
 import { Drawable, Sprite } from 'client/graphics/Sprite'
 
 export default class AnimatedSprite extends Sprite {
@@ -16,10 +16,9 @@ export default class AnimatedSprite extends Sprite {
     this.frames = frames
   }
 
-  static create(src: string): AnimatedSprite {
-    const img = new Image()
-    img.src = src
-    return new AnimatedSprite(img, sliceImage(img))
+  static async create(src: string): Promise<AnimatedSprite> {
+    const img = await loadImage(src)
+    return new AnimatedSprite(img, await sliceImage(img))
   }
 
   get numFrames() {
