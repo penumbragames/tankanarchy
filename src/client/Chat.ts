@@ -4,7 +4,7 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import * as Interfaces from 'lib/Interfaces'
+import { CHAT_MESSAGE, SOCKET_EVENTS } from 'lib/SocketEvents'
 import * as socketIO from 'socket.io-client'
 
 class Chat {
@@ -51,7 +51,7 @@ class Chat {
       true,
     )
     this.socket.on(
-      Interfaces.SOCKET.CHAT_SERVER_CLIENT,
+      SOCKET_EVENTS.CHAT_SERVER_CLIENT,
       this.onChatReceive.bind(this),
     )
   }
@@ -76,7 +76,7 @@ class Chat {
     if (event.code === 'Enter') {
       const text = this.inputElement.value
       this.inputElement.value = ''
-      this.socket.emit(Interfaces.SOCKET.CHAT_CLIENT_SERVER, text)
+      this.socket.emit(SOCKET_EVENTS.CHAT_CLIENT_SERVER, text)
       this.inputElement.blur()
     }
     event.stopPropagation()
@@ -86,7 +86,7 @@ class Chat {
    * Event handler for a socket message received for a chat message.
    * @param {Object} data The data sent from the server
    */
-  onChatReceive(data: Interfaces.CHAT_MESSAGE) {
+  onChatReceive(data: CHAT_MESSAGE) {
     const element = document.createElement('li')
     if (data.isNotification) {
       element.setAttribute('class', 'notification')

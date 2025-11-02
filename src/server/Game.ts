@@ -9,7 +9,7 @@ import { Server, Socket } from 'socket.io'
 import Bullet from 'lib/game/Bullet'
 import Player from 'lib/game/Player'
 import { Powerup } from 'lib/game/Powerup'
-import * as Interfaces from 'lib/Interfaces'
+import { PLAYER_INPUTS, SOCKET_EVENTS } from 'lib/SocketEvents'
 import SOUNDS from 'lib/sound/Sounds'
 
 class Game {
@@ -96,14 +96,14 @@ class Game {
    * @param {string} socketID The socket ID of the player to update
    * @param {Object} data The player's input state
    */
-  updatePlayerOnInput(socketID: string, data: Interfaces.PLAYER_INPUTS): void {
+  updatePlayerOnInput(socketID: string, data: PLAYER_INPUTS): void {
     const player = this.players.get(socketID)
     if (player) {
       player.updateOnInput(data)
       if (data.shoot && player.canShoot()) {
         const projectiles = player.getProjectilesFromShot()
         this.projectiles.push(...projectiles)
-        this.socketServer.sockets.emit(Interfaces.SOCKET.SOUND_EVENT, {
+        this.socketServer.sockets.emit(SOCKET_EVENTS.SOUND_EVENT, {
           type: SOUNDS.TANK_SHOT,
           volume: 100,
           position: player.position,
@@ -155,7 +155,7 @@ class Game {
             e2.source.kills++
           }
           e2.destroyed = true
-          this.socketServer.sockets.emit(Interfaces.SOCKET.SOUND_EVENT, {
+          this.socketServer.sockets.emit(SOCKET_EVENTS.SOUND_EVENT, {
             type: SOUNDS.EXPLOSION,
             volume: 100,
             position: e1.position,
@@ -180,7 +180,7 @@ class Game {
         ) {
           e1.destroyed = true
           e2.destroyed = true
-          this.socketServer.sockets.emit(Interfaces.SOCKET.SOUND_EVENT, {
+          this.socketServer.sockets.emit(SOCKET_EVENTS.SOUND_EVENT, {
             type: SOUNDS.EXPLOSION,
             volume: 100,
             position: e1.position,
@@ -194,7 +194,7 @@ class Game {
         ) {
           e1.destroyed = true
           e2.destroyed = true
-          this.socketServer.sockets.emit(Interfaces.SOCKET.SOUND_EVENT, {
+          this.socketServer.sockets.emit(SOCKET_EVENTS.SOUND_EVENT, {
             type: SOUNDS.EXPLOSION,
             volume: 100,
             position: e1.position,
@@ -226,7 +226,7 @@ class Game {
     const players = [...this.players.values()]
     this.clients.forEach((_client, socketID) => {
       const currentPlayer = this.players.get(socketID)
-      this.clients.get(socketID)!.emit(Interfaces.SOCKET.UPDATE, {
+      this.clients.get(socketID)!.emit(SOCKET_EVENTS.UPDATE, {
         self: currentPlayer,
         players: players,
         projectiles: this.projectiles,

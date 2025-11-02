@@ -11,7 +11,14 @@ import morgan from 'morgan'
 import path from 'node:path'
 import * as socket from 'socket.io'
 
-import * as Interfaces from 'lib/Interfaces'
+import {
+  ClientToServerEvents,
+  InterServerEvents,
+  PLAYER_INPUTS,
+  ServerToClientEvents,
+  SOCKET_EVENTS,
+  SocketData,
+} from 'lib/SocketEvents'
 import SocketParser from 'lib/serialization/SocketParser'
 import Game from 'server/Game'
 
@@ -23,11 +30,13 @@ const DIRNAME = import.meta.dirname
 const app: express.Application = express()
 const httpServer = http.createServer(app)
 const io = new socket.Server<
-  Interfaces.CLIENT_TO_SERVER_EVENTS,
-  Interfaces.SERVER_TO_CLIENT_EVENTS,
-  Interfaces.SERVER_TO_SERVER_EVENTS,
-  Interfaces.SOCKET_DATA
->(httpServer, { parser: SocketParser })
+  ClientToServerEvents,
+  ServerToClientEvents,
+  InterServerEvents,
+  SocketData
+>(httpServer, {
+  parser: SocketParser,
+})
 const game = new Game(io)
 
 app.set('port', PORT)
@@ -48,37 +57,31 @@ app.use('/sound', express.static(path.join(DIRNAME, '../sound/')))
  * game based on the input it receives.
  */
 io.on('connection', (socket: socket.Socket) => {
-  socket.on(
-    Interfaces.SOCKET.NEW_PLAYER,
-    (name: string, callback: () => void) => {
-      game.addNewPlayer(name, socket)
-      io.emit(Interfaces.SOCKET.CHAT_SERVER_CLIENT, {
-        name: CHAT_TAG,
-        message: `${name} has joined the game.`,
-        isNotification: true,
-      })
-      callback()
-    },
-  )
+  socket.on(SOCKET_EVENTS.NEW_PLAYER, (name: string, callback: () => void) => {
+    game.addNewPlayer(name, socket)
+    io.emit(SOCKET_EVENTS.CHAT_SERVER_CLIENT, {
+      name: CHAT_TAG,
+      message: `${name} has joined the game.`,
+      isNotification: true,
+    })
+    callback()
+  })
 
-  socket.on(
-    Interfaces.SOCKET.PLAYER_ACTION,
-    (data: Interfaces.PLAYER_INPUTS) => {
-      game.updatePlayerOnInput(socket.id, data)
-    },
-  )
+  socket.on(SOCKET_EVENTS.PLAYER_ACTION, (data: PLAYER_INPUTS) => {
+    game.updatePlayerOnInput(socket.id, data)
+  })
 
-  socket.on(Interfaces.SOCKET.CHAT_CLIENT_SERVER, (message: string) => {
-    io.emit(Interfaces.SOCKET.CHAT_SERVER_CLIENT, {
+  socket.on(SOCKET_EVENTS.CHAT_CLIENT_SERVER, (message: string) => {
+    io.emit(SOCKET_EVENTS.CHAT_SERVER_CLIENT, {
       name: game.getPlayerNameBySocketId(socket.id),
       message: message,
       isNotification: false,
     })
   })
 
-  socket.on(Interfaces.SOCKET.DISCONNECT, () => {
+  socket.on(SOCKET_EVENTS.DISCONNECT, () => {
     const name = game.removePlayer(socket.id)
-    io.sockets.emit(Interfaces.SOCKET.CHAT_SERVER_CLIENT, {
+    io.sockets.emit(SOCKET_EVENTS.CHAT_SERVER_CLIENT, {
       name: CHAT_TAG,
       message: ` ${name} has left the game.`,
       isNotification: true,

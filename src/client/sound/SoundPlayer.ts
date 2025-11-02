@@ -5,7 +5,7 @@
 import { Socket } from 'socket.io-client'
 
 import { SOUND_MAPPING } from 'client/sound/SoundMapping'
-import { SOCKET } from 'lib/Interfaces'
+import { SOCKET_EVENTS } from 'lib/SocketEvents'
 import Vector from 'lib/math/Vector'
 import SOUNDS from 'lib/sound/Sounds'
 
@@ -26,7 +26,7 @@ export default class SoundPlayer {
   }
 
   bindClientListener() {
-    this.socket.on(SOCKET.SOUND_EVENT, this.clientCallback.bind(this))
+    this.socket.on(SOCKET_EVENTS.SOUND_EVENT, this.clientCallback.bind(this))
   }
 
   clientCallback(data: SOUND_EVENT) {

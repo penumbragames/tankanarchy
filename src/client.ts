@@ -10,7 +10,7 @@ import * as socketIO from 'socket.io-client'
 
 import Chat from 'client/Chat'
 import Game from 'client/Game'
-import * as Interfaces from 'lib/Interfaces'
+import { SOCKET_EVENTS } from 'lib/SocketEvents'
 import SocketParser from 'lib/serialization/SocketParser'
 
 window.onload = (): void => {
@@ -26,7 +26,7 @@ window.onload = (): void => {
     const name = DEBUG ? 'DEBUG_PLAYER' : nameInputElement.value
     document.getElementById('name-prompt-container')!.innerHTML = ''
     if (name && name.length < 20) {
-      socket.emit(Interfaces.SOCKET.NEW_PLAYER, name, () => {
+      socket.emit(SOCKET_EVENTS.NEW_PLAYER, name, () => {
         document.getElementById('name-prompt-overlay')!.remove()
         document.getElementById('canvas')!.focus()
         game.run()

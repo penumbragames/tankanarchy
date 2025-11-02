@@ -5,9 +5,9 @@ import { beforeEach, describe, expect, setSystemTime, test } from 'bun:test'
 import Bullet from 'lib/game/Bullet'
 import Player from 'lib/game/Player'
 import { Powerup, POWERUP_TYPES } from 'lib/game/Powerup'
-import { GAME_STATE } from 'lib/Interfaces'
 import Vector from 'lib/math/Vector'
 import { getReplacerReviver } from 'lib/serialization/ReplacerReviver'
+import { GAME_STATE } from 'lib/SocketEvents'
 
 const UNIXTIME_1 = new Date('1970-01-01T00:00:00.001Z')
 

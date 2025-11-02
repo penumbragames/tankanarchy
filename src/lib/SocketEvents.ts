@@ -8,7 +8,7 @@ import Player from 'lib/game/Player'
 import { Powerup } from 'lib/game/Powerup'
 
 // Socket events we can listen for.
-export enum SOCKET {
+export enum SOCKET_EVENTS {
   UPDATE = 'update',
   NEW_PLAYER = 'newPlayer',
   PLAYER_ACTION = 'playerAction',
@@ -17,6 +17,7 @@ export enum SOCKET {
   SOUND_EVENT = 'soundEvent',
   DISCONNECT = 'disconnect',
 }
+
 export interface PLAYER_INPUTS {
   up: boolean
   down: boolean
@@ -38,15 +39,15 @@ export interface GAME_STATE {
 }
 
 // Interfaces for each of the socket.io communication types
-export interface SERVER_TO_CLIENT_EVENTS {
-  [SOCKET.UPDATE]: (state: GAME_STATE) => void
-  [SOCKET.CHAT_SERVER_CLIENT]: (data: CHAT_MESSAGE) => void
+export interface ServerToClientEvents {
+  [SOCKET_EVENTS.UPDATE]: (state: GAME_STATE) => void
+  [SOCKET_EVENTS.CHAT_SERVER_CLIENT]: (data: CHAT_MESSAGE) => void
 }
-export interface CLIENT_TO_SERVER_EVENTS {
-  [SOCKET.NEW_PLAYER]: (name: string, callback: () => void) => void
-  [SOCKET.PLAYER_ACTION]: (data: PLAYER_INPUTS) => void
-  [SOCKET.CHAT_CLIENT_SERVER]: (data: CHAT_MESSAGE) => void
-  [SOCKET.DISCONNECT]: () => void
+export interface ClientToServerEvents {
+  [SOCKET_EVENTS.NEW_PLAYER]: (name: string, callback: () => void) => void
+  [SOCKET_EVENTS.PLAYER_ACTION]: (data: PLAYER_INPUTS) => void
+  [SOCKET_EVENTS.CHAT_CLIENT_SERVER]: (data: CHAT_MESSAGE) => void
+  [SOCKET_EVENTS.DISCONNECT]: () => void
 }
-export interface SERVER_TO_SERVER_EVENTS {}
-export interface SOCKET_DATA {}
+export interface InterServerEvents {}
+export interface SocketData {}

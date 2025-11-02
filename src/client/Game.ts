@@ -4,7 +4,7 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import * as socketIO from 'socket.io-client'
+import * as socket from 'socket.io-client'
 
 import Canvas from 'client/graphics/Canvas'
 import Renderer from 'client/graphics/Renderer'
@@ -15,13 +15,15 @@ import Viewport from 'client/Viewport'
 import Bullet from 'lib/game/Bullet'
 import Player from 'lib/game/Player'
 import { Powerup } from 'lib/game/Powerup'
-import * as Interfaces from 'lib/Interfaces'
 import Vector from 'lib/math/Vector'
+import {
+  ClientToServerEvents,
+  GAME_STATE,
+  ServerToClientEvents,
+  SOCKET_EVENTS,
+} from 'lib/SocketEvents'
 
-type ClientSocket = socketIO.Socket<
-  Interfaces.SERVER_TO_CLIENT_EVENTS,
-  Interfaces.CLIENT_TO_SERVER_EVENTS
->
+type ClientSocket = socket.Socket<ServerToClientEvents, ClientToServerEvents>
 
 class Game {
   socket: ClientSocket
@@ -73,7 +75,7 @@ class Game {
   }
 
   static create(
-    socket: socketIO.Socket,
+    socket: socket.Socket,
     canvasElementID: string,
     leaderboardElementID: string,
   ): Game {
@@ -103,11 +105,11 @@ class Game {
 
   init(): void {
     this.lastUpdateTime = Date.now()
-    this.socket.on(Interfaces.SOCKET.UPDATE, this.onReceiveGameState.bind(this))
+    this.socket.on(SOCKET_EVENTS.UPDATE, this.onReceiveGameState.bind(this))
     this.soundManager.bindClientListener()
   }
 
-  onReceiveGameState(state: Interfaces.GAME_STATE): void {
+  onReceiveGameState(state: GAME_STATE): void {
     this.self = state.self
     this.players = state.players
     this.projectiles = state.projectiles
@@ -140,7 +142,7 @@ class Game {
         worldMouseCoords,
         this.self.position,
       )
-      this.socket.emit(Interfaces.SOCKET.PLAYER_ACTION, {
+      this.socket.emit(SOCKET_EVENTS.PLAYER_ACTION, {
         up: this.input.up,
         down: this.input.down,
         left: this.input.left,
