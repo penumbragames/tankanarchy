@@ -4,7 +4,7 @@
  */
 
 import { Sprite } from 'client/graphics/Sprite'
-import { POWERUP_TYPES } from 'lib/Constants'
+import { POWERUP_TYPES } from 'lib/game/Powerup'
 
 export const BULLET = Sprite.create('/img/bullet.png')
 export const HEALTH_PACK_POWERUP = Sprite.create('/img/health_pack_powerup.png')
