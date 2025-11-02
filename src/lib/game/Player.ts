@@ -160,12 +160,14 @@ export default class Player extends Entity {
   }
 
   /**
-   * Applies a Powerup to this player.
+   * Applies a Powerup to this player, returning the powerup type for sound.
    * @param {Powerup} powerup The Powerup object.
+   * @returns {POWERUP_TYPES}
    */
-  applyPowerup(powerup: Powerup): void {
+  applyPowerup(powerup: Powerup): POWERUP_TYPES {
     powerup.expirationTime = this.lastUpdateTime + powerup.duration
     this.powerups.set(powerup.type, powerup)
+    return powerup.type
   }
 
   /**

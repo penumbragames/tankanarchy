@@ -9,11 +9,10 @@ import express from 'express'
 import http from 'http'
 import morgan from 'morgan'
 import path from 'node:path'
-import * as socket from 'socket.io'
 
 import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 import { PlayerInputs } from 'lib/socket/SocketInterfaces'
-import { getSocketServer } from 'lib/socket/SocketServer'
+import { getSocketServer, Socket } from 'lib/socket/SocketServer'
 
 import Game from 'server/Game'
 
@@ -41,7 +40,7 @@ app.use('/img/', express.static(path.join(DIRNAME, '../img/')))
 app.use('/sound', express.static(path.join(DIRNAME, '../sound/')))
 
 // Socket server handlers.
-socketServer.on('connection', (socket: socket.Socket) => {
+socketServer.on('connection', (socket: Socket) => {
   socket.on(SOCKET_EVENTS.NEW_PLAYER, (name: string, callback: () => void) => {
     game.addNewPlayer(name, socket)
     socketServer.emit(SOCKET_EVENTS.CHAT_SERVER_TO_CLIENT, {

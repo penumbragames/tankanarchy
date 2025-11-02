@@ -4,17 +4,17 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import { Server, Socket } from 'socket.io'
-
 import Bullet from 'lib/game/Bullet'
 import Player from 'lib/game/Player'
-import { Powerup } from 'lib/game/Powerup'
+import { Powerup, POWERUP_TYPES } from 'lib/game/Powerup'
+import Vector from 'lib/math/Vector'
 import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 import { PlayerInputs } from 'lib/socket/SocketInterfaces'
+import { Socket, SocketServer } from 'lib/socket/SocketServer'
 import SOUNDS from 'lib/sound/Sounds'
 
 class Game {
-  socketServer: Server
+  socketServer: SocketServer
 
   clients: Map<string, Socket>
 
@@ -25,7 +25,7 @@ class Game {
   lastUpdateTime: number
   deltaTime: number
 
-  constructor(socket: Server) {
+  constructor(socket: SocketServer) {
     this.socketServer = socket
 
     // Contains all the connected socket ids and socket instances.
@@ -40,8 +40,8 @@ class Game {
     this.deltaTime = 0
   }
 
-  static create(socketServer: Server): Game {
-    const game = new Game(socketServer)
+  static create(socket: SocketServer): Game {
+    const game = new Game(socket)
     game.init()
     return game
   }
@@ -97,7 +97,7 @@ class Game {
    * @param {string} socketID The socket ID of the player to update
    * @param {Object} data The player's input state
    */
-  updatePlayerOnInput(socketID: string, data: PlayerInputs): void {
+  updatePlayerOnInput(socketID: string, data: PlayerInputs) {
     const player = this.players.get(socketID)
     if (player) {
       player.updateOnInput(data)
@@ -106,11 +106,17 @@ class Game {
         this.projectiles.push(...projectiles)
         this.socketServer.sockets.emit(SOCKET_EVENTS.SOUND, {
           type: SOUNDS.TANK_SHOT,
-          volume: 100,
-          position: player.position,
+          source: player.position,
         })
       }
     }
+  }
+
+  playSound(type: SOUNDS, source: Vector) {
+    this.socketServer.sockets.emit(SOCKET_EVENTS.SOUND, {
+      type,
+      source,
+    })
   }
 
   /**
@@ -156,11 +162,7 @@ class Game {
             e2.source.kills++
           }
           e2.destroyed = true
-          this.socketServer.sockets.emit(SOCKET_EVENTS.SOUND, {
-            type: SOUNDS.EXPLOSION,
-            volume: 100,
-            position: e1.position,
-          })
+          this.playSound(SOUNDS.EXPLOSION, e1.position)
         }
 
         // Player-Powerup collision interaction
@@ -169,7 +171,16 @@ class Game {
           e2 = entities[i]
         }
         if (e1 instanceof Player && e2 instanceof Powerup) {
-          e1.applyPowerup(e2)
+          const type = e1.applyPowerup(e2)
+          switch (type) {
+            case POWERUP_TYPES.HEALTH_PACK:
+              this.playSound(SOUNDS.HEALTH_PACK, e1.position)
+              break
+            case POWERUP_TYPES.RAPIDFIRE:
+            case POWERUP_TYPES.SHOTGUN:
+              this.playSound(SOUNDS.GUN_POWERUP, e1.position)
+              break
+          }
           e2.destroyed = true
         }
 
@@ -181,11 +192,7 @@ class Game {
         ) {
           e1.destroyed = true
           e2.destroyed = true
-          this.socketServer.sockets.emit(SOCKET_EVENTS.SOUND, {
-            type: SOUNDS.EXPLOSION,
-            volume: 100,
-            position: e1.position,
-          })
+          this.playSound(SOUNDS.EXPLOSION, e1.position)
         }
 
         // Bullet-Powerup interaction
@@ -195,11 +202,7 @@ class Game {
         ) {
           e1.destroyed = true
           e2.destroyed = true
-          this.socketServer.sockets.emit(SOCKET_EVENTS.SOUND, {
-            type: SOUNDS.EXPLOSION,
-            volume: 100,
-            position: e1.position,
-          })
+          this.playSound(SOUNDS.EXPLOSION, e1.position)
         }
       }
     }
@@ -226,7 +229,7 @@ class Game {
   sendState(): void {
     const players = [...this.players.values()]
     this.clients.forEach((_client, socketID) => {
-      const currentPlayer = this.players.get(socketID)
+      const currentPlayer = this.players.get(socketID)!
       this.clients.get(socketID)!.emit(SOCKET_EVENTS.GAME_UPDATE, {
         self: currentPlayer,
         players: players,

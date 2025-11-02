@@ -5,7 +5,7 @@
 
 import http from 'http'
 import SocketParser from 'lib/serialization/SocketParser'
-import { Server } from 'socket.io'
+import { Server, Socket as Socket_ } from 'socket.io'
 import {
   ClientToServerEvents,
   InterServerEvents,
@@ -14,6 +14,13 @@ import {
 } from './SocketInterfaces'
 
 export type SocketServer = Server<
+  ClientToServerEvents,
+  ServerToClientEvents,
+  InterServerEvents,
+  SocketData
+>
+
+export type Socket = Socket_<
   ClientToServerEvents,
   ServerToClientEvents,
   InterServerEvents,

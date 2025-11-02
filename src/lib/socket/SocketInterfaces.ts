@@ -24,9 +24,8 @@ export interface PlayerInputs {
 }
 
 /**
- * Interface for the CHAT_SERVER_TO_CLIENT and CHAT_CLIENT_TO_SERVER socket
- * events, sent by the client to the server for a chat message, and then
- * broadcast back from the server to all connected clients.
+ * Interface for the CHAT_CLIENT_TO_SERVER socket event, broadcast back from the
+ * server to all connected clients.
  */
 export interface ChatMessage {
   name: string
@@ -66,7 +65,7 @@ export interface ClientToServerEvents {
   // on the client side.
   [SOCKET_EVENTS.NEW_PLAYER]: (name: string, callback: () => void) => void
   [SOCKET_EVENTS.PLAYER_ACTION]: (data: PlayerInputs) => void
-  [SOCKET_EVENTS.CHAT_CLIENT_TO_SERVER]: (data: ChatMessage) => void
+  [SOCKET_EVENTS.CHAT_CLIENT_TO_SERVER]: (data: string) => void
   [SOCKET_EVENTS.DISCONNECT]: () => void
 }
 export interface InterServerEvents {}
