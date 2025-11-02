@@ -53,6 +53,8 @@ export default class Renderer {
   drawTank(isSelf: boolean, player: Player): void {
     this.context.save()
     const canvasCoords = this.viewport.toCanvas(player.position)
+    // The canvas is already translated to the center of the player coordinate,
+    // so all further sprite rendering should be done with that in mind.
     this.context.translate(canvasCoords.x, canvasCoords.y)
 
     this.context.textAlign = 'center'
@@ -127,8 +129,7 @@ export default class Renderer {
   drawBullet(bullet: Bullet): void {
     const canvasCoords = this.viewport.toCanvas(bullet.position)
     Sprites.BULLET.draw(this.context, {
-      x: canvasCoords.x,
-      y: canvasCoords.y,
+      position: canvasCoords,
       centered: true,
       angle: bullet.angle,
     })
@@ -141,8 +142,7 @@ export default class Renderer {
   drawPowerup(powerup: Powerup): void {
     const canvasCoords = this.viewport.toCanvas(powerup.position)
     Sprites.POWERUP_SPRITE_MAP[powerup.type].draw(this.context, {
-      x: canvasCoords.x,
-      y: canvasCoords.y,
+      position: canvasCoords,
     })
   }
 

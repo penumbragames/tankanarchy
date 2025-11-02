@@ -3,11 +3,17 @@
  * @author omgimanerd
  */
 
+import Vector from 'lib/math/Vector'
+
 export type DrawingOptions = {
+  // (x, y) and position are mutually exclusive arguments.
   x?: number
   y?: number
+  position?: Vector
+
   width?: number
   height?: number
+
   centered?: boolean
   angle?: number
   opacity?: number
