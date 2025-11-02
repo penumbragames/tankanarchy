@@ -43,7 +43,7 @@ app.use('/sound', express.static(path.join(DIRNAME, '../sound/')))
 socketServer.on('connection', (socket: Socket) => {
   socket.on(SOCKET_EVENTS.NEW_PLAYER, (name: string, callback: () => void) => {
     game.addNewPlayer(name, socket)
-    socketServer.emit(SOCKET_EVENTS.CHAT_SERVER_TO_CLIENT, {
+    socketServer.emit(SOCKET_EVENTS.CHAT_BROADCAST, {
       name: CHAT_TAG,
       message: `${name} has joined the game.`,
       isNotification: true,
@@ -55,8 +55,8 @@ socketServer.on('connection', (socket: Socket) => {
     game.updatePlayerOnInput(socket.id, data)
   })
 
-  socket.on(SOCKET_EVENTS.CHAT_CLIENT_TO_SERVER, (message: string) => {
-    socketServer.emit(SOCKET_EVENTS.CHAT_SERVER_TO_CLIENT, {
+  socket.on(SOCKET_EVENTS.CHAT_SEND, (message: string) => {
+    socketServer.emit(SOCKET_EVENTS.CHAT_BROADCAST, {
       name: game.getPlayerNameBySocketId(socket.id),
       message: message,
       isNotification: false,
@@ -65,7 +65,7 @@ socketServer.on('connection', (socket: Socket) => {
 
   socket.on(SOCKET_EVENTS.DISCONNECT, () => {
     const name = game.removePlayer(socket.id)
-    socketServer.sockets.emit(SOCKET_EVENTS.CHAT_SERVER_TO_CLIENT, {
+    socketServer.sockets.emit(SOCKET_EVENTS.CHAT_BROADCAST, {
       name: CHAT_TAG,
       message: ` ${name} has left the game.`,
       isNotification: true,

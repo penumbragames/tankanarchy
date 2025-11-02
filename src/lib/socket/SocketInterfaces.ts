@@ -24,8 +24,8 @@ export interface PlayerInputs {
 }
 
 /**
- * Interface for the CHAT_CLIENT_TO_SERVER socket event, broadcast back from the
- * server to all connected clients.
+ * Server to client CHAT_SERVER_TO_CLIENT event to broadcast chat message to
+ * all players.
  */
 export interface ChatMessage {
   name: string
@@ -34,8 +34,7 @@ export interface ChatMessage {
 }
 
 /**
- * Interface for the UPDATE socket event, broadcast by the server to send the
- * current game state to all clients.
+ * Server to client GAME_UPDATE event which contains the game state.
  */
 export interface GameState {
   self: Player
@@ -45,8 +44,13 @@ export interface GameState {
 }
 
 /**
- * Interface for the SOUND socket event, broadcast by the server to indicate a
- * sound being played at a location.
+ * Server to client PARTICLE event which triggers the client to render a
+ * particle effect.
+ */
+export interface ParticleEvent {}
+
+/**
+ * Server to client SOUND event which triggers a sound to play.
  */
 export interface SoundEvent {
   type: SOUNDS
@@ -56,8 +60,9 @@ export interface SoundEvent {
 // Interfaces used to define the client and server socket objects.
 // https://socket.io/docs/v4/typescript/
 export interface ServerToClientEvents {
-  [SOCKET_EVENTS.CHAT_SERVER_TO_CLIENT]: (data: ChatMessage) => void
+  [SOCKET_EVENTS.CHAT_BROADCAST]: (data: ChatMessage) => void
   [SOCKET_EVENTS.GAME_UPDATE]: (state: GameState) => void
+  [SOCKET_EVENTS.PARTICLE]: (particle: ParticleEvent) => void
   [SOCKET_EVENTS.SOUND]: (event: SoundEvent) => void
 }
 export interface ClientToServerEvents {
@@ -65,7 +70,7 @@ export interface ClientToServerEvents {
   // on the client side.
   [SOCKET_EVENTS.NEW_PLAYER]: (name: string, callback: () => void) => void
   [SOCKET_EVENTS.PLAYER_ACTION]: (data: PlayerInputs) => void
-  [SOCKET_EVENTS.CHAT_CLIENT_TO_SERVER]: (data: string) => void
+  [SOCKET_EVENTS.CHAT_SEND]: (data: string) => void
   [SOCKET_EVENTS.DISCONNECT]: () => void
 }
 export interface InterServerEvents {}

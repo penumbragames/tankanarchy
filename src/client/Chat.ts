@@ -51,10 +51,7 @@ class Chat {
       this.onInputKeyDown.bind(this),
       true,
     )
-    this.socket.on(
-      SOCKET_EVENTS.CHAT_SERVER_TO_CLIENT,
-      this.onChatReceive.bind(this),
-    )
+    this.socket.on(SOCKET_EVENTS.CHAT_BROADCAST, this.onChatReceive.bind(this))
   }
 
   /**
@@ -77,7 +74,7 @@ class Chat {
     if (event.code === 'Enter') {
       const text = this.inputElement.value
       this.inputElement.value = ''
-      this.socket.emit(SOCKET_EVENTS.CHAT_CLIENT_TO_SERVER, text)
+      this.socket.emit(SOCKET_EVENTS.CHAT_SEND, text)
       this.inputElement.blur()
     }
     event.stopPropagation()
