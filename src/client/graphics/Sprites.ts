@@ -5,6 +5,7 @@
 
 import { Sprite } from 'client/graphics/Sprite'
 import { POWERUP_TYPES } from 'lib/game/Powerup'
+import { StrictEnumMapping } from 'lib/util/Enum'
 
 export const BULLET = Sprite.create('/img/bullet.png')
 export const HEALTH_PACK_POWERUP = Sprite.create('/img/health_pack_powerup.png')
@@ -20,14 +21,10 @@ export const SHOTGUN_POWERUP = Sprite.create('/img/shotgun_powerup.png')
 export const SPEEDBOOST_POWERUP = Sprite.create('/img/speedboost_powerup.png')
 export const TILE = Sprite.create('/img/tile.png')
 
-type POWERUP_SPRITE_MAP_TYPE = {
-  [key: string]: Sprite
-}
-
-export const POWERUP_SPRITE_MAP: POWERUP_SPRITE_MAP_TYPE = {
+export const POWERUP_SPRITE_MAP = StrictEnumMapping<Sprite>(POWERUP_TYPES, {
   [POWERUP_TYPES.HEALTH_PACK]: HEALTH_PACK_POWERUP,
   [POWERUP_TYPES.RAPIDFIRE]: RAPIDFIRE_POWERUP,
   [POWERUP_TYPES.SHOTGUN]: SHOTGUN_POWERUP,
   [POWERUP_TYPES.SHIELD]: SHIELD_POWERUP,
   [POWERUP_TYPES.SPEEDBOOST]: SPEEDBOOST_POWERUP,
-}
+})
