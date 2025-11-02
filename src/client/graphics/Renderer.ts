@@ -70,13 +70,16 @@ export default class Renderer {
     }
 
     const tankSprite = isSelf ? Sprites.SELF_TANK : Sprites.OTHER_TANK
-    tankSprite.drawCenteredAt(this.context, 0, 0, player.tankAngle)
+    tankSprite.draw(this.context, { centered: true, angle: player.tankAngle })
     const turretSprite = isSelf ? Sprites.SELF_TURRET : Sprites.OTHER_TURRET
-    turretSprite.drawCenteredAt(this.context, 0, 0, player.turretAngle)
+    turretSprite.draw(this.context, {
+      centered: true,
+      angle: player.turretAngle,
+    })
 
     if (player.powerups.get(POWERUP_TYPES.SHIELD)) {
       this.context.rotate(-player.turretAngle)
-      Sprites.SHIELD.drawCentered(this.context)
+      Sprites.SHIELD.draw(this.context, { centered: true })
     }
 
     this.context.restore()
@@ -104,20 +107,17 @@ export default class Renderer {
         // Compute the alpha of the buff based on how close we are to expiring.
         // We only begin fading the buff close to actual expiration.
         const remainingSeconds = powerup.remainingSeconds
-        this.context.globalAlpha =
-          remainingSeconds < Renderer.POWERUP_FADE_CUTOFF
-            ? this.getBuffAlpha(remainingSeconds)
-            : 1
-        Sprites.POWERUP_SPRITE_MAP[powerupType].drawAt(
-          this.context,
-          offset,
-          Renderer.DEFAULT_PADDING,
-        )
+        Sprites.POWERUP_SPRITE_MAP[powerupType].draw(this.context, {
+          x: offset,
+          y: Renderer.DEFAULT_PADDING,
+          opacity:
+            remainingSeconds < Renderer.POWERUP_FADE_CUTOFF
+              ? this.getBuffAlpha(remainingSeconds)
+              : 1,
+        })
         offset -= Renderer.POWERUP_BUFF_SIZE
       }
     }
-    // Reset the global alpha.
-    this.context.globalAlpha = 1
   }
 
   /**
@@ -126,12 +126,12 @@ export default class Renderer {
    */
   drawBullet(bullet: Bullet): void {
     const canvasCoords = this.viewport.toCanvas(bullet.position)
-    Sprites.BULLET.drawCenteredAt(
-      this.context,
-      canvasCoords.x,
-      canvasCoords.y,
-      bullet.angle,
-    )
+    Sprites.BULLET.draw(this.context, {
+      x: canvasCoords.x,
+      y: canvasCoords.y,
+      centered: true,
+      angle: bullet.angle,
+    })
   }
 
   /**
@@ -140,11 +140,10 @@ export default class Renderer {
    */
   drawPowerup(powerup: Powerup): void {
     const canvasCoords = this.viewport.toCanvas(powerup.position)
-    Sprites.POWERUP_SPRITE_MAP[powerup.type].drawCenteredAt(
-      this.context,
-      canvasCoords.x,
-      canvasCoords.y,
-    )
+    Sprites.POWERUP_SPRITE_MAP[powerup.type].draw(this.context, {
+      x: canvasCoords.x,
+      y: canvasCoords.y,
+    })
   }
 
   drawTiles(): void {
@@ -156,7 +155,7 @@ export default class Renderer {
     )
     for (let x = start.x; x < end.x; x += Renderer.TILE_SIZE) {
       for (let y = start.y; y < end.y; y += Renderer.TILE_SIZE) {
-        Sprites.TILE.drawAt(this.context, x, y)
+        Sprites.TILE.draw(this.context, { x, y })
       }
     }
   }
