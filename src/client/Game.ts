@@ -16,17 +16,12 @@ import Bullet from 'lib/game/Bullet'
 import Player from 'lib/game/Player'
 import { Powerup } from 'lib/game/Powerup'
 import Vector from 'lib/math/Vector'
-import {
-  ClientToServerEvents,
-  GAME_STATE,
-  ServerToClientEvents,
-  SOCKET_EVENTS,
-} from 'lib/SocketEvents'
-
-type ClientSocket = socket.Socket<ServerToClientEvents, ClientToServerEvents>
+import { SocketClient } from 'lib/socket/SocketClient'
+import SOCKET_EVENTS from 'lib/socket/SocketEvents'
+import { GameState } from 'lib/socket/SocketInterfaces'
 
 class Game {
-  socket: ClientSocket
+  socket: SocketClient
 
   // Helper objects
   canvas: Canvas
@@ -47,7 +42,7 @@ class Game {
   deltaTime: number
 
   constructor(
-    socket: ClientSocket,
+    socket: SocketClient,
     canvas: Canvas,
     viewport: Viewport,
     drawing: Renderer,
@@ -105,11 +100,14 @@ class Game {
 
   init(): void {
     this.lastUpdateTime = Date.now()
-    this.socket.on(SOCKET_EVENTS.UPDATE, this.onReceiveGameState.bind(this))
+    this.socket.on(
+      SOCKET_EVENTS.GAME_UPDATE,
+      this.onReceiveGameState.bind(this),
+    )
     this.soundManager.bindClientListener()
   }
 
-  onReceiveGameState(state: GAME_STATE): void {
+  onReceiveGameState(state: GameState): void {
     this.self = state.self
     this.players = state.players
     this.projectiles = state.projectiles

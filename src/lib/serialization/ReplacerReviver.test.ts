@@ -7,7 +7,7 @@ import Player from 'lib/game/Player'
 import { Powerup, POWERUP_TYPES } from 'lib/game/Powerup'
 import Vector from 'lib/math/Vector'
 import { getReplacerReviver } from 'lib/serialization/ReplacerReviver'
-import { GAME_STATE } from 'lib/SocketEvents'
+import { GameState } from 'lib/socket/SocketInterfaces'
 
 const UNIXTIME_1 = new Date('1970-01-01T00:00:00.001Z')
 
@@ -131,7 +131,7 @@ describe('Test serializing/deserializing complex objects', () => {
     const p = createFakePlayer()
     const b = Bullet.createFromPlayer(p, Math.PI)
     const powerup = new Powerup(Vector.one(), POWERUP_TYPES.HEALTH_PACK, 1, 2)
-    const obj: GAME_STATE = {
+    const obj: GameState = {
       self: p,
       players: [],
       projectiles: [b],
@@ -142,7 +142,7 @@ describe('Test serializing/deserializing complex objects', () => {
     // Use bun test -u to update.
     expect(serialized).toMatchSnapshot()
 
-    const deserialized: GAME_STATE = parse(serialized)
+    const deserialized: GameState = parse(serialized)
     expect(deserialized).toMatchSnapshot()
     expect(deserialized.self).toBeInstanceOf(Player)
     expect(deserialized.self.isDead()).toBe(false)

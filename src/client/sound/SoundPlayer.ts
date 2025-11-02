@@ -1,35 +1,30 @@
 /**
- * Client side listener for sound events.
+ * Client side handler for sound events to actually play the corresponding
+ * audio asset.
+ * @author omgimanerd
  */
 
-import { Socket } from 'socket.io-client'
-
 import { SOUND_MAPPING } from 'client/sound/SoundMapping'
-import { SOCKET_EVENTS } from 'lib/SocketEvents'
 import Vector from 'lib/math/Vector'
-import SOUNDS from 'lib/sound/Sounds'
-
-type SOUND_EVENT = {
-  type: SOUNDS
-  volume: number
-  source: Vector
-}
+import { SocketClient } from 'lib/socket/SocketClient'
+import SOCKET_EVENTS from 'lib/socket/SocketEvents'
+import { SoundEvent } from 'lib/socket/SocketInterfaces'
 
 export default class SoundPlayer {
-  socket: Socket
+  socket: SocketClient
 
   listenerPosition: Vector | null
 
-  constructor(socket: Socket) {
+  constructor(socket: SocketClient) {
     this.socket = socket
     this.listenerPosition = null
   }
 
   bindClientListener() {
-    this.socket.on(SOCKET_EVENTS.SOUND_EVENT, this.clientCallback.bind(this))
+    this.socket.on(SOCKET_EVENTS.SOUND, this.clientCallback.bind(this))
   }
 
-  clientCallback(data: SOUND_EVENT) {
+  clientCallback(data: SoundEvent) {
     SOUND_MAPPING[data.type].play()
   }
 

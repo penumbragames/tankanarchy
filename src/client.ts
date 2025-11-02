@@ -6,15 +6,13 @@
 
 import 'reflect-metadata'
 
-import * as socketIO from 'socket.io-client'
-
 import Chat from 'client/Chat'
 import Game from 'client/Game'
-import { SOCKET_EVENTS } from 'lib/SocketEvents'
-import SocketParser from 'lib/serialization/SocketParser'
+import { getSocketClient, SocketClient } from 'lib/socket/SocketClient'
+import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 
 window.onload = (): void => {
-  const socket = socketIO.io({ parser: SocketParser })
+  const socket: SocketClient = getSocketClient()
   const game = Game.create(socket, 'canvas', 'leaderboard')
 
   const nameInputElement = <HTMLInputElement>(

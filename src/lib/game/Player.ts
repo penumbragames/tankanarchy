@@ -12,7 +12,7 @@ import Entity from 'lib/game/Entity'
 import { Powerup, POWERUP_TYPES } from 'lib/game/Powerup'
 import Util from 'lib/math/Util'
 import Vector from 'lib/math/Vector'
-import { PLAYER_INPUTS } from 'lib/SocketEvents'
+import { PlayerInputs } from 'lib/socket/SocketInterfaces'
 
 export default class Player extends Entity {
   static readonly TURN_RATE = 0.005
@@ -83,7 +83,7 @@ export default class Player extends Entity {
    * Update this player given the client's input data from Input
    * @param {Object} data A JSON Object storing the input state
    */
-  updateOnInput(data: PLAYER_INPUTS): void {
+  updateOnInput(data: PlayerInputs): void {
     if ((data.up && data.down) || (!data.up && !data.down)) {
       this.velocity = Vector.zero()
     } else if (data.up) {
