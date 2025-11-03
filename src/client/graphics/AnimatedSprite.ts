@@ -8,12 +8,12 @@ import { Drawable, Sprite } from 'client/graphics/Sprite'
 
 export default class AnimatedSprite extends Sprite {
   baseImage: HTMLImageElement
-  frames: ImageBitmap[]
+  animationFrames: ImageBitmap[]
 
-  constructor(baseImage: HTMLImageElement, frames: ImageBitmap[]) {
+  constructor(baseImage: HTMLImageElement, animationFrames: ImageBitmap[]) {
     super()
     this.baseImage = baseImage
-    this.frames = frames
+    this.animationFrames = animationFrames
   }
 
   static async create(src: string): Promise<AnimatedSprite> {
@@ -21,19 +21,19 @@ export default class AnimatedSprite extends Sprite {
     return new AnimatedSprite(img, await sliceImage(img))
   }
 
-  get numFrames() {
-    return this.frames.length
+  get frames() {
+    return this.animationFrames.length
   }
 
   get width() {
-    return this.frames[0].width
+    return this.animationFrames[0].width
   }
 
   get height() {
-    return this.frames[0].height
+    return this.animationFrames[0].height
   }
 
   getImage(frame: number | undefined): Drawable {
-    return this.frames[frame ?? 0]
+    return this.animationFrames[frame ?? 0]
   }
 }

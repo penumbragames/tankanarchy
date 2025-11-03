@@ -3,6 +3,7 @@
  * @author omgimanerd
  */
 
+import PARTICLES from 'lib/enums/Particles'
 import SOUNDS from 'lib/enums/Sounds'
 import Bullet from 'lib/game/Bullet'
 import Player from 'lib/game/Player'
@@ -47,7 +48,10 @@ export interface GameState {
  * Server to client PARTICLE event which triggers the client to render a
  * particle effect.
  */
-export interface ParticleEvent {}
+export interface ParticleEvent {
+  type: PARTICLES
+  source: Vector
+}
 
 /**
  * Server to client SOUND event which triggers a sound to play.

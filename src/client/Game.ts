@@ -10,6 +10,7 @@ import Canvas from 'client/graphics/Canvas'
 import Renderer from 'client/graphics/Renderer'
 import Input from 'client/Input'
 import Leaderboard from 'client/Leaderboard'
+import Particle from 'client/particle/Particle'
 import SoundPlayer from 'client/sound/SoundPlayer'
 import Viewport from 'client/Viewport'
 import Bullet from 'lib/game/Bullet'
@@ -18,7 +19,7 @@ import { Powerup } from 'lib/game/Powerup'
 import Vector from 'lib/math/Vector'
 import { SocketClient } from 'lib/socket/SocketClient'
 import SOCKET_EVENTS from 'lib/socket/SocketEvents'
-import { GameState } from 'lib/socket/SocketInterfaces'
+import { GameState, ParticleEvent } from 'lib/socket/SocketInterfaces'
 
 class Game {
   socket: SocketClient
@@ -31,13 +32,16 @@ class Game {
   leaderboard: Leaderboard
   soundManager: SoundPlayer
 
-  // Internal state
+  // State from game update messages
   self: Player | null
   players: Player[]
   projectiles: Bullet[]
   powerups: Powerup[]
 
-  animationFrameId: number
+  // Particle system, only created from socket messages, not maintained by server.
+  particles: Particle[]
+
+  animationFrameId: number // Needed for requestAnimationFrame()
   lastUpdateTime: number
   deltaTime: number
 
@@ -63,6 +67,8 @@ class Game {
     this.players = []
     this.projectiles = []
     this.powerups = []
+
+    this.particles = []
 
     this.animationFrameId = 0
     this.lastUpdateTime = 0
@@ -104,6 +110,7 @@ class Game {
       SOCKET_EVENTS.GAME_UPDATE,
       this.onReceiveGameState.bind(this),
     )
+    this.socket.on(SOCKET_EVENTS.PARTICLE, this.onReceiveParticle.bind(this))
     this.soundManager.bindClientListener()
   }
 
@@ -115,6 +122,10 @@ class Game {
 
     this.viewport.updateTrackingPosition(state.self)
     this.leaderboard.update(state.players)
+  }
+
+  onReceiveParticle(particle: ParticleEvent): void {
+    this.particles.push(new Particle(particle.type, particle.source))
   }
 
   run(): void {
@@ -148,6 +159,14 @@ class Game {
         shoot: this.input.mouseDown,
         turretAngle: playerToMouseVector.angle,
       })
+
+      for (let i = 0; i < this.particles.length; ++i) {
+        const particle = this.particles[i]
+        particle.update(this.lastUpdateTime, this.deltaTime)
+        if (particle.destroyed) {
+          this.particles.splice(i--, 1)
+        }
+      }
     }
   }
 
@@ -162,6 +181,8 @@ class Game {
       this.players
         .filter((player) => player.socketID !== this.self?.socketID)
         .forEach((tank) => this.renderer.drawTank(false, tank))
+
+      this.particles.forEach(this.renderer.drawParticle.bind(this.renderer))
 
       this.renderer.drawBuffStatus(this.self)
     }

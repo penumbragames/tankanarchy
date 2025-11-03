@@ -5,10 +5,12 @@
 
 import Canvas from 'client/graphics/Canvas'
 import {
+  ParticleSprites,
   PowerupSprites,
   SpriteLoader,
   SpriteMap,
 } from 'client/graphics/SpriteLoader'
+import Particle from 'client/particle/Particle'
 import Viewport from 'client/Viewport'
 import * as Constants from 'lib/Constants'
 import SPRITES from 'lib/enums/Sprites'
@@ -36,6 +38,7 @@ export default class Renderer {
 
   sprites: SpriteMap
   powerupSprites: PowerupSprites
+  particleSprites: ParticleSprites
 
   constructor(canvas: Canvas, viewport: Viewport) {
     this.canvas = canvas
@@ -43,6 +46,7 @@ export default class Renderer {
     this.viewport = viewport
     this.sprites = SpriteLoader.sprites
     this.powerupSprites = SpriteLoader.powerupSprites
+    this.particleSprites = SpriteLoader.particleSprites
   }
 
   static create(canvas: Canvas, viewport: Viewport): Renderer {
@@ -159,6 +163,15 @@ export default class Renderer {
     this.powerupSprites[powerup.type].draw(this.context, {
       position: canvasCoords,
       centered: true,
+    })
+  }
+
+  drawParticle(particle: Particle): void {
+    const canvasCoords = this.viewport.toCanvas(particle.position)
+    this.particleSprites[particle.type].draw(this.context, {
+      position: canvasCoords,
+      centered: true,
+      frame: particle.frame,
     })
   }
 

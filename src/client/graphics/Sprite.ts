@@ -34,6 +34,7 @@ type Context = CanvasRenderingContext2D
 
 export abstract class Sprite {
   abstract getImage(frame: number | undefined): Drawable
+  abstract get frames(): number
   abstract get width(): number
   abstract get height(): number
 

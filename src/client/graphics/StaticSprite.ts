@@ -18,6 +18,10 @@ export default class StaticSprite extends Sprite {
     return new StaticSprite(await loadImage(src))
   }
 
+  get frames(): number {
+    throw new Error('Invalid frames() for a static sprite')
+  }
+
   get width() {
     return this.image.width
   }

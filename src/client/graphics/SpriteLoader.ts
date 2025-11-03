@@ -5,15 +5,18 @@
 import AnimatedSprite from 'client/graphics/AnimatedSprite'
 import { Sprite } from 'client/graphics/Sprite'
 import StaticSprite from 'client/graphics/StaticSprite'
+import PARTICLES from 'lib/enums/Particles'
 import SPRITES from 'lib/enums/Sprites'
 import { POWERUP_TYPES } from 'lib/game/Powerup'
 
 export type SpriteMap = { [key in SPRITES]: Sprite }
 export type PowerupSprites = { [key in POWERUP_TYPES]: Sprite }
+export type ParticleSprites = { [key in PARTICLES]: Sprite }
 
 export class SpriteLoader {
   static sprites: SpriteMap
   static powerupSprites: PowerupSprites
+  static particleSprites: ParticleSprites
 
   static async loadAssets() {
     // TODO: fire off all these promises in parallel
@@ -52,6 +55,9 @@ export class SpriteLoader {
       [POWERUP_TYPES.SHIELD]: s[SPRITES.SHIELD_POWERUP],
       [POWERUP_TYPES.SHOTGUN]: s[SPRITES.SHOTGUN_POWERUP],
       [POWERUP_TYPES.SPEEDBOOST]: s[SPRITES.SPEEDBOOST_POWERUP],
+    }
+    SpriteLoader.particleSprites = {
+      [PARTICLES.EXPLOSION]: s[SPRITES.EXPLOSION],
     }
   }
 }

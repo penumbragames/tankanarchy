@@ -4,6 +4,7 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
+import PARTICLES from 'lib/enums/Particles'
 import SOUNDS from 'lib/enums/Sounds'
 import Bullet from 'lib/game/Bullet'
 import Player from 'lib/game/Player'
@@ -203,6 +204,10 @@ class Game {
           e1.destroyed = true
           e2.destroyed = true
           this.playSound(SOUNDS.EXPLOSION, e1.position)
+          this.socketServer.emit(SOCKET_EVENTS.PARTICLE, {
+            type: PARTICLES.EXPLOSION,
+            source: e1.position,
+          })
         }
       }
     }

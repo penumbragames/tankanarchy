@@ -35,7 +35,7 @@ export const sliceImage = async (
     throw new Error(`Cannot slice image ${image.src} into bitmaps.`)
   }
   const promises = []
-  for (let offset = 0; offset < width; offset += width) {
+  for (let offset = 0; offset < width; offset += height) {
     promises.push(createImageBitmap(image, offset, 0, height, height))
   }
   return Promise.all(promises)
