@@ -1,4 +1,8 @@
-import { SpriteLoader } from 'client/graphics/SpriteLoader'
+/**
+ * @author omgimanerd
+ */
+
+import { PARTICLE_SPRITES } from 'client/graphics/Sprites'
 import PARTICLES from 'lib/enums/Particles'
 import Entity from 'lib/game/Entity'
 import Vector from 'lib/math/Vector'
@@ -15,7 +19,7 @@ export default class Particle extends Entity {
   constructor(type: PARTICLES, position: Vector) {
     super(position, Vector.zero(), Vector.zero(), 0)
     this.type = type
-    this.frames = SpriteLoader.particleSprites[this.type].frames
+    this.frames = PARTICLE_SPRITES[this.type].frames
   }
 
   update(lastUpdateTime: number, deltaTime: number): void {

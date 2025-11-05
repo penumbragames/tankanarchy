@@ -3,6 +3,8 @@
  * @author omgimanerd
  */
 
+import loadResource from 'client/lib/ResourceLoader'
+
 export default class Sound {
   sound: HTMLAudioElement
 
@@ -10,10 +12,8 @@ export default class Sound {
     this.sound = sound
   }
 
-  static create(src: string): Sound {
-    const sound = new Audio()
-    sound.src = src
-    return new Sound(sound)
+  static async create(src: string): Promise<Sound> {
+    return new Sound(await loadResource(Audio, src))
   }
 
   play(volume: number = 0.2) {

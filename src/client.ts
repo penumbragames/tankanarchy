@@ -8,12 +8,14 @@ import 'reflect-metadata'
 
 import Chat from 'client/Chat'
 import Game from 'client/Game'
-import { SpriteLoader } from 'client/graphics/SpriteLoader'
+import loadSprites from 'client/graphics/Sprites'
+import { loadSounds } from 'client/sound/Sounds'
 import { getSocketClient, SocketClient } from 'lib/socket/SocketClient'
 import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 
 window.onload = async () => {
-  await SpriteLoader.loadAssets()
+  await Promise.all([loadSounds(), loadSprites()])
+
   const socket: SocketClient = getSocketClient()
   const game = Game.create(socket, 'canvas', 'leaderboard')
 

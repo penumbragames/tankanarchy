@@ -5,11 +5,10 @@
 
 import Canvas from 'client/graphics/Canvas'
 import {
-  ParticleSprites,
-  PowerupSprites,
-  SpriteLoader,
-  SpriteMap,
-} from 'client/graphics/SpriteLoader'
+  PARTICLE_SPRITES,
+  POWERUP_SPRITES,
+  SPRITE_MAP,
+} from 'client/graphics/Sprites'
 import Particle from 'client/particle/Particle'
 import Viewport from 'client/Viewport'
 import * as Constants from 'lib/Constants'
@@ -36,17 +35,10 @@ export default class Renderer {
   context: CanvasRenderingContext2D
   viewport: Viewport
 
-  sprites: SpriteMap
-  powerupSprites: PowerupSprites
-  particleSprites: ParticleSprites
-
   constructor(canvas: Canvas, viewport: Viewport) {
     this.canvas = canvas
     this.context = canvas.context
     this.viewport = viewport
-    this.sprites = SpriteLoader.sprites
-    this.powerupSprites = SpriteLoader.powerupSprites
-    this.particleSprites = SpriteLoader.particleSprites
   }
 
   static create(canvas: Canvas, viewport: Viewport): Renderer {
@@ -86,19 +78,19 @@ export default class Renderer {
     }
 
     const tankSprite = isSelf
-      ? this.sprites[SPRITES.SELF_TANK]
-      : this.sprites[SPRITES.OTHER_TANK]
+      ? SPRITE_MAP[SPRITES.SELF_TANK]
+      : SPRITE_MAP[SPRITES.OTHER_TANK]
     tankSprite.draw(this.context, { centered: true, angle: player.tankAngle })
     const turretSprite = isSelf
-      ? this.sprites[SPRITES.SELF_TURRET]
-      : this.sprites[SPRITES.OTHER_TURRET]
+      ? SPRITE_MAP[SPRITES.SELF_TURRET]
+      : SPRITE_MAP[SPRITES.OTHER_TURRET]
     turretSprite.draw(this.context, {
       centered: true,
       angle: player.turretAngle,
     })
 
     if (player.powerups.get(POWERUP_TYPES.SHIELD)) {
-      this.sprites[SPRITES.SHIELD].draw(this.context, { centered: true })
+      SPRITE_MAP[SPRITES.SHIELD].draw(this.context, { centered: true })
     }
 
     this.context.restore()
@@ -126,7 +118,7 @@ export default class Renderer {
         // Compute the alpha of the buff based on how close we are to expiring.
         // We only begin fading the buff close to actual expiration.
         const remainingSeconds = powerup.remainingSeconds
-        this.powerupSprites[powerupType].draw(this.context, {
+        POWERUP_SPRITES[powerupType].draw(this.context, {
           x: offset,
           y: Renderer.DEFAULT_PADDING,
           width: Renderer.POWERUP_BUFF_SIZE,
@@ -147,7 +139,7 @@ export default class Renderer {
    */
   drawBullet(bullet: Bullet): void {
     const canvasCoords = this.viewport.toCanvas(bullet.position)
-    this.sprites[SPRITES.BULLET].draw(this.context, {
+    SPRITE_MAP[SPRITES.BULLET].draw(this.context, {
       position: canvasCoords,
       centered: true,
       angle: bullet.angle,
@@ -160,7 +152,7 @@ export default class Renderer {
    */
   drawPowerup(powerup: Powerup): void {
     const canvasCoords = this.viewport.toCanvas(powerup.position)
-    this.powerupSprites[powerup.type].draw(this.context, {
+    POWERUP_SPRITES[powerup.type].draw(this.context, {
       position: canvasCoords,
       centered: true,
     })
@@ -168,7 +160,7 @@ export default class Renderer {
 
   drawParticle(particle: Particle): void {
     const canvasCoords = this.viewport.toCanvas(particle.position)
-    this.particleSprites[particle.type].draw(this.context, {
+    PARTICLE_SPRITES[particle.type].draw(this.context, {
       position: canvasCoords,
       centered: true,
       frame: particle.frame,
@@ -184,7 +176,7 @@ export default class Renderer {
     )
     for (let x = start.x; x < end.x; x += Renderer.TILE_SIZE) {
       for (let y = start.y; y < end.y; y += Renderer.TILE_SIZE) {
-        this.sprites[SPRITES.TILE].draw(this.context, { x, y })
+        SPRITE_MAP[SPRITES.TILE].draw(this.context, { x, y })
       }
     }
   }

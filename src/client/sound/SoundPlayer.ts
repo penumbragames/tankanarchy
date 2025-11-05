@@ -4,7 +4,7 @@
  * @author omgimanerd
  */
 
-import { SOUND_MAPPING } from 'client/sound/SoundMapping'
+import SOUND_MAP from 'client/sound/Sounds'
 import Vector from 'lib/math/Vector'
 import { SocketClient } from 'lib/socket/SocketClient'
 import SOCKET_EVENTS from 'lib/socket/SocketEvents'
@@ -25,7 +25,7 @@ export default class SoundPlayer {
   }
 
   clientCallback(data: SoundEvent) {
-    SOUND_MAPPING[data.type].play()
+    SOUND_MAP[data.type].play()
   }
 
   update(position: Vector) {

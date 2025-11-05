@@ -3,8 +3,8 @@
  * @author omgimanerd
  */
 
-import { loadImage } from 'client/graphics/ImageUtils'
 import { Drawable, Sprite } from 'client/graphics/Sprite'
+import loadResource from 'client/lib/ResourceLoader'
 
 export default class StaticSprite extends Sprite {
   image: HTMLImageElement
@@ -15,7 +15,7 @@ export default class StaticSprite extends Sprite {
   }
 
   static async create(src: string): Promise<StaticSprite> {
-    return new StaticSprite(await loadImage(src))
+    return new StaticSprite(await loadResource(Image, src))
   }
 
   get frames(): number {
