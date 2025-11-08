@@ -3,9 +3,10 @@
 import { beforeEach, describe, expect, setSystemTime, test } from 'bun:test'
 
 import POWERUPS from 'lib/enums/Powerups'
+
 import Bullet from 'lib/game/Bullet'
 import Player from 'lib/game/Player'
-import { Powerup } from 'lib/game/Powerup'
+import Powerup from 'lib/game/Powerup'
 import { HealthPowerup, PowerupState } from 'lib/game/PowerupState'
 import Vector from 'lib/math/Vector'
 import { getReplacerReviver } from 'lib/serialization/ReplacerReviver'

@@ -1,6 +1,5 @@
 /**
- * Utility method for slicing a loaded image into ImageBitmaps.
- * @author
+ * @author omgimanerd
  */
 
 /**

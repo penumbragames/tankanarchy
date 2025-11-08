@@ -6,6 +6,8 @@
 
 import * as socket from 'socket.io-client'
 
+import SOCKET_EVENTS from 'lib/socket/SocketEvents'
+
 import Canvas from 'client/graphics/Canvas'
 import Renderer from 'client/graphics/Renderer'
 import Input from 'client/Input'
@@ -15,10 +17,9 @@ import SoundPlayer from 'client/sound/SoundPlayer'
 import Viewport from 'client/Viewport'
 import Bullet from 'lib/game/Bullet'
 import Player from 'lib/game/Player'
-import { Powerup } from 'lib/game/Powerup'
+import Powerup from 'lib/game/Powerup'
 import Vector from 'lib/math/Vector'
 import { SocketClient } from 'lib/socket/SocketClient'
-import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 import { GameState, ParticleEvent } from 'lib/socket/SocketInterfaces'
 
 export default class Game {

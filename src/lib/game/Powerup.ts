@@ -3,14 +3,15 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import * as Constants from 'lib/Constants'
 import POWERUPS from 'lib/enums/Powerups'
+
+import * as Constants from 'lib/Constants'
 import Entity from 'lib/game/Entity'
 import { PowerupConstructors, PowerupState } from 'lib/game/PowerupState'
 import Util from 'lib/math/Util'
 import Vector from 'lib/math/Vector'
 
-export class Powerup extends Entity {
+export default class Powerup extends Entity {
   static readonly HITBOX_SIZE = 5
   static readonly MAX_COUNT = 50
 
@@ -20,7 +21,6 @@ export class Powerup extends Entity {
     super(position, Vector.zero(), Vector.zero(), Powerup.HITBOX_SIZE)
 
     this.type = type
-    this.destroyed = false
   }
 
   static create(): Powerup {

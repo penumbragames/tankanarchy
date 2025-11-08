@@ -7,7 +7,7 @@ import PARTICLES from 'lib/enums/Particles'
 import SOUNDS from 'lib/enums/Sounds'
 import Bullet from 'lib/game/Bullet'
 import Player from 'lib/game/Player'
-import { Powerup } from 'lib/game/Powerup'
+import Powerup from 'lib/game/Powerup'
 import Vector from 'lib/math/Vector'
 import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 

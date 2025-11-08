@@ -3,20 +3,22 @@
  * @author kennethli.3470@gmail.com (Kenneth Li)
  */
 
-import Canvas from 'client/graphics/Canvas'
+import * as Constants from 'lib/Constants'
+import POWERUPS from 'lib/enums/Powerups'
+import SPRITES from 'lib/enums/Sprites'
+
 import {
   PARTICLE_SPRITES,
   POWERUP_SPRITES,
   SPRITE_MAP,
 } from 'client/graphics/Sprites'
+
+import Canvas from 'client/graphics/Canvas'
 import Particle from 'client/particle/Particle'
 import Viewport from 'client/Viewport'
-import * as Constants from 'lib/Constants'
-import POWERUPS from 'lib/enums/Powerups'
-import SPRITES from 'lib/enums/Sprites'
 import Bullet from 'lib/game/Bullet'
 import Player from 'lib/game/Player'
-import { Powerup } from 'lib/game/Powerup'
+import Powerup from 'lib/game/Powerup'
 import Vector from 'lib/math/Vector'
 
 export default class Renderer {

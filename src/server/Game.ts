@@ -7,15 +7,16 @@
 import PARTICLES from 'lib/enums/Particles'
 import POWERUPS from 'lib/enums/Powerups'
 import SOUNDS from 'lib/enums/Sounds'
+import SOCKET_EVENTS from 'lib/socket/SocketEvents'
+
 import Bullet from 'lib/game/Bullet'
 import Player from 'lib/game/Player'
-import { Powerup } from 'lib/game/Powerup'
+import Powerup from 'lib/game/Powerup'
 import Vector from 'lib/math/Vector'
-import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 import { PlayerInputs } from 'lib/socket/SocketInterfaces'
 import { Socket, SocketServer } from 'lib/socket/SocketServer'
 
-class Game {
+export default class Game {
   socketServer: SocketServer
 
   // Contains all the connected socket ids and socket instances.
@@ -108,18 +109,12 @@ class Game {
     })
   }
 
-  /**
-   * Updates the state of all the objects in the game.
-   */
   update(): void {
     const currentTime = Date.now()
     this.deltaTime = currentTime - this.lastUpdateTime
     this.lastUpdateTime = currentTime
 
-    /**
-     * Perform a physics update and collision update for all entities
-     * that need it.
-     */
+    // Perform physics update and collision checks.
     const entities = [
       ...this.players.values(),
       ...this.projectiles,
@@ -200,17 +195,13 @@ class Game {
       }
     }
 
-    /**
-     * Filters out destroyed projectiles and powerups.
-     */
+    // Remove destroyed projectiles and powerups.
     this.projectiles = this.projectiles.filter(
       (projectile) => !projectile.destroyed,
     )
     this.powerups = this.powerups.filter((powerup) => !powerup.destroyed)
 
-    /**
-     * Repopulate the world with new powerups.
-     */
+    // Spawn new powerups.
     while (this.powerups.length < Powerup.MAX_COUNT) {
       this.powerups.push(Powerup.create())
     }
@@ -218,9 +209,9 @@ class Game {
 
   sendState(): void {
     const players = [...this.players.values()]
-    this.clients.forEach((_client, socketID) => {
+    this.clients.forEach((client, socketID) => {
       const currentPlayer = this.players.get(socketID)!
-      this.clients.get(socketID)!.emit(SOCKET_EVENTS.GAME_UPDATE, {
+      client.emit(SOCKET_EVENTS.GAME_UPDATE, {
         self: currentPlayer,
         players: players,
         projectiles: this.projectiles,
@@ -229,5 +220,3 @@ class Game {
     })
   }
 }
-
-export default Game
