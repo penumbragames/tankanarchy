@@ -1,0 +1,14 @@
+/**
+ * @author omgimanerd
+ */
+
+// Cannot be a const enum because we iterate over it.
+enum POWERUPS {
+  HEALTH_PACK = 'HEALTH_PACK',
+  SHOTGUN = 'SHOTGUN',
+  RAPIDFIRE = 'RAPIDFIRE',
+  SPEEDBOOST = 'SPEEDBOOST',
+  SHIELD = 'SHIELD',
+}
+
+export default POWERUPS

@@ -4,21 +4,6 @@
  */
 
 /**
- * Asynchronously loads a given image into a HTMLImageElement.
- * @param src The path to the image source to load
- * @returns a Promise containing the HTMLImageElement with the loaded image.
- */
-export const loadImage = async (src: string): Promise<HTMLImageElement> => {
-  return new Promise((resolve, reject) => {
-    const img = new Image()
-    img.onload = () => resolve(img)
-    img.onerror = (error) => reject(error)
-    // Set the image source to send the network request to load the image.
-    img.src = src
-  })
-}
-
-/**
  * Slices an input image into an array of ImageBitmaps. The input image must
  * have a width divisible by its height, and will be sliced into (h/w) frames
  * ordered from left to right.

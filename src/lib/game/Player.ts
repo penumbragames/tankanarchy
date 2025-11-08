@@ -7,65 +7,51 @@
 import { Exclude, Type } from 'class-transformer'
 
 import * as Constants from 'lib/Constants'
+import POWERUPS from 'lib/enums/Powerups'
 import Bullet from 'lib/game/Bullet'
 import Entity from 'lib/game/Entity'
-import { Powerup, POWERUP_TYPES } from 'lib/game/Powerup'
+import PLAYER_CONSTANTS from 'lib/game/PlayerConstants'
+import { Powerup } from 'lib/game/Powerup'
+import {
+  PowerupConstructors,
+  PowerupState,
+  ShieldPowerup,
+} from 'lib/game/PowerupState'
 import Util from 'lib/math/Util'
 import Vector from 'lib/math/Vector'
 import { PlayerInputs } from 'lib/socket/SocketInterfaces'
 
 export default class Player extends Entity {
-  static readonly TURN_RATE = 0.005
-  static readonly DEFAULT_SPEED = 0.4
-  static readonly SHOT_COOLDOWN = 800
-  static readonly DEFAULT_HITBOX_SIZE = 20
-  static readonly SHIELD_HITBOX_SIZE = 45
-  static readonly MAX_HEALTH = 10
-
   name: string
   @Exclude() socketID: string
 
-  @Exclude() lastUpdateTime: number
+  @Exclude() lastUpdateTime: number = 0
 
-  tankAngle: number
-  turretAngle: number
-  turnRate: number
+  tankAngle: number = 0
+  turretAngle: number = 0
+  turnRate: number = 0
 
-  speed: number
-  @Exclude() shotCooldown: number
-  @Exclude() lastShotTime: number
-  health: number
+  speed: number = PLAYER_CONSTANTS.SPEED
+  @Exclude() shotCooldown: number = PLAYER_CONSTANTS.SHOT_COOLDOWN
+  @Exclude() numBulletsShot: number = PLAYER_CONSTANTS.BULLETS_PER_SHOT
+  @Exclude() lastShotTime: number = 0
+  health: number = PLAYER_CONSTANTS.MAX_HEALTH
 
-  @Type(() => Powerup)
-  powerups: Map<POWERUP_TYPES, Powerup>
+  @Type(() => PowerupState)
+  powerups: Map<POWERUPS, PowerupState> = new Map()
 
-  kills: number
-  deaths: number
+  kills: number = 0
+  deaths: number = 0
 
   constructor(name: string, socketID: string) {
     super(
       Vector.zero(),
       Vector.zero(),
       Vector.zero(),
-      Player.DEFAULT_HITBOX_SIZE,
+      PLAYER_CONSTANTS.DEFAULT_HITBOX_SIZE,
     )
-
     this.name = name
     this.socketID = socketID
-
-    this.lastUpdateTime = 0
-    this.tankAngle = 0
-    this.turretAngle = 0
-    this.turnRate = 0
-    this.speed = Player.DEFAULT_SPEED
-    this.shotCooldown = Player.SHOT_COOLDOWN
-    this.lastShotTime = 0
-    this.health = Player.MAX_HEALTH
-
-    this.powerups = new Map()
-
-    this.kills = 0
-    this.deaths = 0
   }
 
   /**
@@ -74,14 +60,12 @@ export default class Player extends Entity {
    * @param {string} socketID The associated socket ID
    */
   static create(name: string, socketID: string): Player {
-    const player = new Player(name, socketID)
-    player.spawn()
-    return player
+    return new Player(name, socketID).spawn()
   }
 
   /**
-   * Update this player given the client's input data from Input
-   * @param {Object} data A JSON Object storing the input state
+   * Update this player given the client's input
+   * @param {PlayerInputs} data
    */
   updateOnInput(data: PlayerInputs): void {
     if ((data.up && data.down) || (!data.up && !data.down)) {
@@ -95,9 +79,9 @@ export default class Player extends Entity {
     if ((data.left && data.right) || (!data.left && !data.right)) {
       this.turnRate = 0
     } else if (data.right) {
-      this.turnRate = Player.TURN_RATE
+      this.turnRate = PLAYER_CONSTANTS.TURN_RATE
     } else if (data.left) {
-      this.turnRate = -Player.TURN_RATE
+      this.turnRate = -PLAYER_CONSTANTS.TURN_RATE
     }
 
     this.turretAngle = data.turretAngle
@@ -116,45 +100,11 @@ export default class Player extends Entity {
       this.tankAngle + (this.turnRate * deltaTime), // prettier-ignore
     )
 
-    this.updatePowerups()
-  }
-
-  updatePowerups(): void {
-    for (const [type, powerup] of this.powerups) {
-      const expired = this.lastUpdateTime > powerup.expirationTime
-      switch (type) {
-        case POWERUP_TYPES.HEALTH_PACK:
-          this.health = Math.min(this.health + powerup.data, Player.MAX_HEALTH)
-          this.powerups.delete(type)
-          break
-        case POWERUP_TYPES.SHOTGUN:
-          if (expired) {
-            this.powerups.delete(type)
-          }
-          break
-        case POWERUP_TYPES.RAPIDFIRE:
-          if (!expired) {
-            this.shotCooldown = Player.SHOT_COOLDOWN / powerup.data
-          } else {
-            this.shotCooldown = Player.SHOT_COOLDOWN
-            this.powerups.delete(type)
-          }
-          break
-        case POWERUP_TYPES.SPEEDBOOST:
-          if (!expired) {
-            this.speed = Player.DEFAULT_SPEED * powerup.data
-          } else {
-            this.speed = Player.DEFAULT_SPEED
-            this.powerups.delete(type)
-          }
-          break
-        case POWERUP_TYPES.SHIELD:
-          this.hitboxSize = Player.SHIELD_HITBOX_SIZE
-          if (expired || powerup.data <= 0) {
-            this.hitboxSize = Player.DEFAULT_HITBOX_SIZE
-            this.powerups.delete(type)
-          }
-          break
+    for (const powerup of Object.values(this.powerups)) {
+      powerup.update(lastUpdateTime, deltaTime)
+      if (powerup.expired) {
+        powerup.remove(this)
+        this.powerups.delete(powerup.type)
       }
     }
   }
@@ -162,18 +112,16 @@ export default class Player extends Entity {
   /**
    * Applies a Powerup to this player, returning the powerup type for sound.
    * @param {Powerup} powerup The Powerup object.
-   * @returns {POWERUP_TYPES}
+   * @returns {POWERUPS}
    */
-  applyPowerup(powerup: Powerup): POWERUP_TYPES {
-    powerup.expirationTime = this.lastUpdateTime + powerup.duration
-    this.powerups.set(powerup.type, powerup)
+  applyPowerup(powerup: Powerup): POWERUPS {
+    this.powerups.set(
+      powerup.type,
+      new PowerupConstructors[powerup.type]().init(),
+    )
     return powerup.type
   }
 
-  /**
-   * Returns a boolean indicating if the player can shoot.
-   * @return {boolean}
-   */
   canShoot(): boolean {
     return this.lastUpdateTime > this.lastShotTime + this.shotCooldown
   }
@@ -182,13 +130,12 @@ export default class Player extends Entity {
    * Returns an array containing new projectile objects as if the player has
    * fired a shot given their current powerup state. This function does not
    * perform a shot cooldown check and resets the shot cooldown.
-   * @return {Array<Bullet>}
+   * @return {Bullet[]}
    */
   getProjectilesFromShot(): Bullet[] {
     const bullets = [Bullet.createFromPlayer(this, 0)]
-    const shotgunPowerup = this.powerups.get(POWERUP_TYPES.SHOTGUN)
-    if (shotgunPowerup) {
-      for (let i = 1; i <= shotgunPowerup.data; ++i) {
+    if (this.numBulletsShot > 1) {
+      for (let i = 1; i <= this.numBulletsShot; ++i) {
         const angleDeviation = (i * Math.PI) / 9
         bullets.push(Bullet.createFromPlayer(this, -angleDeviation))
         bullets.push(Bullet.createFromPlayer(this, angleDeviation))
@@ -202,23 +149,23 @@ export default class Player extends Entity {
     return this.health <= 0
   }
 
-  /**
-   * Damages the player by the given amount, factoring in shields.
-   * @param {number} amount The amount to damage the player by
-   */
   damage(amount: number): void {
-    const shield = this.powerups.get(POWERUP_TYPES.SHIELD)
+    const shield = <ShieldPowerup>this.powerups.get(POWERUPS.SHIELD)
     if (shield) {
-      shield.data -= 1
+      shield.damage(amount)
     } else {
       this.health -= amount
     }
   }
 
+  heal(amount: number): void {
+    this.health = Math.min(PLAYER_CONSTANTS.MAX_HEALTH, this.health + amount)
+  }
+
   /**
    * Handles the spawning (and respawning) of the player.
    */
-  spawn(): void {
+  spawn(): Player {
     this.position = new Vector(
       Util.randRange(
         Constants.WORLD_MIN + Constants.WORLD_PADDING,
@@ -229,7 +176,7 @@ export default class Player extends Entity {
         Constants.WORLD_MAX - Constants.WORLD_PADDING,
       ),
     )
-    this.tankAngle = Util.randRange(0, 2 * Math.PI)
-    this.health = Player.MAX_HEALTH
+    this.health = PLAYER_CONSTANTS.MAX_HEALTH
+    return this
   }
 }

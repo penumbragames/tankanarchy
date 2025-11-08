@@ -23,3 +23,12 @@ just start
 - Kenneth Li (noobbyte)
 
 &copy; 2015 Penumbra Games
+
+
+# TODO:
+  - Separate input/render loop
+  - animation frame refactor
+  - refactor server side sound engine, Game server has a sound / particle service
+  - hitbox debugging
+  - custom cursor
+  - rockets

@@ -7,13 +7,13 @@ import AnimatedSprite from 'client/graphics/AnimatedSprite'
 import { Sprite } from 'client/graphics/Sprite'
 import StaticSprite from 'client/graphics/StaticSprite'
 import PARTICLES from 'lib/enums/Particles'
+import POWERUPS from 'lib/enums/Powerups'
 import SPRITES from 'lib/enums/Sprites'
-import { POWERUP_TYPES } from 'lib/game/Powerup'
 
 // Global sprite object stores, populated asynchronously
 export let SPRITE_MAP: Record<SPRITES, Sprite> = {} as Record<SPRITES, Sprite>
-export let POWERUP_SPRITES: Record<POWERUP_TYPES, Sprite> = {} as Record<
-  POWERUP_TYPES,
+export let POWERUP_SPRITES: Record<POWERUPS, Sprite> = {} as Record<
+  POWERUPS,
   Sprite
 >
 export let PARTICLE_SPRITES: Record<PARTICLES, Sprite> = {} as Record<
@@ -69,11 +69,11 @@ const loadSprites = async () => {
 
   const s = SPRITE_MAP
   POWERUP_SPRITES = {
-    [POWERUP_TYPES.HEALTH_PACK]: s[SPRITES.HEALTH_PACK_POWERUP],
-    [POWERUP_TYPES.RAPIDFIRE]: s[SPRITES.RAPIDFIRE_POWERUP],
-    [POWERUP_TYPES.SHIELD]: s[SPRITES.SHIELD_POWERUP],
-    [POWERUP_TYPES.SHOTGUN]: s[SPRITES.SHOTGUN_POWERUP],
-    [POWERUP_TYPES.SPEEDBOOST]: s[SPRITES.SPEEDBOOST_POWERUP],
+    [POWERUPS.HEALTH_PACK]: s[SPRITES.HEALTH_PACK_POWERUP],
+    [POWERUPS.RAPIDFIRE]: s[SPRITES.RAPIDFIRE_POWERUP],
+    [POWERUPS.SHIELD]: s[SPRITES.SHIELD_POWERUP],
+    [POWERUPS.SHOTGUN]: s[SPRITES.SHOTGUN_POWERUP],
+    [POWERUPS.SPEEDBOOST]: s[SPRITES.SPEEDBOOST_POWERUP],
   }
   PARTICLE_SPRITES = {
     [PARTICLES.EXPLOSION]: s[SPRITES.EXPLOSION],

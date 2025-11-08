@@ -2,9 +2,11 @@
 
 import { beforeEach, describe, expect, setSystemTime, test } from 'bun:test'
 
+import POWERUPS from 'lib/enums/Powerups'
 import Bullet from 'lib/game/Bullet'
 import Player from 'lib/game/Player'
-import { Powerup, POWERUP_TYPES } from 'lib/game/Powerup'
+import { Powerup } from 'lib/game/Powerup'
+import { HealthPowerup, PowerupState } from 'lib/game/PowerupState'
 import Vector from 'lib/math/Vector'
 import { getReplacerReviver } from 'lib/serialization/ReplacerReviver'
 import { GameState } from 'lib/socket/SocketInterfaces'
@@ -15,6 +17,8 @@ const { replacer, reviver } = getReplacerReviver({
   Bullet,
   Player,
   Powerup,
+  PowerupState,
+  HealthPowerup,
   Vector,
 })
 
@@ -58,29 +62,23 @@ describe('Test serializing/deserializing basic class instances', () => {
   })
 
   test('Powerup', () => {
-    let p = new Powerup(Vector.one(), POWERUP_TYPES.HEALTH_PACK, 1, 2)
-    p.expirationTime = 5001
+    let p = new Powerup(Vector.one(), POWERUPS.HEALTH_PACK)
     const serialized = stringify(p)
 
     // Use bun test -u to update.
     expect(serialized).toMatchInlineSnapshot(
-      `"{"hitboxSize":5,"destroyed":false,"position":{"x":1,"y":1},"velocity":{"x":0,"y":0},"acceleration":{"x":0,"y":0},"type":"HEALTH_PACK","data":1,"duration":2,"expirationTime":5001,"__type__":"Powerup"}"`,
+      `"{"hitboxSize":5,"destroyed":false,"position":{"x":1,"y":1},"velocity":{"x":0,"y":0},"acceleration":{"x":0,"y":0},"type":"HEALTH_PACK","__type__":"Powerup"}"`,
     )
 
     const deserialized: Powerup = parse(serialized)
     expect(deserialized).toBeInstanceOf(Powerup)
-    expect(deserialized.remainingMs).toBe(5000)
-    expect(deserialized.remainingSeconds).toBe(5)
     expect(deserialized).toMatchInlineSnapshot(`
       Powerup {
         "acceleration": Vector {
           "x": 0,
           "y": 0,
         },
-        "data": 1,
         "destroyed": false,
-        "duration": 2,
-        "expirationTime": 5001,
         "hitboxSize": 5,
         "position": Vector {
           "x": 1,
@@ -97,15 +95,17 @@ describe('Test serializing/deserializing basic class instances', () => {
 
   test('Player', () => {
     const p = createFakePlayer()
-    // Add a random powerup to the player to serialize.
-    const powerup = new Powerup(Vector.one(), POWERUP_TYPES.HEALTH_PACK, 1, 2)
-    p.applyPowerup(powerup)
+    // Add a powerup to the player to serialize.
+    const powerup = new HealthPowerup()
+    powerup.duration = 1
+    powerup.expirationTime = 2
+    p.powerups.set(POWERUPS.HEALTH_PACK, powerup)
 
     const serialized = stringify(p)
 
     // Use bun test -u to update.
     expect(serialized).toMatchInlineSnapshot(
-      `"{"hitboxSize":20,"destroyed":false,"position":{"x":3,"y":4},"velocity":{"x":0,"y":0},"acceleration":{"x":0,"y":0},"name":"test_player","tankAngle":2,"turretAngle":0,"turnRate":0,"speed":0.4,"health":10,"kills":0,"deaths":0,"powerups":{"HEALTH_PACK":{"hitboxSize":5,"destroyed":false,"position":{"x":1,"y":1},"velocity":{"x":0,"y":0},"acceleration":{"x":0,"y":0},"type":"HEALTH_PACK","data":1,"duration":2,"expirationTime":2}},"__type__":"Player"}"`,
+      `"{"hitboxSize":20,"destroyed":false,"position":{"x":3,"y":4},"velocity":{"x":0,"y":0},"acceleration":{"x":0,"y":0},"name":"test_player","tankAngle":2,"turretAngle":0,"turnRate":0,"speed":0.4,"health":10,"kills":0,"deaths":0,"powerups":{"HEALTH_PACK":{"type":"HEALTH_PACK","duration":1,"expirationTime":2,"expired":false,"healAmount":0}},"__type__":"Player"}"`,
     )
 
     const deserialized: Player = parse(serialized)
@@ -116,11 +116,10 @@ describe('Test serializing/deserializing basic class instances', () => {
     // Check that the nested objects deserialize properly.
     expect(deserialized.position).toBeInstanceOf(Vector)
     expect(deserialized.position.mag).toBe(5)
-    expect(deserialized.powerups).toBeInstanceOf(Map)
-    const deserializedPowerup: Powerup = deserialized.powerups.get(
-      POWERUP_TYPES.HEALTH_PACK,
+    const deserializedPowerup: PowerupState = deserialized.powerups.get(
+      POWERUPS.HEALTH_PACK,
     )!
-    expect(deserializedPowerup).toBeInstanceOf(Powerup)
+    expect(deserializedPowerup).toBeInstanceOf(PowerupState)
     expect(deserializedPowerup.remainingMs).toBe(1)
     expect(deserializedPowerup.remainingSeconds).toBe(0.001)
   })
@@ -130,7 +129,7 @@ describe('Test serializing/deserializing complex objects', () => {
   test('Fake GameState object with one Player and one Bullet', () => {
     const p = createFakePlayer()
     const b = Bullet.createFromPlayer(p, Math.PI)
-    const powerup = new Powerup(Vector.one(), POWERUP_TYPES.HEALTH_PACK, 1, 2)
+    const powerup = new Powerup(Vector.one(), POWERUPS.HEALTH_PACK)
     const obj: GameState = {
       self: p,
       players: [],

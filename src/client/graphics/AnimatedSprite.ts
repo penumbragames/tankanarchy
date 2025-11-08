@@ -1,10 +1,12 @@
 /**
- * Class encapsulating a drawable animated sprite.
+ * Class encapsulating a drawable animated sprite asset. A single instance is
+ * initialized globally for each animated sprite.
  * @author omgimanerd
  */
 
-import { loadImage, sliceImage } from 'client/graphics/ImageUtils'
+import { sliceImage } from 'client/graphics/ImageUtils'
 import { Drawable, Sprite } from 'client/graphics/Sprite'
+import loadResource from 'client/lib/ResourceLoader'
 
 export default class AnimatedSprite extends Sprite {
   baseImage: HTMLImageElement
@@ -17,7 +19,7 @@ export default class AnimatedSprite extends Sprite {
   }
 
   static async create(src: string): Promise<AnimatedSprite> {
-    const img = await loadImage(src)
+    const img = await loadResource(Image, src)
     return new AnimatedSprite(img, await sliceImage(img))
   }
 

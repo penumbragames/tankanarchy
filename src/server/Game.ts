@@ -5,10 +5,11 @@
  */
 
 import PARTICLES from 'lib/enums/Particles'
+import { POWERUPS } from 'lib/enums/Powerups'
 import SOUNDS from 'lib/enums/Sounds'
 import Bullet from 'lib/game/Bullet'
 import Player from 'lib/game/Player'
-import { Powerup, POWERUP_TYPES } from 'lib/game/Powerup'
+import { Powerup } from 'lib/game/Powerup'
 import Vector from 'lib/math/Vector'
 import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 import { PlayerInputs } from 'lib/socket/SocketInterfaces'
@@ -174,11 +175,11 @@ class Game {
         if (e1 instanceof Player && e2 instanceof Powerup) {
           const type = e1.applyPowerup(e2)
           switch (type) {
-            case POWERUP_TYPES.HEALTH_PACK:
+            case POWERUPS.HEALTH_PACK:
               this.playSound(SOUNDS.HEALTH_PACK, e1.position)
               break
-            case POWERUP_TYPES.RAPIDFIRE:
-            case POWERUP_TYPES.SHOTGUN:
+            case POWERUPS.RAPIDFIRE:
+            case POWERUPS.SHOTGUN:
               this.playSound(SOUNDS.GUN_POWERUP, e1.position)
               break
           }

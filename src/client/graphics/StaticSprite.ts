@@ -1,5 +1,6 @@
 /**
- * Class encapsulating a drawable static image sprite.
+ * Class encapsulating a drawable static sprite asset. A single instance is
+ * initialized globally for each static sprite.
  * @author omgimanerd
  */
 

@@ -1,0 +1,15 @@
+/**
+ * @author omgimanerd
+ */
+
+const PLAYER_CONSTANTS = {
+  BULLETS_PER_SHOT: 1,
+  DEFAULT_HITBOX_SIZE: 20,
+  MAX_HEALTH: 10,
+  SHIELD_HITBOX_SIZE: 45,
+  SHOT_COOLDOWN: 800,
+  SPEED: 0.4,
+  TURN_RATE: 0.005,
+}
+
+export default PLAYER_CONSTANTS
