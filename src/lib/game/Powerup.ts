@@ -6,6 +6,7 @@
 import * as Constants from 'lib/Constants'
 import POWERUPS from 'lib/enums/Powerups'
 import Entity from 'lib/game/Entity'
+import { PowerupConstructors, PowerupState } from 'lib/game/PowerupState'
 import Util from 'lib/math/Util'
 import Vector from 'lib/math/Vector'
 
@@ -37,6 +38,7 @@ export class Powerup extends Entity {
     return new Powerup(position, type)
   }
 
-  // Empty update stub.
-  update(lastUpdateTime: number, deltaTime: number): void {}
+  get powerupState(): PowerupState {
+    return new PowerupConstructors[this.type]().init()
+  }
 }

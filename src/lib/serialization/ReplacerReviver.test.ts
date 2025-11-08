@@ -99,7 +99,7 @@ describe('Test serializing/deserializing basic class instances', () => {
     const powerup = new HealthPowerup()
     powerup.duration = 1
     powerup.expirationTime = 2
-    p.powerups.set(POWERUPS.HEALTH_PACK, powerup)
+    p.powerupStates.set(POWERUPS.HEALTH_PACK, powerup)
 
     const serialized = stringify(p)
 
@@ -116,7 +116,7 @@ describe('Test serializing/deserializing basic class instances', () => {
     // Check that the nested objects deserialize properly.
     expect(deserialized.position).toBeInstanceOf(Vector)
     expect(deserialized.position.mag).toBe(5)
-    const deserializedPowerup: PowerupState = deserialized.powerups.get(
+    const deserializedPowerup: PowerupState = deserialized.powerupStates.get(
       POWERUPS.HEALTH_PACK,
     )!
     expect(deserializedPowerup).toBeInstanceOf(PowerupState)

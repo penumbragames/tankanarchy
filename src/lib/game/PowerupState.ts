@@ -8,6 +8,9 @@ import POWERUPS from 'lib/enums/Powerups'
 import PLAYER_CONSTANTS from 'lib/game/PlayerConstants'
 import Util from 'lib/math/Util'
 
+/**
+ * Base class for powerup states which modify the Player.
+ */
 export abstract class PowerupState {
   static readonly MIN_DURATION = 5000
   static readonly MAX_DURATION = 15000
@@ -21,7 +24,18 @@ export abstract class PowerupState {
     this.type = type
   }
 
-  abstract init(): PowerupState
+  static getRandomDuration(): number {
+    return Util.randRangeInt(
+      PowerupState.MIN_DURATION,
+      PowerupState.MAX_DURATION,
+    )
+  }
+
+  init(): PowerupState {
+    this.duration = PowerupState.getRandomDuration()
+    this.expirationTime = Date.now() + this.duration
+    return this
+  }
 
   get remainingMs() {
     return this.expirationTime - Date.now()
@@ -31,12 +45,12 @@ export abstract class PowerupState {
     return this.remainingMs / 1000
   }
 
-  update(lastUpdateTime: number, deltaTime: number) {
+  update(lastUpdateTime: number, _deltaTime: number) {
     this.expired = lastUpdateTime > this.expirationTime
   }
 
-  apply(p: Player) {}
-  remove(p: Player) {}
+  apply(_p: Player) {}
+  remove(_p: Player) {}
 }
 
 export class HealthPowerup extends PowerupState {
@@ -50,6 +64,7 @@ export class HealthPowerup extends PowerupState {
   }
 
   init(): HealthPowerup {
+    super.init()
     this.healAmount = Util.randRangeInt(
       HealthPowerup.MIN_HEAL,
       HealthPowerup.MAX_HEAL,
@@ -74,6 +89,7 @@ export class RapidfirePowerup extends PowerupState {
   }
 
   init(): RapidfirePowerup {
+    super.init()
     this.modifier = Util.randRangeInt(
       RapidfirePowerup.MIN_MODIFIER,
       RapidfirePowerup.MAX_MODIFIER,
@@ -101,6 +117,11 @@ export class ShieldPowerup extends PowerupState {
   }
 
   init(): ShieldPowerup {
+    super.init()
+    this.shield = Util.randRangeInt(
+      ShieldPowerup.MIN_SHIELD,
+      ShieldPowerup.MAX_SHIELD,
+    )
     return this
   }
 
@@ -112,7 +133,7 @@ export class ShieldPowerup extends PowerupState {
 
 export class ShotgunPowerup extends PowerupState {
   static readonly MIN_MODIFIER = 1
-  static readonly MAX_MODIFIER = 3
+  static readonly MAX_MODIFIER = 2
 
   modifier: number = 0
 
@@ -121,19 +142,20 @@ export class ShotgunPowerup extends PowerupState {
   }
 
   init(): ShotgunPowerup {
+    super.init()
     this.modifier = Util.randRangeInt(
-      ShotgunPowerup.MIN_DURATION,
+      ShotgunPowerup.MIN_MODIFIER,
       ShotgunPowerup.MAX_MODIFIER,
     )
     return this
   }
 
   apply(p: Player) {
-    p.numBulletsShot = PLAYER_CONSTANTS.BULLETS_PER_SHOT + this.modifier
+    p.bulletsPerShot = PLAYER_CONSTANTS.BULLETS_PER_SHOT + this.modifier
   }
 
   remove(p: Player) {
-    p.numBulletsShot = PLAYER_CONSTANTS.BULLETS_PER_SHOT
+    p.bulletsPerShot = PLAYER_CONSTANTS.BULLETS_PER_SHOT
   }
 }
 
@@ -148,6 +170,11 @@ export class SpeedboostPowerup extends PowerupState {
   }
 
   init(): SpeedboostPowerup {
+    super.init()
+    this.modifier = Util.randRangeInt(
+      SpeedboostPowerup.MIN_MODIFIER,
+      SpeedboostPowerup.MAX_MODIFIER,
+    )
     return this
   }
 
@@ -162,7 +189,7 @@ export class SpeedboostPowerup extends PowerupState {
   }
 }
 
-type PowerupConstructors_ = { [key in POWERUPS]: any }
+type PowerupConstructors_ = { [key in POWERUPS]: { new (): any } }
 export const PowerupConstructors: PowerupConstructors_ = {
   [POWERUPS.HEALTH_PACK]: HealthPowerup,
   [POWERUPS.RAPIDFIRE]: RapidfirePowerup,

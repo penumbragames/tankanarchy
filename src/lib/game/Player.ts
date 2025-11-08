@@ -12,11 +12,7 @@ import Bullet from 'lib/game/Bullet'
 import Entity from 'lib/game/Entity'
 import PLAYER_CONSTANTS from 'lib/game/PlayerConstants'
 import { Powerup } from 'lib/game/Powerup'
-import {
-  PowerupConstructors,
-  PowerupState,
-  ShieldPowerup,
-} from 'lib/game/PowerupState'
+import { PowerupState, ShieldPowerup } from 'lib/game/PowerupState'
 import Util from 'lib/math/Util'
 import Vector from 'lib/math/Vector'
 import { PlayerInputs } from 'lib/socket/SocketInterfaces'
@@ -33,12 +29,12 @@ export default class Player extends Entity {
 
   speed: number = PLAYER_CONSTANTS.SPEED
   @Exclude() shotCooldown: number = PLAYER_CONSTANTS.SHOT_COOLDOWN
-  @Exclude() numBulletsShot: number = PLAYER_CONSTANTS.BULLETS_PER_SHOT
+  @Exclude() bulletsPerShot: number = PLAYER_CONSTANTS.BULLETS_PER_SHOT
   @Exclude() lastShotTime: number = 0
   health: number = PLAYER_CONSTANTS.MAX_HEALTH
 
   @Type(() => PowerupState)
-  powerups: Map<POWERUPS, PowerupState> = new Map()
+  powerupStates: Map<POWERUPS, PowerupState> = new Map()
 
   kills: number = 0
   deaths: number = 0
@@ -100,11 +96,11 @@ export default class Player extends Entity {
       this.tankAngle + (this.turnRate * deltaTime), // prettier-ignore
     )
 
-    for (const powerup of Object.values(this.powerups)) {
-      powerup.update(lastUpdateTime, deltaTime)
-      if (powerup.expired) {
-        powerup.remove(this)
-        this.powerups.delete(powerup.type)
+    for (const state of this.powerupStates.values()) {
+      state.update(lastUpdateTime, deltaTime)
+      if (state.expired) {
+        state.remove(this)
+        this.powerupStates.delete(state.type)
       }
     }
   }
@@ -115,10 +111,9 @@ export default class Player extends Entity {
    * @returns {POWERUPS}
    */
   applyPowerup(powerup: Powerup): POWERUPS {
-    this.powerups.set(
-      powerup.type,
-      new PowerupConstructors[powerup.type]().init(),
-    )
+    const state = powerup.powerupState
+    this.powerupStates.set(powerup.type, state)
+    state.apply(this)
     return powerup.type
   }
 
@@ -134,9 +129,9 @@ export default class Player extends Entity {
    */
   getProjectilesFromShot(): Bullet[] {
     const bullets = [Bullet.createFromPlayer(this, 0)]
-    if (this.numBulletsShot > 1) {
-      for (let i = 1; i <= this.numBulletsShot; ++i) {
-        const angleDeviation = (i * Math.PI) / 9
+    if (this.bulletsPerShot > 1) {
+      for (let i = 1; i <= this.bulletsPerShot; ++i) {
+        const angleDeviation = (i * Math.PI) / 25
         bullets.push(Bullet.createFromPlayer(this, -angleDeviation))
         bullets.push(Bullet.createFromPlayer(this, angleDeviation))
       }
@@ -150,7 +145,7 @@ export default class Player extends Entity {
   }
 
   damage(amount: number): void {
-    const shield = <ShieldPowerup>this.powerups.get(POWERUPS.SHIELD)
+    const shield = <ShieldPowerup>this.powerupStates.get(POWERUPS.SHIELD)
     if (shield) {
       shield.damage(amount)
     } else {

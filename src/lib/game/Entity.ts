@@ -28,7 +28,7 @@ abstract class Entity {
     this.destroyed = false
   }
 
-  abstract update(lastUpdateTime: number, deltaTime: number): void
+  update(_lastUpdateTime: number, _deltaTime: number): void {}
 
   /**
    * Returns true if this Entity's hitbox is overlapping or touching another
