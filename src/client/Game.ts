@@ -21,7 +21,9 @@ import { SocketClient } from 'lib/socket/SocketClient'
 import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 import { GameState, ParticleEvent } from 'lib/socket/SocketInterfaces'
 
-class Game {
+export default class Game {
+  static readonly INPUT_UPS = 30
+
   socket: SocketClient
 
   // Helper objects
@@ -41,6 +43,7 @@ class Game {
   // Particle system, only created from socket messages, not maintained by server.
   particles: Particle[]
 
+  running: boolean = false
   animationFrameId: number // Needed for requestAnimationFrame()
   lastUpdateTime: number
   deltaTime: number
@@ -114,6 +117,10 @@ class Game {
     this.soundManager.bindClientListener()
   }
 
+  /**
+   * Socket event handler to receive game state.
+   * @param state
+   */
   onReceiveGameState(state: GameState): void {
     this.self = state.self
     this.players = state.players
@@ -124,28 +131,29 @@ class Game {
     this.leaderboard.update(state.players)
   }
 
+  /**
+   * Socket event handler to receive particle state.
+   * @param particle
+   */
   onReceiveParticle(particle: ParticleEvent): void {
     this.particles.push(new Particle(particle.type, particle.source))
   }
 
   run(): void {
-    const currentTime = Date.now()
-    this.deltaTime = currentTime - this.lastUpdateTime
-    this.lastUpdateTime = currentTime
-
-    this.update()
-    this.draw()
-    this.animationFrameId = window.requestAnimationFrame(this.run.bind(this))
+    this.running = true
+    setTimeout(this.inputSendingLoop.bind(this), 1000 / Game.INPUT_UPS)
+    this.animationFrameId = window.requestAnimationFrame(
+      this.updateAndRenderLoop.bind(this),
+    )
   }
 
   stop(): void {
+    this.running = false
     window.cancelAnimationFrame(this.animationFrameId)
   }
 
-  update(): void {
+  inputSendingLoop(): void {
     if (this.self) {
-      this.viewport.update(this.deltaTime)
-      this.soundManager.update(this.self.position)
       const worldMouseCoords = this.viewport.toWorld(this.input.mouseCoords)
       const playerToMouseVector = Vector.sub(
         worldMouseCoords,
@@ -159,6 +167,20 @@ class Game {
         shoot: this.input.mouseDown,
         turretAngle: playerToMouseVector.angle,
       })
+    }
+    if (this.running) {
+      setTimeout(this.inputSendingLoop.bind(this), 1000 / Game.INPUT_UPS)
+    }
+  }
+
+  updateAndRenderLoop(): void {
+    if (this.self) {
+      const currentTime = Date.now()
+      this.deltaTime = currentTime - this.lastUpdateTime
+      this.lastUpdateTime = currentTime
+
+      this.viewport.update(this.deltaTime)
+      this.soundManager.update(this.self.position)
 
       for (let i = 0; i < this.particles.length; ++i) {
         const particle = this.particles[i]
@@ -167,14 +189,10 @@ class Game {
           this.particles.splice(i--, 1)
         }
       }
-    }
-  }
 
-  draw(): void {
-    if (this.self) {
+      // Render
       this.renderer.clear()
       this.renderer.drawTiles()
-
       this.projectiles.forEach(this.renderer.drawBullet.bind(this.renderer))
       this.powerups.forEach(this.renderer.drawPowerup.bind(this.renderer))
       this.renderer.drawTank(true, this.self)
@@ -183,10 +201,12 @@ class Game {
         .forEach((tank) => this.renderer.drawTank(false, tank))
 
       this.particles.forEach(this.renderer.drawParticle.bind(this.renderer))
-
       this.renderer.drawBuffStatus(this.self)
+    }
+    if (this.running) {
+      this.animationFrameId = window.requestAnimationFrame(
+        this.updateAndRenderLoop.bind(this),
+      )
     }
   }
 }
-
-export default Game
