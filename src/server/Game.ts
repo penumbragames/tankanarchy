@@ -5,7 +5,7 @@
  */
 
 import PARTICLES from 'lib/enums/Particles'
-import { POWERUPS } from 'lib/enums/Powerups'
+import POWERUPS from 'lib/enums/Powerups'
 import SOUNDS from 'lib/enums/Sounds'
 import Bullet from 'lib/game/Bullet'
 import Player from 'lib/game/Player'
@@ -18,38 +18,28 @@ import { Socket, SocketServer } from 'lib/socket/SocketServer'
 class Game {
   socketServer: SocketServer
 
-  clients: Map<string, Socket>
+  // Contains all the connected socket ids and socket instances.
+  clients: Map<string, Socket> = new Map()
+  // Contains all the connected socket ids and the players associated with
+  // them. This should always be parallel with sockets.
+  players: Map<string, Player> = new Map()
+  projectiles: Bullet[] = []
+  powerups: Powerup[] = []
 
-  players: Map<string, Player>
-  projectiles: Bullet[]
-  powerups: Powerup[]
-
-  lastUpdateTime: number
-  deltaTime: number
+  lastUpdateTime: number = 0
+  deltaTime: number = 0
 
   constructor(socket: SocketServer) {
     this.socketServer = socket
-
-    // Contains all the connected socket ids and socket instances.
-    this.clients = new Map()
-    // Contains all the connected socket ids and the players associated with
-    // them. This should always be parallel with sockets.
-    this.players = new Map()
-    this.projectiles = []
-    this.powerups = []
-
-    this.lastUpdateTime = 0
-    this.deltaTime = 0
   }
 
   static create(socket: SocketServer): Game {
-    const game = new Game(socket)
-    game.init()
-    return game
+    return new Game(socket).init()
   }
 
-  init(): void {
+  init(): Game {
     this.lastUpdateTime = Date.now()
+    return this
   }
 
   /**
@@ -106,10 +96,7 @@ class Game {
       if (data.shoot && player.canShoot()) {
         const projectiles = player.getProjectilesFromShot()
         this.projectiles.push(...projectiles)
-        this.socketServer.sockets.emit(SOCKET_EVENTS.SOUND, {
-          type: SOUNDS.TANK_SHOT,
-          source: player.position,
-        })
+        this.playSound(SOUNDS.TANK_SHOT, player.position)
       }
     }
   }
@@ -229,9 +216,6 @@ class Game {
     }
   }
 
-  /**
-   * Sends the state of the game to all connected players.
-   */
   sendState(): void {
     const players = [...this.players.values()]
     this.clients.forEach((_client, socketID) => {
