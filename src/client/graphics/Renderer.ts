@@ -29,10 +29,10 @@ export default class Renderer {
   static readonly HP_MISSING_COLOR = 'grey'
   static readonly TILE_SIZE = 100
 
-  static readonly DEFAULT_PADDING = 0
+  static readonly DEFAULT_PADDING = 10
   static readonly POWERUP_FADE_CUTOFF = 3
   static readonly POWERUP_FADE_EXPONENTIAL = 50
-  static readonly POWERUP_BUFF_SIZE = 55
+  static readonly POWERUP_BUFF_SIZE = 40
 
   canvas: Canvas
   context: CanvasRenderingContext2D
@@ -131,7 +131,7 @@ export default class Renderer {
               ? this.getBuffAlpha(remainingSeconds)
               : 1,
         })
-        offset -= Renderer.POWERUP_BUFF_SIZE
+        offset -= Renderer.POWERUP_BUFF_SIZE + Renderer.DEFAULT_PADDING
       }
     }
   }
