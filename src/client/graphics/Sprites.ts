@@ -3,12 +3,13 @@
  * @author omgimanerd
  */
 
-import AnimatedSprite from 'client/graphics/AnimatedSprite'
-import { Sprite } from 'client/graphics/Sprite'
-import StaticSprite from 'client/graphics/StaticSprite'
 import PARTICLES from 'lib/enums/Particles'
 import POWERUPS from 'lib/enums/Powerups'
 import SPRITES from 'lib/enums/Sprites'
+
+import AnimatedSprite from 'client/graphics/AnimatedSprite'
+import { Sprite } from 'client/graphics/Sprite'
+import StaticSprite from 'client/graphics/StaticSprite'
 
 // Global sprite object stores, populated asynchronously
 export let SPRITE_MAP: Record<SPRITES, Sprite> = {} as Record<SPRITES, Sprite>
