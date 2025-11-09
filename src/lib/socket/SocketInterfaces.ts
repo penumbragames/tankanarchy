@@ -21,7 +21,8 @@ export interface PlayerInputs {
   right: boolean
   left: boolean
   turretAngle: number
-  shoot: boolean
+  shootBullet: boolean
+  shootRocket: boolean
 }
 
 /**

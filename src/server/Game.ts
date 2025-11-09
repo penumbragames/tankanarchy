@@ -94,7 +94,7 @@ export default class Game {
     const player = this.players.get(socketID)
     if (player) {
       player.updateOnInput(data)
-      if (data.shoot && player.canShoot()) {
+      if (data.shootBullet && player.canShoot()) {
         const projectiles = player.getProjectilesFromShot()
         this.projectiles.push(...projectiles)
         this.playSound(SOUNDS.TANK_SHOT, player.position)

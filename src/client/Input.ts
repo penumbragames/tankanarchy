@@ -7,23 +7,18 @@
 import Vector from 'lib/math/Vector'
 
 class Input {
-  up: boolean
-  down: boolean
-  left: boolean
-  right: boolean
+  static readonly MOUSE_LEFT = 0
+  static readonly MOUSE_MIDDLE = 1
+  static readonly MOUSE_RIGHT = 2
 
-  mouseDown: boolean
-  mouseCoords: Vector
+  up: boolean = false
+  down: boolean = false
+  left: boolean = false
+  right: boolean = false
 
-  constructor() {
-    this.up = false
-    this.down = false
-    this.left = false
-    this.right = false
-
-    this.mouseDown = false
-    this.mouseCoords = Vector.zero()
-  }
+  mouseLeftDown: boolean = false
+  mouseRightDown: boolean = false
+  mouseCoords: Vector = Vector.zero()
 
   static create(
     keyElement: HTMLElement,
@@ -77,14 +72,24 @@ class Input {
   }
 
   onMouseDown(event: MouseEvent): void {
-    if (event.button === 0) {
-      this.mouseDown = true
+    switch (event.button) {
+      case Input.MOUSE_LEFT:
+        this.mouseLeftDown = true
+        break
+      case Input.MOUSE_RIGHT:
+        this.mouseRightDown = true
+        break
     }
   }
 
   onMouseUp(event: MouseEvent): void {
-    if (event.button === 0) {
-      this.mouseDown = false
+    switch (event.button) {
+      case Input.MOUSE_LEFT:
+        this.mouseLeftDown = false
+        break
+      case Input.MOUSE_RIGHT:
+        this.mouseRightDown = false
+        break
     }
   }
 

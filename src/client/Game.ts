@@ -165,8 +165,9 @@ export default class Game {
         down: this.input.down,
         left: this.input.left,
         right: this.input.right,
-        shoot: this.input.mouseDown,
         turretAngle: playerToMouseVector.angle,
+        shootBullet: this.input.mouseLeftDown,
+        shootRocket: this.input.mouseRightDown,
       })
     }
     if (this.running) {
