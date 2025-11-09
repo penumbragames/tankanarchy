@@ -19,6 +19,7 @@ import Viewport from 'client/Viewport'
 import Bullet from 'lib/game/Bullet'
 import Entity from 'lib/game/Entity'
 import Player from 'lib/game/Player'
+import PLAYER_CONSTANTS from 'lib/game/PlayerConstants'
 import Powerup from 'lib/game/Powerup'
 import Vector from 'lib/math/Vector'
 
@@ -111,7 +112,11 @@ export default class Renderer {
     })
 
     if (player.powerupStates.get(POWERUPS.SHIELD)) {
-      SPRITE_MAP[SPRITES.SHIELD].draw(this.context, { centered: true })
+      SPRITE_MAP[SPRITES.SHIELD].draw(this.context, {
+        width: PLAYER_CONSTANTS.SHIELD_HITBOX_SIZE * 2,
+        height: PLAYER_CONSTANTS.SHIELD_HITBOX_SIZE * 2,
+        centered: true,
+      })
     }
 
     this.context.restore()

@@ -125,6 +125,14 @@ export class ShieldPowerup extends PowerupState {
     return this
   }
 
+  apply(p: Player) {
+    p.hitboxSize = PLAYER_CONSTANTS.SHIELD_HITBOX_SIZE
+  }
+
+  remove(p: Player) {
+    p.hitboxSize = PLAYER_CONSTANTS.DEFAULT_HITBOX_SIZE
+  }
+
   damage(amount: number) {
     this.shield -= amount
     if (this.shield <= 0) this.expired = true
