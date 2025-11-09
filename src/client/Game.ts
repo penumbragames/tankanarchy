@@ -36,18 +36,19 @@ export default class Game {
   soundManager: SoundPlayer
 
   // State from game update messages
-  self: Player | null
-  players: Player[]
-  projectiles: Bullet[]
-  powerups: Powerup[]
+  self: Player | null = null
+  players: Player[] = []
+  projectiles: Bullet[] = []
+  powerups: Powerup[] = []
 
-  // Particle system, only created from socket messages, not maintained by server.
-  particles: Particle[]
+  // Particle system, only created from socket messages, not maintained by
+  // server.
+  particles: Particle[] = []
 
   running: boolean = false
-  animationFrameId: number // Needed for requestAnimationFrame()
-  lastUpdateTime: number
-  deltaTime: number
+  animationFrameId: number = 0 // Needed for requestAnimationFrame()
+  lastUpdateTime: number = 0
+  deltaTime: number = 0
 
   constructor(
     socket: SocketClient,
@@ -66,17 +67,6 @@ export default class Game {
     this.input = input
     this.leaderboard = leaderboard
     this.soundManager = soundManager
-
-    this.self = null
-    this.players = []
-    this.projectiles = []
-    this.powerups = []
-
-    this.particles = []
-
-    this.animationFrameId = 0
-    this.lastUpdateTime = 0
-    this.deltaTime = 0
   }
 
   static create(
@@ -183,14 +173,12 @@ export default class Game {
 
       this.viewport.update(this.deltaTime)
       this.soundManager.update(this.self.position)
-
-      for (let i = 0; i < this.particles.length; ++i) {
-        const particle = this.particles[i]
-        particle.update(this.lastUpdateTime, this.deltaTime)
-        if (particle.destroyed) {
-          this.particles.splice(i--, 1)
-        }
-      }
+      this.particles = this.particles
+        .map((particle: Particle) => {
+          particle.update(this.lastUpdateTime, this.deltaTime)
+          return particle
+        })
+        .filter((particle: Particle) => !particle.destroyed)
 
       // Render
       this.renderer.clear()
@@ -204,6 +192,7 @@ export default class Game {
 
       this.particles.forEach(this.renderer.drawParticle.bind(this.renderer))
       this.renderer.drawBuffStatus(this.self)
+      this.renderer.drawCrosshair(this.input)
     }
     if (this.running) {
       this.animationFrameId = window.requestAnimationFrame(

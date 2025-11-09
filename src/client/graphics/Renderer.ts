@@ -14,6 +14,7 @@ import {
 } from 'client/graphics/Sprites'
 
 import Canvas from 'client/graphics/Canvas'
+import Input from 'client/Input'
 import Particle from 'client/particle/Particle'
 import Viewport from 'client/Viewport'
 import Bullet from 'lib/game/Bullet'
@@ -160,10 +161,6 @@ export default class Renderer {
     }
   }
 
-  /**
-   * Draws a bullet (tank shell) to the canvas.
-   * @param {Bullet} bullet The bullet to draw to the canvas
-   */
   drawBullet(bullet: Bullet): void {
     const canvasCoords = this.viewport.toCanvas(bullet.position)
     SPRITE_MAP[SPRITES.BULLET].draw(this.context, {
@@ -174,10 +171,6 @@ export default class Renderer {
     this.drawDebugHitbox(bullet)
   }
 
-  /**
-   * Draws a powerup to the canvas.
-   * @param {Powerup} powerup The powerup to draw
-   */
   drawPowerup(powerup: Powerup): void {
     const canvasCoords = this.viewport.toCanvas(powerup.position)
     POWERUP_SPRITES[powerup.type].draw(this.context, {
@@ -196,6 +189,28 @@ export default class Renderer {
       centered: true,
       frame: particle.animationManager.frame,
     })
+  }
+
+  drawCrosshair(input: Input): void {
+    this.context.save()
+    this.context.beginPath()
+    this.context.arc(
+      input.mouseCoords.x,
+      input.mouseCoords.y,
+      10,
+      0,
+      2 * Math.PI,
+      false,
+    )
+    this.context.moveTo(input.mouseCoords.x, input.mouseCoords.y + 20)
+    this.context.lineTo(input.mouseCoords.x, input.mouseCoords.y - 20)
+    this.context.moveTo(input.mouseCoords.x - 20, input.mouseCoords.y)
+    this.context.lineTo(input.mouseCoords.x + 20, input.mouseCoords.y)
+
+    this.context.strokeStyle = 'black'
+    this.context.lineWidth = 1
+    this.context.stroke()
+    this.context.restore()
   }
 
   drawTiles(): void {
