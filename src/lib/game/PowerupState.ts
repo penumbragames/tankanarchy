@@ -106,6 +106,19 @@ export class RapidfirePowerup extends PowerupState {
   }
 }
 
+export class RocketPowerup extends PowerupState {
+  rockets: number = 0
+
+  constructor() {
+    super(POWERUPS.ROCKET)
+  }
+
+  init(): RocketPowerup {
+    super.init()
+    return this
+  }
+}
+
 export class ShieldPowerup extends PowerupState {
   static readonly MIN_SHIELD = 1
   static readonly MAX_SHIELD = 4
@@ -201,6 +214,7 @@ type PowerupConstructors_ = { [key in POWERUPS]: { new (): any } }
 export const PowerupConstructors: PowerupConstructors_ = {
   [POWERUPS.HEALTH_PACK]: HealthPowerup,
   [POWERUPS.RAPIDFIRE]: RapidfirePowerup,
+  [POWERUPS.ROCKET]: RocketPowerup,
   [POWERUPS.SHIELD]: ShieldPowerup,
   [POWERUPS.SHOTGUN]: ShotgunPowerup,
   [POWERUPS.SPEEDBOOST]: SpeedboostPowerup,

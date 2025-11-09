@@ -51,6 +51,8 @@ const loadSprites = async () => {
       StaticSprite,
       '/img/rapidfire_powerup.png',
     ),
+    loadSprite(SPRITES.ROCKET, StaticSprite, '/img/rocket.png'),
+    loadSprite(SPRITES.ROCKET_POWERUP, StaticSprite, '/img/rocket_powerup.png'),
     loadSprite(SPRITES.SELF_TANK, StaticSprite, '/img/self_tank.png'),
     loadSprite(SPRITES.SELF_TURRET, StaticSprite, '/img/self_turret.png'),
     loadSprite(SPRITES.SHIELD, StaticSprite, '/img/shield.png'),
@@ -72,6 +74,7 @@ const loadSprites = async () => {
   POWERUP_SPRITES = {
     [POWERUPS.HEALTH_PACK]: s[SPRITES.HEALTH_PACK_POWERUP],
     [POWERUPS.RAPIDFIRE]: s[SPRITES.RAPIDFIRE_POWERUP],
+    [POWERUPS.ROCKET]: s[SPRITES.ROCKET_POWERUP],
     [POWERUPS.SHIELD]: s[SPRITES.SHIELD_POWERUP],
     [POWERUPS.SHOTGUN]: s[SPRITES.SHOTGUN_POWERUP],
     [POWERUPS.SPEEDBOOST]: s[SPRITES.SPEEDBOOST_POWERUP],
