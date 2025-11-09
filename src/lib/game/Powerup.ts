@@ -12,7 +12,7 @@ import Util from 'lib/math/Util'
 import Vector from 'lib/math/Vector'
 
 export default class Powerup extends Entity {
-  static readonly HITBOX_SIZE = 5
+  static readonly HITBOX_SIZE = 10
   static readonly MAX_COUNT = 50
 
   type: POWERUPS

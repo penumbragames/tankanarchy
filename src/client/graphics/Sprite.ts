@@ -69,10 +69,10 @@ export abstract class Sprite {
       }
       context.drawImage(
         this.getImage(options.frame),
-        drawX,
-        drawY,
-        width,
-        height,
+        drawX, // dx
+        drawY, // dy
+        width, // dWidth
+        height, // dHeight
       )
       // Reset the opacity only if we changed it.
       if (options.opacity) {

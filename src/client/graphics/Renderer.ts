@@ -17,6 +17,7 @@ import Canvas from 'client/graphics/Canvas'
 import Particle from 'client/particle/Particle'
 import Viewport from 'client/Viewport'
 import Bullet from 'lib/game/Bullet'
+import Entity from 'lib/game/Entity'
 import Player from 'lib/game/Player'
 import Powerup from 'lib/game/Powerup'
 import Vector from 'lib/math/Vector'
@@ -52,6 +53,24 @@ export default class Renderer {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
   }
 
+  drawDebugHitbox(e: Entity): void {
+    if (DEBUG && false) {
+      this.context.beginPath()
+      const canvasCoords = this.viewport.toCanvas(e.position)
+      this.context.arc(
+        canvasCoords.x,
+        canvasCoords.y,
+        e.hitboxSize,
+        0,
+        2 * Math.PI,
+        false,
+      )
+      this.context.strokeStyle = 'red'
+      this.context.lineWidth = 3
+      this.context.stroke()
+    }
+  }
+
   /**
    * Draws a player to the canvas as a tank.
    * @param {boolean} isSelf If this is true, then a green tank will be draw
@@ -69,8 +88,7 @@ export default class Renderer {
     this.context.textAlign = 'center'
     this.context.font = Renderer.NAME_FONT
     this.context.fillStyle = Renderer.NAME_COLOR
-    this.context.fillText(player.name as string, 0, -50)
-
+    this.context.fillText(player.name, 0, -50)
     for (let i = 0; i < 10; ++i) {
       if (i < player.health) {
         this.context.fillStyle = Renderer.HP_COLOR
@@ -97,6 +115,7 @@ export default class Renderer {
     }
 
     this.context.restore()
+    this.drawDebugHitbox(player)
   }
 
   getBuffAlpha(remainingSeconds: number): number {
@@ -147,6 +166,7 @@ export default class Renderer {
       centered: true,
       angle: bullet.angle,
     })
+    this.drawDebugHitbox(bullet)
   }
 
   /**
@@ -157,8 +177,11 @@ export default class Renderer {
     const canvasCoords = this.viewport.toCanvas(powerup.position)
     POWERUP_SPRITES[powerup.type].draw(this.context, {
       position: canvasCoords,
+      width: powerup.hitboxSize * 2,
+      height: powerup.hitboxSize * 2,
       centered: true,
     })
+    this.drawDebugHitbox(powerup)
   }
 
   drawParticle(particle: Particle): void {

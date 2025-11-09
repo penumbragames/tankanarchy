@@ -12,7 +12,7 @@ abstract class Entity {
   @Type(() => Vector) position: Vector
   @Type(() => Vector) velocity: Vector
   @Type(() => Vector) acceleration: Vector
-  hitboxSize: number
+  hitboxSize: number // Radial hitbox size
   destroyed: boolean
 
   constructor(
