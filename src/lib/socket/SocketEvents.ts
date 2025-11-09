@@ -10,7 +10,7 @@ enum SOCKET_EVENTS {
   // Server to client, broadcasts received chat messages
   CHAT_BROADCAST = 'CHAT_BROADCAST',
   // Client to server, sent automatically on socket disconnect
-  DISCONNECT = 'DISCONNECT',
+  DISCONNECT = 'disconnect', // BUILTIN SOCKET EVENT
   // Server to client, sends game state
   GAME_UPDATE = 'GAME_UPDATE',
   // Client to server, sent on new player join
