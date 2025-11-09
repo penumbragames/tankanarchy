@@ -19,7 +19,7 @@ import { PlayerInputs } from 'lib/socket/SocketInterfaces'
 
 export default class Player extends Entity {
   name: string
-  @Exclude() socketID: string
+  socketID: string // Also serves as the player UID.
 
   @Exclude() lastUpdateTime: number = 0
 
