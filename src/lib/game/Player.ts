@@ -12,7 +12,7 @@ import Bullet from 'lib/game/Bullet'
 import Entity from 'lib/game/Entity'
 import PLAYER_CONSTANTS from 'lib/game/PlayerConstants'
 import Powerup from 'lib/game/Powerup'
-import { PowerupState, ShieldPowerup } from 'lib/game/PowerupState'
+import { PowerupState, PowerupTypeMap } from 'lib/game/PowerupState'
 import Util from 'lib/math/Util'
 import Vector from 'lib/math/Vector'
 import { PlayerInputs } from 'lib/socket/SocketInterfaces'
@@ -105,6 +105,10 @@ export default class Player extends Entity {
     }
   }
 
+  getPowerupState<T extends POWERUPS>(type: T): PowerupTypeMap[T] | undefined {
+    return <PowerupTypeMap[T]>this.powerupStates.get(type)
+  }
+
   /**
    * Applies a Powerup to this player, returning the powerup type for sound.
    * @param {Powerup} powerup The Powerup object.
@@ -145,7 +149,7 @@ export default class Player extends Entity {
   }
 
   damage(amount: number): void {
-    const shield = <ShieldPowerup>this.powerupStates.get(POWERUPS.SHIELD)
+    const shield = this.getPowerupState(POWERUPS.SHIELD)
     if (shield) {
       shield.damage(amount)
     } else {

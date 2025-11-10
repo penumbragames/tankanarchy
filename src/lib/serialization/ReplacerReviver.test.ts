@@ -68,7 +68,7 @@ describe('Test serializing/deserializing basic class instances', () => {
 
     // Use bun test -u to update.
     expect(serialized).toMatchInlineSnapshot(
-      `"{"hitboxSize":5,"destroyed":false,"position":{"x":1,"y":1},"velocity":{"x":0,"y":0},"acceleration":{"x":0,"y":0},"type":"HEALTH_PACK","__type__":"Powerup"}"`,
+      `"{"hitboxSize":10,"destroyed":false,"position":{"x":1,"y":1},"velocity":{"x":0,"y":0},"acceleration":{"x":0,"y":0},"type":"HEALTH_PACK","__type__":"Powerup"}"`,
     )
 
     const deserialized: Powerup = parse(serialized)
@@ -80,7 +80,7 @@ describe('Test serializing/deserializing basic class instances', () => {
           "y": 0,
         },
         "destroyed": false,
-        "hitboxSize": 5,
+        "hitboxSize": 10,
         "position": Vector {
           "x": 1,
           "y": 1,
@@ -106,7 +106,7 @@ describe('Test serializing/deserializing basic class instances', () => {
 
     // Use bun test -u to update.
     expect(serialized).toMatchInlineSnapshot(
-      `"{"hitboxSize":20,"destroyed":false,"position":{"x":3,"y":4},"velocity":{"x":0,"y":0},"acceleration":{"x":0,"y":0},"name":"test_player","tankAngle":2,"turretAngle":0,"turnRate":0,"speed":0.4,"health":10,"kills":0,"deaths":0,"powerups":{"HEALTH_PACK":{"type":"HEALTH_PACK","duration":1,"expirationTime":2,"expired":false,"healAmount":0}},"__type__":"Player"}"`,
+      `"{"hitboxSize":20,"destroyed":false,"position":{"x":3,"y":4},"velocity":{"x":0,"y":0},"acceleration":{"x":0,"y":0},"name":"test_player","socketID":"socket_id","tankAngle":2,"turretAngle":0,"turnRate":0,"speed":0.4,"health":10,"kills":0,"deaths":0,"powerupStates":{"HEALTH_PACK":{"type":"HEALTH_PACK","duration":1,"expirationTime":2,"expired":false,"healAmount":0}},"__type__":"Player"}"`,
     )
 
     const deserialized: Player = parse(serialized)
@@ -117,7 +117,7 @@ describe('Test serializing/deserializing basic class instances', () => {
     // Check that the nested objects deserialize properly.
     expect(deserialized.position).toBeInstanceOf(Vector)
     expect(deserialized.position.mag).toBe(5)
-    const deserializedPowerup: PowerupState = deserialized.powerupStates.get(
+    const deserializedPowerup: PowerupState = deserialized.getPowerupState(
       POWERUPS.HEALTH_PACK,
     )!
     expect(deserializedPowerup).toBeInstanceOf(PowerupState)

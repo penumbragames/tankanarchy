@@ -220,6 +220,13 @@ export const PowerupConstructors: PowerupConstructors_ = {
   [POWERUPS.SPEEDBOOST]: SpeedboostPowerup,
 }
 
-export type PowerupMap = {
-  [key in POWERUPS]: PowerupState
+export type PowerupTypeMap = {
+  [P in keyof POWERUPS]: PowerupState
+} & {
+  [POWERUPS.HEALTH_PACK]: HealthPowerup
+  [POWERUPS.RAPIDFIRE]: RapidfirePowerup
+  [POWERUPS.ROCKET]: RocketPowerup
+  [POWERUPS.SHIELD]: ShieldPowerup
+  [POWERUPS.SHOTGUN]: ShotgunPowerup
+  [POWERUPS.SPEEDBOOST]: SpeedboostPowerup
 }

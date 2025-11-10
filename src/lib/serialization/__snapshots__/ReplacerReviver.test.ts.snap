@@ -6,6 +6,7 @@ Player {
     "x": 0,
     "y": 0,
   },
+  "bulletsPerShot": 1,
   "deaths": 0,
   "destroyed": false,
   "health": 10,
@@ -14,12 +15,11 @@ Player {
   "lastShotTime": 0,
   "lastUpdateTime": 0,
   "name": "test_player",
-  "numBulletsShot": 1,
   "position": Vector {
     "x": 3,
     "y": 4,
   },
-  "powerups": 
+  "powerupStates": 
 Map {
     "HEALTH_PACK" => PowerupState {
       "duration": 1,
@@ -31,7 +31,7 @@ Map {
   }
 ,
   "shotCooldown": 800,
-  "socketID": undefined,
+  "socketID": "socket_id",
   "speed": 0.4,
   "tankAngle": 2,
   "turnRate": 0,
@@ -43,7 +43,7 @@ Map {
 }
 `;
 
-exports[`Test serializing/deserializing complex objects Fake GameState object with one Player and one Bullet 1`] = `"{"self":{"hitboxSize":20,"destroyed":false,"position":{"x":3,"y":4},"velocity":{"x":0,"y":0},"acceleration":{"x":0,"y":0},"name":"test_player","tankAngle":2,"turretAngle":0,"turnRate":0,"speed":0.4,"health":10,"kills":0,"deaths":0,"powerups":{},"__type__":"Player"},"players":[],"projectiles":[{"hitboxSize":10,"destroyed":false,"position":{"x":3,"y":4},"velocity":{"x":-1.2,"y":1.4695761589768238e-16},"acceleration":{"x":0,"y":0},"angle":3.141592653589793,"damage":1,"distanceTraveled":0,"source":{"hitboxSize":20,"destroyed":false,"position":{"x":3,"y":4},"velocity":{"x":0,"y":0},"acceleration":{"x":0,"y":0},"name":"test_player","tankAngle":2,"turretAngle":0,"turnRate":0,"speed":0.4,"health":10,"kills":0,"deaths":0,"powerups":{}},"__type__":"Bullet"}],"powerups":[{"hitboxSize":5,"destroyed":false,"position":{"x":1,"y":1},"velocity":{"x":0,"y":0},"acceleration":{"x":0,"y":0},"type":"HEALTH_PACK","__type__":"Powerup"}]}"`;
+exports[`Test serializing/deserializing complex objects Fake GameState object with one Player and one Bullet 1`] = `"{"self":{"hitboxSize":20,"destroyed":false,"position":{"x":3,"y":4},"velocity":{"x":0,"y":0},"acceleration":{"x":0,"y":0},"name":"test_player","socketID":"socket_id","tankAngle":2,"turretAngle":0,"turnRate":0,"speed":0.4,"health":10,"kills":0,"deaths":0,"powerupStates":{},"__type__":"Player"},"players":[],"projectiles":[{"hitboxSize":10,"destroyed":false,"position":{"x":3,"y":4},"velocity":{"x":-1.2,"y":1.4695761589768238e-16},"acceleration":{"x":0,"y":0},"angle":3.141592653589793,"damage":1,"distanceTraveled":0,"source":{"hitboxSize":20,"destroyed":false,"position":{"x":3,"y":4},"velocity":{"x":0,"y":0},"acceleration":{"x":0,"y":0},"name":"test_player","socketID":"socket_id","tankAngle":2,"turretAngle":0,"turnRate":0,"speed":0.4,"health":10,"kills":0,"deaths":0,"powerupStates":{}},"__type__":"Bullet"}],"powerups":[{"hitboxSize":10,"destroyed":false,"position":{"x":1,"y":1},"velocity":{"x":0,"y":0},"acceleration":{"x":0,"y":0},"type":"HEALTH_PACK","__type__":"Powerup"}]}"`;
 
 exports[`Test serializing/deserializing complex objects Fake GameState object with one Player and one Bullet 2`] = `
 {
@@ -55,7 +55,7 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
         "y": 0,
       },
       "destroyed": false,
-      "hitboxSize": 5,
+      "hitboxSize": 10,
       "position": Vector {
         "x": 1,
         "y": 1,
@@ -87,6 +87,7 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
           "x": 0,
           "y": 0,
         },
+        "bulletsPerShot": 1,
         "deaths": 0,
         "destroyed": false,
         "health": 10,
@@ -95,14 +96,13 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
         "lastShotTime": 0,
         "lastUpdateTime": 0,
         "name": "test_player",
-        "numBulletsShot": 1,
         "position": Vector {
           "x": 3,
           "y": 4,
         },
-        "powerups": Map {},
+        "powerupStates": Map {},
         "shotCooldown": 800,
-        "socketID": undefined,
+        "socketID": "socket_id",
         "speed": 0.4,
         "tankAngle": 2,
         "turnRate": 0,
@@ -123,6 +123,7 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
       "x": 0,
       "y": 0,
     },
+    "bulletsPerShot": 1,
     "deaths": 0,
     "destroyed": false,
     "health": 10,
@@ -131,14 +132,13 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
     "lastShotTime": 0,
     "lastUpdateTime": 0,
     "name": "test_player",
-    "numBulletsShot": 1,
     "position": Vector {
       "x": 3,
       "y": 4,
     },
-    "powerups": Map {},
+    "powerupStates": Map {},
     "shotCooldown": 800,
-    "socketID": undefined,
+    "socketID": "socket_id",
     "speed": 0.4,
     "tankAngle": 2,
     "turnRate": 0,
