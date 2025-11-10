@@ -38,7 +38,7 @@ class Viewport extends Entity {
     this.playerPosition = Vector.sub(player.position, this.canvas.center)
   }
 
-  update(deltaTime: number): void {
+  update(_lastUpdateTime: number, deltaTime: number): void {
     if (
       this.position == Viewport.UNINITIALIZED ||
       this.velocity == Viewport.UNINITIALIZED

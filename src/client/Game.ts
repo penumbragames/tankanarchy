@@ -171,7 +171,7 @@ export default class Game {
       this.deltaTime = currentTime - this.lastUpdateTime
       this.lastUpdateTime = currentTime
 
-      this.viewport.update(this.deltaTime)
+      this.viewport.update(this.lastUpdateTime, this.deltaTime)
       this.soundManager.update(this.self.position)
       this.particles = this.particles
         .map((particle: Particle) => {
