@@ -12,12 +12,13 @@ import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 import Bullet from 'lib/game/Bullet'
 import Player from 'lib/game/Player'
 import Powerup from 'lib/game/Powerup'
-import Vector from 'lib/math/Vector'
 import { PlayerInputs } from 'lib/socket/SocketInterfaces'
 import { Socket, SocketServer } from 'lib/socket/SocketServer'
+import GameServices from 'server/GameServices'
 
 export default class Game {
   socketServer: SocketServer
+  services: GameServices
 
   // Contains all the connected socket ids and socket instances.
   clients: Map<string, Socket> = new Map()
@@ -32,6 +33,7 @@ export default class Game {
 
   constructor(socket: SocketServer) {
     this.socketServer = socket
+    this.services = new GameServices(socket)
   }
 
   static create(socket: SocketServer): Game {
@@ -97,16 +99,9 @@ export default class Game {
       if (data.shootBullet && player.canShoot()) {
         const projectiles = player.getProjectilesFromShot()
         this.projectiles.push(...projectiles)
-        this.playSound(SOUNDS.TANK_SHOT, player.position)
+        this.services.playSound(SOUNDS.TANK_SHOT, player.position)
       }
     }
-  }
-
-  playSound(type: SOUNDS, source: Vector) {
-    this.socketServer.sockets.emit(SOCKET_EVENTS.SOUND, {
-      type,
-      source,
-    })
   }
 
   update(): void {
@@ -146,7 +141,7 @@ export default class Game {
             e2.source.kills++
           }
           e2.destroyed = true
-          this.playSound(SOUNDS.EXPLOSION, e1.position)
+          this.services.playSound(SOUNDS.EXPLOSION, e1.position)
         }
 
         // Player-Powerup collision interaction
@@ -158,11 +153,11 @@ export default class Game {
           const type = e1.applyPowerup(e2)
           switch (type) {
             case POWERUPS.HEALTH_PACK:
-              this.playSound(SOUNDS.HEALTH_PACK, e1.position)
+              this.services.playSound(SOUNDS.HEALTH_PACK, e1.position)
               break
             case POWERUPS.RAPIDFIRE:
             case POWERUPS.SHOTGUN:
-              this.playSound(SOUNDS.GUN_POWERUP, e1.position)
+              this.services.playSound(SOUNDS.GUN_POWERUP, e1.position)
               break
           }
           e2.destroyed = true
@@ -176,7 +171,7 @@ export default class Game {
         ) {
           e1.destroyed = true
           e2.destroyed = true
-          this.playSound(SOUNDS.EXPLOSION, e1.position)
+          this.services.playSound(SOUNDS.EXPLOSION, e1.position)
         }
 
         // Bullet-Powerup interaction
@@ -186,11 +181,8 @@ export default class Game {
         ) {
           e1.destroyed = true
           e2.destroyed = true
-          this.playSound(SOUNDS.EXPLOSION, e1.position)
-          this.socketServer.emit(SOCKET_EVENTS.PARTICLE, {
-            type: PARTICLES.EXPLOSION,
-            source: e1.position,
-          })
+          this.services.playSound(SOUNDS.EXPLOSION, e1.position)
+          this.services.addParticle(PARTICLES.EXPLOSION, e1.position, {})
         }
       }
     }

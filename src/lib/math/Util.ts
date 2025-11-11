@@ -62,8 +62,7 @@ const randRangeInt = (min: number, max: number): number => {
 /**
  * Returns a random element in a given array.
  */
-const choiceArray = <Type>(array: Type[]): Type =>
-  array[randRangeInt(0, array.length)]
+const choiceArray = <T>(array: T[]): T => array[randRangeInt(0, array.length)]
 
 export default {
   normalizeAngle,
