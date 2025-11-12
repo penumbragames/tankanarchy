@@ -13,27 +13,26 @@ import Bullet from 'lib/game/Bullet'
 import Player from 'lib/game/Player'
 import Powerup from 'lib/game/Powerup'
 import { PlayerInputs } from 'lib/socket/SocketInterfaces'
-import { Socket, SocketServer } from 'lib/socket/SocketServer'
+import { SocketServer } from 'lib/socket/SocketServer'
 import GameServices from 'server/GameServices'
+import PlayerContainer from 'server/PlayerContainer'
 
 export default class Game {
   socketServer: SocketServer
   services: GameServices
 
-  // Contains all the connected socket ids and socket instances.
-  clients: Map<string, Socket> = new Map()
-  // Contains all the connected socket ids and the players associated with
-  // them. This should always be parallel with sockets.
-  players: Map<string, Player> = new Map()
+  players: PlayerContainer
+
   projectiles: Bullet[] = []
   powerups: Powerup[] = []
 
   lastUpdateTime: number = 0
   deltaTime: number = 0
 
-  constructor(socket: SocketServer) {
-    this.socketServer = socket
-    this.services = new GameServices(socket)
+  constructor(socketServer: SocketServer) {
+    this.socketServer = socketServer
+    this.services = new GameServices(socketServer)
+    this.players = new PlayerContainer(socketServer)
   }
 
   static create(socket: SocketServer): Game {
@@ -46,54 +45,13 @@ export default class Game {
   }
 
   /**
-   * Creates a new player with the given name and ID.
-   * @param {string} name The display name of the player.
-   * @param {Object} playerSocket The socket object of the player.
-   */
-  addNewPlayer(name: string, playerSocket: Socket): void {
-    this.clients.set(playerSocket.id, playerSocket)
-    this.players.set(playerSocket.id, Player.create(name, playerSocket.id))
-  }
-
-  /**
-   * Removes the player with the given socket ID and returns the name of the
-   * player removed.
-   * @param {string} socketID The socket ID of the player to remove.
-   * @return {string}
-   */
-  removePlayer(socketID: string): string {
-    if (this.clients.has(socketID)) {
-      this.clients.delete(socketID)
-    }
-    if (this.players.has(socketID)) {
-      const p = this.players.get(socketID)
-      if (p) {
-        this.players.delete(socketID)
-        return p.name
-      }
-      return ''
-    }
-    return ''
-  }
-
-  /**
-   * Returns the name of the player with the given socket id.
-   * @param {string} socketID The socket id to look up.
-   * @return {string}
-   */
-  getPlayerNameBySocketId(socketID: string): string {
-    const p = this.players.get(socketID)
-    return p ? p.name : ''
-  }
-
-  /**
    * Updates the player with the given socket ID according to the input state
    * object sent by the player's client.
    * @param {string} socketID The socket ID of the player to update
    * @param {Object} data The player's input state
    */
   updatePlayerOnInput(socketID: string, data: PlayerInputs) {
-    const player = this.players.get(socketID)
+    const player = this.players.getPlayer(socketID)
     if (player) {
       player.updateOnInput(data)
       if (data.shootBullet && player.canShoot()) {
@@ -111,7 +69,7 @@ export default class Game {
 
     // Perform physics update and collision checks.
     const entities = [
-      ...this.players.values(),
+      ...this.players.players,
       ...this.projectiles,
       ...this.powerups,
     ]
@@ -200,15 +158,15 @@ export default class Game {
   }
 
   sendState(): void {
-    const players = [...this.players.values()]
-    this.clients.forEach((client, socketID) => {
-      const currentPlayer = this.players.get(socketID)!
-      client.emit(SOCKET_EVENTS.GAME_UPDATE, {
+    const players = [...this.players.players]
+    for (const socket of this.players.sockets) {
+      const currentPlayer = this.players.getPlayer(socket.id)!
+      socket.emit(SOCKET_EVENTS.GAME_UPDATE, {
         self: currentPlayer,
         players: players,
         projectiles: this.projectiles,
         powerups: this.powerups,
       })
-    })
+    }
   }
 }
