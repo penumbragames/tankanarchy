@@ -6,6 +6,7 @@ import type Player from 'lib/game/Player'
 
 import POWERUPS from 'lib/enums/Powerups'
 import PLAYER_CONSTANTS from 'lib/game/PlayerConstants'
+
 import GameLoopUpdateable from 'lib/interfaces/GameLoopUpdateable'
 import Util from 'lib/math/Util'
 

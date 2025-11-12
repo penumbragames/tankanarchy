@@ -6,11 +6,12 @@
 
 import { Exclude, Type } from 'class-transformer'
 
-import * as Constants from 'lib/Constants'
 import POWERUPS from 'lib/enums/Powerups'
+import PLAYER_CONSTANTS from 'lib/game/PlayerConstants'
+
+import * as Constants from 'lib/Constants'
 import Bullet from 'lib/game/Bullet'
 import Entity from 'lib/game/Entity'
-import PLAYER_CONSTANTS from 'lib/game/PlayerConstants'
 import Powerup from 'lib/game/Powerup'
 import { PowerupState, PowerupTypeMap } from 'lib/game/PowerupState'
 import Util from 'lib/math/Util'

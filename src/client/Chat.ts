@@ -5,6 +5,7 @@
  */
 
 import SOCKET_EVENTS from 'lib/socket/SocketEvents'
+
 import { ChatMessage } from 'lib/socket/SocketInterfaces'
 import * as socketIO from 'socket.io-client'
 

@@ -6,6 +6,7 @@
 import * as Constants from 'lib/Constants'
 import POWERUPS from 'lib/enums/Powerups'
 import SPRITES from 'lib/enums/Sprites'
+import PLAYER_CONSTANTS from 'lib/game/PlayerConstants'
 
 import {
   PARTICLE_SPRITES,
@@ -20,7 +21,6 @@ import Viewport from 'client/Viewport'
 import Bullet from 'lib/game/Bullet'
 import Entity from 'lib/game/Entity'
 import Player from 'lib/game/Player'
-import PLAYER_CONSTANTS from 'lib/game/PlayerConstants'
 import Powerup from 'lib/game/Powerup'
 import Vector from 'lib/math/Vector'
 

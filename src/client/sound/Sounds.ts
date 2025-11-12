@@ -3,8 +3,9 @@
  * @author omgimanerd
  */
 
-import Sound from 'client/sound/Sound'
 import SOUNDS from 'lib/enums/Sounds'
+
+import Sound from 'client/sound/Sound'
 
 // Populated asynchronously
 let SOUND_MAP: Record<SOUNDS, Sound> = {} as Record<SOUNDS, Sound>
