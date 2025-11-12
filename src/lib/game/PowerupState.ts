@@ -65,7 +65,7 @@ export class HealthPowerup extends PowerupState {
     super(POWERUPS.HEALTH_PACK)
   }
 
-  init(): HealthPowerup {
+  override init(): HealthPowerup {
     super.init()
     this.healAmount = Util.randRangeInt(
       HealthPowerup.MIN_HEAL,
@@ -74,7 +74,7 @@ export class HealthPowerup extends PowerupState {
     return this
   }
 
-  apply(p: Player) {
+  override apply(p: Player) {
     p.heal(this.healAmount)
     this.expired = true
   }
@@ -90,7 +90,7 @@ export class RapidfirePowerup extends PowerupState {
     super(POWERUPS.RAPIDFIRE)
   }
 
-  init(): RapidfirePowerup {
+  override init(): RapidfirePowerup {
     super.init()
     this.modifier = Util.randRangeInt(
       RapidfirePowerup.MIN_MODIFIER,
@@ -99,11 +99,11 @@ export class RapidfirePowerup extends PowerupState {
     return this
   }
 
-  apply(p: Player) {
+  override apply(p: Player) {
     p.shotCooldown = PLAYER_CONSTANTS.SHOT_COOLDOWN / this.modifier
   }
 
-  remove(p: Player) {
+  override remove(p: Player) {
     p.shotCooldown = PLAYER_CONSTANTS.SHOT_COOLDOWN
   }
 }
@@ -115,7 +115,7 @@ export class RocketPowerup extends PowerupState {
     super(POWERUPS.ROCKET)
   }
 
-  init(): RocketPowerup {
+  override init(): RocketPowerup {
     super.init()
     return this
   }
@@ -131,7 +131,7 @@ export class ShieldPowerup extends PowerupState {
     super(POWERUPS.SHIELD)
   }
 
-  init(): ShieldPowerup {
+  override init(): ShieldPowerup {
     super.init()
     this.shield = Util.randRangeInt(
       ShieldPowerup.MIN_SHIELD,
@@ -140,11 +140,11 @@ export class ShieldPowerup extends PowerupState {
     return this
   }
 
-  apply(p: Player) {
+  override apply(p: Player) {
     p.hitboxSize = PLAYER_CONSTANTS.SHIELD_HITBOX_SIZE
   }
 
-  remove(p: Player) {
+  override remove(p: Player) {
     p.hitboxSize = PLAYER_CONSTANTS.DEFAULT_HITBOX_SIZE
   }
 
@@ -164,7 +164,7 @@ export class ShotgunPowerup extends PowerupState {
     super(POWERUPS.SHOTGUN)
   }
 
-  init(): ShotgunPowerup {
+  override init(): ShotgunPowerup {
     super.init()
     this.modifier = Util.randRangeInt(
       ShotgunPowerup.MIN_MODIFIER,
@@ -173,11 +173,11 @@ export class ShotgunPowerup extends PowerupState {
     return this
   }
 
-  apply(p: Player) {
+  override apply(p: Player) {
     p.bulletsPerShot = PLAYER_CONSTANTS.BULLETS_PER_SHOT + this.modifier
   }
 
-  remove(p: Player) {
+  override remove(p: Player) {
     p.bulletsPerShot = PLAYER_CONSTANTS.BULLETS_PER_SHOT
   }
 }
@@ -192,7 +192,7 @@ export class SpeedboostPowerup extends PowerupState {
     super(POWERUPS.SPEEDBOOST)
   }
 
-  init(): SpeedboostPowerup {
+  override init(): SpeedboostPowerup {
     super.init()
     this.modifier = Util.randRangeInt(
       SpeedboostPowerup.MIN_MODIFIER,
@@ -201,12 +201,12 @@ export class SpeedboostPowerup extends PowerupState {
     return this
   }
 
-  apply(p: Player) {
+  override apply(p: Player) {
     p.turnRate = PLAYER_CONSTANTS.TURN_RATE * this.modifier
     p.speed = PLAYER_CONSTANTS.SPEED * this.modifier
   }
 
-  remove(p: Player) {
+  override remove(p: Player) {
     p.turnRate = PLAYER_CONSTANTS.TURN_RATE
     p.speed = PLAYER_CONSTANTS.SPEED
   }

@@ -91,7 +91,7 @@ export default class Player extends Entity {
    * @param {number} lastUpdateTime The last timestamp an update occurred
    * @param {number} deltaTime The timestep to compute the update with
    */
-  update(lastUpdateTime: number, deltaTime: number): void {
+  override update(lastUpdateTime: number, deltaTime: number): void {
     this.lastUpdateTime = lastUpdateTime
     this.position.add(Vector.scale(this.velocity, deltaTime))
     this.boundToWorld()

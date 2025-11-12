@@ -23,7 +23,7 @@ export default class Particle extends Entity {
     )
   }
 
-  update(lastUpdateTime: number, deltaTime: number): void {
+  override update(lastUpdateTime: number, deltaTime: number): void {
     this.animationManager.update(lastUpdateTime, deltaTime)
     this.destroyed = this.animationManager.finished
   }

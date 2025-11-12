@@ -66,7 +66,7 @@ export default class Bullet extends Entity {
    * unused
    * @param {number} deltaTime The timestep to compute the update with
    */
-  update(_lastUpdateTime: number, deltaTime: number): void {
+  override update(_lastUpdateTime: number, deltaTime: number): void {
     const distanceStep = Vector.scale(this.velocity, deltaTime)
     this.position.add(distanceStep)
     if (!this.inWorld()) {
