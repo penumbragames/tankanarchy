@@ -10,6 +10,7 @@ import SOUNDS from 'lib/enums/Sounds'
 import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 
 import Bullet from 'lib/game/Bullet'
+import GameLoop from 'lib/game/GameLoop'
 import Player from 'lib/game/Player'
 import Powerup from 'lib/game/Powerup'
 import { PlayerInputs } from 'lib/socket/SocketInterfaces'
@@ -18,6 +19,8 @@ import GameServices from 'server/GameServices'
 import PlayerContainer from 'server/PlayerContainer'
 
 export default class Game {
+  static readonly TARGET_UPS = 60
+
   socketServer: SocketServer
   services: GameServices
 
@@ -26,22 +29,26 @@ export default class Game {
   projectiles: Bullet[] = []
   powerups: Powerup[] = []
 
-  lastUpdateTime: number = 0
-  deltaTime: number = 0
+  gameLoop: GameLoop
 
   constructor(socketServer: SocketServer) {
     this.socketServer = socketServer
     this.services = new GameServices(socketServer)
     this.players = new PlayerContainer(socketServer)
+    this.gameLoop = new GameLoop(Game.TARGET_UPS, this.run.bind(this))
   }
 
   static create(socket: SocketServer): Game {
-    return new Game(socket).init()
+    return new Game(socket)
   }
 
-  init(): Game {
-    this.lastUpdateTime = Date.now()
-    return this
+  start() {
+    this.gameLoop.start()
+  }
+
+  run(): void {
+    this.update()
+    this.sendState()
   }
 
   /**
@@ -63,10 +70,6 @@ export default class Game {
   }
 
   update(): void {
-    const currentTime = Date.now()
-    this.deltaTime = currentTime - this.lastUpdateTime
-    this.lastUpdateTime = currentTime
-
     // Perform physics update and collision checks.
     const entities = [
       ...this.players.players,
@@ -76,7 +79,7 @@ export default class Game {
 
     // TODO: Use quadtree for collision update
     entities.forEach((entity) => {
-      entity.update(this.lastUpdateTime, this.deltaTime)
+      entity.update(this.gameLoop.lastUpdateTime, this.gameLoop.deltaTime)
     })
     for (let i = 0; i < entities.length; ++i) {
       for (let j = i + 1; j < entities.length; ++j) {

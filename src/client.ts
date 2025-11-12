@@ -14,6 +14,7 @@ import { getSocketClient, SocketClient } from 'lib/socket/SocketClient'
 import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 
 window.onload = async () => {
+  // Must be called to asynchronously load sound and sprite assets.
   await Promise.all([loadSounds(), loadSprites()])
 
   const socket: SocketClient = getSocketClient()
@@ -31,7 +32,7 @@ window.onload = async () => {
       socket.emit(SOCKET_EVENTS.NEW_PLAYER, name, () => {
         document.getElementById('name-prompt-overlay')!.remove()
         document.getElementById('canvas')!.focus()
-        game.run()
+        game.start()
         Chat.create(socket, 'chat-display', 'chat-input')
       })
     } else {

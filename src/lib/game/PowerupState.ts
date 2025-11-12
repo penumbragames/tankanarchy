@@ -6,13 +6,13 @@ import type Player from 'lib/game/Player'
 
 import POWERUPS from 'lib/enums/Powerups'
 import PLAYER_CONSTANTS from 'lib/game/PlayerConstants'
-import Updateable from 'lib/interfaces/Updateable'
+import GameLoopUpdateable from 'lib/interfaces/GameLoopUpdateable'
 import Util from 'lib/math/Util'
 
 /**
  * Base class for powerup states which modify the Player.
  */
-export abstract class PowerupState implements Updateable {
+export abstract class PowerupState implements GameLoopUpdateable {
   static readonly MIN_DURATION = 5000
   static readonly MAX_DURATION = 15000
 

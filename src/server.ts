@@ -20,13 +20,12 @@ import { getSocketServer } from 'lib/socket/SocketServer'
 import Game from 'server/Game'
 
 const PORT = process.env.PORT || 5000
-const FRAME_RATE = 1000 / 60
 const DIRNAME = import.meta.dirname
 
 const app: express.Application = express()
 const httpServer = http.createServer(app)
 const socketServer = getSocketServer(httpServer)
-const game = new Game(socketServer).init()
+const game = new Game(socketServer)
 
 app.set('port', PORT)
 
@@ -74,16 +73,7 @@ socketServer.on('connection', (socket: Socket) => {
   })
 })
 
-/**
- * Server side game loop, runs at 60Hz and sends out update packets to all
- * clients every update.
- */
-const gameLoop = () => {
-  game.update()
-  game.sendState()
-  setTimeout(gameLoop, FRAME_RATE)
-}
-gameLoop()
+game.start()
 
 httpServer.on('error', (e) => {
   console.error(e)

@@ -16,6 +16,7 @@ import Particle from 'client/particle/Particle'
 import SoundPlayer from 'client/sound/SoundPlayer'
 import Viewport from 'client/Viewport'
 import Bullet from 'lib/game/Bullet'
+import GameLoop from 'lib/game/GameLoop'
 import Player from 'lib/game/Player'
 import Powerup from 'lib/game/Powerup'
 import Vector from 'lib/math/Vector'
@@ -45,10 +46,10 @@ export default class Game {
   // server.
   particles: Particle[] = []
 
-  running: boolean = false
-  animationFrameId: number = 0 // Needed for requestAnimationFrame()
-  lastUpdateTime: number = 0
-  deltaTime: number = 0
+  // Separate game loops for sending input and rendering, input sends at a lower
+  // rate than render, which attempts to do so as fast as possible.
+  inputLoop: GameLoop
+  updateAndRenderLoop: GameLoop
 
   constructor(
     socket: SocketClient,
@@ -67,6 +68,13 @@ export default class Game {
     this.input = input
     this.leaderboard = leaderboard
     this.soundManager = soundManager
+
+    this.inputLoop = new GameLoop(Game.INPUT_UPS, this.sendInput.bind(this))
+    this.updateAndRenderLoop = new GameLoop(
+      Infinity,
+      this.updateAndRender.bind(this),
+      /*useAnimationFrame=*/ true,
+    )
   }
 
   static create(
@@ -99,7 +107,6 @@ export default class Game {
   }
 
   init(): void {
-    this.lastUpdateTime = Date.now()
     this.socket.on(
       SOCKET_EVENTS.GAME_UPDATE,
       this.onReceiveGameState.bind(this),
@@ -130,20 +137,17 @@ export default class Game {
     this.particles.push(new Particle(particle.type, particle.source))
   }
 
-  run(): void {
-    this.running = true
-    setTimeout(this.inputSendingLoop.bind(this), 1000 / Game.INPUT_UPS)
-    this.animationFrameId = window.requestAnimationFrame(
-      this.updateAndRenderLoop.bind(this),
-    )
+  start(): void {
+    this.inputLoop.start()
+    this.updateAndRenderLoop.start()
   }
 
   stop(): void {
-    this.running = false
-    window.cancelAnimationFrame(this.animationFrameId)
+    this.inputLoop.stop()
+    this.updateAndRenderLoop.stop()
   }
 
-  inputSendingLoop(): void {
+  sendInput(): void {
     if (this.self) {
       const worldMouseCoords = this.viewport.toWorld(this.input.mouseCoords)
       const playerToMouseVector = Vector.sub(
@@ -160,22 +164,21 @@ export default class Game {
         shootRocket: this.input.mouseRightDown,
       })
     }
-    if (this.running) {
-      setTimeout(this.inputSendingLoop.bind(this), 1000 / Game.INPUT_UPS)
-    }
   }
 
-  updateAndRenderLoop(): void {
+  updateAndRender(): void {
     if (this.self) {
-      const currentTime = Date.now()
-      this.deltaTime = currentTime - this.lastUpdateTime
-      this.lastUpdateTime = currentTime
-
-      this.viewport.update(this.lastUpdateTime, this.deltaTime)
+      this.viewport.update(
+        this.updateAndRenderLoop.lastUpdateTime,
+        this.updateAndRenderLoop.deltaTime,
+      )
       this.soundManager.update(this.self.position)
       this.particles = this.particles
         .map((particle: Particle) => {
-          particle.update(this.lastUpdateTime, this.deltaTime)
+          particle.update(
+            this.updateAndRenderLoop.lastUpdateTime,
+            this.updateAndRenderLoop.deltaTime,
+          )
           return particle
         })
         .filter((particle: Particle) => !particle.destroyed)
@@ -193,11 +196,6 @@ export default class Game {
       this.particles.forEach(this.renderer.drawParticle.bind(this.renderer))
       this.renderer.drawBuffStatus(this.self)
       this.renderer.drawCrosshair(this.input)
-    }
-    if (this.running) {
-      this.animationFrameId = window.requestAnimationFrame(
-        this.updateAndRenderLoop.bind(this),
-      )
     }
   }
 }

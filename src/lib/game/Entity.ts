@@ -5,11 +5,11 @@
 
 import { Type } from 'class-transformer'
 import * as Constants from 'lib/Constants'
-import Updateable from 'lib/interfaces/Updateable'
+import GameLoopUpdateable from 'lib/interfaces/GameLoopUpdateable'
 import Util from 'lib/math/Util'
 import Vector from 'lib/math/Vector'
 
-abstract class Entity implements Updateable {
+abstract class Entity implements GameLoopUpdateable {
   @Type(() => Vector) position: Vector
   @Type(() => Vector) velocity: Vector
   @Type(() => Vector) acceleration: Vector
