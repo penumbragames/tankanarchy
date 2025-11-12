@@ -9,7 +9,7 @@ import GameLoopUpdateable from 'lib/interfaces/GameLoopUpdateable'
 import Util from 'lib/math/Util'
 import Vector from 'lib/math/Vector'
 
-abstract class Entity implements GameLoopUpdateable {
+export default abstract class Entity implements GameLoopUpdateable {
   @Type(() => Vector) position: Vector
   @Type(() => Vector) velocity: Vector
   @Type(() => Vector) acceleration: Vector
@@ -71,5 +71,3 @@ abstract class Entity implements GameLoopUpdateable {
     )
   }
 }
-
-export default Entity

@@ -1,6 +1,8 @@
 /**
- * Stores the state of the player on the server. This class will also store
- * other important information such as socket ID, packet number, and latency.
+ * Stores the state of the player. This class is shared between the server and
+ * the client, though the client will be missing the @Exclude fields after
+ * deserialization to reduce the data sent over socket.
+ *
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 

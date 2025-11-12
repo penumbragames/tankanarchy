@@ -46,6 +46,9 @@ export default class Game {
     this.gameLoop.start()
   }
 
+  /**
+   * Game loop function that should run at the target UPS.
+   */
   run(): void {
     this.update()
     this.sendState()
