@@ -4,11 +4,11 @@
  */
 
 import Canvas from 'client/graphics/Canvas'
-import Entity from 'lib/game/Entity'
+import PhysObject from 'lib/game/PhysObject'
 import Player from 'lib/game/Player'
 import Vector from 'lib/math/Vector'
 
-class Viewport extends Entity {
+class Viewport extends PhysObject {
   static readonly UNINITIALIZED = new Vector(-99999, -99999)
   static readonly STICKINESS = 0.005
 
@@ -16,22 +16,19 @@ class Viewport extends Entity {
   canvas: Canvas
 
   /**
-   * Constructor for a Viewport object. The position of the viewport will hold
-   * the absolute world coordinates for the top left of the view (which
-   * correspond to canvas coordinates [width / 2, height / 2]).
-   * @param {Vector} position The starting position of the viewport
-   * @param {Vector} velocity The starting velocity of the viewport
+   * @param {Vector} position The starting position of the viewport, represents
+   *   the center of the view.
    * @param {Canvas} canvas The canvas that the game is rendering on
    */
-  constructor(position: Vector, velocity: Vector, canvas: Canvas) {
-    super(position, velocity, Vector.zero(), 0)
+  constructor(position: Vector, canvas: Canvas) {
+    super(position, Vector.zero(), Vector.zero())
 
     this.playerPosition = Vector.zero()
     this.canvas = canvas
   }
 
   static create(canvas: Canvas): Viewport {
-    return new Viewport(Viewport.UNINITIALIZED, Viewport.UNINITIALIZED, canvas)
+    return new Viewport(Viewport.UNINITIALIZED, canvas)
   }
 
   updateTrackingPosition(player: Player): void {

@@ -7,10 +7,10 @@ import PARTICLES from 'lib/enums/Particles'
 import AnimatedSprite from 'client/graphics/AnimatedSprite'
 import { PARTICLE_SPRITES } from 'client/graphics/Sprites'
 import { AnimationManager, TYPE } from 'client/lib/AnimationManager'
-import Entity from 'lib/game/Entity'
+import PhysObject from 'lib/game/PhysObject'
 import Vector from 'lib/math/Vector'
 
-export default class Particle extends Entity {
+export default class Particle extends PhysObject {
   type: PARTICLES
   animationManager: AnimationManager
 

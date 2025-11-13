@@ -1,20 +1,14 @@
 /**
- * Wrapper class for all entities that need basic physics.
- * @author alvin@omgimanerd.tech (Alvin Lin)
+ * An entity is an object in the game with physics and a hitbox.
+ * @author omgimanerd
  */
 
-import { Type } from 'class-transformer'
-import * as Constants from 'lib/Constants'
-import GameLoopUpdateable from 'lib/interfaces/GameLoopUpdateable'
-import Util from 'lib/math/Util'
+import PhysObject from 'lib/game/PhysObject'
+import HasHitbox from 'lib/interfaces/CircleHitbox'
 import Vector from 'lib/math/Vector'
 
-export default abstract class Entity implements GameLoopUpdateable {
-  @Type(() => Vector) position: Vector
-  @Type(() => Vector) velocity: Vector
-  @Type(() => Vector) acceleration: Vector
-  hitboxSize: number // Radial hitbox size
-  destroyed: boolean
+export default class Entity extends PhysObject implements HasHitbox {
+  hitboxSize: number
 
   constructor(
     position: Vector,
@@ -22,20 +16,15 @@ export default abstract class Entity implements GameLoopUpdateable {
     acceleration: Vector,
     hitboxSize: number,
   ) {
-    this.position = position
-    this.velocity = velocity
-    this.acceleration = acceleration
+    super(position, velocity, acceleration)
     this.hitboxSize = hitboxSize
-    this.destroyed = false
   }
-
-  update(_lastUpdateTime: number, _deltaTime: number): void {}
 
   /**
    * Returns true if this Entity's hitbox is overlapping or touching another
    * Entity's hitbox.
    */
-  collided(other: Entity): boolean {
+  collided(other: HasHitbox): boolean {
     const minDistance = this.hitboxSize + other.hitboxSize
     return (
       Vector.sub(this.position, other.position).mag2 <=
@@ -43,31 +32,7 @@ export default abstract class Entity implements GameLoopUpdateable {
     )
   }
 
-  /**
-   * Returns true if this Entity is inside the bounds of the game environment
-   * world.
-   */
-  inWorld(): boolean {
-    return (
-      Util.inBound(this.position.x, Constants.WORLD_MIN, Constants.WORLD_MAX) &&
-      Util.inBound(this.position.y, Constants.WORLD_MIN, Constants.WORLD_MAX)
-    )
-  }
-
-  /**
-   * Clamps this Entity's position within the game world if it is outside of the
-   * game world.
-   */
-  boundToWorld(): void {
-    this.position.x = Util.clamp(
-      this.position.x,
-      Constants.WORLD_MIN,
-      Constants.WORLD_MAX,
-    )
-    this.position.y = Util.clamp(
-      this.position.y,
-      Constants.WORLD_MIN,
-      Constants.WORLD_MAX,
-    )
+  onCollision(_other: HasHitbox): void {
+    throw new Error('Not implemented!')
   }
 }

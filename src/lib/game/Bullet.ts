@@ -4,8 +4,8 @@
  */
 
 import { Type } from 'class-transformer'
-
 import Entity from 'lib/game/Entity'
+
 import Player from 'lib/game/Player'
 import Vector from 'lib/math/Vector'
 

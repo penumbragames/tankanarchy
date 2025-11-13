@@ -19,7 +19,7 @@ import Input from 'client/Input'
 import Particle from 'client/particle/Particle'
 import Viewport from 'client/Viewport'
 import Bullet from 'lib/game/Bullet'
-import Entity from 'lib/game/Entity'
+import PhysObject from 'lib/game/PhysObject'
 import Player from 'lib/game/Player'
 import Powerup from 'lib/game/Powerup'
 import Vector from 'lib/math/Vector'
@@ -55,7 +55,7 @@ export default class Renderer {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
   }
 
-  drawDebugHitbox(e: Entity): void {
+  drawDebugHitbox(e: PhysObject): void {
     if (DEBUG && false) {
       this.context.beginPath()
       const canvasCoords = this.viewport.toCanvas(e.position)
