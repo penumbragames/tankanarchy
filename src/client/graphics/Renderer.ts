@@ -15,9 +15,9 @@ import {
 } from 'client/graphics/Sprites'
 
 import Canvas from 'client/graphics/Canvas'
+import Viewport from 'client/graphics/Viewport'
 import Input from 'client/Input'
 import Particle from 'client/particle/Particle'
-import Viewport from 'client/Viewport'
 import Entity from 'lib/game/Entity'
 import Bullet from 'lib/game/entity/Bullet'
 import Player from 'lib/game/entity/Player'
