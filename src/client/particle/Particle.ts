@@ -15,7 +15,7 @@ export default class Particle extends PhysObject {
   animationManager: AnimationManager
 
   constructor(type: PARTICLES, position: Vector) {
-    super(position, Vector.zero(), Vector.zero(), 0)
+    super(position, Vector.zero(), Vector.zero())
     this.type = type
     this.animationManager = new AnimationManager(
       TYPE.SINGLE,

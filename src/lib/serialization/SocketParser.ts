@@ -8,9 +8,9 @@ import * as socketIOParser from 'socket.io-parser'
 
 import { getReplacerReviver } from 'lib/serialization/ReplacerReviver'
 
-import Bullet from 'lib/game/Bullet'
-import Player from 'lib/game/Player'
-import Powerup from 'lib/game/Powerup'
+import Bullet from 'lib/game/entity/Bullet'
+import Player from 'lib/game/entity/Player'
+import Powerup from 'lib/game/entity/Powerup'
 import Vector from 'lib/math/Vector'
 
 // All the custom serializable classes that should be preserved when sent over

@@ -6,7 +6,7 @@
 import { Type } from 'class-transformer'
 import Entity from 'lib/game/Entity'
 
-import Player from 'lib/game/Player'
+import Player from 'lib/game/entity/Player'
 import Vector from 'lib/math/Vector'
 
 // Workaround to reference the Player type without depending on load order.

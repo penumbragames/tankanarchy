@@ -3,7 +3,7 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import Player from 'lib/game/Player'
+import Player from 'lib/game/entity/Player'
 
 class LeaderboardEntry {
   player: string

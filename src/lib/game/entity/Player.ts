@@ -9,13 +9,13 @@
 import { Exclude, Type } from 'class-transformer'
 
 import POWERUPS from 'lib/enums/Powerups'
-import PLAYER_CONSTANTS from 'lib/game/PlayerConstants'
+import PLAYER_CONSTANTS from 'lib/game/entity/PlayerConstants'
 
 import * as Constants from 'lib/Constants'
-import Bullet from 'lib/game/Bullet'
 import Entity from 'lib/game/Entity'
-import Powerup from 'lib/game/Powerup'
-import { PowerupState, PowerupTypeMap } from 'lib/game/PowerupState'
+import Bullet from 'lib/game/entity/Bullet'
+import Powerup from 'lib/game/entity/Powerup'
+import { PowerupState, PowerupTypeMap } from 'lib/game/entity/PowerupState'
 import Util from 'lib/math/Util'
 import Vector from 'lib/math/Vector'
 import { PlayerInputs } from 'lib/socket/SocketInterfaces'

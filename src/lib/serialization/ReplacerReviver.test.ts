@@ -4,10 +4,10 @@ import { beforeEach, describe, expect, setSystemTime, test } from 'bun:test'
 
 import POWERUPS from 'lib/enums/Powerups'
 
-import Bullet from 'lib/game/Bullet'
-import Player from 'lib/game/Player'
-import Powerup from 'lib/game/Powerup'
-import { HealthPowerup, PowerupState } from 'lib/game/PowerupState'
+import Bullet from 'lib/game/entity/Bullet'
+import Player from 'lib/game/entity/Player'
+import Powerup from 'lib/game/entity/Powerup'
+import { HealthPowerup, PowerupState } from 'lib/game/entity/PowerupState'
 import Vector from 'lib/math/Vector'
 import { getReplacerReviver } from 'lib/serialization/ReplacerReviver'
 import { GameState } from 'lib/socket/SocketInterfaces'
@@ -68,7 +68,7 @@ describe('Test serializing/deserializing basic class instances', () => {
 
     // Use bun test -u to update.
     expect(serialized).toMatchInlineSnapshot(
-      `"{"hitboxSize":10,"destroyed":false,"position":{"x":1,"y":1},"velocity":{"x":0,"y":0},"acceleration":{"x":0,"y":0},"type":"HEALTH_PACK","__type__":"Powerup"}"`,
+      `"{"destroyed":false,"position":{"x":1,"y":1},"velocity":{"x":0,"y":0},"acceleration":{"x":0,"y":0},"hitboxSize":10,"type":"HEALTH_PACK","__type__":"Powerup"}"`,
     )
 
     const deserialized: Powerup = parse(serialized)
@@ -106,7 +106,7 @@ describe('Test serializing/deserializing basic class instances', () => {
 
     // Use bun test -u to update.
     expect(serialized).toMatchInlineSnapshot(
-      `"{"hitboxSize":20,"destroyed":false,"position":{"x":3,"y":4},"velocity":{"x":0,"y":0},"acceleration":{"x":0,"y":0},"name":"test_player","socketID":"socket_id","tankAngle":2,"turretAngle":0,"turnRate":0,"speed":0.4,"health":10,"kills":0,"deaths":0,"powerupStates":{"HEALTH_PACK":{"type":"HEALTH_PACK","duration":1,"expirationTime":2,"expired":false,"healAmount":0}},"__type__":"Player"}"`,
+      `"{"destroyed":false,"position":{"x":3,"y":4},"velocity":{"x":0,"y":0},"acceleration":{"x":0,"y":0},"hitboxSize":20,"name":"test_player","socketID":"socket_id","tankAngle":2,"turretAngle":0,"turnRate":0,"speed":0.4,"health":10,"kills":0,"deaths":0,"powerupStates":{"HEALTH_PACK":{"type":"HEALTH_PACK","duration":1,"expirationTime":2,"expired":false,"healAmount":0}},"__type__":"Player"}"`,
     )
 
     const deserialized: Player = parse(serialized)

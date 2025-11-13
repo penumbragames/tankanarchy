@@ -5,7 +5,7 @@
 
 import Canvas from 'client/graphics/Canvas'
 import PhysObject from 'lib/game/PhysObject'
-import Player from 'lib/game/Player'
+import Player from 'lib/game/entity/Player'
 import Vector from 'lib/math/Vector'
 
 class Viewport extends PhysObject {

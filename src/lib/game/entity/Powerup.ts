@@ -7,7 +7,7 @@ import POWERUPS from 'lib/enums/Powerups'
 
 import * as Constants from 'lib/Constants'
 import Entity from 'lib/game/Entity'
-import { PowerupConstructors, PowerupState } from 'lib/game/PowerupState'
+import { PowerupConstructors, PowerupState } from 'lib/game/entity/PowerupState'
 import Util from 'lib/math/Util'
 import Vector from 'lib/math/Vector'
 

@@ -2,10 +2,10 @@
  * @author omgimanerd
  */
 
-import type Player from 'lib/game/Player'
+import type Player from 'lib/game/entity/Player'
 
 import POWERUPS from 'lib/enums/Powerups'
-import PLAYER_CONSTANTS from 'lib/game/PlayerConstants'
+import PLAYER_CONSTANTS from 'lib/game/entity/PlayerConstants'
 
 import GameLoopUpdateable from 'lib/interfaces/GameLoopUpdateable'
 import Util from 'lib/math/Util'

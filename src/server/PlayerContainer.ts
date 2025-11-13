@@ -3,7 +3,7 @@
  * @author omgimanerd
  */
 
-import Player from 'lib/game/Player'
+import Player from 'lib/game/entity/Player'
 import { Socket, SocketServer } from 'lib/socket/SocketServer'
 
 export default class PlayerContainer {

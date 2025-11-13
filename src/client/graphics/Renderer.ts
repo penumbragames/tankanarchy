@@ -6,7 +6,7 @@
 import * as Constants from 'lib/Constants'
 import POWERUPS from 'lib/enums/Powerups'
 import SPRITES from 'lib/enums/Sprites'
-import PLAYER_CONSTANTS from 'lib/game/PlayerConstants'
+import PLAYER_CONSTANTS from 'lib/game/entity/PlayerConstants'
 
 import {
   PARTICLE_SPRITES,
@@ -18,10 +18,10 @@ import Canvas from 'client/graphics/Canvas'
 import Input from 'client/Input'
 import Particle from 'client/particle/Particle'
 import Viewport from 'client/Viewport'
-import Bullet from 'lib/game/Bullet'
-import PhysObject from 'lib/game/PhysObject'
-import Player from 'lib/game/Player'
-import Powerup from 'lib/game/Powerup'
+import Entity from 'lib/game/Entity'
+import Bullet from 'lib/game/entity/Bullet'
+import Player from 'lib/game/entity/Player'
+import Powerup from 'lib/game/entity/Powerup'
 import Vector from 'lib/math/Vector'
 
 export default class Renderer {
@@ -55,7 +55,7 @@ export default class Renderer {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
   }
 
-  drawDebugHitbox(e: PhysObject): void {
+  drawDebugHitbox(e: Entity): void {
     if (DEBUG && false) {
       this.context.beginPath()
       const canvasCoords = this.viewport.toCanvas(e.position)
