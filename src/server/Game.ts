@@ -10,6 +10,7 @@ import SOUNDS from 'lib/enums/Sounds'
 import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 
 import Bullet from 'lib/game/entity/Bullet'
+import Entity from 'lib/game/entity/Entity'
 import Player from 'lib/game/entity/Player'
 import Powerup from 'lib/game/entity/Powerup'
 import GameLoop from 'lib/game/GameLoop'
@@ -74,19 +75,15 @@ export default class Game {
 
   update(): void {
     // Perform physics update and collision checks.
-    const entities = [
+    const entities: Entity[] = [
       ...this.players.players,
       ...this.projectiles,
       ...this.powerups,
     ]
 
     // TODO: Use quadtree for collision update
-    entities.forEach((entity) => {
-      entity.update(
-        this.gameLoop.lastUpdateTime,
-        this.gameLoop.currentTime,
-        this.gameLoop.deltaTime,
-      )
+    entities.forEach((entity: Entity) => {
+      entity.update(this.gameLoop.updateFrame)
     })
     for (let i = 0; i < entities.length; ++i) {
       for (let j = i + 1; j < entities.length; ++j) {

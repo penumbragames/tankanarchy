@@ -7,13 +7,13 @@ import type Player from 'lib/game/entity/Player'
 import POWERUPS from 'lib/enums/Powerups'
 import PLAYER_CONSTANTS from 'lib/game/entity/PlayerConstants'
 
-import GameLoopUpdateable from 'lib/interfaces/GameLoopUpdateable'
+import { IUpdateable, UpdateFrame } from 'lib/game/component/Updateable'
 import Util from 'lib/math/Util'
 
 /**
  * Base class for powerup states which modify the Player.
  */
-export abstract class PowerupState implements GameLoopUpdateable {
+export abstract class PowerupState implements IUpdateable {
   static readonly MIN_DURATION = 5000
   static readonly MAX_DURATION = 15000
 
@@ -47,8 +47,8 @@ export abstract class PowerupState implements GameLoopUpdateable {
     return this.remainingMs / 1000
   }
 
-  update(lastUpdateTime: number, _deltaTime: number) {
-    this.expired = lastUpdateTime > this.expirationTime
+  update(updateFrame: UpdateFrame) {
+    this.expired = updateFrame.lastUpdateTime > this.expirationTime
   }
 
   apply(_p: Player) {}
@@ -141,11 +141,11 @@ export class ShieldPowerup extends PowerupState {
   }
 
   override apply(p: Player) {
-    p.hitboxSize = PLAYER_CONSTANTS.SHIELD_HITBOX_SIZE
+    p.hitbox.hitboxSize = PLAYER_CONSTANTS.SHIELD_HITBOX_SIZE
   }
 
   override remove(p: Player) {
-    p.hitboxSize = PLAYER_CONSTANTS.DEFAULT_HITBOX_SIZE
+    p.hitbox.hitboxSize = PLAYER_CONSTANTS.DEFAULT_HITBOX_SIZE
   }
 
   damage(amount: number) {

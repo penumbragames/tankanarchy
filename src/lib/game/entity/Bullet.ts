@@ -4,6 +4,7 @@
  */
 
 import { Type } from 'class-transformer'
+import { UpdateFrame } from 'lib/game/component/Updateable'
 import Entity from 'lib/game/entity/Entity'
 
 import Player from 'lib/game/entity/Player'
@@ -57,12 +58,11 @@ export default class Bullet extends Entity {
     )
   }
 
-  override update(
-    _lastUpdateTime: number,
-    _currentTime: number,
-    deltaTime: number,
-  ): void {
-    const distanceStep = Vector.scale(this.physics.velocity, deltaTime)
+  override update(updateFrame: UpdateFrame): void {
+    const distanceStep = Vector.scale(
+      this.physics.velocity,
+      updateFrame.deltaTime,
+    )
     this.physics.position.add(distanceStep)
     if (!this.inWorld()) {
       this.destroyed = true

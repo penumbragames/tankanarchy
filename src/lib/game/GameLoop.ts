@@ -3,11 +3,9 @@
  * @author omgimanerd
  */
 
-type GameLoopFunction = (
-  lastUpdateTime: number,
-  currentTime: number,
-  deltaTime: number,
-) => void
+import { UpdateFrame } from 'lib/game/component/Updateable'
+
+type GameLoopFunction = (updateFrame: UpdateFrame) => void
 
 /**
  * GameLoop is a loose wrapper for any function that needs to run in a game
@@ -41,10 +39,18 @@ export default class GameLoop {
     this.useAnimationFrame = useAnimationFrame
   }
 
-  get delayToNextUpdate() {
+  get delayToNextUpdate(): number {
     return this.targetUpdateInterval === 0
       ? 0
       : Math.max(this.targetUpdateInterval - this.deltaTime, 0)
+  }
+
+  get updateFrame(): UpdateFrame {
+    return {
+      lastUpdateTime: this.lastUpdateTime,
+      currentTime: this.currentTime,
+      deltaTime: this.deltaTime,
+    }
   }
 
   start() {
@@ -58,7 +64,7 @@ export default class GameLoop {
     this.currentTime = Date.now()
     this.deltaTime = this.currentTime - this.lastUpdateTime
     this.lastUpdateTime = this.currentTime
-    this.fn(this.lastUpdateTime, this.currentTime, this.deltaTime)
+    this.fn(this.updateFrame)
     if (this.useAnimationFrame) {
       window.requestAnimationFrame(this.run.bind(this))
     } else {

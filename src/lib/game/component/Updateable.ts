@@ -2,6 +2,12 @@
  * @author omgimanerd
  */
 
-export default interface IUpdateable {
-  update(lastUpdateTime: number, currentTime: number, deltaTime: number): void
+export type UpdateFrame = {
+  lastUpdateTime: number
+  currentTime: number
+  deltaTime: number
+}
+
+export interface IUpdateable {
+  update(updateFrame: UpdateFrame): void
 }

@@ -8,7 +8,7 @@ import AnimatedSprite from 'client/graphics/AnimatedSprite'
 import { PARTICLE_SPRITES } from 'client/graphics/Sprites'
 import { AnimationManager, TYPE } from 'client/lib/AnimationManager'
 import { IPhysics, Physics } from 'lib/game/component/Physics'
-import IUpdateable from 'lib/game/component/Updateable'
+import { IUpdateable, UpdateFrame } from 'lib/game/component/Updateable'
 import Vector from 'lib/math/Vector'
 
 export default class Particle implements IPhysics, IUpdateable {
@@ -28,12 +28,8 @@ export default class Particle implements IPhysics, IUpdateable {
     )
   }
 
-  update(
-    lastUpdateTime: number,
-    _currentTime: number,
-    deltaTime: number,
-  ): void {
-    this.animationManager.update(lastUpdateTime, deltaTime)
+  update(updateFrame: UpdateFrame): void {
+    this.animationManager.update(updateFrame)
     this.destroyed = this.animationManager.finished
   }
 }

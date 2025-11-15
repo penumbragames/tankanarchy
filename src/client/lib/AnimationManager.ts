@@ -5,6 +5,7 @@
  */
 
 import AnimatedSprite from 'client/graphics/AnimatedSprite'
+import { UpdateFrame } from 'lib/game/component/Updateable'
 
 export enum TYPE {
   SINGLE = 'SINGLE',
@@ -27,9 +28,9 @@ export class AnimationManager {
     this.frames = sprite.frames
   }
 
-  update(_lastUpdateTime: number, deltaTime: number) {
+  update(updateFrame: UpdateFrame) {
     if (!this.finished) {
-      this.accumulator += deltaTime
+      this.accumulator += updateFrame.deltaTime
       this.frame = Math.min(
         Math.floor(
           this.accumulator / AnimationManager.TIME_PER_ANIMATION_FRAME,

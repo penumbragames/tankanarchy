@@ -168,19 +168,11 @@ export default class Game {
 
   updateAndRender(): void {
     if (this.self) {
-      this.viewport.update(
-        this.updateAndRenderLoop.lastUpdateTime,
-        this.updateAndRenderLoop.currentTime,
-        this.updateAndRenderLoop.deltaTime,
-      )
+      this.viewport.update(this.updateAndRenderLoop.updateFrame)
       this.soundManager.update(this.self.physics.position)
       this.particles = this.particles
         .map((particle: Particle) => {
-          particle.update(
-            this.updateAndRenderLoop.lastUpdateTime,
-            this.updateAndRenderLoop.currentTime,
-            this.updateAndRenderLoop.deltaTime,
-          )
+          particle.update(this.updateAndRenderLoop.updateFrame)
           return particle
         })
         .filter((particle: Particle) => !particle.destroyed)

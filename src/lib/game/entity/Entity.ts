@@ -7,7 +7,7 @@ import { Type } from 'class-transformer'
 import * as Constants from 'lib/Constants'
 import { Hitbox, IHitbox } from 'lib/game/component/Hitbox'
 import { IPhysics, Physics } from 'lib/game/component/Physics'
-import IUpdateable from 'lib/game/component/Updateable'
+import { IUpdateable, UpdateFrame } from 'lib/game/component/Updateable'
 import Util from 'lib/math/Util'
 import Vector from 'lib/math/Vector'
 
@@ -29,13 +29,10 @@ export default class Entity implements IPhysics, IHitbox, IUpdateable {
 
   /**
    * Performs a physics update.
-   * @param {number} _lastUpdateTime The last timestamp an update occurred,
-   *   unused
-   * @param {number} _currentTime The current timestamp for update
-   * @param {number} _deltaTime The timestep to compute the update with, delta
-   *   between lastUpdateTime and currentTime
+   * @param {UpdateFrame} _updateFrame An object containing the last update
+   *   time, current time, and delta time.
    */
-  update(_lastUpdateTime: number, _currentTime: number, _deltaTime: number) {}
+  update(_updateFrame: UpdateFrame) {}
 
   collided(other: IHitbox): boolean {
     return this.hitbox.collided(other.hitbox)

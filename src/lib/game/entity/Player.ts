@@ -12,6 +12,7 @@ import POWERUPS from 'lib/enums/Powerups'
 import PLAYER_CONSTANTS from 'lib/game/entity/PlayerConstants'
 
 import * as Constants from 'lib/Constants'
+import { UpdateFrame } from 'lib/game/component/Updateable'
 import Bullet from 'lib/game/entity/Bullet'
 import Entity from 'lib/game/entity/Entity'
 import Powerup from 'lib/game/entity/Powerup'
@@ -86,20 +87,18 @@ export default class Player extends Entity {
     this.turretAngle = data.turretAngle
   }
 
-  override update(
-    lastUpdateTime: number,
-    _currentTime: number,
-    deltaTime: number,
-  ): void {
-    this.lastUpdateTime = lastUpdateTime
-    this.physics.position.add(Vector.scale(this.physics.velocity, deltaTime))
+  override update(updateFrame: UpdateFrame): void {
+    this.lastUpdateTime = updateFrame.lastUpdateTime
+    this.physics.position.add(
+      Vector.scale(this.physics.velocity, updateFrame.deltaTime),
+    )
     this.boundToWorld()
     this.tankAngle = Util.normalizeAngle(
-      this.tankAngle + (this.turnRate * deltaTime), // prettier-ignore
+      this.tankAngle + (this.turnRate * updateFrame.deltaTime), // prettier-ignore
     )
 
     for (const state of this.powerupStates.values()) {
-      state.update(lastUpdateTime, deltaTime)
+      state.update(updateFrame)
       if (state.expired) {
         state.remove(this)
         this.powerupStates.delete(state.type)

@@ -5,7 +5,7 @@
 
 import Canvas from 'client/graphics/Canvas'
 import { IPhysics, Physics } from 'lib/game/component/Physics'
-import IUpdateable from 'lib/game/component/Updateable'
+import { IUpdateable, UpdateFrame } from 'lib/game/component/Updateable'
 import Player from 'lib/game/entity/Player'
 import Vector from 'lib/math/Vector'
 
@@ -42,11 +42,7 @@ class Viewport implements IPhysics, IUpdateable {
     )
   }
 
-  update(
-    _lastUpdateTime: number,
-    _currentTime: number,
-    deltaTime: number,
-  ): void {
+  update(updateFrame: UpdateFrame): void {
     if (
       this.physics.position == Viewport.UNINITIALIZED ||
       this.physics.velocity == Viewport.UNINITIALIZED
@@ -58,7 +54,7 @@ class Viewport implements IPhysics, IUpdateable {
     this.physics.velocity = Vector.sub(
       this.playerPosition,
       this.physics.position,
-    ).scale(Viewport.STICKINESS * deltaTime)
+    ).scale(Viewport.STICKINESS * updateFrame.deltaTime)
     this.physics.position.add(this.physics.velocity)
   }
 
