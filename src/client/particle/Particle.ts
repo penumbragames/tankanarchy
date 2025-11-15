@@ -7,15 +7,20 @@ import PARTICLES from 'lib/enums/Particles'
 import AnimatedSprite from 'client/graphics/AnimatedSprite'
 import { PARTICLE_SPRITES } from 'client/graphics/Sprites'
 import { AnimationManager, TYPE } from 'client/lib/AnimationManager'
-import PhysObject from 'lib/game/PhysObject'
+import { IPhysics, Physics } from 'lib/game/component/Physics'
+import IUpdateable from 'lib/game/component/Updateable'
 import Vector from 'lib/math/Vector'
 
-export default class Particle extends PhysObject {
+export default class Particle implements IPhysics, IUpdateable {
+  physics: Physics
+
   type: PARTICLES
   animationManager: AnimationManager
 
+  destroyed: boolean = false
+
   constructor(type: PARTICLES, position: Vector) {
-    super(position, Vector.zero(), Vector.zero())
+    this.physics = new Physics(position, Vector.zero(), Vector.zero())
     this.type = type
     this.animationManager = new AnimationManager(
       TYPE.SINGLE,
@@ -23,7 +28,11 @@ export default class Particle extends PhysObject {
     )
   }
 
-  override update(lastUpdateTime: number, deltaTime: number): void {
+  update(
+    lastUpdateTime: number,
+    _currentTime: number,
+    deltaTime: number,
+  ): void {
     this.animationManager.update(lastUpdateTime, deltaTime)
     this.destroyed = this.animationManager.finished
   }

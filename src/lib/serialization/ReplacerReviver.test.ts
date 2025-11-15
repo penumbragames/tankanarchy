@@ -4,6 +4,8 @@ import { beforeEach, describe, expect, setSystemTime, test } from 'bun:test'
 
 import POWERUPS from 'lib/enums/Powerups'
 
+import { Hitbox } from 'lib/game/component/Hitbox'
+import { Physics } from 'lib/game/component/Physics'
 import Bullet from 'lib/game/entity/Bullet'
 import Player from 'lib/game/entity/Player'
 import Powerup from 'lib/game/entity/Powerup'
@@ -23,7 +25,7 @@ const { replacer, reviver } = getReplacerReviver({
   Vector,
 })
 
-const stringify = (v: any) => JSON.stringify(v, replacer)
+const stringify = (v: any) => JSON.stringify(v, replacer, 2)
 const parse = (v: string) => JSON.parse(v, reviver)
 
 /**
@@ -31,7 +33,7 @@ const parse = (v: string) => JSON.parse(v, reviver)
  */
 const createFakePlayer = (): Player => {
   const p = Player.create('test_player', 'socket_id')
-  p.position = new Vector(3, 4)
+  p.physics.position = new Vector(3, 4)
   p.tankAngle = 2
   return p
 }
@@ -46,7 +48,13 @@ describe('Test serializing/deserializing basic class instances', () => {
     const serialized = stringify(v)
     // Use bun test -u to update.
     expect(serialized).toMatchInlineSnapshot(
-      `"{"x":1,"y":2,"__type__":"Vector"}"`,
+      `
+        "{
+          "x": 1,
+          "y": 2,
+          "__type__": "Vector"
+        }"
+      `,
     )
 
     const deserialized: Vector = parse(serialized)
@@ -68,28 +76,56 @@ describe('Test serializing/deserializing basic class instances', () => {
 
     // Use bun test -u to update.
     expect(serialized).toMatchInlineSnapshot(
-      `"{"destroyed":false,"position":{"x":1,"y":1},"velocity":{"x":0,"y":0},"acceleration":{"x":0,"y":0},"hitboxSize":10,"type":"HEALTH_PACK","__type__":"Powerup"}"`,
+      `
+        "{
+          "destroyed": false,
+          "physics": {
+            "position": {
+              "x": 1,
+              "y": 1
+            },
+            "velocity": {
+              "x": 0,
+              "y": 0
+            },
+            "acceleration": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "hitbox": {
+            "hitboxSize": 10
+          },
+          "type": "HEALTH_PACK",
+          "__type__": "Powerup"
+        }"
+      `,
     )
 
     const deserialized: Powerup = parse(serialized)
     expect(deserialized).toBeInstanceOf(Powerup)
     expect(deserialized).toMatchInlineSnapshot(`
       Powerup {
-        "acceleration": Vector {
-          "x": 0,
-          "y": 0,
-        },
         "destroyed": false,
-        "hitboxSize": 10,
-        "position": Vector {
-          "x": 1,
-          "y": 1,
+        "hitbox": Hitbox {
+          "body": undefined,
+          "hitboxSize": 10,
+        },
+        "physics": Physics {
+          "acceleration": Vector {
+            "x": 0,
+            "y": 0,
+          },
+          "position": Vector {
+            "x": 1,
+            "y": 1,
+          },
+          "velocity": Vector {
+            "x": 0,
+            "y": 0,
+          },
         },
         "type": "HEALTH_PACK",
-        "velocity": Vector {
-          "x": 0,
-          "y": 0,
-        },
       }
     `)
   })
@@ -106,7 +142,47 @@ describe('Test serializing/deserializing basic class instances', () => {
 
     // Use bun test -u to update.
     expect(serialized).toMatchInlineSnapshot(
-      `"{"destroyed":false,"position":{"x":3,"y":4},"velocity":{"x":0,"y":0},"acceleration":{"x":0,"y":0},"hitboxSize":20,"name":"test_player","socketID":"socket_id","tankAngle":2,"turretAngle":0,"turnRate":0,"speed":0.4,"health":10,"kills":0,"deaths":0,"powerupStates":{"HEALTH_PACK":{"type":"HEALTH_PACK","duration":1,"expirationTime":2,"expired":false,"healAmount":0}},"__type__":"Player"}"`,
+      `
+        "{
+          "destroyed": false,
+          "physics": {
+            "position": {
+              "x": 3,
+              "y": 4
+            },
+            "velocity": {
+              "x": 0,
+              "y": 0
+            },
+            "acceleration": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "hitbox": {
+            "hitboxSize": 20
+          },
+          "name": "test_player",
+          "socketID": "socket_id",
+          "tankAngle": 2,
+          "turretAngle": 0,
+          "turnRate": 0,
+          "speed": 0.4,
+          "health": 10,
+          "kills": 0,
+          "deaths": 0,
+          "powerupStates": {
+            "HEALTH_PACK": {
+              "type": "HEALTH_PACK",
+              "duration": 1,
+              "expirationTime": 2,
+              "expired": false,
+              "healAmount": 0
+            }
+          },
+          "__type__": "Player"
+        }"
+      `,
     )
 
     const deserialized: Player = parse(serialized)
@@ -115,8 +191,10 @@ describe('Test serializing/deserializing basic class instances', () => {
     expect(deserialized).toMatchSnapshot()
     expect(deserialized.isDead()).toBe(false)
     // Check that the nested objects deserialize properly.
-    expect(deserialized.position).toBeInstanceOf(Vector)
-    expect(deserialized.position.mag).toBe(5)
+    expect(deserialized.physics).toBeInstanceOf(Physics)
+    expect(deserialized.hitbox).toBeInstanceOf(Hitbox)
+    expect(deserialized.physics.position).toBeInstanceOf(Vector)
+    expect(deserialized.physics.position.mag).toBe(5)
     const deserializedPowerup: PowerupState = deserialized.getPowerupState(
       POWERUPS.HEALTH_PACK,
     )!
@@ -146,8 +224,9 @@ describe('Test serializing/deserializing complex objects', () => {
     expect(deserialized).toMatchSnapshot()
     expect(deserialized.self).toBeInstanceOf(Player)
     expect(deserialized.self.isDead()).toBe(false)
-    expect(deserialized.self.position).toBeInstanceOf(Vector)
-    expect(deserialized.self.position.mag).toBe(5)
+
+    expect(deserialized.self.physics.position).toBeInstanceOf(Vector)
+    expect(deserialized.self.physics.position.mag).toBe(5)
 
     expect(deserialized.projectiles).toBeArrayOfSize(1)
     const deserializedBullet = deserialized.projectiles[0]

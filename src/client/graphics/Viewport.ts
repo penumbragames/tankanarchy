@@ -4,50 +4,62 @@
  */
 
 import Canvas from 'client/graphics/Canvas'
-import PhysObject from 'lib/game/PhysObject'
+import { IPhysics, Physics } from 'lib/game/component/Physics'
+import IUpdateable from 'lib/game/component/Updateable'
 import Player from 'lib/game/entity/Player'
 import Vector from 'lib/math/Vector'
 
-class Viewport extends PhysObject {
+class Viewport implements IPhysics, IUpdateable {
   static readonly UNINITIALIZED = new Vector(-99999, -99999)
   static readonly STICKINESS = 0.005
+
+  physics: Physics
 
   playerPosition: Vector
   canvas: Canvas
 
   /**
-   * @param {Vector} position The starting position of the viewport, represents
-   *   the center of the view.
    * @param {Canvas} canvas The canvas that the game is rendering on
    */
-  constructor(position: Vector, canvas: Canvas) {
-    super(position, Vector.zero(), Vector.zero())
-
+  constructor(canvas: Canvas) {
+    this.physics = new Physics(
+      Viewport.UNINITIALIZED,
+      Vector.zero(),
+      Vector.zero(),
+    )
     this.playerPosition = Vector.zero()
     this.canvas = canvas
   }
 
   static create(canvas: Canvas): Viewport {
-    return new Viewport(Viewport.UNINITIALIZED, canvas)
+    return new Viewport(canvas)
   }
 
   updateTrackingPosition(player: Player): void {
-    this.playerPosition = Vector.sub(player.position, this.canvas.center)
+    this.playerPosition = Vector.sub(
+      player.physics.position,
+      this.canvas.center,
+    )
   }
 
-  override update(_lastUpdateTime: number, deltaTime: number): void {
+  update(
+    _lastUpdateTime: number,
+    _currentTime: number,
+    deltaTime: number,
+  ): void {
     if (
-      this.position == Viewport.UNINITIALIZED ||
-      this.velocity == Viewport.UNINITIALIZED
+      this.physics.position == Viewport.UNINITIALIZED ||
+      this.physics.velocity == Viewport.UNINITIALIZED
     ) {
-      this.position = this.playerPosition
-      this.velocity = Vector.zero()
+      this.physics.position = this.playerPosition
+      this.physics.velocity = Vector.zero()
       return
     }
-    this.velocity = Vector.sub(this.playerPosition, this.position).scale(
-      Viewport.STICKINESS * deltaTime,
-    )
-    this.position.add(this.velocity)
+    this.physics.velocity = Vector.sub(
+      this.playerPosition,
+      this.physics.position,
+    ).scale(Viewport.STICKINESS * deltaTime)
+    this.physics.position.add(this.physics.velocity)
   }
 
   /**
@@ -57,7 +69,7 @@ class Viewport extends PhysObject {
    * @return {Vector}
    */
   toCanvas(position: Vector): Vector {
-    return Vector.sub(position, this.position)
+    return Vector.sub(position, this.physics.position)
   }
 
   /**
@@ -67,7 +79,7 @@ class Viewport extends PhysObject {
    * @return {Vector}
    */
   toWorld(position: Vector): Vector {
-    return Vector.add(position, this.position)
+    return Vector.add(position, this.physics.position)
   }
 }
 

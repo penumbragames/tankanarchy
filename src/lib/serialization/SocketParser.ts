@@ -8,6 +8,8 @@ import * as socketIOParser from 'socket.io-parser'
 
 import { getReplacerReviver } from 'lib/serialization/ReplacerReviver'
 
+import { Hitbox } from 'lib/game/component/Hitbox'
+import { Physics } from 'lib/game/component/Physics'
 import Bullet from 'lib/game/entity/Bullet'
 import Player from 'lib/game/entity/Player'
 import Powerup from 'lib/game/entity/Powerup'
@@ -17,6 +19,8 @@ import Vector from 'lib/math/Vector'
 // the socket are listed here.
 const { replacer, reviver } = getReplacerReviver({
   Bullet,
+  Hitbox,
+  Physics,
   Player,
   Powerup,
   Vector,

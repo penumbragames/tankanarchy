@@ -4,7 +4,7 @@
  */
 
 import { Type } from 'class-transformer'
-import Entity from 'lib/game/Entity'
+import Entity from 'lib/game/entity/Entity'
 
 import Player from 'lib/game/entity/Player'
 import Vector from 'lib/math/Vector'
@@ -22,7 +22,6 @@ export default class Bullet extends Entity {
   static readonly HITBOX_SIZE = 10
 
   angle: number
-
   @Type(() => Player) source: Ref<Player>
 
   damage: number
@@ -35,13 +34,11 @@ export default class Bullet extends Entity {
     source: Player,
   ) {
     super(position, velocity, Vector.zero(), Bullet.HITBOX_SIZE)
-
     this.angle = angle
     this.source = source
 
     this.damage = Bullet.DEFAULT_DAMAGE
     this.distanceTraveled = 0
-    this.destroyed = false
   }
 
   /**
@@ -53,22 +50,20 @@ export default class Bullet extends Entity {
   static createFromPlayer(player: Player, angleDeviation: number): Bullet {
     const angle = player.turretAngle + angleDeviation
     return new Bullet(
-      player.position.copy(),
+      player.physics.position.copy(),
       Vector.fromPolar(Bullet.SPEED, angle),
       angle,
       player,
     )
   }
 
-  /**
-   * Performs a physics update.
-   * @param {number} _lastUpdateTime The last timestamp an update occurred,
-   * unused
-   * @param {number} deltaTime The timestep to compute the update with
-   */
-  override update(_lastUpdateTime: number, deltaTime: number): void {
-    const distanceStep = Vector.scale(this.velocity, deltaTime)
-    this.position.add(distanceStep)
+  override update(
+    _lastUpdateTime: number,
+    _currentTime: number,
+    deltaTime: number,
+  ): void {
+    const distanceStep = Vector.scale(this.physics.velocity, deltaTime)
+    this.physics.position.add(distanceStep)
     if (!this.inWorld()) {
       this.destroyed = true
       return

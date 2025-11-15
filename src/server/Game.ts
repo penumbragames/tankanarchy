@@ -67,7 +67,7 @@ export default class Game {
       if (data.shootBullet && player.canShoot()) {
         const projectiles = player.getProjectilesFromShot()
         this.projectiles.push(...projectiles)
-        this.services.playSound(SOUNDS.TANK_SHOT, player.position)
+        this.services.playSound(SOUNDS.TANK_SHOT, player.physics.position)
       }
     }
   }
@@ -82,7 +82,11 @@ export default class Game {
 
     // TODO: Use quadtree for collision update
     entities.forEach((entity) => {
-      entity.update(this.gameLoop.lastUpdateTime, this.gameLoop.deltaTime)
+      entity.update(
+        this.gameLoop.lastUpdateTime,
+        this.gameLoop.currentTime,
+        this.gameLoop.deltaTime,
+      )
     })
     for (let i = 0; i < entities.length; ++i) {
       for (let j = i + 1; j < entities.length; ++j) {
@@ -105,7 +109,7 @@ export default class Game {
             e2.source.kills++
           }
           e2.destroyed = true
-          this.services.playSound(SOUNDS.EXPLOSION, e1.position)
+          this.services.playSound(SOUNDS.EXPLOSION, e1.physics.position)
         }
 
         // Player-Powerup collision interaction
@@ -117,11 +121,11 @@ export default class Game {
           const type = e1.applyPowerup(e2)
           switch (type) {
             case POWERUPS.HEALTH_PACK:
-              this.services.playSound(SOUNDS.HEALTH_PACK, e1.position)
+              this.services.playSound(SOUNDS.HEALTH_PACK, e1.physics.position)
               break
             case POWERUPS.RAPIDFIRE:
             case POWERUPS.SHOTGUN:
-              this.services.playSound(SOUNDS.GUN_POWERUP, e1.position)
+              this.services.playSound(SOUNDS.GUN_POWERUP, e1.physics.position)
               break
           }
           e2.destroyed = true
@@ -135,7 +139,7 @@ export default class Game {
         ) {
           e1.destroyed = true
           e2.destroyed = true
-          this.services.playSound(SOUNDS.EXPLOSION, e1.position)
+          this.services.playSound(SOUNDS.EXPLOSION, e1.physics.position)
         }
 
         // Bullet-Powerup interaction
@@ -145,8 +149,12 @@ export default class Game {
         ) {
           e1.destroyed = true
           e2.destroyed = true
-          this.services.playSound(SOUNDS.EXPLOSION, e1.position)
-          this.services.addParticle(PARTICLES.EXPLOSION, e1.position, {})
+          this.services.playSound(SOUNDS.EXPLOSION, e1.physics.position)
+          this.services.addParticle(
+            PARTICLES.EXPLOSION,
+            e1.physics.position,
+            {},
+          )
         }
       }
     }

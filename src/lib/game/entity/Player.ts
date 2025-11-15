@@ -12,8 +12,8 @@ import POWERUPS from 'lib/enums/Powerups'
 import PLAYER_CONSTANTS from 'lib/game/entity/PlayerConstants'
 
 import * as Constants from 'lib/Constants'
-import Entity from 'lib/game/Entity'
 import Bullet from 'lib/game/entity/Bullet'
+import Entity from 'lib/game/entity/Entity'
 import Powerup from 'lib/game/entity/Powerup'
 import { PowerupState, PowerupTypeMap } from 'lib/game/entity/PowerupState'
 import Util from 'lib/math/Util'
@@ -68,11 +68,11 @@ export default class Player extends Entity {
    */
   updateOnInput(data: PlayerInputs): void {
     if ((data.up && data.down) || (!data.up && !data.down)) {
-      this.velocity = Vector.zero()
+      this.physics.velocity = Vector.zero()
     } else if (data.up) {
-      this.velocity = Vector.fromPolar(this.speed, this.tankAngle)
+      this.physics.velocity = Vector.fromPolar(this.speed, this.tankAngle)
     } else if (data.down) {
-      this.velocity = Vector.fromPolar(-this.speed, this.tankAngle)
+      this.physics.velocity = Vector.fromPolar(-this.speed, this.tankAngle)
     }
 
     if ((data.left && data.right) || (!data.left && !data.right)) {
@@ -86,14 +86,13 @@ export default class Player extends Entity {
     this.turretAngle = data.turretAngle
   }
 
-  /**
-   * Performs a physics update.
-   * @param {number} lastUpdateTime The last timestamp an update occurred
-   * @param {number} deltaTime The timestep to compute the update with
-   */
-  override update(lastUpdateTime: number, deltaTime: number): void {
+  override update(
+    lastUpdateTime: number,
+    _currentTime: number,
+    deltaTime: number,
+  ): void {
     this.lastUpdateTime = lastUpdateTime
-    this.position.add(Vector.scale(this.velocity, deltaTime))
+    this.physics.position.add(Vector.scale(this.physics.velocity, deltaTime))
     this.boundToWorld()
     this.tankAngle = Util.normalizeAngle(
       this.tankAngle + (this.turnRate * deltaTime), // prettier-ignore
@@ -168,7 +167,7 @@ export default class Player extends Entity {
    * Handles the spawning (and respawning) of the player.
    */
   spawn(): Player {
-    this.position = new Vector(
+    this.physics.position = new Vector(
       Util.randRange(
         Constants.WORLD_MIN + Constants.WORLD_PADDING,
         Constants.WORLD_MAX - Constants.WORLD_PADDING,

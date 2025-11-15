@@ -18,8 +18,8 @@ import Canvas from 'client/graphics/Canvas'
 import Viewport from 'client/graphics/Viewport'
 import Input from 'client/Input'
 import Particle from 'client/particle/Particle'
-import Entity from 'lib/game/Entity'
 import Bullet from 'lib/game/entity/Bullet'
+import Entity from 'lib/game/entity/Entity'
 import Player from 'lib/game/entity/Player'
 import Powerup from 'lib/game/entity/Powerup'
 import Vector from 'lib/math/Vector'
@@ -58,11 +58,11 @@ export default class Renderer {
   drawDebugHitbox(e: Entity): void {
     if (DEBUG && false) {
       this.context.beginPath()
-      const canvasCoords = this.viewport.toCanvas(e.position)
+      const canvasCoords = this.viewport.toCanvas(e.physics.position)
       this.context.arc(
         canvasCoords.x,
         canvasCoords.y,
-        e.hitboxSize,
+        e.hitbox.hitboxSize,
         0,
         2 * Math.PI,
         false,
@@ -82,7 +82,7 @@ export default class Renderer {
    */
   drawTank(isSelf: boolean, player: Player): void {
     this.context.save()
-    const canvasCoords = this.viewport.toCanvas(player.position)
+    const canvasCoords = this.viewport.toCanvas(player.physics.position)
     // The canvas is already translated to the center of the player coordinate,
     // so all further sprite rendering should be done with that in mind.
     this.context.translate(canvasCoords.x, canvasCoords.y)
@@ -162,7 +162,7 @@ export default class Renderer {
   }
 
   drawBullet(bullet: Bullet): void {
-    const canvasCoords = this.viewport.toCanvas(bullet.position)
+    const canvasCoords = this.viewport.toCanvas(bullet.physics.position)
     SPRITE_MAP[SPRITES.BULLET].draw(this.context, {
       position: canvasCoords,
       centered: true,
@@ -172,18 +172,18 @@ export default class Renderer {
   }
 
   drawPowerup(powerup: Powerup): void {
-    const canvasCoords = this.viewport.toCanvas(powerup.position)
+    const canvasCoords = this.viewport.toCanvas(powerup.physics.position)
     POWERUP_SPRITES[powerup.type].draw(this.context, {
       position: canvasCoords,
-      width: powerup.hitboxSize * 2,
-      height: powerup.hitboxSize * 2,
+      width: powerup.hitbox.hitboxSize * 2,
+      height: powerup.hitbox.hitboxSize * 2,
       centered: true,
     })
     this.drawDebugHitbox(powerup)
   }
 
   drawParticle(particle: Particle): void {
-    const canvasCoords = this.viewport.toCanvas(particle.position)
+    const canvasCoords = this.viewport.toCanvas(particle.physics.position)
     PARTICLE_SPRITES[particle.type].draw(this.context, {
       position: canvasCoords,
       centered: true,

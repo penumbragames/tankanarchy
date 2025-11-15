@@ -152,7 +152,7 @@ export default class Game {
       const worldMouseCoords = this.viewport.toWorld(this.input.mouseCoords)
       const playerToMouseVector = Vector.sub(
         worldMouseCoords,
-        this.self.position,
+        this.self.physics.position,
       )
       this.socket.emit(SOCKET_EVENTS.PLAYER_ACTION, {
         up: this.input.up,
@@ -170,13 +170,15 @@ export default class Game {
     if (this.self) {
       this.viewport.update(
         this.updateAndRenderLoop.lastUpdateTime,
+        this.updateAndRenderLoop.currentTime,
         this.updateAndRenderLoop.deltaTime,
       )
-      this.soundManager.update(this.self.position)
+      this.soundManager.update(this.self.physics.position)
       this.particles = this.particles
         .map((particle: Particle) => {
           particle.update(
             this.updateAndRenderLoop.lastUpdateTime,
+            this.updateAndRenderLoop.currentTime,
             this.updateAndRenderLoop.deltaTime,
           )
           return particle
