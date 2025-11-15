@@ -9,15 +9,15 @@ import Vector from 'lib/math/Vector'
 
 export class Hitbox {
   @Exclude() body: Physics
-  hitboxSize: number
+  size: number
 
-  constructor(body: Physics, hitboxSize: number) {
+  constructor(body: Physics, size: number) {
     this.body = body
-    this.hitboxSize = hitboxSize
+    this.size = size
   }
 
   collided(other: Hitbox) {
-    const minDistance = this.hitboxSize + other.hitboxSize
+    const minDistance = this.size + other.size
     return (
       Vector.sub(this.body.position, other.body.position).mag2 <=
       minDistance * minDistance

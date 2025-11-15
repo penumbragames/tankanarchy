@@ -141,11 +141,11 @@ export class ShieldPowerup extends PowerupState {
   }
 
   override apply(p: Player) {
-    p.hitbox.hitboxSize = PLAYER_CONSTANTS.SHIELD_HITBOX_SIZE
+    p.hitbox.size = PLAYER_CONSTANTS.SHIELD_HITBOX_SIZE
   }
 
   override remove(p: Player) {
-    p.hitbox.hitboxSize = PLAYER_CONSTANTS.DEFAULT_HITBOX_SIZE
+    p.hitbox.size = PLAYER_CONSTANTS.DEFAULT_HITBOX_SIZE
   }
 
   damage(amount: number) {

@@ -62,7 +62,7 @@ export default class Renderer {
       this.context.arc(
         canvasCoords.x,
         canvasCoords.y,
-        e.hitbox.hitboxSize,
+        e.hitbox.size,
         0,
         2 * Math.PI,
         false,
@@ -175,8 +175,8 @@ export default class Renderer {
     const canvasCoords = this.viewport.toCanvas(powerup.physics.position)
     POWERUP_SPRITES[powerup.type].draw(this.context, {
       position: canvasCoords,
-      width: powerup.hitbox.hitboxSize * 2,
-      height: powerup.hitbox.hitboxSize * 2,
+      width: powerup.hitbox.size * 2,
+      height: powerup.hitbox.size * 2,
       centered: true,
     })
     this.drawDebugHitbox(powerup)
