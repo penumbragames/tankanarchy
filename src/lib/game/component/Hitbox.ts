@@ -1,9 +1,11 @@
 /**
- * Component for entities or objects with circular hitboxes.
- * @author
+ * Component for entities or objects with circular hitboxes. Entities with
+ * circular hitboxes should implement IHitbox.
+ * @author omgimanerd
  */
 
 import { Exclude } from 'class-transformer'
+
 import { Physics } from 'lib/game/component/Physics'
 import Vector from 'lib/math/Vector'
 

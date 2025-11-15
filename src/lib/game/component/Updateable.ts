@@ -1,4 +1,6 @@
 /**
+ * IUpdateable is an interface for any object that can be updated by a game
+ * loop.
  * @author omgimanerd
  */
 

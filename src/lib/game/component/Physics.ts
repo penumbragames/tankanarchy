@@ -1,6 +1,7 @@
 /**
- * Component for entities or objects with movement physics.
- * @author
+ * Component for entities or objects with movement physics. Entities with
+ * position, velocity, and acceleration should implement IPhysics.
+ * @author omgimanerd
  */
 
 import { Type } from 'class-transformer'
