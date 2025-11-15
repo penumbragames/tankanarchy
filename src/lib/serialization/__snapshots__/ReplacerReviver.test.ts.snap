@@ -8,7 +8,7 @@ Player {
   "health": 10,
   "hitbox": Hitbox {
     "body": undefined,
-    "hitboxSize": 20,
+    "size": 20,
   },
   "kills": 0,
   "lastShotTime": 0,
@@ -67,7 +67,7 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
       }
     },
     "hitbox": {
-      "hitboxSize": 20
+      "size": 20
     },
     "name": "test_player",
     "socketID": "socket_id",
@@ -100,7 +100,7 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
         }
       },
       "hitbox": {
-        "hitboxSize": 10
+        "size": 10
       },
       "angle": 3.141592653589793,
       "damage": 1,
@@ -122,7 +122,7 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
           }
         },
         "hitbox": {
-          "hitboxSize": 20
+          "size": 20
         },
         "name": "test_player",
         "socketID": "socket_id",
@@ -156,7 +156,7 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
         }
       },
       "hitbox": {
-        "hitboxSize": 10
+        "size": 10
       },
       "type": "HEALTH_PACK",
       "__type__": "Powerup"
@@ -173,7 +173,7 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
       "destroyed": false,
       "hitbox": Hitbox {
         "body": undefined,
-        "hitboxSize": 10,
+        "size": 10,
       },
       "physics": Physics {
         "acceleration": Vector {
@@ -200,7 +200,7 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
       "distanceTraveled": 0,
       "hitbox": Hitbox {
         "body": undefined,
-        "hitboxSize": 10,
+        "size": 10,
       },
       "physics": Physics {
         "acceleration": Vector {
@@ -223,7 +223,7 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
         "health": 10,
         "hitbox": Hitbox {
           "body": undefined,
-          "hitboxSize": 20,
+          "size": 20,
         },
         "kills": 0,
         "lastShotTime": 0,
@@ -260,7 +260,7 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
     "health": 10,
     "hitbox": Hitbox {
       "body": undefined,
-      "hitboxSize": 20,
+      "size": 20,
     },
     "kills": 0,
     "lastShotTime": 0,

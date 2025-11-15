@@ -94,7 +94,7 @@ describe('Test serializing/deserializing basic class instances', () => {
             }
           },
           "hitbox": {
-            "hitboxSize": 10
+            "size": 10
           },
           "type": "HEALTH_PACK",
           "__type__": "Powerup"
@@ -109,7 +109,7 @@ describe('Test serializing/deserializing basic class instances', () => {
         "destroyed": false,
         "hitbox": Hitbox {
           "body": undefined,
-          "hitboxSize": 10,
+          "size": 10,
         },
         "physics": Physics {
           "acceleration": Vector {
@@ -160,7 +160,7 @@ describe('Test serializing/deserializing basic class instances', () => {
             }
           },
           "hitbox": {
-            "hitboxSize": 20
+            "size": 20
           },
           "name": "test_player",
           "socketID": "socket_id",
