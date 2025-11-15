@@ -6,6 +6,7 @@
 import SOUNDS from 'lib/enums/Sounds'
 
 import Sound from 'client/sound/Sound'
+import { StrictEnumMapping } from 'lib/enums/EnumMapping'
 
 // Populated asynchronously
 let SOUND_MAP: Record<SOUNDS, Sound> = {} as Record<SOUNDS, Sound>
@@ -19,12 +20,13 @@ const loadSound = async (soundEnum: SOUNDS, src: string) => {
  * called during site load prior to game initialization.
  */
 export const loadSounds = async () => {
-  return Promise.all([
+  await Promise.all([
     loadSound(SOUNDS.EXPLOSION, '/sound/boom.mp3'),
     loadSound(SOUNDS.GUN_POWERUP, '/sound/gunPowerup.wav'),
     loadSound(SOUNDS.HEALTH_PACK, '/sound/healthpack.mp3'),
     loadSound(SOUNDS.TANK_SHOT, '/sound/tankShot.mp3'),
   ])
+  StrictEnumMapping<Sound>(SOUNDS, SOUND_MAP)
 }
 
 export default SOUND_MAP

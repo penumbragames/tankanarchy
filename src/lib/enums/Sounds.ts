@@ -2,7 +2,7 @@
  * @author omgimanerd
  */
 
-const enum SOUNDS {
+enum SOUNDS {
   EXPLOSION = 'EXPLOSION',
   GUN_POWERUP = 'GUN_POWERUP',
   HEALTH_PACK = 'HEALTH_PACK',

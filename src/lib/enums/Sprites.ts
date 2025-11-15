@@ -2,7 +2,7 @@
  * @author omgimanerd
  */
 
-const enum SPRITES {
+enum SPRITES {
   BULLET = 'BULLET',
   EXPLOSION = 'EXPLOSION',
   HEALTH_PACK_POWERUP = 'HEALTH_PACK_POWERUP',

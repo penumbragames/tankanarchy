@@ -10,6 +10,7 @@ import SPRITES from 'lib/enums/Sprites'
 import AnimatedSprite from 'client/graphics/AnimatedSprite'
 import { Sprite } from 'client/graphics/Sprite'
 import StaticSprite from 'client/graphics/StaticSprite'
+import { StrictEnumMapping } from 'lib/enums/EnumMapping'
 
 // Global sprite object stores, populated asynchronously
 export let SPRITE_MAP: Record<SPRITES, Sprite> = {} as Record<SPRITES, Sprite>
@@ -70,7 +71,7 @@ const loadSprites = async () => {
     loadSprite(SPRITES.TILE, StaticSprite, '/img/tile.png'),
   ])
 
-  const s = SPRITE_MAP
+  const s = StrictEnumMapping<Sprite>(SPRITES, SPRITE_MAP)
   POWERUP_SPRITES = {
     [POWERUPS.HEALTH_PACK]: s[SPRITES.HEALTH_PACK_POWERUP],
     [POWERUPS.RAPIDFIRE]: s[SPRITES.RAPIDFIRE_POWERUP],
