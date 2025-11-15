@@ -22,6 +22,18 @@ export class Physics {
   static create(): Physics {
     return new Physics(Vector.zero(), Vector.zero(), Vector.zero())
   }
+
+  updatePosition(deltaTime: number): Vector {
+    const displacement = Vector.scale(this.velocity, deltaTime)
+    this.position.add(displacement)
+    return displacement
+  }
+
+  updateVelocity(deltaTime: number): Vector {
+    const velocityUpdate = Vector.scale(this.acceleration, deltaTime)
+    this.velocity.add(velocityUpdate)
+    return velocityUpdate
+  }
 }
 
 export interface IPhysics {

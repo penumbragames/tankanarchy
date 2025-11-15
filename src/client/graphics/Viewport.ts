@@ -15,7 +15,7 @@ class Viewport implements IPhysics, IUpdateable {
 
   physics: Physics
 
-  playerPosition: Vector
+  playerPosition: Vector // tracks the position of the self player
   canvas: Canvas
 
   /**

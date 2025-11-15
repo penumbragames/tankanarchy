@@ -55,12 +55,31 @@ export default class Player extends Entity {
   }
 
   /**
-   * Creates a new Player object.
+   * Factory method for a new Player object.
    * @param {string} name The display name of the player
    * @param {string} socketID The associated socket ID
    */
   static create(name: string, socketID: string): Player {
     return new Player(name, socketID).spawn()
+  }
+
+  override update(updateFrame: UpdateFrame): void {
+    this.lastUpdateTime = updateFrame.lastUpdateTime
+    this.physics.position.add(
+      Vector.scale(this.physics.velocity, updateFrame.deltaTime),
+    )
+    this.boundToWorld()
+    this.tankAngle = Util.normalizeAngle(
+      this.tankAngle + (this.turnRate * updateFrame.deltaTime), // prettier-ignore
+    )
+
+    for (const state of this.powerupStates.values()) {
+      state.update(updateFrame)
+      if (state.expired) {
+        state.remove(this)
+        this.powerupStates.delete(state.type)
+      }
+    }
   }
 
   /**
@@ -85,25 +104,6 @@ export default class Player extends Entity {
     }
 
     this.turretAngle = data.turretAngle
-  }
-
-  override update(updateFrame: UpdateFrame): void {
-    this.lastUpdateTime = updateFrame.lastUpdateTime
-    this.physics.position.add(
-      Vector.scale(this.physics.velocity, updateFrame.deltaTime),
-    )
-    this.boundToWorld()
-    this.tankAngle = Util.normalizeAngle(
-      this.tankAngle + (this.turnRate * updateFrame.deltaTime), // prettier-ignore
-    )
-
-    for (const state of this.powerupStates.values()) {
-      state.update(updateFrame)
-      if (state.expired) {
-        state.remove(this)
-        this.powerupStates.delete(state.type)
-      }
-    }
   }
 
   getPowerupState<T extends POWERUPS>(type: T): PowerupTypeMap[T] | undefined {

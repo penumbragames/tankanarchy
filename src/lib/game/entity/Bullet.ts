@@ -25,8 +25,8 @@ export default class Bullet extends Entity {
   angle: number
   @Type(() => Player) source: Ref<Player>
 
-  damage: number
-  distanceTraveled: number
+  damage: number = Bullet.DEFAULT_DAMAGE
+  distanceTraveled: number = 0 // accumulated square of the distance travelled
 
   constructor(
     position: Vector,
@@ -37,9 +37,6 @@ export default class Bullet extends Entity {
     super(position, velocity, Vector.zero(), Bullet.HITBOX_SIZE)
     this.angle = angle
     this.source = source
-
-    this.damage = Bullet.DEFAULT_DAMAGE
-    this.distanceTraveled = 0
   }
 
   /**
@@ -59,17 +56,12 @@ export default class Bullet extends Entity {
   }
 
   override update(updateFrame: UpdateFrame): void {
-    const distanceStep = Vector.scale(
-      this.physics.velocity,
-      updateFrame.deltaTime,
-    )
-    this.physics.position.add(distanceStep)
-    if (!this.inWorld()) {
-      this.destroyed = true
-      return
-    }
-    this.distanceTraveled += distanceStep.mag2
-    if (this.distanceTraveled > Bullet.MAX_TRAVEL_DISTANCE ** 2) {
+    const displacement = this.physics.updatePosition(updateFrame.deltaTime)
+    this.distanceTraveled += displacement.mag2
+    if (
+      !this.inWorld() ||
+      this.distanceTraveled > Bullet.MAX_TRAVEL_DISTANCE ** 2
+    ) {
       this.destroyed = true
     }
   }
