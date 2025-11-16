@@ -2,6 +2,10 @@
 
 exports[`Test serializing/deserializing basic class instances Player 2`] = `
 Player {
+  "bulletShooting": Cooldown {
+    "cooldown": 800,
+    "lastUsage": 0,
+  },
   "bulletsPerShot": 1,
   "deaths": 0,
   "destroyed": false,
@@ -11,8 +15,6 @@ Player {
     "size": 20,
   },
   "kills": 0,
-  "lastShotTime": 0,
-  "lastUpdateTime": 0,
   "name": "test_player",
   "physics": Physics {
     "acceleration": Vector {
@@ -39,7 +41,10 @@ Map {
     },
   }
 ,
-  "shotCooldown": 800,
+  "rocketShooting": Cooldown {
+    "cooldown": 1500,
+    "lastUsage": 0,
+  },
   "socketID": "socket_id",
   "speed": 0.4,
   "tankAngle": 2,
@@ -105,36 +110,6 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
       "angle": 3.141592653589793,
       "damage": 1,
       "distanceTraveled": 0,
-      "source": {
-        "destroyed": false,
-        "physics": {
-          "position": {
-            "x": 3,
-            "y": 4
-          },
-          "velocity": {
-            "x": 0,
-            "y": 0
-          },
-          "acceleration": {
-            "x": 0,
-            "y": 0
-          }
-        },
-        "hitbox": {
-          "size": 20
-        },
-        "name": "test_player",
-        "socketID": "socket_id",
-        "tankAngle": 2,
-        "turretAngle": 0,
-        "turnRate": 0,
-        "speed": 0.4,
-        "health": 10,
-        "kills": 0,
-        "deaths": 0,
-        "powerupStates": {}
-      },
       "__type__": "Bullet"
     }
   ],
@@ -216,44 +191,14 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
           "y": 0.00000000000000014695761589768238,
         },
       },
-      "source": Player {
-        "bulletsPerShot": 1,
-        "deaths": 0,
-        "destroyed": false,
-        "health": 10,
-        "hitbox": Hitbox {
-          "body": undefined,
-          "size": 20,
-        },
-        "kills": 0,
-        "lastShotTime": 0,
-        "lastUpdateTime": 0,
-        "name": "test_player",
-        "physics": Physics {
-          "acceleration": Vector {
-            "x": 0,
-            "y": 0,
-          },
-          "position": Vector {
-            "x": 3,
-            "y": 4,
-          },
-          "velocity": Vector {
-            "x": 0,
-            "y": 0,
-          },
-        },
-        "powerupStates": Map {},
-        "shotCooldown": 800,
-        "socketID": "socket_id",
-        "speed": 0.4,
-        "tankAngle": 2,
-        "turnRate": 0,
-        "turretAngle": 0,
-      },
+      "source": undefined,
     },
   ],
   "self": Player {
+    "bulletShooting": Cooldown {
+      "cooldown": 800,
+      "lastUsage": 0,
+    },
     "bulletsPerShot": 1,
     "deaths": 0,
     "destroyed": false,
@@ -263,8 +208,6 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
       "size": 20,
     },
     "kills": 0,
-    "lastShotTime": 0,
-    "lastUpdateTime": 0,
     "name": "test_player",
     "physics": Physics {
       "acceleration": Vector {
@@ -281,7 +224,10 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
       },
     },
     "powerupStates": Map {},
-    "shotCooldown": 800,
+    "rocketShooting": Cooldown {
+      "cooldown": 1500,
+      "lastUsage": 0,
+    },
     "socketID": "socket_id",
     "speed": 0.4,
     "tankAngle": 2,

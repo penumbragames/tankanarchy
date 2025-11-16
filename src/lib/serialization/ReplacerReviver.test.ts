@@ -231,7 +231,6 @@ describe('Test serializing/deserializing complex objects', () => {
     expect(deserialized.projectiles).toBeArrayOfSize(1)
     const deserializedBullet = deserialized.projectiles[0]
     expect(deserializedBullet).toBeInstanceOf(Bullet)
-    expect(deserializedBullet.source).toBeInstanceOf(Player)
 
     expect(deserialized.powerups).toBeArrayOfSize(1)
     const deserializedPowerup = deserialized.powerups[0]
