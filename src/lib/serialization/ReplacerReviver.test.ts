@@ -1,4 +1,7 @@
-// Testing for object serialization to and from JSON
+/**
+ * Testing for object serialization to and from JSON
+ * @author omgimanerd
+ */
 
 import { beforeEach, describe, expect, setSystemTime, test } from 'bun:test'
 

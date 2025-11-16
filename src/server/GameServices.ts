@@ -4,6 +4,8 @@
  * @author omgimanerd
  */
 
+import random from 'random'
+
 import PARTICLES from 'lib/enums/Particles'
 import SOUNDS from 'lib/enums/Sounds'
 import SOCKET_EVENTS from 'lib/socket/SocketEvents'
@@ -12,6 +14,15 @@ import { Projectile } from 'lib/game/component/Projectile'
 import Vector from 'lib/math/Vector'
 import { SocketServer } from 'lib/socket/SocketServer'
 import Game from 'server/Game'
+
+type ParticleDrawingOptions = {}
+type ExplosionOptions = {
+  // dictates the spatial spread that explosion particles can generate
+  spread: number
+  // dictates the number of explosion particles
+  density: number
+  delay: number
+}
 
 export default class GameServices {
   game: Game
@@ -29,11 +40,30 @@ export default class GameServices {
     })
   }
 
-  addParticle(type: PARTICLES, source: Vector, options: any /* TODO */): void {
+  addParticle(
+    type: PARTICLES,
+    position: Vector,
+    options: any /* TODO */,
+  ): void {
     this.socket.sockets.emit(SOCKET_EVENTS.PARTICLE, {
       type,
-      source,
+      source: position,
     })
+  }
+
+  addExplosion(position: Vector, options: ExplosionOptions): void {
+    const spread = random.normal(0, options.spread)
+    const delayFn = random.uniformInt(0, options.delay)
+    for (let i = 0; i < options.density; ++i) {
+      const delay = delayFn()
+      const newPosition = position.copy().add(new Vector(spread(), spread()))
+      setTimeout(() => {
+        this.socket.sockets.emit(SOCKET_EVENTS.PARTICLE, {
+          type: PARTICLES.EXPLOSION,
+          source: newPosition,
+        })
+      }, delay)
+    }
   }
 
   addProjectile(...projectiles: Projectile[]) {

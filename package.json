@@ -32,6 +32,7 @@
     "express": "^4.21.2",
     "morgan": "^1.10.1",
     "pug": "^3.0.3",
+    "random": "^5.4.1",
     "reflect-metadata": "^0.2.2",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",

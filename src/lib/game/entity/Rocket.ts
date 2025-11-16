@@ -19,7 +19,7 @@ export default class Rocket extends Entity implements IProjectile {
   static readonly MAX_TRAVEL_DISTANCE = 800
   // If the explosion threshold distance is too small, it is possible a single
   // update tick may take the rocket entity past the target.
-  static readonly EXPLOSION_DISTANCE_THRESHOLD = 3
+  static readonly EXPLOSION_DISTANCE_THRESHOLD = 5
   static readonly HITBOX_SIZE = 10
 
   angle: number
@@ -65,6 +65,11 @@ export default class Rocket extends Entity implements IProjectile {
       atTarget
     ) {
       this.destroy(services)
+      services.addExplosion(this.physics.position, {
+        spread: 25,
+        density: 8,
+        delay: 500,
+      })
     }
   }
 }
