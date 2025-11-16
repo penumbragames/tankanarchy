@@ -21,10 +21,11 @@ const loadSound = async (soundEnum: SOUNDS, src: string) => {
  */
 export const loadSounds = async () => {
   await Promise.all([
+    loadSound(SOUNDS.BULLET_SHOT, '/sound/bulletShot.mp3'),
     loadSound(SOUNDS.EXPLOSION, '/sound/boom.mp3'),
     loadSound(SOUNDS.GUN_POWERUP, '/sound/gunPowerup.wav'),
     loadSound(SOUNDS.HEALTH_PACK, '/sound/healthpack.mp3'),
-    loadSound(SOUNDS.TANK_SHOT, '/sound/tankShot.mp3'),
+    loadSound(SOUNDS.ROCKET_SHOT, '/sound/rocketShot.wav'),
   ])
   StrictEnumMapping<Sound>(SOUNDS, SOUND_MAP)
 }

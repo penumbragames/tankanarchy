@@ -19,6 +19,7 @@ import Bullet from 'lib/game/entity/Bullet'
 import Entity from 'lib/game/entity/Entity'
 import Powerup from 'lib/game/entity/Powerup'
 import { PowerupState, PowerupTypeMap } from 'lib/game/entity/PowerupState'
+import Rocket from 'lib/game/entity/Rocket'
 import Util from 'lib/math/Util'
 import Vector from 'lib/math/Vector'
 import { PlayerInputs } from 'lib/socket/SocketInterfaces'
@@ -121,8 +122,13 @@ export default class Player extends Entity {
 
     if (data.shootBullet && this.bulletShooting.ready(updateFrame)) {
       services.addProjectile(...this.getBulletsFromShot())
-      services.playSound(SOUNDS.TANK_SHOT, this.physics.position)
+      services.playSound(SOUNDS.BULLET_SHOT, this.physics.position)
       this.bulletShooting.trigger(updateFrame)
+    }
+    if (data.shootRocket && this.rocketShooting.ready(updateFrame)) {
+      services.addProjectile(this.getRocketFromShot())
+      services.playSound(SOUNDS.ROCKET_SHOT, this.physics.position)
+      this.rocketShooting.trigger(updateFrame)
     }
   }
 
@@ -157,6 +163,10 @@ export default class Player extends Entity {
       }
     }
     return bullets
+  }
+
+  getRocketFromShot(): Rocket {
+    return Rocket.createFromPlayer(this)
   }
 
   isDead(): boolean {

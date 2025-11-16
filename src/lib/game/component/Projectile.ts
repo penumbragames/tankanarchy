@@ -6,6 +6,8 @@ import Entity from 'lib/game/entity/Entity'
 import Player from 'lib/game/entity/Player'
 
 export interface IProjectile {
+  angle: number
+
   source: Player
   damage: number
 

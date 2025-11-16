@@ -15,9 +15,6 @@ import Input from 'client/Input'
 import Particle from 'client/particle/Particle'
 import SoundPlayer from 'client/sound/SoundPlayer'
 import Leaderboard from 'client/ui/Leaderboard'
-import IProjectile from 'lib/game/component/Projectile'
-import Bullet from 'lib/game/entity/Bullet'
-import Entity from 'lib/game/entity/Entity'
 import GameLoop from 'lib/game/GameLoop'
 import Vector from 'lib/math/Vector'
 import { SocketClient } from 'lib/socket/SocketClient'
@@ -174,11 +171,9 @@ export default class Game {
       // Render
       this.renderer.clear()
       this.renderer.drawTiles()
-      this.state.projectiles.forEach((projectile: Entity & IProjectile) => {
-        if (projectile instanceof Bullet) {
-          this.renderer.drawBullet(projectile)
-        }
-      })
+      this.state.projectiles.forEach(
+        this.renderer.drawProjectile.bind(this.renderer),
+      )
       this.state.powerups.forEach(this.renderer.drawPowerup.bind(this.renderer))
       this.renderer.drawTank(true, this.state.self)
       this.state.players

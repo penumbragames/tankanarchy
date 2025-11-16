@@ -18,10 +18,12 @@ import Canvas from 'client/graphics/Canvas'
 import Viewport from 'client/graphics/Viewport'
 import Input from 'client/Input'
 import Particle from 'client/particle/Particle'
+import { Projectile } from 'lib/game/component/Projectile'
 import Bullet from 'lib/game/entity/Bullet'
 import Entity from 'lib/game/entity/Entity'
 import Player from 'lib/game/entity/Player'
 import Powerup from 'lib/game/entity/Powerup'
+import Rocket from 'lib/game/entity/Rocket'
 import Vector from 'lib/math/Vector'
 
 export default class Renderer {
@@ -161,14 +163,25 @@ export default class Renderer {
     }
   }
 
-  drawBullet(bullet: Bullet): void {
-    const canvasCoords = this.viewport.toCanvas(bullet.physics.position)
-    SPRITE_MAP[SPRITES.BULLET].draw(this.context, {
-      position: canvasCoords,
-      centered: true,
-      angle: bullet.angle,
-    })
-    this.drawDebugHitbox(bullet)
+  drawProjectile(projectile: Projectile): void {
+    const canvasCoords = this.viewport.toCanvas(projectile.physics.position)
+    if (projectile instanceof Bullet) {
+      SPRITE_MAP[SPRITES.BULLET].draw(this.context, {
+        position: canvasCoords,
+        centered: true,
+        angle: projectile.angle,
+      })
+    } else if (projectile instanceof Rocket) {
+      SPRITE_MAP[SPRITES.ROCKET].draw(this.context, {
+        position: canvasCoords,
+        // TODO: fix the underlying asset and make it animated
+        width: 80,
+        height: 10,
+        centered: true,
+        angle: projectile.angle,
+      })
+    }
+    this.drawDebugHitbox(projectile)
   }
 
   drawPowerup(powerup: Powerup): void {

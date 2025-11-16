@@ -11,18 +11,22 @@ import { getReplacerReviver } from 'lib/serialization/ReplacerReviver'
 import { Hitbox } from 'lib/game/component/Hitbox'
 import { Physics } from 'lib/game/component/Physics'
 import Bullet from 'lib/game/entity/Bullet'
+import Explosion from 'lib/game/entity/Explosion'
 import Player from 'lib/game/entity/Player'
 import Powerup from 'lib/game/entity/Powerup'
+import Rocket from 'lib/game/entity/Rocket'
 import Vector from 'lib/math/Vector'
 
 // All the custom serializable classes that should be preserved when sent over
 // the socket are listed here.
 const { replacer, reviver } = getReplacerReviver({
   Bullet,
+  Explosion,
   Hitbox,
   Physics,
   Player,
   Powerup,
+  Rocket,
   Vector,
 })
 

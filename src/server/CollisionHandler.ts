@@ -12,6 +12,7 @@ import Bullet from 'lib/game/entity/Bullet'
 import Entity from 'lib/game/entity/Entity'
 import Player from 'lib/game/entity/Player'
 import Powerup from 'lib/game/entity/Powerup'
+import Rocket from 'lib/game/entity/Rocket'
 import { Constructor } from 'lib/types'
 import GameServices from 'server/GameServices'
 
@@ -89,6 +90,7 @@ export default class CollisionHandler {
         b.destroy(this.services)
         this.services.playSound(SOUNDS.EXPLOSION, p.physics.position)
       }) ||
+      e.handle(Player, Rocket, (p: Player, r: Rocket) => {}) ||
       e.handle(Player, Powerup, (p: Player, po: Powerup) => {
         switch (p.applyPowerup(po)) {
           case POWERUPS.HEALTH_PACK:
@@ -114,6 +116,9 @@ export default class CollisionHandler {
         this.services.playSound(SOUNDS.EXPLOSION, b.physics.position)
         this.services.addParticle(PARTICLES.EXPLOSION, b.physics.position, {})
       }) ||
+      e.handle(Rocket, Rocket, (r: Rocket, e: Entity) => {}) ||
+      e.handle(Rocket, Powerup, (r: Rocket, e: Entity) => {}) ||
+      e.handle(Rocket, Bullet, (r: Rocket, e: Entity) => {}) ||
       e.handle(Powerup, Powerup, (_p1: Powerup, _p2: Powerup) => {})
     ) {
       return

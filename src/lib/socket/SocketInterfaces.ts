@@ -5,11 +5,12 @@
 
 import PARTICLES from 'lib/enums/Particles'
 import SOUNDS from 'lib/enums/Sounds'
+import SOCKET_EVENTS from 'lib/socket/SocketEvents'
+
 import { Projectile } from 'lib/game/component/Projectile'
 import Player from 'lib/game/entity/Player'
 import Powerup from 'lib/game/entity/Powerup'
 import Vector from 'lib/math/Vector'
-import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 
 /**
  * Interface for the PLAYER_ACTION socket event, sent from the client to the

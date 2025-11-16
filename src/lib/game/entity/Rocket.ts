@@ -3,6 +3,8 @@
  * @author omgimanerd
  */
 
+import type { Ref } from 'lib/types'
+
 import { Exclude } from 'class-transformer'
 import { IProjectile } from 'lib/game/component/Projectile'
 import { UpdateFrame } from 'lib/game/component/Updateable'
@@ -13,12 +15,12 @@ import GameServices from 'server/GameServices'
 
 export default class Rocket extends Entity implements IProjectile {
   static readonly DEFAULT_DAMAGE = 3
-  static readonly SPEED = 2
+  static readonly SPEED = 1.6
   static readonly MAX_TRAVEL_DISTANCE = 1000
   static readonly HITBOX_SIZE = 10
 
   angle: number
-  @Exclude() source: Player
+  @Exclude() source: Ref<Player>
 
   damage: number = Rocket.DEFAULT_DAMAGE
   distanceTraveled: number = 0 // accumulated square of the distance travelled
