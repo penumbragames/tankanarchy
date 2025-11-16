@@ -56,18 +56,14 @@ export default class Bullet extends Entity {
     )
   }
 
-  override update(updateFrame: UpdateFrame): void {
+  override update(updateFrame: UpdateFrame, services: GameServices): void {
     const displacement = this.physics.updatePosition(updateFrame.deltaTime)
     this.distanceTraveled += displacement.mag2
     if (
       !this.inWorld() ||
       this.distanceTraveled > Bullet.MAX_TRAVEL_DISTANCE ** 2
     ) {
-      this.destroyed = true
+      this.destroy(services)
     }
-  }
-
-  override destroy(services: GameServices): void {
-    super.destroy(services)
   }
 }

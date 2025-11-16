@@ -80,7 +80,7 @@ export default class Game {
       ...this.powerups,
     ]
     entities.forEach((entity: Entity) => {
-      entity.update(this.gameLoop.updateFrame)
+      entity.update(this.gameLoop.updateFrame, this.services)
     })
     this.collisionHandler.run(entities)
 

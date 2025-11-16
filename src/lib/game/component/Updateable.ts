@@ -4,6 +4,8 @@
  * @author omgimanerd
  */
 
+import GameServices from 'server/GameServices'
+
 export type UpdateFrame = {
   lastUpdateTime: number
   currentTime: number
@@ -11,5 +13,5 @@ export type UpdateFrame = {
 }
 
 export interface IUpdateable {
-  update(updateFrame: UpdateFrame): void
+  update(updateFrame: UpdateFrame, services: GameServices): void
 }

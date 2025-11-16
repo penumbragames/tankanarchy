@@ -86,12 +86,11 @@ export default class CollisionHandler {
           p.deaths++
           b.source.kills++
         }
-        b.destroyed = true
+        b.destroy(this.services)
         this.services.playSound(SOUNDS.EXPLOSION, p.physics.position)
       }) ||
       e.handle(Player, Powerup, (p: Player, po: Powerup) => {
-        const type = p.applyPowerup(po)
-        switch (type) {
+        switch (p.applyPowerup(po)) {
           case POWERUPS.HEALTH_PACK:
             this.services.playSound(SOUNDS.HEALTH_PACK, p.physics.position)
             break
@@ -100,22 +99,22 @@ export default class CollisionHandler {
             this.services.playSound(SOUNDS.GUN_POWERUP, p.physics.position)
             break
         }
-        po.destroyed = true
+        po.destroy(this.services)
       }) ||
       e.handle(Bullet, Bullet, (b1: Bullet, b2: Bullet) => {
         if (b1.source === b2.source) return
-        b1.destroyed = true
-        b2.destroyed = true
+        b1.destroy(this.services)
+        b2.destroy(this.services)
         this.services.playSound(SOUNDS.EXPLOSION, b1.physics.position)
         this.services.addParticle(PARTICLES.EXPLOSION, b1.physics.position, {})
       }) ||
       e.handle(Bullet, Powerup, (b: Bullet, po: Powerup) => {
-        b.destroyed = true
-        po.destroyed = true
+        b.destroy(this.services)
+        po.destroy(this.services)
         this.services.playSound(SOUNDS.EXPLOSION, b.physics.position)
         this.services.addParticle(PARTICLES.EXPLOSION, b.physics.position, {})
       }) ||
-      e.handle(Powerup, Powerup, (p1: Powerup, p2: Powerup) => {})
+      e.handle(Powerup, Powerup, (_p1: Powerup, _p2: Powerup) => {})
     ) {
       return
     }

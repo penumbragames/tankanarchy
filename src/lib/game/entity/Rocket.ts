@@ -9,6 +9,7 @@ import { UpdateFrame } from 'lib/game/component/Updateable'
 import Entity from 'lib/game/entity/Entity'
 import Player from 'lib/game/entity/Player'
 import Vector from 'lib/math/Vector'
+import GameServices from 'server/GameServices'
 
 export default class Rocket extends Entity implements IProjectile {
   static readonly DEFAULT_DAMAGE = 3
@@ -43,14 +44,14 @@ export default class Rocket extends Entity implements IProjectile {
     )
   }
 
-  override update(updateFrame: UpdateFrame): void {
+  override update(updateFrame: UpdateFrame, services: GameServices): void {
     const displacement = this.physics.updatePosition(updateFrame.deltaTime)
     this.distanceTraveled += displacement.mag2
     if (
       !this.inWorld() ||
       this.distanceTraveled > Rocket.MAX_TRAVEL_DISTANCE ** 2
     ) {
-      this.destroyed = true
+      this.destroy(services)
     }
   }
 }

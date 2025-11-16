@@ -29,11 +29,13 @@ export default abstract class Entity implements IPhysics, IHitbox, IUpdateable {
   }
 
   /**
-   * Performs a physics update.
+   * Updates this entity's state.
    * @param {UpdateFrame} _updateFrame An object containing the last update
    *   time, current time, and delta time.
+   * @param {GameServices} _services A helper object to access and modify the
+   *   game state.
    */
-  update(_updateFrame: UpdateFrame) {}
+  update(_updateFrame: UpdateFrame, _services: GameServices) {}
 
   destroy(_services: GameServices) {
     this.destroyed = true

@@ -20,6 +20,7 @@ import { PowerupState, PowerupTypeMap } from 'lib/game/entity/PowerupState'
 import Util from 'lib/math/Util'
 import Vector from 'lib/math/Vector'
 import { PlayerInputs } from 'lib/socket/SocketInterfaces'
+import GameServices from 'server/GameServices'
 
 export default class Player extends Entity {
   name: string
@@ -63,7 +64,7 @@ export default class Player extends Entity {
     return new Player(name, socketID).spawn()
   }
 
-  override update(updateFrame: UpdateFrame): void {
+  override update(updateFrame: UpdateFrame, _services: GameServices): void {
     this.lastUpdateTime = updateFrame.lastUpdateTime
     this.physics.position.add(
       Vector.scale(this.physics.velocity, updateFrame.deltaTime),
