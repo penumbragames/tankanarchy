@@ -10,8 +10,9 @@ import { IPhysics, Physics } from 'lib/game/component/Physics'
 import { IUpdateable, UpdateFrame } from 'lib/game/component/Updateable'
 import Util from 'lib/math/Util'
 import Vector from 'lib/math/Vector'
+import GameServices from 'server/GameServices'
 
-export default class Entity implements IPhysics, IHitbox, IUpdateable {
+export default abstract class Entity implements IPhysics, IHitbox, IUpdateable {
   @Type(() => Physics) physics: Physics
   @Type(() => Hitbox) hitbox: Hitbox
 
@@ -33,6 +34,10 @@ export default class Entity implements IPhysics, IHitbox, IUpdateable {
    *   time, current time, and delta time.
    */
   update(_updateFrame: UpdateFrame) {}
+
+  destroy(_services: GameServices) {
+    this.destroyed = true
+  }
 
   collided(other: IHitbox): boolean {
     return this.hitbox.collided(other.hitbox)

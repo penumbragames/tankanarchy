@@ -29,4 +29,6 @@ export class Hitbox {
 
 export interface IHitbox {
   hitbox: Hitbox
+
+  collided(other: IHitbox): boolean // Utility method should defer to hitbox
 }

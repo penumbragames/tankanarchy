@@ -4,18 +4,16 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import PARTICLES from 'lib/enums/Particles'
-import POWERUPS from 'lib/enums/Powerups'
 import SOUNDS from 'lib/enums/Sounds'
 import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 
 import Bullet from 'lib/game/entity/Bullet'
 import Entity from 'lib/game/entity/Entity'
-import Player from 'lib/game/entity/Player'
 import Powerup from 'lib/game/entity/Powerup'
 import GameLoop from 'lib/game/GameLoop'
 import { PlayerInputs } from 'lib/socket/SocketInterfaces'
 import { SocketServer } from 'lib/socket/SocketServer'
+import CollisionHandler from 'server/CollisionHandler'
 import GameServices from 'server/GameServices'
 import PlayerContainer from 'server/PlayerContainer'
 
@@ -26,17 +24,18 @@ export default class Game {
   services: GameServices
 
   players: PlayerContainer
-
   projectiles: Bullet[] = []
   powerups: Powerup[] = []
 
   gameLoop: GameLoop
+  collisionHandler: CollisionHandler
 
   constructor(socketServer: SocketServer) {
     this.socketServer = socketServer
     this.services = new GameServices(socketServer)
     this.players = new PlayerContainer(socketServer)
     this.gameLoop = new GameLoop(Game.TARGET_UPS, this.run.bind(this))
+    this.collisionHandler = new CollisionHandler(this.services)
   }
 
   static create(socket: SocketServer): Game {
@@ -80,81 +79,10 @@ export default class Game {
       ...this.projectiles,
       ...this.powerups,
     ]
-
-    // TODO: Use quadtree for collision update
     entities.forEach((entity: Entity) => {
       entity.update(this.gameLoop.updateFrame)
     })
-    for (let i = 0; i < entities.length; ++i) {
-      for (let j = i + 1; j < entities.length; ++j) {
-        let e1 = entities[i]
-        let e2 = entities[j]
-        if (!e1.collided(e2)) {
-          continue
-        }
-
-        // Player-Bullet collision interaction
-        if (e1 instanceof Bullet && e2 instanceof Player) {
-          e1 = entities[j]
-          e2 = entities[i]
-        }
-        if (e1 instanceof Player && e2 instanceof Bullet && e2.source !== e1) {
-          e1.damage(e2.damage)
-          if (e1.isDead()) {
-            e1.spawn()
-            e1.deaths++
-            e2.source.kills++
-          }
-          e2.destroyed = true
-          this.services.playSound(SOUNDS.EXPLOSION, e1.physics.position)
-        }
-
-        // Player-Powerup collision interaction
-        if (e1 instanceof Powerup && e2 instanceof Player) {
-          e1 = entities[j]
-          e2 = entities[i]
-        }
-        if (e1 instanceof Player && e2 instanceof Powerup) {
-          const type = e1.applyPowerup(e2)
-          switch (type) {
-            case POWERUPS.HEALTH_PACK:
-              this.services.playSound(SOUNDS.HEALTH_PACK, e1.physics.position)
-              break
-            case POWERUPS.RAPIDFIRE:
-            case POWERUPS.SHOTGUN:
-              this.services.playSound(SOUNDS.GUN_POWERUP, e1.physics.position)
-              break
-          }
-          e2.destroyed = true
-        }
-
-        // Bullet-Bullet interaction
-        if (
-          e1 instanceof Bullet &&
-          e2 instanceof Bullet &&
-          e1.source !== e2.source
-        ) {
-          e1.destroyed = true
-          e2.destroyed = true
-          this.services.playSound(SOUNDS.EXPLOSION, e1.physics.position)
-        }
-
-        // Bullet-Powerup interaction
-        if (
-          (e1 instanceof Powerup && e2 instanceof Bullet) ||
-          (e1 instanceof Bullet && e2 instanceof Powerup)
-        ) {
-          e1.destroyed = true
-          e2.destroyed = true
-          this.services.playSound(SOUNDS.EXPLOSION, e1.physics.position)
-          this.services.addParticle(
-            PARTICLES.EXPLOSION,
-            e1.physics.position,
-            {},
-          )
-        }
-      }
-    }
+    this.collisionHandler.run(entities)
 
     // Remove destroyed projectiles and powerups.
     this.projectiles = this.projectiles.filter(

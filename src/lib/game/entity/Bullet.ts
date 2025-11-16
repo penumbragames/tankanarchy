@@ -9,6 +9,7 @@ import Entity from 'lib/game/entity/Entity'
 
 import Player from 'lib/game/entity/Player'
 import Vector from 'lib/math/Vector'
+import GameServices from 'server/GameServices'
 
 // Workaround to reference the Player type without depending on load order.
 // TODO: Implement a kill attribution interface for the player to implement to
@@ -64,5 +65,9 @@ export default class Bullet extends Entity {
     ) {
       this.destroyed = true
     }
+  }
+
+  override destroy(services: GameServices): void {
+    super.destroy(services)
   }
 }
