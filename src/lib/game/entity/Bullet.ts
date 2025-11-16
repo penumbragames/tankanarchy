@@ -59,11 +59,8 @@ export default class Bullet extends Entity implements IProjectile {
 
   override update(updateFrame: UpdateFrame, services: GameServices): void {
     const displacement = this.physics.updatePosition(updateFrame.deltaTime)
-    this.distanceTraveled += displacement.mag2
-    if (
-      !this.inWorld() ||
-      this.distanceTraveled > Bullet.MAX_TRAVEL_DISTANCE ** 2
-    ) {
+    this.distanceTraveled += displacement.mag
+    if (!this.inWorld() || this.distanceTraveled > Bullet.MAX_TRAVEL_DISTANCE) {
       this.destroy(services)
     }
   }

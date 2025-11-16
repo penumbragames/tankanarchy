@@ -16,7 +16,7 @@ import GameServices from 'server/GameServices'
 export default class Rocket extends Entity implements IProjectile {
   static readonly DEFAULT_DAMAGE = 3
   static readonly SPEED = 1.6
-  static readonly MAX_TRAVEL_DISTANCE = 1000
+  static readonly MAX_TRAVEL_DISTANCE = 800
   static readonly HITBOX_SIZE = 10
 
   angle: number
@@ -48,11 +48,8 @@ export default class Rocket extends Entity implements IProjectile {
 
   override update(updateFrame: UpdateFrame, services: GameServices): void {
     const displacement = this.physics.updatePosition(updateFrame.deltaTime)
-    this.distanceTraveled += displacement.mag2
-    if (
-      !this.inWorld() ||
-      this.distanceTraveled > Rocket.MAX_TRAVEL_DISTANCE ** 2
-    ) {
+    this.distanceTraveled += displacement.mag
+    if (!this.inWorld() || this.distanceTraveled > Rocket.MAX_TRAVEL_DISTANCE) {
       this.destroy(services)
     }
   }
