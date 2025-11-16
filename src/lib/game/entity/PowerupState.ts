@@ -8,7 +8,7 @@ import POWERUPS from 'lib/enums/Powerups'
 import PLAYER_CONSTANTS from 'lib/game/entity/PlayerConstants'
 
 import { IUpdateable, UpdateFrame } from 'lib/game/component/Updateable'
-import Util from 'lib/math/Util'
+import Random from 'lib/math/Random'
 
 /**
  * Base class for powerup states which modify the Player.
@@ -28,7 +28,7 @@ export abstract class PowerupState implements IUpdateable {
   }
 
   static getRandomDuration(): number {
-    return Util.randRangeInt(
+    return Random.randRangeInt(
       PowerupState.MIN_DURATION,
       PowerupState.MAX_DURATION,
     )
@@ -70,7 +70,7 @@ export class HealthPowerup extends PowerupState {
 
   override init(): HealthPowerup {
     super.init()
-    this.healAmount = Util.randRangeInt(
+    this.healAmount = Random.randRangeInt(
       HealthPowerup.MIN_HEAL,
       HealthPowerup.MAX_HEAL,
     )
@@ -95,7 +95,7 @@ export class RapidfirePowerup extends PowerupState {
 
   override init(): RapidfirePowerup {
     super.init()
-    this.modifier = Util.randRangeInt(
+    this.modifier = Random.randRangeInt(
       RapidfirePowerup.MIN_MODIFIER,
       RapidfirePowerup.MAX_MODIFIER,
     )
@@ -145,7 +145,7 @@ export class ShieldPowerup extends PowerupState {
 
   override init(): ShieldPowerup {
     super.init()
-    this.shield = Util.randRangeInt(
+    this.shield = Random.randRangeInt(
       ShieldPowerup.MIN_SHIELD,
       ShieldPowerup.MAX_SHIELD,
     )
@@ -178,7 +178,7 @@ export class ShotgunPowerup extends PowerupState {
 
   override init(): ShotgunPowerup {
     super.init()
-    this.modifier = Util.randRangeInt(
+    this.modifier = Random.randRangeInt(
       ShotgunPowerup.MIN_MODIFIER,
       ShotgunPowerup.MAX_MODIFIER,
     )
@@ -206,7 +206,7 @@ export class SpeedboostPowerup extends PowerupState {
 
   override init(): SpeedboostPowerup {
     super.init()
-    this.modifier = Util.randRangeInt(
+    this.modifier = Random.randRangeInt(
       SpeedboostPowerup.MIN_MODIFIER,
       SpeedboostPowerup.MAX_MODIFIER,
     )

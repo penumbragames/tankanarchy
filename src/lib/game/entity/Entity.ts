@@ -8,7 +8,7 @@ import * as Constants from 'lib/Constants'
 import { Hitbox, IHitbox } from 'lib/game/component/Hitbox'
 import { IPhysics, Physics } from 'lib/game/component/Physics'
 import { IUpdateable, UpdateFrame } from 'lib/game/component/Updateable'
-import Util from 'lib/math/Util'
+import Util from 'lib/math/Math'
 import Vector from 'lib/math/Vector'
 import GameServices from 'server/GameServices'
 
