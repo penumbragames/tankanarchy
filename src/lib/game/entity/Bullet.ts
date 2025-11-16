@@ -28,7 +28,7 @@ export default class Bullet extends Entity implements IProjectile {
   @Exclude() source: Ref<Player>
 
   damage: number = Bullet.DEFAULT_DAMAGE
-  distanceTraveled: number = 0 // accumulated square of the distance travelled
+  distanceTraveled: number = 0
 
   constructor(
     position: Vector,

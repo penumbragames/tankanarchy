@@ -21,6 +21,7 @@ export interface PlayerInputs {
   down: boolean
   right: boolean
   left: boolean
+  worldMouseCoords: Vector
   turretAngle: number
   shootBullet: boolean
   shootRocket: boolean

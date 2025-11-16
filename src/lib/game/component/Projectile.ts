@@ -7,10 +7,8 @@ import Player from 'lib/game/entity/Player'
 
 export interface IProjectile {
   angle: number
-
   source: Player
   damage: number
-
   distanceTraveled: number
 }
 

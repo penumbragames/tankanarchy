@@ -128,7 +128,9 @@ export default class Player extends Entity {
     if (data.shootRocket && this.rocketShooting.ready(updateFrame)) {
       const rocketPowerup = this.getPowerupState(POWERUPS.ROCKET)
       if (rocketPowerup && rocketPowerup.rockets > 0) {
-        services.addProjectile(this.getRocketFromShot())
+        services.addProjectile(
+          Rocket.createFromPlayer(this, data.worldMouseCoords),
+        )
         services.playSound(SOUNDS.ROCKET_SHOT, this.physics.position)
         this.rocketShooting.trigger(updateFrame)
         rocketPowerup.consume()
@@ -167,10 +169,6 @@ export default class Player extends Entity {
       }
     }
     return bullets
-  }
-
-  getRocketFromShot(): Rocket {
-    return Rocket.createFromPlayer(this)
   }
 
   isDead(): boolean {

@@ -17,39 +17,53 @@ export default class Rocket extends Entity implements IProjectile {
   static readonly DEFAULT_DAMAGE = 3
   static readonly SPEED = 1.6
   static readonly MAX_TRAVEL_DISTANCE = 800
+  // If the explosion threshold distance is too small, it is possible a single
+  // update tick may take the rocket entity past the target.
+  static readonly EXPLOSION_DISTANCE_THRESHOLD = 3
   static readonly HITBOX_SIZE = 10
 
   angle: number
   @Exclude() source: Ref<Player>
-
   damage: number = Rocket.DEFAULT_DAMAGE
-  distanceTraveled: number = 0 // accumulated square of the distance travelled
+  distanceTraveled: number = 0
+
+  target: Vector // The target position where the Rocket will explode
 
   constructor(
     position: Vector,
     velocity: Vector,
     angle: number,
     source: Player,
+    target: Vector,
   ) {
     super(position, velocity, Vector.zero(), Rocket.HITBOX_SIZE)
     this.angle = angle
     this.source = source
+    this.target = target
   }
 
-  static createFromPlayer(player: Player): Rocket {
+  static createFromPlayer(player: Player, target: Vector): Rocket {
     const angle = player.turretAngle
     return new Rocket(
       player.physics.position.copy(),
       Vector.fromPolar(Rocket.SPEED, angle),
       angle,
       player,
+      target.copy(),
     )
   }
 
   override update(updateFrame: UpdateFrame, services: GameServices): void {
     const displacement = this.physics.updatePosition(updateFrame.deltaTime)
     this.distanceTraveled += displacement.mag
-    if (!this.inWorld() || this.distanceTraveled > Rocket.MAX_TRAVEL_DISTANCE) {
+    const atTarget =
+      Vector.sub(this.physics.position, this.target).mag2 <
+      Rocket.EXPLOSION_DISTANCE_THRESHOLD ** 2
+    if (
+      !this.inWorld() ||
+      this.distanceTraveled > Rocket.MAX_TRAVEL_DISTANCE ||
+      atTarget
+    ) {
       this.destroy(services)
     }
   }
