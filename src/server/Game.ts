@@ -4,10 +4,9 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import SOUNDS from 'lib/enums/Sounds'
 import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 
-import Bullet from 'lib/game/entity/Bullet'
+import { Projectile } from 'lib/game/component/Projectile'
 import Entity from 'lib/game/entity/Entity'
 import Powerup from 'lib/game/entity/Powerup'
 import GameLoop from 'lib/game/GameLoop'
@@ -24,7 +23,7 @@ export default class Game {
   services: GameServices
 
   players: PlayerContainer
-  projectiles: Bullet[] = []
+  projectiles: Projectile[] = []
   powerups: Powerup[] = []
 
   gameLoop: GameLoop
@@ -32,7 +31,7 @@ export default class Game {
 
   constructor(socketServer: SocketServer) {
     this.socketServer = socketServer
-    this.services = new GameServices(socketServer)
+    this.services = new GameServices(this, socketServer)
     this.players = new PlayerContainer(socketServer)
     this.gameLoop = new GameLoop(Game.TARGET_UPS, this.run.bind(this))
     this.collisionHandler = new CollisionHandler(this.services)
@@ -61,15 +60,7 @@ export default class Game {
    * @param {Object} data The player's input state
    */
   updatePlayerOnInput(socketID: string, data: PlayerInputs) {
-    const player = this.players.getPlayer(socketID)
-    if (player) {
-      player.updateOnInput(data)
-      if (data.shootBullet && player.canShoot()) {
-        const projectiles = player.getProjectilesFromShot()
-        this.projectiles.push(...projectiles)
-        this.services.playSound(SOUNDS.TANK_SHOT, player.physics.position)
-      }
-    }
+    this.players.getPlayer(socketID)?.updateOnInput(data, this.services)
   }
 
   update(): void {
@@ -96,6 +87,9 @@ export default class Game {
     }
   }
 
+  /**
+   * Broadcasts the game's current state to all connected players.
+   */
   sendState(): void {
     const players = [...this.players.players]
     for (const socket of this.players.sockets) {

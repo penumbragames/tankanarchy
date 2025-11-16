@@ -4,7 +4,7 @@
  */
 
 import { Exclude } from 'class-transformer'
-import IProjectile from 'lib/game/component/Projectile'
+import { IProjectile } from 'lib/game/component/Projectile'
 import { UpdateFrame } from 'lib/game/component/Updateable'
 import Entity from 'lib/game/entity/Entity'
 import Player from 'lib/game/entity/Player'

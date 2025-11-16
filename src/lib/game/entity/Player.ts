@@ -12,6 +12,7 @@ import POWERUPS from 'lib/enums/Powerups'
 import PLAYER_CONSTANTS from 'lib/game/entity/PlayerConstants'
 
 import * as Constants from 'lib/Constants'
+import SOUNDS from 'lib/enums/Sounds'
 import { UpdateFrame } from 'lib/game/component/Updateable'
 import Bullet from 'lib/game/entity/Bullet'
 import Entity from 'lib/game/entity/Entity'
@@ -87,7 +88,7 @@ export default class Player extends Entity {
    * Update this player given the client's input
    * @param {PlayerInputs} data
    */
-  updateOnInput(data: PlayerInputs): void {
+  updateOnInput(data: PlayerInputs, services: GameServices): void {
     if ((data.up && data.down) || (!data.up && !data.down)) {
       this.physics.velocity = Vector.zero()
     } else if (data.up) {
@@ -105,6 +106,11 @@ export default class Player extends Entity {
     }
 
     this.turretAngle = data.turretAngle
+
+    if (data.shootBullet && this.canShootBullet()) {
+      services.addProjectile(...this.getProjectilesFromShot())
+      services.playSound(SOUNDS.TANK_SHOT, this.physics.position)
+    }
   }
 
   getPowerupState<T extends POWERUPS>(type: T): PowerupTypeMap[T] | undefined {
@@ -123,7 +129,7 @@ export default class Player extends Entity {
     return powerup.type
   }
 
-  canShoot(): boolean {
+  canShootBullet(): boolean {
     return this.lastUpdateTime > this.lastShotTime + this.shotCooldown
   }
 

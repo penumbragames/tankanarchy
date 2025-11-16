@@ -1,8 +1,15 @@
+/**
+ * @author omgimanerd
+ */
+
+import Entity from 'lib/game/entity/Entity'
 import Player from 'lib/game/entity/Player'
 
-export default interface IProjectile {
+export interface IProjectile {
   source: Player
   damage: number
 
   distanceTraveled: number
 }
+
+export type Projectile = Entity & IProjectile

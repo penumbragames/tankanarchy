@@ -4,6 +4,7 @@
  */
 
 import { Type } from 'class-transformer'
+import { IProjectile } from 'lib/game/component/Projectile'
 import { UpdateFrame } from 'lib/game/component/Updateable'
 import Entity from 'lib/game/entity/Entity'
 
@@ -17,7 +18,7 @@ import GameServices from 'server/GameServices'
 // https://stackoverflow.com/a/77248059
 type Ref<T> = T
 
-export default class Bullet extends Entity {
+export default class Bullet extends Entity implements IProjectile {
   static readonly DEFAULT_DAMAGE = 1
   static readonly SPEED = 1.2
   static readonly MAX_TRAVEL_DISTANCE = 1000

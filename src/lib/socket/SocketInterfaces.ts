@@ -5,7 +5,7 @@
 
 import PARTICLES from 'lib/enums/Particles'
 import SOUNDS from 'lib/enums/Sounds'
-import Bullet from 'lib/game/entity/Bullet'
+import { Projectile } from 'lib/game/component/Projectile'
 import Player from 'lib/game/entity/Player'
 import Powerup from 'lib/game/entity/Powerup'
 import Vector from 'lib/math/Vector'
@@ -41,7 +41,7 @@ export interface ChatMessage {
 export interface GameState {
   self: Player
   players: Player[]
-  projectiles: Bullet[]
+  projectiles: Projectile[]
   powerups: Powerup[]
 }
 

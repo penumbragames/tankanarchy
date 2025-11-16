@@ -15,9 +15,9 @@ import Input from 'client/Input'
 import Particle from 'client/particle/Particle'
 import SoundPlayer from 'client/sound/SoundPlayer'
 import Leaderboard from 'client/ui/Leaderboard'
+import IProjectile from 'lib/game/component/Projectile'
 import Bullet from 'lib/game/entity/Bullet'
-import Player from 'lib/game/entity/Player'
-import Powerup from 'lib/game/entity/Powerup'
+import Entity from 'lib/game/entity/Entity'
 import GameLoop from 'lib/game/GameLoop'
 import Vector from 'lib/math/Vector'
 import { SocketClient } from 'lib/socket/SocketClient'
@@ -37,10 +37,7 @@ export default class Game {
   soundManager: SoundPlayer
 
   // State from game update messages
-  self: Player | null = null
-  players: Player[] = []
-  projectiles: Bullet[] = []
-  powerups: Powerup[] = []
+  state: GameState | null = null
 
   // Particle system, only created from socket messages, not maintained by
   // server.
@@ -120,10 +117,7 @@ export default class Game {
    * @param state
    */
   onReceiveGameState(state: GameState): void {
-    this.self = state.self
-    this.players = state.players
-    this.projectiles = state.projectiles
-    this.powerups = state.powerups
+    this.state = state
 
     this.viewport.updateTrackingPosition(state.self)
     this.leaderboard.update(state.players)
@@ -148,11 +142,11 @@ export default class Game {
   }
 
   sendInput(): void {
-    if (this.self) {
+    if (this.state?.self) {
       const worldMouseCoords = this.viewport.toWorld(this.input.mouseCoords)
       const playerToMouseVector = Vector.sub(
         worldMouseCoords,
-        this.self.physics.position,
+        this.state.self.physics.position,
       )
       this.socket.emit(SOCKET_EVENTS.PLAYER_ACTION, {
         up: this.input.up,
@@ -167,9 +161,9 @@ export default class Game {
   }
 
   updateAndRender(): void {
-    if (this.self) {
+    if (this.state?.self) {
       this.viewport.update(this.updateAndRenderLoop.updateFrame)
-      this.soundManager.update(this.self.physics.position)
+      this.soundManager.update(this.state.self.physics.position)
       this.particles = this.particles
         .map((particle: Particle) => {
           particle.update(this.updateAndRenderLoop.updateFrame)
@@ -180,15 +174,19 @@ export default class Game {
       // Render
       this.renderer.clear()
       this.renderer.drawTiles()
-      this.projectiles.forEach(this.renderer.drawBullet.bind(this.renderer))
-      this.powerups.forEach(this.renderer.drawPowerup.bind(this.renderer))
-      this.renderer.drawTank(true, this.self)
-      this.players
-        .filter((player) => player.socketID !== this.self?.socketID)
+      this.state.projectiles.forEach((projectile: Entity & IProjectile) => {
+        if (projectile instanceof Bullet) {
+          this.renderer.drawBullet(projectile)
+        }
+      })
+      this.state.powerups.forEach(this.renderer.drawPowerup.bind(this.renderer))
+      this.renderer.drawTank(true, this.state.self)
+      this.state.players
+        .filter((player) => player.socketID !== this.state?.self?.socketID)
         .forEach((tank) => this.renderer.drawTank(false, tank))
 
       this.particles.forEach(this.renderer.drawParticle.bind(this.renderer))
-      this.renderer.drawBuffStatus(this.self)
+      this.renderer.drawBuffStatus(this.state.self)
       this.renderer.drawCrosshair(this.input)
     }
   }
