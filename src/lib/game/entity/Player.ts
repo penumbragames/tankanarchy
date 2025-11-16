@@ -9,11 +9,12 @@
 import { Exclude, Type } from 'class-transformer'
 
 import POWERUPS from 'lib/enums/Powerups'
+import SOUNDS from 'lib/enums/Sounds'
 import PLAYER_CONSTANTS from 'lib/game/entity/PlayerConstants'
 
 import * as Constants from 'lib/Constants'
-import SOUNDS from 'lib/enums/Sounds'
 import { UpdateFrame } from 'lib/game/component/Updateable'
+import Cooldown from 'lib/game/Cooldown'
 import Bullet from 'lib/game/entity/Bullet'
 import Entity from 'lib/game/entity/Entity'
 import Powerup from 'lib/game/entity/Powerup'
@@ -27,17 +28,17 @@ export default class Player extends Entity {
   name: string
   socketID: string // Also serves as the player UID.
 
-  @Exclude() lastUpdateTime: number = 0
-
   tankAngle: number = 0
   turretAngle: number = 0
   turnRate: number = 0
 
   speed: number = PLAYER_CONSTANTS.SPEED
-  @Exclude() shotCooldown: number = PLAYER_CONSTANTS.SHOT_COOLDOWN
-  @Exclude() bulletsPerShot: number = PLAYER_CONSTANTS.BULLETS_PER_SHOT
-  @Exclude() lastShotTime: number = 0
   health: number = PLAYER_CONSTANTS.MAX_HEALTH
+
+  @Exclude() bulletShooting: Cooldown
+  @Exclude() bulletsPerShot: number = PLAYER_CONSTANTS.BULLETS_PER_SHOT
+
+  @Exclude() rocketShooting: Cooldown
 
   @Type(() => PowerupState)
   powerupStates: Map<POWERUPS, PowerupState> = new Map()
@@ -54,6 +55,9 @@ export default class Player extends Entity {
     )
     this.name = name
     this.socketID = socketID
+
+    this.bulletShooting = new Cooldown(PLAYER_CONSTANTS.BULLET_COOLDOWN)
+    this.rocketShooting = new Cooldown(PLAYER_CONSTANTS.ROCKET_COOLDOWN)
   }
 
   /**
@@ -66,13 +70,13 @@ export default class Player extends Entity {
   }
 
   override update(updateFrame: UpdateFrame, _services: GameServices): void {
-    this.lastUpdateTime = updateFrame.lastUpdateTime
     this.physics.position.add(
       Vector.scale(this.physics.velocity, updateFrame.deltaTime),
     )
     this.boundToWorld()
     this.tankAngle = Util.normalizeAngle(
-      this.tankAngle + (this.turnRate * updateFrame.deltaTime), // prettier-ignore
+      // prettier-ignore
+      this.tankAngle + (this.turnRate * updateFrame.deltaTime),
     )
 
     for (const state of this.powerupStates.values()) {
@@ -85,10 +89,18 @@ export default class Player extends Entity {
   }
 
   /**
-   * Update this player given the client's input
-   * @param {PlayerInputs} data
+   * Update this player using a client input packet.
+   * @param {PlayerInputs} data The client input packet.
+   * @param {UpdateFrame} updateFrame The frame information from the game loop,
+   *   which contains the update time and delta time.
+   * @param {GameServices} services Service locator for the game to access
+   *   game logic.
    */
-  updateOnInput(data: PlayerInputs, services: GameServices): void {
+  updateOnInput(
+    data: PlayerInputs,
+    updateFrame: UpdateFrame,
+    services: GameServices,
+  ): void {
     if ((data.up && data.down) || (!data.up && !data.down)) {
       this.physics.velocity = Vector.zero()
     } else if (data.up) {
@@ -107,9 +119,10 @@ export default class Player extends Entity {
 
     this.turretAngle = data.turretAngle
 
-    if (data.shootBullet && this.canShootBullet()) {
-      services.addProjectile(...this.getProjectilesFromShot())
+    if (data.shootBullet && this.bulletShooting.ready(updateFrame)) {
+      services.addProjectile(...this.getBulletsFromShot())
       services.playSound(SOUNDS.TANK_SHOT, this.physics.position)
+      this.bulletShooting.trigger(updateFrame)
     }
   }
 
@@ -129,17 +142,12 @@ export default class Player extends Entity {
     return powerup.type
   }
 
-  canShootBullet(): boolean {
-    return this.lastUpdateTime > this.lastShotTime + this.shotCooldown
-  }
-
   /**
    * Returns an array containing new projectile objects as if the player has
-   * fired a shot given their current powerup state. This function does not
-   * perform a shot cooldown check and resets the shot cooldown.
+   * fired a shot given their current powerup state.
    * @return {Bullet[]}
    */
-  getProjectilesFromShot(): Bullet[] {
+  getBulletsFromShot(): Bullet[] {
     const bullets = [Bullet.createFromPlayer(this, 0)]
     if (this.bulletsPerShot > 1) {
       for (let i = 1; i <= this.bulletsPerShot; ++i) {
@@ -148,7 +156,6 @@ export default class Player extends Entity {
         bullets.push(Bullet.createFromPlayer(this, angleDeviation))
       }
     }
-    this.lastShotTime = this.lastUpdateTime
     return bullets
   }
 

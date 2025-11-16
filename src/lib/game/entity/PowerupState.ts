@@ -100,11 +100,11 @@ export class RapidfirePowerup extends PowerupState {
   }
 
   override apply(p: Player) {
-    p.shotCooldown = PLAYER_CONSTANTS.SHOT_COOLDOWN / this.modifier
+    p.bulletShooting.cooldown = PLAYER_CONSTANTS.BULLET_COOLDOWN / this.modifier
   }
 
   override remove(p: Player) {
-    p.shotCooldown = PLAYER_CONSTANTS.SHOT_COOLDOWN
+    p.bulletShooting.cooldown = PLAYER_CONSTANTS.BULLET_COOLDOWN
   }
 }
 

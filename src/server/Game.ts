@@ -60,7 +60,9 @@ export default class Game {
    * @param {Object} data The player's input state
    */
   updatePlayerOnInput(socketID: string, data: PlayerInputs) {
-    this.players.getPlayer(socketID)?.updateOnInput(data, this.services)
+    this.players
+      .getPlayer(socketID)
+      ?.updateOnInput(data, this.gameLoop.updateFrame, this.services)
   }
 
   update(): void {
