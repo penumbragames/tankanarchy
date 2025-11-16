@@ -1,6 +1,6 @@
 /**
- * Provider for server side game services like sending audio and particle
- * triggers.
+ * Provider for server side game services to allow other classes to access
+ * and modify game state, spawn particles, trigger sounds, etc.
  * @author omgimanerd
  */
 
@@ -16,11 +16,14 @@ import { SocketServer } from 'lib/socket/SocketServer'
 import Game from 'server/Game'
 
 type ParticleDrawingOptions = {}
+
 type ExplosionOptions = {
   // dictates the spatial spread that explosion particles can generate
   spread: number
   // dictates the number of explosion particles
   density: number
+  // dictates the maximum delay to spawn explosion particles, particles are
+  // normally distributed over the delay period
   delay: number
 }
 

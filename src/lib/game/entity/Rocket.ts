@@ -65,11 +65,15 @@ export default class Rocket extends Entity implements IProjectile {
       atTarget
     ) {
       this.destroy(services)
-      services.addExplosion(this.physics.position, {
-        spread: 25,
-        density: 8,
-        delay: 500,
-      })
     }
+  }
+
+  override destroy(services: GameServices): void {
+    super.destroy(services)
+    services.addExplosion(this.physics.position, {
+      spread: 25,
+      density: 7,
+      delay: 400,
+    })
   }
 }

@@ -90,7 +90,17 @@ export default class CollisionHandler {
         b.destroy(this.services)
         this.services.playSound(SOUNDS.EXPLOSION, p.physics.position)
       }) ||
-      e.handle(Player, Rocket, (p: Player, r: Rocket) => {}) ||
+      e.handle(Player, Rocket, (p: Player, r: Rocket) => {
+        if (r.source === p) return
+        p.damage(r.damage)
+        if (p.isDead()) {
+          p.spawn()
+          p.deaths++
+          r.source.kills++
+        }
+        r.destroy(this.services)
+        this.services.playSound(SOUNDS.EXPLOSION, p.physics.position)
+      }) ||
       e.handle(Player, Powerup, (p: Player, po: Powerup) => {
         switch (p.applyPowerup(po)) {
           case POWERUPS.HEALTH_PACK:
@@ -116,9 +126,18 @@ export default class CollisionHandler {
         this.services.playSound(SOUNDS.EXPLOSION, b.physics.position)
         this.services.addParticle(PARTICLES.EXPLOSION, b.physics.position, {})
       }) ||
-      e.handle(Rocket, Rocket, (r: Rocket, e: Entity) => {}) ||
-      e.handle(Rocket, Powerup, (r: Rocket, e: Entity) => {}) ||
-      e.handle(Rocket, Bullet, (r: Rocket, e: Entity) => {}) ||
+      e.handle(Rocket, Rocket, (r1: Rocket, r2: Rocket) => {
+        r1.destroy(this.services)
+        r2.destroy(this.services)
+      }) ||
+      e.handle(Rocket, Powerup, (r: Rocket, po: Powerup) => {
+        r.destroy(this.services)
+        po.destroy(this.services)
+      }) ||
+      e.handle(Rocket, Bullet, (r: Rocket, b: Bullet) => {
+        r.destroy(this.services)
+        b.destroy(this.services)
+      }) ||
       e.handle(Powerup, Powerup, (_p1: Powerup, _p2: Powerup) => {})
     ) {
       return
