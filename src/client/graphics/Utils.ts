@@ -3,6 +3,18 @@
  */
 
 /**
+ * Helper function to execute the given callback in new canvas context.
+ */
+export const newCanvasState = (
+  context: CanvasRenderingContext2D,
+  callback: () => void,
+) => {
+  context.save()
+  callback()
+  context.restore()
+}
+
+/**
  * Slices an input image into an array of ImageBitmaps. The input image must
  * have a width divisible by its height, and will be sliced into (h/w) frames
  * ordered from left to right.

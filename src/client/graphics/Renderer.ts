@@ -15,6 +15,7 @@ import {
 } from 'client/graphics/Sprites'
 
 import Canvas from 'client/graphics/Canvas'
+import { newCanvasState } from 'client/graphics/Utils'
 import Viewport from 'client/graphics/Viewport'
 import Input from 'client/Input'
 import Particle from 'client/particle/Particle'
@@ -142,7 +143,13 @@ export default class Renderer {
     let offset =
       this.canvas.width - Renderer.DEFAULT_PADDING - Renderer.POWERUP_BUFF_SIZE
     for (const powerupType of Object.values(POWERUPS)) {
-      if (powerupType === POWERUPS.HEALTH_PACK) continue
+      // Healthpacks and rockets are not rendered in the buff status bar.
+      if (
+        powerupType === POWERUPS.HEALTH_PACK ||
+        powerupType === POWERUPS.ROCKET
+      ) {
+        continue
+      }
       let powerup
       if ((powerup = self.getPowerupState(powerupType))) {
         // Compute the alpha of the buff based on how close we are to expiring.
@@ -204,26 +211,43 @@ export default class Renderer {
     })
   }
 
-  drawCrosshair(input: Input): void {
-    this.context.save()
-    this.context.beginPath()
-    this.context.arc(
-      input.mouseCoords.x,
-      input.mouseCoords.y,
-      10,
-      0,
-      2 * Math.PI,
-      false,
-    )
-    this.context.moveTo(input.mouseCoords.x, input.mouseCoords.y + 20)
-    this.context.lineTo(input.mouseCoords.x, input.mouseCoords.y - 20)
-    this.context.moveTo(input.mouseCoords.x - 20, input.mouseCoords.y)
-    this.context.lineTo(input.mouseCoords.x + 20, input.mouseCoords.y)
+  drawCrosshair(self: Player, input: Input): void {
+    newCanvasState(this.context, () => {
+      this.context.translate(input.mouseCoords.x, input.mouseCoords.y)
+      this.context.beginPath()
+      this.context.arc(
+        0, // x
+        0, // y
+        10, // radius
+        0, // startAngle
+        2 * Math.PI, // endAngle
+        false,
+      )
+      this.context.moveTo(0, 20)
+      this.context.lineTo(0, -20)
+      this.context.moveTo(-20, 0)
+      this.context.lineTo(20, 0)
 
-    this.context.strokeStyle = 'black'
-    this.context.lineWidth = 1
-    this.context.stroke()
-    this.context.restore()
+      this.context.strokeStyle = 'black'
+      this.context.lineWidth = 1
+      this.context.stroke()
+
+      // Draw the number of rockets left to fire
+      this.context.translate(20, 20)
+      for (
+        let i = 0;
+        i < (self.getPowerupState(POWERUPS.ROCKET)?.rockets ?? 0);
+        ++i
+      ) {
+        SPRITE_MAP[SPRITES.ROCKET].draw(this.context, {
+          width: 20,
+          height: 4,
+          centered: true,
+          angle: -Math.PI / 2,
+        })
+        this.context.translate(7, 0)
+      }
+    })
   }
 
   drawTiles(): void {

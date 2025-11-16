@@ -126,9 +126,13 @@ export default class Player extends Entity {
       this.bulletShooting.trigger(updateFrame)
     }
     if (data.shootRocket && this.rocketShooting.ready(updateFrame)) {
-      services.addProjectile(this.getRocketFromShot())
-      services.playSound(SOUNDS.ROCKET_SHOT, this.physics.position)
-      this.rocketShooting.trigger(updateFrame)
+      const rocketPowerup = this.getPowerupState(POWERUPS.ROCKET)
+      if (rocketPowerup && rocketPowerup.rockets > 0) {
+        services.addProjectile(this.getRocketFromShot())
+        services.playSound(SOUNDS.ROCKET_SHOT, this.physics.position)
+        this.rocketShooting.trigger(updateFrame)
+        rocketPowerup.consume()
+      }
     }
   }
 

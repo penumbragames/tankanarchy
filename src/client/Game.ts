@@ -95,18 +95,18 @@ export default class Game {
       input,
       leaderboard,
       soundManager,
-    )
-    game.init()
+    ).init()
     return game
   }
 
-  init(): void {
+  init(): Game {
     this.socket.on(
       SOCKET_EVENTS.GAME_UPDATE,
       this.onReceiveGameState.bind(this),
     )
     this.socket.on(SOCKET_EVENTS.PARTICLE, this.onReceiveParticle.bind(this))
     this.soundManager.bindClientListener()
+    return this
   }
 
   /**
@@ -182,7 +182,7 @@ export default class Game {
 
       this.particles.forEach(this.renderer.drawParticle.bind(this.renderer))
       this.renderer.drawBuffStatus(this.state.self)
-      this.renderer.drawCrosshair(this.input)
+      this.renderer.drawCrosshair(this.state.self, this.input)
     }
   }
 }

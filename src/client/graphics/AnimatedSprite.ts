@@ -4,8 +4,8 @@
  * @author omgimanerd
  */
 
-import { sliceImage } from 'client/graphics/ImageUtils'
 import { Drawable, Sprite } from 'client/graphics/Sprite'
+import { sliceImage } from 'client/graphics/Utils'
 import loadResource from 'client/lib/ResourceLoader'
 
 export default class AnimatedSprite extends Sprite {

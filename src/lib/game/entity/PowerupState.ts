@@ -18,8 +18,9 @@ export abstract class PowerupState implements IUpdateable {
   static readonly MAX_DURATION = 15000
 
   type: POWERUPS
-  duration: number = 0
-  expirationTime: number = 0
+  duration: number = 0 // set to Infinity to make this state non-expiring
+  expirationTime: number = 0 // set to Infinity to make this state non-expiring
+
   expired: boolean = false
 
   constructor(type: POWERUPS) {
@@ -48,7 +49,9 @@ export abstract class PowerupState implements IUpdateable {
   }
 
   update(updateFrame: UpdateFrame) {
-    this.expired = updateFrame.lastUpdateTime > this.expirationTime
+    if (this.duration != Infinity) {
+      this.expired = updateFrame.lastUpdateTime > this.expirationTime
+    }
   }
 
   apply(_p: Player) {}
@@ -109,15 +112,24 @@ export class RapidfirePowerup extends PowerupState {
 }
 
 export class RocketPowerup extends PowerupState {
-  rockets: number = 0
+  static readonly NUM_ROCKETS = 5
+
+  rockets: number = RocketPowerup.NUM_ROCKETS
 
   constructor() {
     super(POWERUPS.ROCKET)
   }
 
   override init(): RocketPowerup {
-    super.init()
+    this.duration = Infinity
+    this.expirationTime = Infinity
     return this
+  }
+
+  consume(): void {
+    if (--this.rockets === 0) {
+      this.expired = true
+    }
   }
 }
 

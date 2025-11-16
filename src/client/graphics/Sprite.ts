@@ -3,6 +3,7 @@
  * @author omgimanerd
  */
 
+import { newCanvasState } from 'client/graphics/Utils'
 import Vector from 'lib/math/Vector'
 
 export type DrawingOptions = {
@@ -56,7 +57,7 @@ export abstract class Sprite {
     // the image when we need to center it about the drawing point.
     const drawX = options.centered ? -width / 2 : 0
     const drawY = options.centered ? -height / 2 : 0
-    this.newCanvasState(context, () => {
+    newCanvasState(context, () => {
       const oldOpacity = context.globalAlpha
       if (options.opacity) {
         context.globalAlpha = options.opacity
@@ -79,17 +80,5 @@ export abstract class Sprite {
         context.globalAlpha = oldOpacity
       }
     })
-  }
-
-  /**
-   * Context manager helper that runs the given callback in a new sub-context of
-   * a canvas rendering context.
-   * @param context {Context} The canvas context to save state for.
-   * @param callback {() => void} The function to execute in the new context.
-   */
-  newCanvasState(context: Context, callback: () => void) {
-    context.save()
-    callback()
-    context.restore()
   }
 }
