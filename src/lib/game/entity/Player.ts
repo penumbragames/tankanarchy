@@ -122,16 +122,14 @@ export default class Player extends Entity {
     this.turretAngle = data.turretAngle
 
     if (data.shootBullet && this.bulletShooting.ready(updateFrame)) {
-      services.addProjectile(...this.getBulletsFromShot())
+      services.addEntity(...this.getBulletsFromShot())
       services.playSound(SOUNDS.BULLET_SHOT, this.physics.position)
       this.bulletShooting.trigger(updateFrame)
     }
     if (data.shootRocket && this.rocketShooting.ready(updateFrame)) {
       const rocketPowerup = this.getPowerupState(POWERUPS.ROCKET)
       if (rocketPowerup && rocketPowerup.rockets > 0) {
-        services.addProjectile(
-          Rocket.createFromPlayer(this, data.worldMouseCoords),
-        )
+        services.addEntity(Rocket.createFromPlayer(this, data.worldMouseCoords))
         services.playSound(SOUNDS.ROCKET_SHOT, this.physics.position)
         this.rocketShooting.trigger(updateFrame)
         rocketPowerup.consume()

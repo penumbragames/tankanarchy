@@ -168,6 +168,16 @@ export default class Renderer {
     }
   }
 
+  drawEntity(e: Entity): void {
+    if (e instanceof Bullet || e instanceof Rocket) {
+      this.drawProjectile(e)
+    } else if (e instanceof Powerup) {
+      this.drawPowerup(e)
+    } else {
+      throw new Error(`Unknown entity ${e}`)
+    }
+  }
+
   drawProjectile(projectile: Projectile): void {
     const canvasCoords = this.viewport.toCanvas(projectile.physics.position)
     if (projectile instanceof Bullet) {

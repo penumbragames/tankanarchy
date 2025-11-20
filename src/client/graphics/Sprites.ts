@@ -39,6 +39,7 @@ const loadSprite = async <T extends Sprite>(
 const loadSprites = async () => {
   await Promise.all([
     loadSprite(SPRITES.BULLET, StaticSprite, '/img/bullet.png'),
+    // Animated sprite has 9 frames, should dynamically gen this.
     loadSprite(SPRITES.EXPLOSION, AnimatedSprite, '/img/explosion.png'),
     loadSprite(
       SPRITES.HEALTH_PACK_POWERUP,

@@ -10,9 +10,11 @@ import POWERUPS from 'lib/enums/Powerups'
 import { Hitbox } from 'lib/game/component/Hitbox'
 import { Physics } from 'lib/game/component/Physics'
 import Bullet from 'lib/game/entity/Bullet'
+import Explosion from 'lib/game/entity/Explosion'
 import Player from 'lib/game/entity/Player'
 import Powerup from 'lib/game/entity/Powerup'
 import { HealthPowerup, PowerupState } from 'lib/game/entity/PowerupState'
+import Rocket from 'lib/game/entity/Rocket'
 import Vector from 'lib/math/Vector'
 import { getReplacerReviver } from 'lib/serialization/ReplacerReviver'
 import { GameState } from 'lib/socket/SocketInterfaces'
@@ -21,10 +23,12 @@ const UNIXTIME_1 = new Date('1970-01-01T00:00:00.001Z')
 
 const { replacer, reviver } = getReplacerReviver({
   Bullet,
+  Explosion,
+  Hitbox,
+  Physics,
   Player,
   Powerup,
-  PowerupState,
-  HealthPowerup,
+  Rocket,
   Vector,
 })
 
@@ -208,15 +212,18 @@ describe('Test serializing/deserializing basic class instances', () => {
 })
 
 describe('Test serializing/deserializing complex objects', () => {
-  test('Fake GameState object with one Player and one Bullet', () => {
+  test('Fake GameState object with some fake entities', () => {
     const p = createFakePlayer()
     const b = Bullet.createFromPlayer(p, Math.PI)
+    const r = Rocket.createFromPlayer(p, Vector.zero())
+
+    console.log(parse(stringify(r)))
+
     const powerup = new Powerup(Vector.one(), POWERUPS.HEALTH_PACK)
     const obj: GameState = {
       self: p,
       players: [],
-      projectiles: [b],
-      powerups: [powerup],
+      entities: [b, r, powerup],
     }
     const serialized = stringify(obj)
 
@@ -231,12 +238,15 @@ describe('Test serializing/deserializing complex objects', () => {
     expect(deserialized.self.physics.position).toBeInstanceOf(Vector)
     expect(deserialized.self.physics.position.mag).toBe(5)
 
-    expect(deserialized.projectiles).toBeArrayOfSize(1)
-    const deserializedBullet = deserialized.projectiles[0]
+    expect(deserialized.entities).toBeArrayOfSize(3)
+
+    const deserializedBullet = deserialized.entities[0]
     expect(deserializedBullet).toBeInstanceOf(Bullet)
 
-    expect(deserialized.powerups).toBeArrayOfSize(1)
-    const deserializedPowerup = deserialized.powerups[0]
+    const deserializedRocket = deserialized.entities[1]
+    expect(deserializedRocket).toBeInstanceOf(Rocket)
+
+    const deserializedPowerup = deserialized.entities[2]
     expect(deserializedPowerup).toBeInstanceOf(Powerup)
   })
 })

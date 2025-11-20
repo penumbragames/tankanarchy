@@ -7,9 +7,8 @@ import PARTICLES from 'lib/enums/Particles'
 import SOUNDS from 'lib/enums/Sounds'
 import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 
-import { Projectile } from 'lib/game/component/Projectile'
+import Entity from 'lib/game/entity/Entity'
 import Player from 'lib/game/entity/Player'
-import Powerup from 'lib/game/entity/Powerup'
 import Vector from 'lib/math/Vector'
 import { ParticleDrawingOptions } from 'server/GameServices'
 
@@ -44,8 +43,7 @@ export interface ChatMessage {
 export interface GameState {
   self: Player
   players: Player[]
-  projectiles: Projectile[]
-  powerups: Powerup[]
+  entities: Entity[]
 }
 
 /**

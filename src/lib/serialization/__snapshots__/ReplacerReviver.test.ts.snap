@@ -53,7 +53,7 @@ Map {
 }
 `;
 
-exports[`Test serializing/deserializing complex objects Fake GameState object with one Player and one Bullet 1`] = `
+exports[`Test serializing/deserializing complex objects Fake GameState object with some fake entities 1`] = `
 "{
   "self": {
     "destroyed": false,
@@ -87,7 +87,7 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
     "__type__": "Player"
   },
   "players": [],
-  "projectiles": [
+  "entities": [
     {
       "destroyed": false,
       "physics": {
@@ -111,9 +111,35 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
       "damage": 1,
       "distanceTraveled": 0,
       "__type__": "Bullet"
-    }
-  ],
-  "powerups": [
+    },
+    {
+      "destroyed": false,
+      "physics": {
+        "position": {
+          "x": 3,
+          "y": 4
+        },
+        "velocity": {
+          "x": 1.6,
+          "y": 0
+        },
+        "acceleration": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "hitbox": {
+        "size": 10
+      },
+      "angle": 0,
+      "damage": 3,
+      "distanceTraveled": 0,
+      "target": {
+        "x": 0,
+        "y": 0
+      },
+      "__type__": "Rocket"
+    },
     {
       "destroyed": false,
       "physics": {
@@ -140,34 +166,9 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
 }"
 `;
 
-exports[`Test serializing/deserializing complex objects Fake GameState object with one Player and one Bullet 2`] = `
+exports[`Test serializing/deserializing complex objects Fake GameState object with some fake entities 2`] = `
 {
-  "players": [],
-  "powerups": [
-    Powerup {
-      "destroyed": false,
-      "hitbox": Hitbox {
-        "body": undefined,
-        "size": 10,
-      },
-      "physics": Physics {
-        "acceleration": Vector {
-          "x": 0,
-          "y": 0,
-        },
-        "position": Vector {
-          "x": 1,
-          "y": 1,
-        },
-        "velocity": Vector {
-          "x": 0,
-          "y": 0,
-        },
-      },
-      "type": "HEALTH_PACK",
-    },
-  ],
-  "projectiles": [
+  "entities": [
     Bullet {
       "angle": 3.141592653589793,
       "damage": 1,
@@ -193,7 +194,59 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
       },
       "source": undefined,
     },
+    Rocket {
+      "angle": 0,
+      "damage": 3,
+      "destroyed": false,
+      "distanceTraveled": 0,
+      "hitbox": Hitbox {
+        "body": undefined,
+        "size": 10,
+      },
+      "physics": Physics {
+        "acceleration": Vector {
+          "x": 0,
+          "y": 0,
+        },
+        "position": Vector {
+          "x": 3,
+          "y": 4,
+        },
+        "velocity": Vector {
+          "x": 1.6,
+          "y": 0,
+        },
+      },
+      "source": undefined,
+      "target": {
+        "x": 0,
+        "y": 0,
+      },
+    },
+    Powerup {
+      "destroyed": false,
+      "hitbox": Hitbox {
+        "body": undefined,
+        "size": 10,
+      },
+      "physics": Physics {
+        "acceleration": Vector {
+          "x": 0,
+          "y": 0,
+        },
+        "position": Vector {
+          "x": 1,
+          "y": 1,
+        },
+        "velocity": Vector {
+          "x": 0,
+          "y": 0,
+        },
+      },
+      "type": "HEALTH_PACK",
+    },
   ],
+  "players": [],
   "self": Player {
     "bulletShooting": Cooldown {
       "cooldown": 800,

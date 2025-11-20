@@ -6,7 +6,6 @@
 
 import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 
-import { Projectile } from 'lib/game/component/Projectile'
 import Entity from 'lib/game/entity/Entity'
 import Powerup from 'lib/game/entity/Powerup'
 import GameLoop from 'lib/game/GameLoop'
@@ -23,8 +22,7 @@ export default class Game {
   services: GameServices
 
   players: PlayerContainer
-  projectiles: Projectile[] = []
-  powerups: Powerup[] = []
+  entities: Entity[] = [] // all non-player entities
 
   gameLoop: GameLoop
   collisionHandler: CollisionHandler
@@ -67,25 +65,20 @@ export default class Game {
 
   update(): void {
     // Perform physics update and collision checks.
-    const entities: Entity[] = [
-      ...this.players.players,
-      ...this.projectiles,
-      ...this.powerups,
-    ]
+    const entities: Entity[] = this.entities.concat(...this.players.players)
+    let nPowerups = 0
     entities.forEach((entity: Entity) => {
       entity.update(this.gameLoop.updateFrame, this.services)
+      if (!entity.destroyed && entity instanceof Powerup) ++nPowerups
     })
     this.collisionHandler.run(entities)
 
-    // Remove destroyed projectiles and powerups.
-    this.projectiles = this.projectiles.filter(
-      (projectile) => !projectile.destroyed,
-    )
-    this.powerups = this.powerups.filter((powerup) => !powerup.destroyed)
+    // Remove destroyed entities.
+    this.entities = this.entities.filter((e: Entity) => !e.destroyed)
 
     // Spawn new powerups.
-    while (this.powerups.length < Powerup.MAX_COUNT) {
-      this.powerups.push(Powerup.create())
+    while (nPowerups++ < Powerup.MAX_COUNT) {
+      this.entities.push(Powerup.create())
     }
   }
 
@@ -99,8 +92,7 @@ export default class Game {
       socket.emit(SOCKET_EVENTS.GAME_UPDATE, {
         self: currentPlayer,
         players: players,
-        projectiles: this.projectiles,
-        powerups: this.powerups,
+        entities: this.entities,
       })
     }
   }

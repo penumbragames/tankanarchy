@@ -174,10 +174,7 @@ export default class Game {
       // Render
       this.renderer.clear()
       this.renderer.drawTiles()
-      this.state.projectiles.forEach(
-        this.renderer.drawProjectile.bind(this.renderer),
-      )
-      this.state.powerups.forEach(this.renderer.drawPowerup.bind(this.renderer))
+      this.state.entities.forEach(this.renderer.drawEntity.bind(this.renderer))
       this.renderer.drawTank(true, this.state.self)
       this.state.players
         .filter((player) => player.socketID !== this.state?.self?.socketID)

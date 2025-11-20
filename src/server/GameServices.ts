@@ -10,8 +10,8 @@ import PARTICLES from 'lib/enums/Particles'
 import SOUNDS from 'lib/enums/Sounds'
 import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 
-import { Projectile } from 'lib/game/component/Projectile'
 import { UpdateFrame } from 'lib/game/component/Updateable'
+import Entity from 'lib/game/entity/Entity'
 import Vector from 'lib/math/Vector'
 import { SocketServer } from 'lib/socket/SocketServer'
 import Game from 'server/Game'
@@ -22,6 +22,9 @@ export type ParticleDrawingOptions = {
 }
 
 export type ExplosionOptions = {
+  // dictates the size of the individual explosion particles that make up the
+  // explosion
+  size: number
   // dictates the spatial spread that explosion particles can generate
   spread: number
   // dictates the number of explosion particles
@@ -73,12 +76,15 @@ export class GameServices {
         this.socket.sockets.emit(SOCKET_EVENTS.PARTICLE, {
           type: PARTICLES.EXPLOSION,
           source: newPosition,
+          options: {
+            size: options.size,
+          },
         })
       }, delay)
     }
   }
 
-  addProjectile(...projectiles: Projectile[]) {
-    this.game.projectiles.push(...projectiles)
+  addEntity(...entities: Entity[]) {
+    this.game.entities.push(...entities)
   }
 }
