@@ -2,13 +2,14 @@
  * @author omgimanerd
  */
 
+import random from 'random'
+
 import type Player from 'lib/game/entity/Player'
 
 import POWERUPS from 'lib/enums/Powerups'
 import PLAYER_CONSTANTS from 'lib/game/entity/PlayerConstants'
 
 import { IUpdateable, UpdateFrame } from 'lib/game/component/Updateable'
-import Random from 'lib/math/Random'
 
 /**
  * Base class for powerup states which modify the Player.
@@ -28,10 +29,7 @@ export abstract class PowerupState implements IUpdateable {
   }
 
   static getRandomDuration(): number {
-    return Random.randRangeInt(
-      PowerupState.MIN_DURATION,
-      PowerupState.MAX_DURATION,
-    )
+    return random.int(PowerupState.MIN_DURATION, PowerupState.MAX_DURATION)
   }
 
   init(): PowerupState {
@@ -70,10 +68,7 @@ export class HealthPowerup extends PowerupState {
 
   override init(): HealthPowerup {
     super.init()
-    this.healAmount = Random.randRangeInt(
-      HealthPowerup.MIN_HEAL,
-      HealthPowerup.MAX_HEAL,
-    )
+    this.healAmount = random.int(HealthPowerup.MIN_HEAL, HealthPowerup.MAX_HEAL)
     return this
   }
 
@@ -95,7 +90,7 @@ export class RapidfirePowerup extends PowerupState {
 
   override init(): RapidfirePowerup {
     super.init()
-    this.modifier = Random.randRangeInt(
+    this.modifier = random.int(
       RapidfirePowerup.MIN_MODIFIER,
       RapidfirePowerup.MAX_MODIFIER,
     )
@@ -145,10 +140,7 @@ export class ShieldPowerup extends PowerupState {
 
   override init(): ShieldPowerup {
     super.init()
-    this.shield = Random.randRangeInt(
-      ShieldPowerup.MIN_SHIELD,
-      ShieldPowerup.MAX_SHIELD,
-    )
+    this.shield = random.int(ShieldPowerup.MIN_SHIELD, ShieldPowerup.MAX_SHIELD)
     return this
   }
 
@@ -178,7 +170,7 @@ export class ShotgunPowerup extends PowerupState {
 
   override init(): ShotgunPowerup {
     super.init()
-    this.modifier = Random.randRangeInt(
+    this.modifier = random.int(
       ShotgunPowerup.MIN_MODIFIER,
       ShotgunPowerup.MAX_MODIFIER,
     )
@@ -206,7 +198,7 @@ export class SpeedboostPowerup extends PowerupState {
 
   override init(): SpeedboostPowerup {
     super.init()
-    this.modifier = Random.randRangeInt(
+    this.modifier = random.int(
       SpeedboostPowerup.MIN_MODIFIER,
       SpeedboostPowerup.MAX_MODIFIER,
     )

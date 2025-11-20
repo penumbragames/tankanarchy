@@ -7,6 +7,7 @@
  */
 
 import { Exclude, Type } from 'class-transformer'
+import random from 'random'
 
 import POWERUPS from 'lib/enums/Powerups'
 import SOUNDS from 'lib/enums/Sounds'
@@ -21,7 +22,6 @@ import Powerup from 'lib/game/entity/Powerup'
 import { PowerupState, PowerupTypeMap } from 'lib/game/entity/PowerupState'
 import Rocket from 'lib/game/entity/Rocket'
 import Util from 'lib/math/Math'
-import Random from 'lib/math/Random'
 import Vector from 'lib/math/Vector'
 import { PlayerInputs } from 'lib/socket/SocketInterfaces'
 import GameServices from 'server/GameServices'
@@ -194,11 +194,11 @@ export default class Player extends Entity {
    */
   spawn(): Player {
     this.physics.position = new Vector(
-      Random.randRange(
+      random.int(
         Constants.WORLD_MIN + Constants.WORLD_PADDING,
         Constants.WORLD_MAX - Constants.WORLD_PADDING,
       ),
-      Random.randRange(
+      random.int(
         Constants.WORLD_MIN + Constants.WORLD_PADDING,
         Constants.WORLD_MAX - Constants.WORLD_PADDING,
       ),

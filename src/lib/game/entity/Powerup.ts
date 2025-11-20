@@ -3,12 +3,13 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
+import random from 'random'
+
 import POWERUPS from 'lib/enums/Powerups'
 
 import * as Constants from 'lib/Constants'
 import Entity from 'lib/game/entity/Entity'
 import { PowerupConstructors, PowerupState } from 'lib/game/entity/PowerupState'
-import Random from 'lib/math/Random'
 import Vector from 'lib/math/Vector'
 
 export default class Powerup extends Entity {
@@ -25,16 +26,16 @@ export default class Powerup extends Entity {
 
   static create(): Powerup {
     const position = new Vector(
-      Random.randRange(
+      random.int(
         Constants.WORLD_MIN + Constants.WORLD_PADDING,
         Constants.WORLD_MAX - Constants.WORLD_PADDING,
       ),
-      Random.randRange(
+      random.int(
         Constants.WORLD_MIN + Constants.WORLD_PADDING,
         Constants.WORLD_MAX - Constants.WORLD_PADDING,
       ),
     )
-    const type = <POWERUPS>Random.choiceArray(Object.keys(POWERUPS))
+    const type = <POWERUPS>random.choice(Object.keys(POWERUPS))
     return new Powerup(position, type)
   }
 
