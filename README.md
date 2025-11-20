@@ -21,10 +21,3 @@ just start
 - Kenneth Li (noobbyte)
 
 &copy; 2015 Penumbra Games
-
-
-# TODO:
-  - rockets spawn xplosion
-  - lazor
-  - debug dom element
-  - tank trail visual elements
