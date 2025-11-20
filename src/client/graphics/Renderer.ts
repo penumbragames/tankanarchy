@@ -22,6 +22,7 @@ import Particle from 'client/particle/Particle'
 import { Projectile } from 'lib/game/component/Projectile'
 import Bullet from 'lib/game/entity/Bullet'
 import Entity from 'lib/game/entity/Entity'
+import Explosion from 'lib/game/entity/Explosion'
 import Player from 'lib/game/entity/Player'
 import Powerup from 'lib/game/entity/Powerup'
 import Rocket from 'lib/game/entity/Rocket'
@@ -173,6 +174,8 @@ export default class Renderer {
       this.drawProjectile(e)
     } else if (e instanceof Powerup) {
       this.drawPowerup(e)
+    } else if (e instanceof Explosion) {
+      this.drawDebugHitbox(e)
     } else {
       throw new Error(`Unknown entity ${e}`)
     }

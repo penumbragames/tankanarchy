@@ -225,11 +225,13 @@ describe('Test serializing/deserializing complex objects', () => {
 
     expect(deserialized.entities).toBeArrayOfSize(3)
 
-    const deserializedBullet = deserialized.entities[0]
+    const deserializedBullet = <Bullet>deserialized.entities[0]
     expect(deserializedBullet).toBeInstanceOf(Bullet)
+    expect(deserializedBullet.source).toBeUndefined()
 
-    const deserializedRocket = deserialized.entities[1]
+    const deserializedRocket = <Rocket>deserialized.entities[1]
     expect(deserializedRocket).toBeInstanceOf(Rocket)
+    expect(deserializedRocket.source).toBeUndefined()
 
     const deserializedPowerup = deserialized.entities[2]
     expect(deserializedPowerup).toBeInstanceOf(Powerup)

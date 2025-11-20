@@ -11,6 +11,8 @@ import PLAYER_CONSTANTS from 'lib/game/entity/PlayerConstants'
 
 import { IUpdateable, UpdateFrame } from 'lib/game/component/Updateable'
 
+// TODO implement a powerup factory method
+
 /**
  * Base class for powerup states which modify the Player.
  */

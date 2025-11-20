@@ -134,10 +134,7 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
       "angle": 0,
       "damage": 3,
       "distanceTraveled": 0,
-      "target": {
-        "x": 0,
-        "y": 0
-      },
+      "maxDistance": 5,
       "__type__": "Rocket"
     },
     {
@@ -203,6 +200,7 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
         "body": undefined,
         "size": 10,
       },
+      "maxDistance": 5,
       "physics": Physics {
         "acceleration": Vector {
           "x": 0,
@@ -218,10 +216,6 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
         },
       },
       "source": undefined,
-      "target": {
-        "x": 0,
-        "y": 0,
-      },
     },
     Powerup {
       "destroyed": false,

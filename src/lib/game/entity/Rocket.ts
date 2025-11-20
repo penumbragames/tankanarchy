@@ -9,6 +9,7 @@ import { Exclude } from 'class-transformer'
 import { IProjectile } from 'lib/game/component/Projectile'
 import { UpdateFrame } from 'lib/game/component/Updateable'
 import Entity from 'lib/game/entity/Entity'
+import Explosion from 'lib/game/entity/Explosion'
 import Player from 'lib/game/entity/Player'
 import Vector from 'lib/math/Vector'
 import { GameServices } from 'server/GameServices'
@@ -26,20 +27,19 @@ export default class Rocket extends Entity implements IProjectile {
   @Exclude() source: Ref<Player>
   damage: number = Rocket.DEFAULT_DAMAGE
   distanceTraveled: number = 0
-
-  target: Vector // The target position where the Rocket will explode
+  maxDistance: number // Computed from the target position
 
   constructor(
     position: Vector,
     velocity: Vector,
     angle: number,
     source: Player,
-    target: Vector,
+    maxDistance: number,
   ) {
     super(position, velocity, Vector.zero(), Rocket.HITBOX_SIZE)
     this.angle = angle
     this.source = source
-    this.target = target
+    this.maxDistance = maxDistance
   }
 
   static createFromPlayer(player: Player, target: Vector): Rocket {
@@ -49,29 +49,32 @@ export default class Rocket extends Entity implements IProjectile {
       Vector.fromPolar(Rocket.SPEED, angle),
       angle,
       player,
-      target.copy(),
+      Math.min(
+        Vector.sub(target, player.physics.position).mag,
+        Rocket.MAX_TRAVEL_DISTANCE,
+      ),
     )
   }
 
   override update(updateFrame: UpdateFrame, services: GameServices): void {
     const displacement = this.physics.updatePosition(updateFrame.deltaTime)
     this.distanceTraveled += displacement.mag
-    const atTarget =
-      Vector.sub(this.physics.position, this.target).mag2 <
-      Rocket.EXPLOSION_DISTANCE_THRESHOLD ** 2
-    if (
-      !this.inWorld() ||
-      this.distanceTraveled > Rocket.MAX_TRAVEL_DISTANCE ||
-      atTarget
-    ) {
+    if (!this.inWorld() || this.distanceTraveled > this.maxDistance) {
       this.destroy(services)
     }
   }
 
   override destroy(services: GameServices): void {
     super.destroy(services)
+    services.addEntity(
+      Explosion.create(
+        this.physics.position,
+        this.source,
+        services.updateFrame.currentTime,
+      ),
+    )
     services.addExplosion(this.physics.position, {
-      size: 25,
+      size: 100,
       spread: 25,
       density: 7,
       delay: 400,
