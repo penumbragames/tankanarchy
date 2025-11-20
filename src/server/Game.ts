@@ -13,7 +13,7 @@ import GameLoop from 'lib/game/GameLoop'
 import { PlayerInputs } from 'lib/socket/SocketInterfaces'
 import { SocketServer } from 'lib/socket/SocketServer'
 import CollisionHandler from 'server/CollisionHandler'
-import GameServices from 'server/GameServices'
+import { GameServices } from 'server/GameServices'
 import PlayerContainer from 'server/PlayerContainer'
 
 export default class Game {

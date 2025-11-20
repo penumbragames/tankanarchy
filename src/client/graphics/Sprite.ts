@@ -6,20 +6,22 @@
 import { newCanvasState } from 'client/graphics/Utils'
 import Vector from 'lib/math/Vector'
 
-export type DrawingOptions = {
+export type DrawingOptions = Partial<{
   // (x, y) and position are mutually exclusive arguments.
-  x?: number
-  y?: number
-  position?: Vector
+  x: number
+  y: number
+  position: Vector
 
-  width?: number
-  height?: number
+  // (width, height) and size are mutually exclusive arguments.
+  size: number
+  width: number
+  height: number
 
-  centered?: boolean
-  angle?: number
-  opacity?: number
-  frame?: number
-}
+  centered: boolean
+  angle: number
+  opacity: number
+  frame: number
+}>
 
 // Matches the API for CanvasRenderingContext2D.drawImage's image argument.
 export type Drawable =
@@ -50,8 +52,17 @@ export abstract class Sprite {
     }
     const x = options.position?.x ?? options.x
     const y = options.position?.y ?? options.y
-    const width = options.width ?? this.width
-    const height = options.height ?? this.height
+
+    if (
+      options.size !== undefined &&
+      (options.width !== undefined || options.height !== undefined)
+    ) {
+      throw new Error(
+        'Cannot specify size args and width/height args at the same time.',
+      )
+    }
+    const width = options.size ?? options.width ?? this.width
+    const height = options.size ?? options.height ?? this.height
     // For the x/y options, we will translate by that amount in order to set the
     // image in the right place, and use the x/y drawImage() arguments to offset
     // the image when we need to center it about the drawing point.

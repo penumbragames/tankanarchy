@@ -11,6 +11,7 @@ import { Projectile } from 'lib/game/component/Projectile'
 import Player from 'lib/game/entity/Player'
 import Powerup from 'lib/game/entity/Powerup'
 import Vector from 'lib/math/Vector'
+import { ParticleDrawingOptions } from 'server/GameServices'
 
 /**
  * Interface for the PLAYER_ACTION socket event, sent from the client to the
@@ -54,6 +55,7 @@ export interface GameState {
 export interface ParticleEvent {
   type: PARTICLES
   source: Vector
+  options?: Partial<ParticleDrawingOptions>
 }
 
 /**

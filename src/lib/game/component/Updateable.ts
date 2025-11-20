@@ -4,7 +4,7 @@
  * @author omgimanerd
  */
 
-import GameServices from 'server/GameServices'
+import { GameServices } from 'server/GameServices'
 
 export type UpdateFrame = {
   lastUpdateTime: number

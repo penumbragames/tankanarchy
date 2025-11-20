@@ -117,8 +117,7 @@ export default class Renderer {
 
     if (player.getPowerupState(POWERUPS.SHIELD)) {
       SPRITE_MAP[SPRITES.SHIELD].draw(this.context, {
-        width: PLAYER_CONSTANTS.SHIELD_HITBOX_SIZE * 2,
-        height: PLAYER_CONSTANTS.SHIELD_HITBOX_SIZE * 2,
+        size: PLAYER_CONSTANTS.SHIELD_HITBOX_SIZE * 2,
         centered: true,
       })
     }
@@ -158,8 +157,7 @@ export default class Renderer {
         POWERUP_SPRITES[powerupType].draw(this.context, {
           x: offset,
           y: Renderer.DEFAULT_PADDING,
-          width: Renderer.POWERUP_BUFF_SIZE,
-          height: Renderer.POWERUP_BUFF_SIZE,
+          size: Renderer.POWERUP_BUFF_SIZE,
           opacity:
             remainingSeconds < Renderer.POWERUP_FADE_CUTOFF
               ? this.getBuffAlpha(remainingSeconds)
@@ -195,8 +193,7 @@ export default class Renderer {
     const canvasCoords = this.viewport.toCanvas(powerup.physics.position)
     POWERUP_SPRITES[powerup.type].draw(this.context, {
       position: canvasCoords,
-      width: powerup.hitbox.size * 2,
-      height: powerup.hitbox.size * 2,
+      size: powerup.hitbox.size * 2,
       centered: true,
     })
     this.drawDebugHitbox(powerup)
@@ -206,6 +203,7 @@ export default class Renderer {
     const canvasCoords = this.viewport.toCanvas(particle.physics.position)
     PARTICLE_SPRITES[particle.type].draw(this.context, {
       position: canvasCoords,
+      size: particle.options.size,
       centered: true,
       frame: particle.animation.frame,
     })

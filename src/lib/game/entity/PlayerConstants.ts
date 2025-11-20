@@ -1,4 +1,6 @@
 /**
+ * Separate PlayerConstants file to prevent circular import between Player and
+ * PowerupState.
  * @author omgimanerd
  */
 

@@ -10,7 +10,7 @@ import { IPhysics, Physics } from 'lib/game/component/Physics'
 import { IUpdateable, UpdateFrame } from 'lib/game/component/Updateable'
 import Util from 'lib/math/Math'
 import Vector from 'lib/math/Vector'
-import GameServices from 'server/GameServices'
+import { GameServices } from 'server/GameServices'
 
 export default abstract class Entity implements IPhysics, IHitbox, IUpdateable {
   @Type(() => Physics) physics: Physics

@@ -11,13 +11,17 @@ import SOUNDS from 'lib/enums/Sounds'
 import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 
 import { Projectile } from 'lib/game/component/Projectile'
+import { UpdateFrame } from 'lib/game/component/Updateable'
 import Vector from 'lib/math/Vector'
 import { SocketServer } from 'lib/socket/SocketServer'
 import Game from 'server/Game'
 
-type ParticleDrawingOptions = {}
+export type ParticleDrawingOptions = {
+  // differs from particle to particle
+  size: number
+}
 
-type ExplosionOptions = {
+export type ExplosionOptions = {
   // dictates the spatial spread that explosion particles can generate
   spread: number
   // dictates the number of explosion particles
@@ -27,13 +31,17 @@ type ExplosionOptions = {
   delay: number
 }
 
-export default class GameServices {
+export class GameServices {
   game: Game
   socket: SocketServer
 
   constructor(game: Game, socket: SocketServer) {
     this.game = game
     this.socket = socket
+  }
+
+  get updateFrame(): UpdateFrame {
+    return this.game.gameLoop.updateFrame
   }
 
   playSound(type: SOUNDS, source: Vector): void {
@@ -46,11 +54,12 @@ export default class GameServices {
   addParticle(
     type: PARTICLES,
     position: Vector,
-    options: any /* TODO */,
+    options: Partial<ParticleDrawingOptions>,
   ): void {
     this.socket.sockets.emit(SOCKET_EVENTS.PARTICLE, {
       type,
       source: position,
+      options: options,
     })
   }
 

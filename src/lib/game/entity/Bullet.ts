@@ -12,7 +12,7 @@ import Entity from 'lib/game/entity/Entity'
 
 import Player from 'lib/game/entity/Player'
 import Vector from 'lib/math/Vector'
-import GameServices from 'server/GameServices'
+import { GameServices } from 'server/GameServices'
 
 export default class Bullet extends Entity implements IProjectile {
   static readonly DEFAULT_DAMAGE = 1

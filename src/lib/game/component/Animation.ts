@@ -1,5 +1,6 @@
 /**
- * Component for entities that have a corresponding animated sprite.
+ * Component for entities that have a corresponding animated sprite. This class
+ * handles tracking the current frame of the animation.
  * @author omgimanerd
  */
 

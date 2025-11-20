@@ -24,7 +24,7 @@ import Rocket from 'lib/game/entity/Rocket'
 import Util from 'lib/math/Math'
 import Vector from 'lib/math/Vector'
 import { PlayerInputs } from 'lib/socket/SocketInterfaces'
-import GameServices from 'server/GameServices'
+import { GameServices } from 'server/GameServices'
 
 export default class Player extends Entity {
   name: string
@@ -176,12 +176,18 @@ export default class Player extends Entity {
     return this.health <= 0
   }
 
-  damage(amount: number): void {
+  damage(amount: number, source: Player): void {
     const shield = this.getPowerupState(POWERUPS.SHIELD)
     if (shield) {
       shield.damage(amount)
     } else {
       this.health -= amount
+    }
+
+    if (this.isDead()) {
+      this.spawn()
+      this.deaths++
+      source.kills++
     }
   }
 

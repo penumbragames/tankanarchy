@@ -125,7 +125,9 @@ export default class Game {
    * @param particle
    */
   onReceiveParticle(particle: ParticleEvent): void {
-    this.particles.push(new Particle(particle.type, particle.source))
+    this.particles.push(
+      new Particle(particle.type, particle.source, particle?.options),
+    )
   }
 
   start(): void {
