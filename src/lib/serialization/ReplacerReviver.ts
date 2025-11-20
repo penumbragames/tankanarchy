@@ -10,7 +10,7 @@ import { instanceToPlain, plainToInstance } from 'class-transformer'
 // All possible serializable classes.
 import Bullet from 'lib/game/entity/Bullet'
 import Explosion from 'lib/game/entity/Explosion'
-import Player from 'lib/game/entity/Player'
+import Player from 'lib/game/entity/player/Player'
 import Powerup from 'lib/game/entity/Powerup'
 import Rocket from 'lib/game/entity/Rocket'
 import Vector from 'lib/math/Vector'

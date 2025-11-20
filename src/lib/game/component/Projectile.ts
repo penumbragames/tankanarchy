@@ -3,7 +3,7 @@
  */
 
 import Entity from 'lib/game/entity/Entity'
-import Player from 'lib/game/entity/Player'
+import Player from 'lib/game/entity/player/Player'
 
 export interface IProjectile {
   angle: number

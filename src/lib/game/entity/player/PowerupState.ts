@@ -4,10 +4,10 @@
 
 import random from 'random'
 
-import type Player from 'lib/game/entity/Player'
+import type Player from 'lib/game/entity/player/Player'
 
 import POWERUPS from 'lib/enums/Powerups'
-import PLAYER_CONSTANTS from 'lib/game/entity/PlayerConstants'
+import PLAYER_CONSTANTS from 'lib/game/entity/player/PlayerConstants'
 
 import { IUpdateable, UpdateFrame } from 'lib/game/component/Updateable'
 

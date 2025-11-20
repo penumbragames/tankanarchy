@@ -10,9 +10,12 @@ import POWERUPS from 'lib/enums/Powerups'
 import { Hitbox } from 'lib/game/component/Hitbox'
 import { Physics } from 'lib/game/component/Physics'
 import Bullet from 'lib/game/entity/Bullet'
-import Player from 'lib/game/entity/Player'
+import Player from 'lib/game/entity/player/Player'
+import {
+  HealthPowerup,
+  PowerupState,
+} from 'lib/game/entity/player/PowerupState'
 import Powerup from 'lib/game/entity/Powerup'
-import { HealthPowerup, PowerupState } from 'lib/game/entity/PowerupState'
 import Rocket from 'lib/game/entity/Rocket'
 import Vector from 'lib/math/Vector'
 import { replacer, reviver } from 'lib/serialization/ReplacerReviver'

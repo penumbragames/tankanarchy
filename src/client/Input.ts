@@ -16,8 +16,8 @@ class Input {
   left: boolean = false
   right: boolean = false
 
-  mouseLeftDown: boolean = false
-  mouseRightDown: boolean = false
+  mouseLeft: boolean = false
+  mouseRight: boolean = false
   mouseCoords: Vector = Vector.zero()
 
   static create(
@@ -74,10 +74,10 @@ class Input {
   onMouseDown(event: MouseEvent): void {
     switch (event.button) {
       case Input.MOUSE_LEFT:
-        this.mouseLeftDown = true
+        this.mouseLeft = true
         break
       case Input.MOUSE_RIGHT:
-        this.mouseRightDown = true
+        this.mouseRight = true
         break
     }
   }
@@ -85,10 +85,10 @@ class Input {
   onMouseUp(event: MouseEvent): void {
     switch (event.button) {
       case Input.MOUSE_LEFT:
-        this.mouseLeftDown = false
+        this.mouseLeft = false
         break
       case Input.MOUSE_RIGHT:
-        this.mouseRightDown = false
+        this.mouseRight = false
         break
     }
   }

@@ -9,7 +9,10 @@ import POWERUPS from 'lib/enums/Powerups'
 
 import * as Constants from 'lib/Constants'
 import Entity from 'lib/game/entity/Entity'
-import { PowerupConstructors, PowerupState } from 'lib/game/entity/PowerupState'
+import {
+  PowerupConstructors,
+  PowerupState,
+} from 'lib/game/entity/player/PowerupState'
 import Vector from 'lib/math/Vector'
 
 export default class Powerup extends Entity {

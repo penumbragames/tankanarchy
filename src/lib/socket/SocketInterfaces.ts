@@ -8,7 +8,7 @@ import SOUNDS from 'lib/enums/Sounds'
 import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 
 import Entity from 'lib/game/entity/Entity'
-import Player from 'lib/game/entity/Player'
+import Player from 'lib/game/entity/player/Player'
 import Vector from 'lib/math/Vector'
 import { ParticleDrawingOptions } from 'server/GameServices'
 
@@ -23,8 +23,8 @@ export interface PlayerInputs {
   left: boolean
   worldMouseCoords: Vector
   turretAngle: number
-  shootBullet: boolean
-  shootRocket: boolean
+  mouseLeft: boolean
+  mouseRight: boolean
 }
 
 /**

@@ -6,7 +6,7 @@
 import Canvas from 'client/graphics/Canvas'
 import { IPhysics, Physics } from 'lib/game/component/Physics'
 import { IUpdateable, UpdateFrame } from 'lib/game/component/Updateable'
-import Player from 'lib/game/entity/Player'
+import Player from 'lib/game/entity/player/Player'
 import Vector from 'lib/math/Vector'
 
 class Viewport implements IPhysics, IUpdateable {

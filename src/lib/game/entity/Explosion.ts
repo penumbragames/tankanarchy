@@ -11,7 +11,7 @@ import type { Ref } from 'lib/types'
 import { Exclude } from 'class-transformer'
 import { UpdateFrame } from 'lib/game/component/Updateable'
 import Entity from 'lib/game/entity/Entity'
-import Player from 'lib/game/entity/Player'
+import Player from 'lib/game/entity/player/Player'
 import Vector from 'lib/math/Vector'
 import { GameServices } from 'server/GameServices'
 

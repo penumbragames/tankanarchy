@@ -11,15 +11,18 @@ import random from 'random'
 
 import POWERUPS from 'lib/enums/Powerups'
 import SOUNDS from 'lib/enums/Sounds'
-import PLAYER_CONSTANTS from 'lib/game/entity/PlayerConstants'
+import PLAYER_CONSTANTS from 'lib/game/entity/player/PlayerConstants'
 
 import * as Constants from 'lib/Constants'
 import { UpdateFrame } from 'lib/game/component/Updateable'
 import Cooldown from 'lib/game/Cooldown'
 import Bullet from 'lib/game/entity/Bullet'
 import Entity from 'lib/game/entity/Entity'
+import {
+  PowerupState,
+  PowerupTypeMap,
+} from 'lib/game/entity/player/PowerupState'
 import Powerup from 'lib/game/entity/Powerup'
-import { PowerupState, PowerupTypeMap } from 'lib/game/entity/PowerupState'
 import Rocket from 'lib/game/entity/Rocket'
 import Util from 'lib/math/Math'
 import Vector from 'lib/math/Vector'
@@ -121,12 +124,12 @@ export default class Player extends Entity {
 
     this.turretAngle = data.turretAngle
 
-    if (data.shootBullet && this.bulletShooting.ready(updateFrame)) {
+    if (data.mouseLeft && this.bulletShooting.ready(updateFrame)) {
       services.addEntity(...this.getBulletsFromShot())
       services.playSound(SOUNDS.BULLET_SHOT, this.physics.position)
       this.bulletShooting.trigger(updateFrame)
     }
-    if (data.shootRocket && this.rocketShooting.ready(updateFrame)) {
+    if (data.mouseRight && this.rocketShooting.ready(updateFrame)) {
       const rocketPowerup = this.getPowerupState(POWERUPS.ROCKET)
       if (rocketPowerup && rocketPowerup.rockets > 0) {
         services.addEntity(Rocket.createFromPlayer(this, data.worldMouseCoords))
