@@ -200,7 +200,7 @@ export class SpeedboostPowerup extends PowerupState {
 
   override init(): SpeedboostPowerup {
     super.init()
-    this.modifier = random.int(
+    this.modifier = random.float(
       SpeedboostPowerup.MIN_MODIFIER,
       SpeedboostPowerup.MAX_MODIFIER,
     )
