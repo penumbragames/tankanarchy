@@ -207,7 +207,7 @@ export default class Renderer {
     PARTICLE_SPRITES[particle.type].draw(this.context, {
       position: canvasCoords,
       centered: true,
-      frame: particle.animationManager.frame,
+      frame: particle.animation.frame,
     })
   }
 
