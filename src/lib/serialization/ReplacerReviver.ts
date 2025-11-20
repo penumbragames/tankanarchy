@@ -7,6 +7,14 @@ import 'reflect-metadata'
 
 import { instanceToPlain, plainToInstance } from 'class-transformer'
 
+// All possible serializable classes.
+import Bullet from 'lib/game/entity/Bullet'
+import Explosion from 'lib/game/entity/Explosion'
+import Player from 'lib/game/entity/Player'
+import Powerup from 'lib/game/entity/Powerup'
+import Rocket from 'lib/game/entity/Rocket'
+import Vector from 'lib/math/Vector'
+
 const __type__ = '__type__'
 
 type SerializableTypes = {
@@ -34,9 +42,7 @@ interface JSONReplacerReviver {
  * @returns JSONReplacerReviver, an object with two keys storing the custom
  * replacer and reviver functions to be used with JSON.parse and JSON.stringify
  */
-export function getReplacerReviver(
-  types: SerializableTypes,
-): JSONReplacerReviver {
+const getReplacerReviver = (types: SerializableTypes): JSONReplacerReviver => {
   return {
     replacer(_key: string, value: any): any {
       if (!value) return value
@@ -82,3 +88,14 @@ export function getReplacerReviver(
     },
   }
 }
+
+// Export replacer and reviver functions for all the classes in this project
+// that we are sending over the wire.
+export const { replacer, reviver } = getReplacerReviver({
+  Bullet,
+  Explosion,
+  Player,
+  Powerup,
+  Rocket,
+  Vector,
+})

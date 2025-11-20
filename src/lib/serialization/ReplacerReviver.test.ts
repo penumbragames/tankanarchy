@@ -10,27 +10,15 @@ import POWERUPS from 'lib/enums/Powerups'
 import { Hitbox } from 'lib/game/component/Hitbox'
 import { Physics } from 'lib/game/component/Physics'
 import Bullet from 'lib/game/entity/Bullet'
-import Explosion from 'lib/game/entity/Explosion'
 import Player from 'lib/game/entity/Player'
 import Powerup from 'lib/game/entity/Powerup'
 import { HealthPowerup, PowerupState } from 'lib/game/entity/PowerupState'
 import Rocket from 'lib/game/entity/Rocket'
 import Vector from 'lib/math/Vector'
-import { getReplacerReviver } from 'lib/serialization/ReplacerReviver'
+import { replacer, reviver } from 'lib/serialization/ReplacerReviver'
 import { GameState } from 'lib/socket/SocketInterfaces'
 
 const UNIXTIME_1 = new Date('1970-01-01T00:00:00.001Z')
-
-const { replacer, reviver } = getReplacerReviver({
-  Bullet,
-  Explosion,
-  Hitbox,
-  Physics,
-  Player,
-  Powerup,
-  Rocket,
-  Vector,
-})
 
 const stringify = (v: any) => JSON.stringify(v, replacer, 2)
 const parse = (v: string) => JSON.parse(v, reviver)
@@ -216,9 +204,6 @@ describe('Test serializing/deserializing complex objects', () => {
     const p = createFakePlayer()
     const b = Bullet.createFromPlayer(p, Math.PI)
     const r = Rocket.createFromPlayer(p, Vector.zero())
-
-    console.log(parse(stringify(r)))
-
     const powerup = new Powerup(Vector.one(), POWERUPS.HEALTH_PACK)
     const obj: GameState = {
       self: p,
