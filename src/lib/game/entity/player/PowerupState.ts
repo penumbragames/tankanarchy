@@ -2,16 +2,14 @@
  * @author omgimanerd
  */
 
-import random from 'random'
-
 import type Player from 'lib/game/entity/player/Player'
+
+import random from 'random'
 
 import POWERUPS from 'lib/enums/Powerups'
 import PLAYER_CONSTANTS from 'lib/game/entity/player/PlayerConstants'
 
 import { IUpdateable, UpdateFrame } from 'lib/game/component/Updateable'
-
-// TODO implement a powerup factory method
 
 /**
  * Base class for powerup states which modify the Player.

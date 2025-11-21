@@ -1,6 +1,6 @@
 /**
- * A class encapsulating the state of a powerup on the server.
- * @author alvin@omgimanerd.tech (Alvin Lin)
+ * A class encapsulating a powerup entity that can be picked up.
+ * @author omgimanerd
  */
 
 import random from 'random'

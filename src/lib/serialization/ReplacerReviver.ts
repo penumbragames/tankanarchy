@@ -86,6 +86,10 @@ const getReplacerReviver = (types: SerializableTypes): JSONReplacerReviver => {
       // Remove the __type__ field and deserialize it with class-transformer's
       // plainToInstance.
       delete value[__type__]
+      // plainToInstance will call the class constructor under the hood before
+      // replacing its fields. If the constructor performs some initialization
+      // on a field that is @Excluded, the initialized field will remain in the
+      // deserialized class.
       return plainToInstance(types[typenameProperty.value], value)
     },
   }
