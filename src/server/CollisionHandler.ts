@@ -83,7 +83,6 @@ export default class CollisionHandler {
       e.handle(Player, Bullet, (p: Player, b: Bullet) => {
         if (b.source === p) return
         p.damage(b.damage, b.source)
-        console.log('damage triggered')
         b.destroy(this.services)
         this.services.playSound(SOUNDS.EXPLOSION, p.physics.position)
       }) ||
@@ -93,7 +92,7 @@ export default class CollisionHandler {
         }
       }) ||
       e.handle(Player, Powerup, (p: Player, po: Powerup) => {
-        switch (p.powerups.apply(po)) {
+        switch (p.powerups.apply(p, po)) {
           case POWERUPS.HEALTH_PACK:
             this.services.playSound(SOUNDS.HEALTH_PACK, p.physics.position)
             break

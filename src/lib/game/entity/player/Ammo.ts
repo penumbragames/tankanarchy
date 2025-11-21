@@ -11,8 +11,6 @@
  * @author omgimanerd
  */
 
-import type { Ref } from 'lib/types'
-
 import POWERUPS from 'lib/enums/Powerups'
 import SOUNDS from 'lib/enums/Sounds'
 import PLAYER_CONSTANTS from 'lib/game/entity/player/PlayerConstants'
@@ -26,17 +24,23 @@ import { PlayerInputs } from 'lib/socket/SocketInterfaces'
 import { GameServices } from 'server/GameServices'
 
 export default class Ammo {
-  player: Ref<Player>
-
   bulletCooldown: Cooldown = new Cooldown(PLAYER_CONSTANTS.BULLET_COOLDOWN)
   bulletsPerShot: number = PLAYER_CONSTANTS.BULLETS_PER_SHOT
   rocketCooldown: Cooldown = new Cooldown(PLAYER_CONSTANTS.ROCKET_COOLDOWN)
 
-  constructor(player: Player) {
-    this.player = player
-  }
-
+  /**
+   * The player that this component is a part of must be passed as the first
+   * argument instead of being stored as a reference because objects with
+   * circular references cannot be passed into socket.io's custom encoder and
+   * decoder, even if the circular reference is not serialized.
+   *
+   * @param player The player that this component is part of,
+   * @param inputs The inputs sent over socket
+   * @param updateFrame The game loop update frame
+   * @param services The game service locator
+   */
   updateFromInput(
+    player: Player,
     inputs: PlayerInputs,
     updateFrame: UpdateFrame,
     services: GameServices,
@@ -44,18 +48,18 @@ export default class Ammo {
     let turnlocked = false
     if (inputs.mouseLeft) {
       // Left clicking is either laser or regular bullets.
-      if (this.player.powerups.get(POWERUPS.LASER)) {
+      if (player.powerups.get(POWERUPS.LASER)) {
         // Charging the laser locks the rotation of the tank.
         turnlocked = true
       } else {
         if (this.bulletCooldown.trigger(updateFrame)) {
-          services.addEntity(...this.getBullets(this.player))
-          services.playSound(SOUNDS.BULLET_SHOT, this.player.physics.position)
+          services.addEntity(...this.getBullets(player))
+          services.playSound(SOUNDS.BULLET_SHOT, player.physics.position)
         }
       }
     }
     // Right clicking is rocket firing.
-    const rocketPowerup = this.player.powerups.get(POWERUPS.ROCKET)
+    const rocketPowerup = player.powerups.get(POWERUPS.ROCKET)
     if (
       inputs.mouseRight &&
       rocketPowerup &&
@@ -63,13 +67,13 @@ export default class Ammo {
       this.rocketCooldown.trigger(updateFrame)
     ) {
       services.addEntity(
-        Rocket.createFromPlayer(this.player, inputs.worldMouseCoords),
+        Rocket.createFromPlayer(player, inputs.worldMouseCoords),
       )
       rocketPowerup.consume()
     }
 
     if (!turnlocked) {
-      this.player.turretAngle = inputs.turretAngle
+      player.turretAngle = inputs.turretAngle
     }
   }
 

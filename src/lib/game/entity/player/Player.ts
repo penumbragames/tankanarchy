@@ -34,10 +34,11 @@ export default class Player extends Entity {
   speed: number = PLAYER_CONSTANTS.SPEED
   health: number = PLAYER_CONSTANTS.MAX_HEALTH
 
-  // These components cannot be initialized in the constructor since the
-  // deserialization process calls the constructor of Player. They must be
-  // initialized in the factory method. These components have a circular
-  // reference, which will make socket deserialization crap itself.
+  // This component cannot be initialized in the constructor since
+  // class-transformer's deserialization process calls the constructor of
+  // Player. They must be initialized in the factory method or they will be
+  // included in the deserialized class even if they have the @Exclude
+  // decorator.
   @Exclude() ammo!: Ammo
   @Type(() => PowerupStateMap) powerups!: PowerupStateMap
 
@@ -53,6 +54,7 @@ export default class Player extends Entity {
     )
     this.name = name
     this.socketID = socketID
+    this.powerups = new PowerupStateMap()
   }
 
   /**
@@ -65,12 +67,11 @@ export default class Player extends Entity {
    */
   static create(name: string, socketID: string): Player {
     const p = new Player(name, socketID).spawn()
-    p.ammo = new Ammo(p)
-    p.powerups = new PowerupStateMap(p)
+    p.ammo = new Ammo()
     return p
   }
 
-  override update(updateFrame: UpdateFrame, _services: GameServices): void {
+  override update(updateFrame: UpdateFrame, services: GameServices): void {
     this.physics.position.add(
       Vector.scale(this.physics.velocity, updateFrame.deltaTime),
     )
@@ -79,6 +80,8 @@ export default class Player extends Entity {
       // prettier-ignore
       this.tankAngle + (this.turnRate * updateFrame.deltaTime),
     )
+
+    this.powerups.update(this, updateFrame, services)
   }
 
   /**
@@ -86,7 +89,7 @@ export default class Player extends Entity {
    * @param {PlayerInputs} data The client input packet.
    * @param {UpdateFrame} updateFrame The frame information from the game loop,
    *   which contains the update time and delta time.
-   * @param {GameServices} services Service locator for the game to access
+   * @param {GameServices} services Service locator for the player to access
    *   game logic.
    */
   updateOnInput(
@@ -112,7 +115,7 @@ export default class Player extends Entity {
 
     // The ammunition manager updates the player turn angle since charging a
     // laser locks the player turret.
-    this.ammo.updateFromInput(data, updateFrame, services)
+    this.ammo.updateFromInput(this, data, updateFrame, services)
   }
 
   isDead(): boolean {
