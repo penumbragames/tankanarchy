@@ -8,7 +8,7 @@ import * as Constants from 'lib/Constants'
 import { Hitbox, IHitbox } from 'lib/game/component/Hitbox'
 import { IPhysics, Physics } from 'lib/game/component/Physics'
 import { IUpdateable, UpdateFrame } from 'lib/game/component/Updateable'
-import Util from 'lib/math/Math'
+import MathUtil from 'lib/math/MathUtil'
 import Vector from 'lib/math/Vector'
 import { GameServices } from 'server/GameServices'
 
@@ -50,12 +50,12 @@ export default abstract class Entity implements IPhysics, IHitbox, IUpdateable {
    */
   inWorld(): boolean {
     return (
-      Util.inBound(
+      MathUtil.inBound(
         this.physics.position.x,
         Constants.WORLD_MIN,
         Constants.WORLD_MAX,
       ) &&
-      Util.inBound(
+      MathUtil.inBound(
         this.physics.position.y,
         Constants.WORLD_MIN,
         Constants.WORLD_MAX,
@@ -67,12 +67,12 @@ export default abstract class Entity implements IPhysics, IHitbox, IUpdateable {
    * Clamps this entity's position within the game world.
    */
   boundToWorld(): void {
-    this.physics.position.x = Util.clamp(
+    this.physics.position.x = MathUtil.clamp(
       this.physics.position.x,
       Constants.WORLD_MIN,
       Constants.WORLD_MAX,
     )
-    this.physics.position.y = Util.clamp(
+    this.physics.position.y = MathUtil.clamp(
       this.physics.position.y,
       Constants.WORLD_MIN,
       Constants.WORLD_MAX,

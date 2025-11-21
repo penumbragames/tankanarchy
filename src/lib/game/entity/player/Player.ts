@@ -16,7 +16,7 @@ import { UpdateFrame } from 'lib/game/component/Updateable'
 import Entity from 'lib/game/entity/Entity'
 import Ammo from 'lib/game/entity/player/Ammo'
 import PowerupStateMap from 'lib/game/entity/player/PowerupStateMap'
-import Util from 'lib/math/Math'
+import MathUtil from 'lib/math/MathUtil'
 import Vector from 'lib/math/Vector'
 import { PlayerInputs } from 'lib/socket/SocketInterfaces'
 import { GameServices } from 'server/GameServices'
@@ -75,7 +75,7 @@ export default class Player extends Entity {
       Vector.scale(this.physics.velocity, updateFrame.deltaTime),
     )
     this.boundToWorld()
-    this.tankAngle = Util.normalizeAngle(
+    this.tankAngle = MathUtil.normalizeAngle(
       // prettier-ignore
       this.tankAngle + (this.turnRate * updateFrame.deltaTime),
     )

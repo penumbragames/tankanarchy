@@ -3,13 +3,14 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
+const TAU = 2 * Math.PI
+
 /**
  * Given an angle in radians, this function normalizes the angle to the range
  * 0 to 2 PI and returns the normalized angle.
  */
 const normalizeAngle = (angle: number): number => {
-  const tau = 2 * Math.PI
-  return angle < 0 ? angle + Math.ceil(-angle / tau) * tau : angle % tau
+  return angle < 0 ? angle + Math.ceil(-angle / TAU) * TAU : angle % TAU
 }
 
 /**
@@ -36,6 +37,7 @@ const clamp = (val: number, min: number, max: number): number => {
 }
 
 export default {
+  TAU,
   normalizeAngle,
   inBound,
   clamp,
