@@ -5,11 +5,12 @@
 // Cannot be a const enum because we iterate over it.
 enum POWERUPS {
   HEALTH_PACK = 'HEALTH_PACK',
-  SHOTGUN = 'SHOTGUN',
+  LASER = 'LASER',
   RAPIDFIRE = 'RAPIDFIRE',
   ROCKET = 'ROCKET',
-  SPEEDBOOST = 'SPEEDBOOST',
   SHIELD = 'SHIELD',
+  SHOTGUN = 'SHOTGUN',
+  SPEEDBOOST = 'SPEEDBOOST',
 }
 
 export default POWERUPS

@@ -80,6 +80,17 @@ export class HealthPowerup extends PowerupState {
   }
 }
 
+export class LaserPowerup extends PowerupState {
+  constructor() {
+    super(POWERUPS.LASER)
+  }
+
+  override init(): LaserPowerup {
+    super.init()
+    return this
+  }
+}
+
 export class RapidfirePowerup extends PowerupState {
   static readonly MIN_MODIFIER = 2
   static readonly MAX_MODIFIER = 4
@@ -100,11 +111,12 @@ export class RapidfirePowerup extends PowerupState {
   }
 
   override apply(p: Player) {
-    p.bulletShooting.cooldown = PLAYER_CONSTANTS.BULLET_COOLDOWN / this.modifier
+    p.ammo.bulletCooldown.cooldown =
+      PLAYER_CONSTANTS.BULLET_COOLDOWN / this.modifier
   }
 
   override remove(p: Player) {
-    p.bulletShooting.cooldown = PLAYER_CONSTANTS.BULLET_COOLDOWN
+    p.ammo.bulletCooldown.cooldown = PLAYER_CONSTANTS.BULLET_COOLDOWN
   }
 }
 
@@ -179,13 +191,13 @@ export class ShotgunPowerup extends PowerupState {
     return this
   }
 
-  override apply(p: Player) {
-    p.bulletsPerShot = PLAYER_CONSTANTS.BULLETS_PER_SHOT + this.modifier
-  }
+  // override apply(p: Player) {
+  //   p.ammo.bulletsPerShot = PLAYER_CONSTANTS.BULLETS_PER_SHOT + this.modifier
+  // }
 
-  override remove(p: Player) {
-    p.bulletsPerShot = PLAYER_CONSTANTS.BULLETS_PER_SHOT
-  }
+  // override remove(p: Player) {
+  //   p.ammo.bulletsPerShot = PLAYER_CONSTANTS.BULLETS_PER_SHOT
+  // }
 }
 
 export class SpeedboostPowerup extends PowerupState {
@@ -221,6 +233,7 @@ export class SpeedboostPowerup extends PowerupState {
 type PowerupConstructors_ = { [key in POWERUPS]: { new (): any } }
 export const PowerupConstructors: PowerupConstructors_ = {
   [POWERUPS.HEALTH_PACK]: HealthPowerup,
+  [POWERUPS.LASER]: LaserPowerup,
   [POWERUPS.RAPIDFIRE]: RapidfirePowerup,
   [POWERUPS.ROCKET]: RocketPowerup,
   [POWERUPS.SHIELD]: ShieldPowerup,
@@ -232,6 +245,7 @@ export type PowerupTypeMap = {
   [P in keyof POWERUPS]: PowerupState
 } & {
   [POWERUPS.HEALTH_PACK]: HealthPowerup
+  [POWERUPS.LASER]: LaserPowerup
   [POWERUPS.RAPIDFIRE]: RapidfirePowerup
   [POWERUPS.ROCKET]: RocketPowerup
   [POWERUPS.SHIELD]: ShieldPowerup

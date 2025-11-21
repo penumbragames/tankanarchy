@@ -46,6 +46,7 @@ const loadSprites = async () => {
       StaticSprite,
       '/img/health_pack_powerup.png',
     ),
+    loadSprite(SPRITES.LASER_POWERUP, StaticSprite, '/img/laser_powerup.png'),
     loadSprite(SPRITES.OTHER_TANK, StaticSprite, '/img/other_tank.png'),
     loadSprite(SPRITES.OTHER_TURRET, StaticSprite, '/img/other_turret.png'),
     loadSprite(
@@ -75,6 +76,7 @@ const loadSprites = async () => {
   const s = StrictEnumMapping<Sprite>(SPRITES, SPRITE_MAP)
   POWERUP_SPRITES = {
     [POWERUPS.HEALTH_PACK]: s[SPRITES.HEALTH_PACK_POWERUP],
+    [POWERUPS.LASER]: s[SPRITES.LASER_POWERUP],
     [POWERUPS.RAPIDFIRE]: s[SPRITES.RAPIDFIRE_POWERUP],
     [POWERUPS.ROCKET]: s[SPRITES.ROCKET_POWERUP],
     [POWERUPS.SHIELD]: s[SPRITES.SHIELD_POWERUP],
