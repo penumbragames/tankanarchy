@@ -17,7 +17,17 @@ export default class Cooldown {
     return updateFrame.currentTime > this.lastUsage + this.cooldown
   }
 
-  trigger(updateFrame: UpdateFrame): void {
+  reset(updateFrame: UpdateFrame): void {
     this.lastUsage = updateFrame.currentTime
+  }
+
+  /**
+   * Combines ready() and reset(), can be called in a conditional which returns
+   * true when the cooldown is up and whatever tracked ability can be used.
+   */
+  trigger(updateFrame: UpdateFrame): boolean {
+    const ready = this.ready(updateFrame)
+    if (ready) this.reset(updateFrame)
+    return ready
   }
 }

@@ -2,28 +2,24 @@
  * Stores the state of the player. This class is shared between the server and
  * the client, though the client will be missing the @Exclude fields after
  * deserialization to reduce the data sent over socket.
- *
- * @author alvin@omgimanerd.tech (Alvin Lin)
+ * @author omgimanerd
  */
 
 import { Exclude, Type } from 'class-transformer'
 import random from 'random'
 
 import POWERUPS from 'lib/enums/Powerups'
-import SOUNDS from 'lib/enums/Sounds'
 import PLAYER_CONSTANTS from 'lib/game/entity/player/PlayerConstants'
 
 import * as Constants from 'lib/Constants'
 import { UpdateFrame } from 'lib/game/component/Updateable'
-import Cooldown from 'lib/game/Cooldown'
-import Bullet from 'lib/game/entity/Bullet'
 import Entity from 'lib/game/entity/Entity'
+import Ammo from 'lib/game/entity/player/Ammo'
 import {
   PowerupState,
   PowerupTypeMap,
 } from 'lib/game/entity/player/PowerupState'
 import Powerup from 'lib/game/entity/Powerup'
-import Rocket from 'lib/game/entity/Rocket'
 import Util from 'lib/math/Math'
 import Vector from 'lib/math/Vector'
 import { PlayerInputs } from 'lib/socket/SocketInterfaces'
@@ -31,19 +27,20 @@ import { GameServices } from 'server/GameServices'
 
 export default class Player extends Entity {
   name: string
-  socketID: string // Also serves as the player UID.
+  // Also serves as the player UID. Required on the client side to distinguish
+  // the 'self' player
+  socketID: string
 
   tankAngle: number = 0
   turretAngle: number = 0
-  turnRate: number = 0
+  @Exclude() turnRate: number = 0
 
   speed: number = PLAYER_CONSTANTS.SPEED
   health: number = PLAYER_CONSTANTS.MAX_HEALTH
 
-  @Exclude() bulletShooting: Cooldown
-  @Exclude() bulletsPerShot: number = PLAYER_CONSTANTS.BULLETS_PER_SHOT
-
-  @Exclude() rocketShooting: Cooldown
+  // This cannot be initialized in the constructor since the deserialization
+  // process calls the constructor
+  @Exclude() ammo!: Ammo
 
   @Type(() => PowerupState)
   powerupStates: Map<POWERUPS, PowerupState> = new Map()
@@ -60,18 +57,20 @@ export default class Player extends Entity {
     )
     this.name = name
     this.socketID = socketID
-
-    this.bulletShooting = new Cooldown(PLAYER_CONSTANTS.BULLET_COOLDOWN)
-    this.rocketShooting = new Cooldown(PLAYER_CONSTANTS.ROCKET_COOLDOWN)
   }
 
   /**
-   * Factory method for a new Player object.
+   * Factory method for a new Player object. Handles initializing objects with
+   * circular references because these cannot be initialized in the constructor
+   * or the object cannot be deserialized properly when sent over socket.
+   *
    * @param {string} name The display name of the player
    * @param {string} socketID The associated socket ID
    */
   static create(name: string, socketID: string): Player {
-    return new Player(name, socketID).spawn()
+    const p = new Player(name, socketID).spawn()
+    p.ammo = new Ammo(p)
+    return p
   }
 
   override update(updateFrame: UpdateFrame, _services: GameServices): void {
@@ -122,22 +121,9 @@ export default class Player extends Entity {
       this.turnRate = -PLAYER_CONSTANTS.TURN_RATE
     }
 
-    this.turretAngle = data.turretAngle
-
-    if (data.mouseLeft && this.bulletShooting.ready(updateFrame)) {
-      services.addEntity(...this.getBulletsFromShot())
-      services.playSound(SOUNDS.BULLET_SHOT, this.physics.position)
-      this.bulletShooting.trigger(updateFrame)
-    }
-    if (data.mouseRight && this.rocketShooting.ready(updateFrame)) {
-      const rocketPowerup = this.getPowerupState(POWERUPS.ROCKET)
-      if (rocketPowerup && rocketPowerup.rockets > 0) {
-        services.addEntity(Rocket.createFromPlayer(this, data.worldMouseCoords))
-        services.playSound(SOUNDS.ROCKET_SHOT, this.physics.position)
-        this.rocketShooting.trigger(updateFrame)
-        rocketPowerup.consume()
-      }
-    }
+    // The ammunition manager updates the player turn angle since charging a
+    // laser locks the player turret.
+    this.ammo.updateFromInput(data, updateFrame, services)
   }
 
   getPowerupState<T extends POWERUPS>(type: T): PowerupTypeMap[T] | undefined {
@@ -154,23 +140,6 @@ export default class Player extends Entity {
     this.powerupStates.set(powerup.type, state)
     state.apply(this)
     return powerup.type
-  }
-
-  /**
-   * Returns an array containing new projectile objects as if the player has
-   * fired a shot given their current powerup state.
-   * @return {Bullet[]}
-   */
-  getBulletsFromShot(): Bullet[] {
-    const bullets = [Bullet.createFromPlayer(this, 0)]
-    if (this.bulletsPerShot > 1) {
-      for (let i = 1; i <= this.bulletsPerShot; ++i) {
-        const angleDeviation = (i * Math.PI) / 25
-        bullets.push(Bullet.createFromPlayer(this, -angleDeviation))
-        bullets.push(Bullet.createFromPlayer(this, angleDeviation))
-      }
-    }
-    return bullets
   }
 
   isDead(): boolean {

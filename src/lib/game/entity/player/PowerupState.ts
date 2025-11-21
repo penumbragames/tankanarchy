@@ -191,13 +191,13 @@ export class ShotgunPowerup extends PowerupState {
     return this
   }
 
-  // override apply(p: Player) {
-  //   p.ammo.bulletsPerShot = PLAYER_CONSTANTS.BULLETS_PER_SHOT + this.modifier
-  // }
+  override apply(p: Player) {
+    p.ammo.bulletsPerShot = PLAYER_CONSTANTS.BULLETS_PER_SHOT + this.modifier
+  }
 
-  // override remove(p: Player) {
-  //   p.ammo.bulletsPerShot = PLAYER_CONSTANTS.BULLETS_PER_SHOT
-  // }
+  override remove(p: Player) {
+    p.ammo.bulletsPerShot = PLAYER_CONSTANTS.BULLETS_PER_SHOT
+  }
 }
 
 export class SpeedboostPowerup extends PowerupState {

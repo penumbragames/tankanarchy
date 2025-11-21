@@ -164,7 +164,6 @@ describe('Test serializing/deserializing basic class instances', () => {
           "socketID": "socket_id",
           "tankAngle": 2,
           "turretAngle": 0,
-          "turnRate": 0,
           "speed": 0.4,
           "health": 10,
           "kills": 0,

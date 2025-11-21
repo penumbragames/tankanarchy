@@ -2,11 +2,6 @@
 
 exports[`Test serializing/deserializing basic class instances Player 2`] = `
 Player {
-  "bulletShooting": Cooldown {
-    "cooldown": 800,
-    "lastUsage": 0,
-  },
-  "bulletsPerShot": 1,
   "deaths": 0,
   "destroyed": false,
   "health": 10,
@@ -41,10 +36,6 @@ Map {
     },
   }
 ,
-  "rocketShooting": Cooldown {
-    "cooldown": 1500,
-    "lastUsage": 0,
-  },
   "socketID": "socket_id",
   "speed": 0.4,
   "tankAngle": 2,
@@ -78,7 +69,6 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
     "socketID": "socket_id",
     "tankAngle": 2,
     "turretAngle": 0,
-    "turnRate": 0,
     "speed": 0.4,
     "health": 10,
     "kills": 0,
@@ -242,11 +232,6 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
   ],
   "players": [],
   "self": Player {
-    "bulletShooting": Cooldown {
-      "cooldown": 800,
-      "lastUsage": 0,
-    },
-    "bulletsPerShot": 1,
     "deaths": 0,
     "destroyed": false,
     "health": 10,
@@ -271,10 +256,6 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
       },
     },
     "powerupStates": Map {},
-    "rocketShooting": Cooldown {
-      "cooldown": 1500,
-      "lastUsage": 0,
-    },
     "socketID": "socket_id",
     "speed": 0.4,
     "tankAngle": 2,
