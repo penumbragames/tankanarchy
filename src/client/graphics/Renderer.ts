@@ -116,7 +116,7 @@ export default class Renderer {
       angle: player.turretAngle,
     })
 
-    if (player.getPowerupState(POWERUPS.SHIELD)) {
+    if (player.powerups.get(POWERUPS.SHIELD)) {
       SPRITE_MAP[SPRITES.SHIELD].draw(this.context, {
         size: PLAYER_CONSTANTS.SHIELD_HITBOX_SIZE * 2,
         centered: true,
@@ -151,7 +151,7 @@ export default class Renderer {
         continue
       }
       let powerup
-      if ((powerup = self.getPowerupState(powerupType))) {
+      if ((powerup = self.powerups.get(powerupType))) {
         // Compute the alpha of the buff based on how close we are to expiring.
         // We only begin fading the buff close to actual expiration.
         const remainingSeconds = powerup.remainingSeconds
@@ -247,7 +247,7 @@ export default class Renderer {
       this.context.translate(20, 20)
       for (
         let i = 0;
-        i < (self.getPowerupState(POWERUPS.ROCKET)?.rockets ?? 0);
+        i < (self.powerups.get(POWERUPS.ROCKET)?.rockets ?? 0);
         ++i
       ) {
         SPRITE_MAP[SPRITES.ROCKET].draw(this.context, {

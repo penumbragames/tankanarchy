@@ -44,7 +44,7 @@ export default class Ammo {
     let turnlocked = false
     if (inputs.mouseLeft) {
       // Left clicking is either laser or regular bullets.
-      if (this.player.getPowerupState(POWERUPS.LASER)) {
+      if (this.player.powerups.get(POWERUPS.LASER)) {
         // Charging the laser locks the rotation of the tank.
         turnlocked = true
       } else {
@@ -55,7 +55,7 @@ export default class Ammo {
       }
     }
     // Right clicking is rocket firing.
-    const rocketPowerup = this.player.getPowerupState(POWERUPS.ROCKET)
+    const rocketPowerup = this.player.powerups.get(POWERUPS.ROCKET)
     if (
       inputs.mouseRight &&
       rocketPowerup &&

@@ -10,8 +10,8 @@ import { instanceToPlain, plainToInstance } from 'class-transformer'
 // All possible serializable classes.
 import Bullet from 'lib/game/entity/Bullet'
 import Explosion from 'lib/game/entity/Explosion'
-import Ammo from 'lib/game/entity/player/Ammo'
 import Player from 'lib/game/entity/player/Player'
+import PowerupStateMap from 'lib/game/entity/player/PowerupStateMap'
 import Powerup from 'lib/game/entity/Powerup'
 import Rocket from 'lib/game/entity/Rocket'
 import Vector from 'lib/math/Vector'
@@ -94,11 +94,11 @@ const getReplacerReviver = (types: SerializableTypes): JSONReplacerReviver => {
 // Export replacer and reviver functions for all the classes in this project
 // that we are sending over the wire.
 export const { replacer, reviver } = getReplacerReviver({
-  Ammo,
   Bullet,
   Explosion,
   Player,
   Powerup,
+  PowerupStateMap,
   Rocket,
   Vector,
 })

@@ -15,11 +15,7 @@ import * as Constants from 'lib/Constants'
 import { UpdateFrame } from 'lib/game/component/Updateable'
 import Entity from 'lib/game/entity/Entity'
 import Ammo from 'lib/game/entity/player/Ammo'
-import {
-  PowerupState,
-  PowerupTypeMap,
-} from 'lib/game/entity/player/PowerupState'
-import Powerup from 'lib/game/entity/Powerup'
+import PowerupStateMap from 'lib/game/entity/player/PowerupStateMap'
 import Util from 'lib/math/Math'
 import Vector from 'lib/math/Vector'
 import { PlayerInputs } from 'lib/socket/SocketInterfaces'
@@ -38,12 +34,12 @@ export default class Player extends Entity {
   speed: number = PLAYER_CONSTANTS.SPEED
   health: number = PLAYER_CONSTANTS.MAX_HEALTH
 
-  // This cannot be initialized in the constructor since the deserialization
-  // process calls the constructor
+  // These components cannot be initialized in the constructor since the
+  // deserialization process calls the constructor of Player. They must be
+  // initialized in the factory method. These components have a circular
+  // reference, which will make socket deserialization crap itself.
   @Exclude() ammo!: Ammo
-
-  @Type(() => PowerupState)
-  powerupStates: Map<POWERUPS, PowerupState> = new Map()
+  @Type(() => PowerupStateMap) powerups!: PowerupStateMap
 
   kills: number = 0
   deaths: number = 0
@@ -70,6 +66,7 @@ export default class Player extends Entity {
   static create(name: string, socketID: string): Player {
     const p = new Player(name, socketID).spawn()
     p.ammo = new Ammo(p)
+    p.powerups = new PowerupStateMap(p)
     return p
   }
 
@@ -82,14 +79,6 @@ export default class Player extends Entity {
       // prettier-ignore
       this.tankAngle + (this.turnRate * updateFrame.deltaTime),
     )
-
-    for (const state of this.powerupStates.values()) {
-      state.update(updateFrame)
-      if (state.expired) {
-        state.remove(this)
-        this.powerupStates.delete(state.type)
-      }
-    }
   }
 
   /**
@@ -126,28 +115,12 @@ export default class Player extends Entity {
     this.ammo.updateFromInput(data, updateFrame, services)
   }
 
-  getPowerupState<T extends POWERUPS>(type: T): PowerupTypeMap[T] | undefined {
-    return <PowerupTypeMap[T]>this.powerupStates.get(type)
-  }
-
-  /**
-   * Applies a Powerup to this player, returning the powerup type for sound.
-   * @param {Powerup} powerup The Powerup object.
-   * @returns {POWERUPS}
-   */
-  applyPowerup(powerup: Powerup): POWERUPS {
-    const state = powerup.powerupState
-    this.powerupStates.set(powerup.type, state)
-    state.apply(this)
-    return powerup.type
-  }
-
   isDead(): boolean {
     return this.health <= 0
   }
 
   damage(amount: number, source: Player): void {
-    const shield = this.getPowerupState(POWERUPS.SHIELD)
+    const shield = this.powerups.get(POWERUPS.SHIELD)
     if (shield) {
       shield.damage(amount)
     } else {

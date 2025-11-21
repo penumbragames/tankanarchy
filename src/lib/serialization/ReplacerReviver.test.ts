@@ -15,6 +15,7 @@ import {
   HealthPowerup,
   PowerupState,
 } from 'lib/game/entity/player/PowerupState'
+import PowerupStateMap from 'lib/game/entity/player/PowerupStateMap'
 import Powerup from 'lib/game/entity/Powerup'
 import Rocket from 'lib/game/entity/Rocket'
 import Vector from 'lib/math/Vector'
@@ -134,7 +135,7 @@ describe('Test serializing/deserializing basic class instances', () => {
     const powerup = new HealthPowerup()
     powerup.duration = 1
     powerup.expirationTime = 2
-    p.powerupStates.set(POWERUPS.HEALTH_PACK, powerup)
+    p.powerups.map.set(POWERUPS.HEALTH_PACK, powerup)
 
     const serialized = stringify(p)
 
@@ -168,13 +169,15 @@ describe('Test serializing/deserializing basic class instances', () => {
           "health": 10,
           "kills": 0,
           "deaths": 0,
-          "powerupStates": {
-            "HEALTH_PACK": {
-              "type": "HEALTH_PACK",
-              "duration": 1,
-              "expirationTime": 2,
-              "expired": false,
-              "healAmount": 0
+          "powerups": {
+            "map": {
+              "HEALTH_PACK": {
+                "type": "HEALTH_PACK",
+                "duration": 1,
+                "expirationTime": 2,
+                "expired": false,
+                "healAmount": 0
+              }
             }
           },
           "__type__": "Player"
@@ -192,7 +195,8 @@ describe('Test serializing/deserializing basic class instances', () => {
     expect(deserialized.hitbox).toBeInstanceOf(Hitbox)
     expect(deserialized.physics.position).toBeInstanceOf(Vector)
     expect(deserialized.physics.position.mag).toBe(5)
-    const deserializedPowerup: PowerupState = deserialized.getPowerupState(
+    expect(deserialized.powerups).toBeInstanceOf(PowerupStateMap)
+    const deserializedPowerup: PowerupState = deserialized.powerups.get(
       POWERUPS.HEALTH_PACK,
     )!
     expect(deserializedPowerup).toBeInstanceOf(PowerupState)
