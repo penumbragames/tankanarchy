@@ -34,6 +34,8 @@ test('lerp()', () => {
   expect(MathUtil.lerp(-2, 0, 10, 0, 100)).toBe(-20)
   expect(MathUtil.lerp(4, 0, 10, 0, 100)).toBe(40)
   expect(MathUtil.lerp(14, 0, 10, 0, 100)).toBe(140)
+
+  expect(MathUtil.lerp(4, 10, 0, 0, 100)).toBe(60)
 })
 
 test('normalizeAngle()', () => {

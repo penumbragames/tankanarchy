@@ -4,6 +4,7 @@
  */
 
 import { describe, expect, mock, test } from 'bun:test'
+
 import { BinarySignal } from 'lib/math/BinarySignal'
 
 describe('Test the BinarySignal class in callback mode', () => {
