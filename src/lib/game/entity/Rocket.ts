@@ -17,7 +17,7 @@ import { GameServices } from 'server/GameServices'
 
 export default class Rocket extends Entity implements IProjectile {
   static readonly DEFAULT_DAMAGE = 3
-  static readonly SPEED = 1.6
+  static readonly SPEED = 0.85
   static readonly MAX_TRAVEL_DISTANCE = 800
   // If the explosion threshold distance is too small, it is possible a single
   // update tick may take the rocket entity past the target.

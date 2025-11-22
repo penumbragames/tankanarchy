@@ -115,7 +115,7 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
           "y": 4
         },
         "velocity": {
-          "x": 1.6,
+          "x": 0.85,
           "y": 0
         },
         "acceleration": {
@@ -206,7 +206,7 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
           "y": 4,
         },
         "velocity": Vector {
-          "x": 1.6,
+          "x": 0.85,
           "y": 0,
         },
       },
