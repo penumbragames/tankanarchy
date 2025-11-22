@@ -24,9 +24,15 @@ import { PlayerInputs } from 'lib/socket/SocketInterfaces'
 import { GameServices } from 'server/GameServices'
 
 export default class Ammo {
+  player: Player
+
   bulletCooldown: Cooldown = new Cooldown(PLAYER_CONSTANTS.BULLET_COOLDOWN)
   bulletsPerShot: number = PLAYER_CONSTANTS.BULLETS_PER_SHOT
   rocketCooldown: Cooldown = new Cooldown(PLAYER_CONSTANTS.ROCKET_COOLDOWN)
+
+  constructor(player: Player) {
+    this.player = player
+  }
 
   /**
    * The player that this component is a part of must be passed as the first
@@ -40,7 +46,6 @@ export default class Ammo {
    * @param services The game service locator
    */
   updateFromInput(
-    player: Player,
     inputs: PlayerInputs,
     updateFrame: UpdateFrame,
     services: GameServices,
@@ -48,18 +53,18 @@ export default class Ammo {
     let turnlocked = false
     if (inputs.mouseLeft) {
       // Left clicking is either laser or regular bullets.
-      if (player.powerups.get(POWERUPS.LASER)) {
+      if (this.player.powerups.get(POWERUPS.LASER)) {
         // Charging the laser locks the rotation of the tank.
         turnlocked = true
       } else {
         if (this.bulletCooldown.trigger(updateFrame)) {
-          services.addEntity(...this.getBullets(player))
-          services.playSound(SOUNDS.BULLET_SHOT, player.physics.position)
+          services.addEntity(...this.getBullets(this.player))
+          services.playSound(SOUNDS.BULLET_SHOT, this.player.physics.position)
         }
       }
     }
     // Right clicking is rocket firing.
-    const rocketPowerup = player.powerups.get(POWERUPS.ROCKET)
+    const rocketPowerup = this.player.powerups.get(POWERUPS.ROCKET)
     if (
       inputs.mouseRight &&
       rocketPowerup &&
@@ -67,13 +72,13 @@ export default class Ammo {
       this.rocketCooldown.trigger(updateFrame)
     ) {
       services.addEntity(
-        Rocket.createFromPlayer(player, inputs.worldMouseCoords),
+        Rocket.createFromPlayer(this.player, inputs.worldMouseCoords),
       )
       rocketPowerup.consume()
     }
 
     if (!turnlocked) {
-      player.turretAngle = inputs.turretAngle
+      this.player.turretAngle = inputs.turretAngle
     }
   }
 

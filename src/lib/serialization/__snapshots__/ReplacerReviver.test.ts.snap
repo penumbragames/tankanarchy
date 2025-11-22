@@ -37,6 +37,7 @@ Map {
       },
     }
 ,
+    "player": undefined,
   },
   "socketID": "socket_id",
   "speed": 0.4,
@@ -261,6 +262,7 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
     },
     "powerups": PowerupStateMap {
       "map": Map {},
+      "player": undefined,
     },
     "socketID": "socket_id",
     "speed": 0.4,

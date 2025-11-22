@@ -92,7 +92,7 @@ export default class CollisionHandler {
         }
       }) ||
       e.handle(Player, Powerup, (p: Player, po: Powerup) => {
-        switch (p.powerups.apply(p, po)) {
+        switch (p.powerups.apply(po)) {
           case POWERUPS.HEALTH_PACK:
             this.services.playSound(SOUNDS.HEALTH_PACK, p.physics.position)
             break

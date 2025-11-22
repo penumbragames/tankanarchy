@@ -1,7 +1,9 @@
 /**
- * @fileoverview Custom JSON replacer and reviver functions which allow for ES6
- * Maps to be serialized and deserialized from JSON objects for sending across
- * the wire through socket.io.
+ * @fileoverview Custom extensions of of socket.io's built in encoder and
+ * decoder that use our replacer and reviver to send objects across the socket
+ * and fully deserialize them back. Uses JSON.stringify and JSON.parse, which
+ * is sufficient because we do not send binary or other data over the socket.
+ * @author omgimanerd
  */
 
 import * as socketIOParser from 'socket.io-parser'
@@ -16,6 +18,10 @@ class Encoder extends socketIOParser.Encoder {
   constructor() {
     super(replacer)
   }
+
+  override encode(packet: socketIOParser.Packet) {
+    return [JSON.stringify(packet, replacer)]
+  }
 }
 
 /**
@@ -25,6 +31,14 @@ class Encoder extends socketIOParser.Encoder {
 class Decoder extends socketIOParser.Decoder {
   constructor() {
     super(reviver)
+  }
+
+  override add(chunk: string) {
+    try {
+      this.emitReserved('decoded', JSON.parse(chunk, reviver))
+    } catch (error: unknown) {
+      console.error(error)
+    }
   }
 }
 

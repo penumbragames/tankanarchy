@@ -40,7 +40,7 @@ export default class Player extends Entity {
   // included in the deserialized class even if they have the @Exclude
   // decorator.
   @Exclude() ammo!: Ammo
-  @Type(() => PowerupStateMap) powerups!: PowerupStateMap
+  @Type(() => PowerupStateMap) powerups: PowerupStateMap
 
   kills: number = 0
   deaths: number = 0
@@ -54,20 +54,18 @@ export default class Player extends Entity {
     )
     this.name = name
     this.socketID = socketID
-    this.powerups = new PowerupStateMap()
+    this.powerups = new PowerupStateMap(this)
   }
 
   /**
-   * Factory method for a new Player object. Handles initializing objects with
-   * circular references because these cannot be initialized in the constructor
-   * or the object cannot be deserialized properly when sent over socket.
+   * Factory method for a new Player object.
    *
    * @param {string} name The display name of the player
    * @param {string} socketID The associated socket ID
    */
   static create(name: string, socketID: string): Player {
     const p = new Player(name, socketID).spawn()
-    p.ammo = new Ammo()
+    p.ammo = new Ammo(p)
     return p
   }
 
@@ -81,7 +79,7 @@ export default class Player extends Entity {
       this.tankAngle + (this.turnRate * updateFrame.deltaTime),
     )
 
-    this.powerups.update(this, updateFrame, services)
+    this.powerups.update(updateFrame, services)
   }
 
   /**
@@ -115,7 +113,7 @@ export default class Player extends Entity {
 
     // The ammunition manager updates the player turn angle since charging a
     // laser locks the player turret.
-    this.ammo.updateFromInput(this, data, updateFrame, services)
+    this.ammo.updateFromInput(data, updateFrame, services)
   }
 
   isDead(): boolean {

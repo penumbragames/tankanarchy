@@ -3,11 +3,11 @@
  * @author omgimanerd
  */
 
-import type { Optional } from 'lib/types'
+import type { Optional, Ref } from 'lib/types'
 
 import POWERUPS from 'lib/enums/Powerups'
 
-import { Type } from 'class-transformer'
+import { Exclude, Type } from 'class-transformer'
 import { UpdateFrame } from 'lib/game/component/Updateable'
 import Player from 'lib/game/entity/player/Player'
 import {
@@ -18,7 +18,15 @@ import Powerup from 'lib/game/entity/Powerup'
 import { GameServices } from 'server/GameServices'
 
 export default class PowerupStateMap {
+  // This field MUST be excluded from serialization since it is a circular
+  // reference.
+  @Exclude() player: Ref<Player>
+
   @Type(() => PowerupState) map: Map<POWERUPS, PowerupState> = new Map()
+
+  constructor(player: Player) {
+    this.player = player
+  }
 
   get keys() {
     return this.map.keys()
@@ -32,24 +40,18 @@ export default class PowerupStateMap {
     return <PowerupTypeMap[T]>this.map.get(type)
   }
 
-  /**
-   * The player that this component is a part of must be passed as the first
-   * argument instead of being stored as a reference because objects with
-   * circular references cannot be passed into socket.io's custom encoder and
-   * decoder, even if the circular reference is not serialized.
-   */
-  apply(player: Player, powerup: Powerup): POWERUPS {
+  apply(powerup: Powerup): POWERUPS {
     const state = powerup.powerupState
     this.map.set(powerup.type, state)
-    state.apply(player)
+    state.apply(this.player)
     return powerup.type
   }
 
-  update(player: Player, updateFrame: UpdateFrame, _services: GameServices) {
+  update(updateFrame: UpdateFrame, _services: GameServices) {
     for (const state of this.values) {
       state.update(updateFrame)
       if (state.expired) {
-        state.remove(player)
+        state.remove(this.player)
         this.map.delete(state.type)
       }
     }
