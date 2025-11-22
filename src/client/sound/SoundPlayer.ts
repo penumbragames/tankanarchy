@@ -20,7 +20,7 @@ export default class SoundPlayer {
 
   socket: SocketClient
 
-  // Active playing sounds that we are storing
+  // Active playing sounds, store them here
   activeSounds: Map<string, Sound> = new Map()
   listenerPosition: Nullable<Vector> = null
 
@@ -52,6 +52,11 @@ export default class SoundPlayer {
       case SOUND_ACTION.PAUSE:
         if (!data.id) break
         this.activeSounds.get(data.id)?.pause()
+        break
+      case SOUND_ACTION.STOP:
+        if (!data.id) break
+        this.activeSounds.get(data.id)?.pause()
+        this.activeSounds.delete(data.id)
         break
       case SOUND_ACTION.MOVE:
         if (!data.id) break

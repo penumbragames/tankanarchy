@@ -36,6 +36,10 @@ export type ExplosionOptions = {
 
 export class GameServices {
   game: Game
+
+  // TODO: instead of emitting the socket event whenever the relevant methods
+  // are called, maybe we should buffer them all up in this class, and send
+  // them in batches with the game update instead.
   socket: SocketServer
 
   constructor(game: Game, socket: SocketServer) {

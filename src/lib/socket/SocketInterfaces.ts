@@ -59,6 +59,7 @@ export interface ParticleEvent {
 export enum SOUND_ACTION {
   PLAY = 'PLAY',
   PAUSE = 'PAUSE',
+  STOP = 'STOP',
   MOVE = 'MOVE',
 }
 
