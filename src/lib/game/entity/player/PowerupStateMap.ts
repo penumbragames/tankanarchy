@@ -40,11 +40,11 @@ export default class PowerupStateMap {
     return <PowerupTypeMap[T]>this.map.get(type)
   }
 
-  apply(powerup: Powerup): POWERUPS {
+  apply(powerup: Powerup): PowerupState {
     const state = powerup.powerupState
     this.map.set(powerup.type, state)
     state.apply(this.player)
-    return powerup.type
+    return state
   }
 
   update(updateFrame: UpdateFrame, _services: GameServices) {

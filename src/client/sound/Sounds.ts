@@ -26,7 +26,9 @@ export const loadSounds = async () => {
     loadSound(SOUNDS.GUN_POWERUP, '/sound/gunPowerup.wav'),
     loadSound(SOUNDS.HEALTH_PACK, '/sound/healthpack.mp3'),
     loadSound(SOUNDS.LASER_CHARGE, '/sound/laserCharge.mp3'),
+    loadSound(SOUNDS.LASER_POWERUP, '/sound/laserPowerup.mp3'),
     loadSound(SOUNDS.LASER_SHOT, '/sound/laserShot.mp3'),
+    loadSound(SOUNDS.ROCKET_POWERUP, '/sound/rocketPowerup.mp3'),
     loadSound(SOUNDS.ROCKET_SHOT, '/sound/rocketShot.wav'),
     loadSound(SOUNDS.SHIELD_POWERUP, '/sound/shieldPowerup.mp3'),
   ])

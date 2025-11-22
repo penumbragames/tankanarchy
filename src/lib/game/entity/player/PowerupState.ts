@@ -3,10 +3,12 @@
  */
 
 import type Player from 'lib/game/entity/player/Player'
+import type { Nullable } from 'lib/types/types'
 
 import random from 'random'
 
 import POWERUPS from 'lib/enums/Powerups'
+import SOUNDS from 'lib/enums/Sounds'
 import PLAYER_CONSTANTS from 'lib/game/entity/player/PlayerConstants'
 
 import { IUpdateable, UpdateFrame } from 'lib/game/component/Updateable'
@@ -46,6 +48,10 @@ export abstract class PowerupState implements IUpdateable {
     return this.remainingMs / 1000
   }
 
+  get pickupSound(): Nullable<SOUNDS> {
+    return null
+  }
+
   update(updateFrame: UpdateFrame) {
     if (this.duration != Infinity) {
       this.expired = updateFrame.lastUpdateTime > this.expirationTime
@@ -72,6 +78,10 @@ export class HealthPowerup extends PowerupState {
     return this
   }
 
+  override get pickupSound(): Nullable<SOUNDS> {
+    return SOUNDS.HEALTH_PACK
+  }
+
   override apply(p: Player) {
     p.heal(this.healAmount)
     this.expired = true
@@ -86,6 +96,10 @@ export class LaserPowerup extends PowerupState {
   override init(): LaserPowerup {
     super.init()
     return this
+  }
+
+  override get pickupSound(): Nullable<SOUNDS> {
+    return SOUNDS.LASER_POWERUP
   }
 }
 
@@ -106,6 +120,10 @@ export class RapidfirePowerup extends PowerupState {
       RapidfirePowerup.MAX_MODIFIER,
     )
     return this
+  }
+
+  override get pickupSound(): Nullable<SOUNDS> {
+    return SOUNDS.GUN_POWERUP
   }
 
   override apply(p: Player) {
@@ -132,6 +150,10 @@ export class RocketPowerup extends PowerupState {
     return this
   }
 
+  override get pickupSound(): Nullable<SOUNDS> {
+    return SOUNDS.ROCKET_POWERUP
+  }
+
   consume(): void {
     if (--this.rockets === 0) {
       this.expired = true
@@ -153,6 +175,10 @@ export class ShieldPowerup extends PowerupState {
     super.init()
     this.shield = random.int(ShieldPowerup.MIN_SHIELD, ShieldPowerup.MAX_SHIELD)
     return this
+  }
+
+  override get pickupSound(): Nullable<SOUNDS> {
+    return SOUNDS.SHIELD_POWERUP
   }
 
   override apply(p: Player) {
@@ -186,6 +212,10 @@ export class ShotgunPowerup extends PowerupState {
       ShotgunPowerup.MAX_MODIFIER,
     )
     return this
+  }
+
+  override get pickupSound(): Nullable<SOUNDS> {
+    return SOUNDS.GUN_POWERUP
   }
 
   override apply(p: Player) {

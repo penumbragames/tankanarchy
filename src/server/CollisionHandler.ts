@@ -5,7 +5,6 @@
  */
 
 import PARTICLES from 'lib/enums/Particles'
-import POWERUPS from 'lib/enums/Powerups'
 import SOUNDS from 'lib/enums/Sounds'
 
 import Bullet from 'lib/game/entity/Bullet'
@@ -92,17 +91,9 @@ export default class CollisionHandler {
         }
       }) ||
       e.handle(Player, Powerup, (p: Player, po: Powerup) => {
-        switch (p.powerups.apply(po)) {
-          case POWERUPS.HEALTH_PACK:
-            this.services.playSound(SOUNDS.HEALTH_PACK, p.physics.position)
-            break
-          case POWERUPS.SHIELD:
-            this.services.playSound(SOUNDS.SHIELD_POWERUP, p.physics.position)
-            break
-          case POWERUPS.RAPIDFIRE:
-          case POWERUPS.SHOTGUN:
-            this.services.playSound(SOUNDS.GUN_POWERUP, p.physics.position)
-            break
+        const powerupState = p.powerups.apply(po)
+        if (powerupState.pickupSound) {
+          this.services.playSound(powerupState.pickupSound, p.physics.position)
         }
         po.destroy(this.services)
       }) ||
