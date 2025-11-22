@@ -13,6 +13,10 @@ describe('Test the BinarySignal class in callback mode', () => {
 
     const bs = new BinarySignal(false, onRise, onFall)
 
+    expect(() => {
+      bs.consume()
+    }).toThrow()
+
     bs.update(false)
     expect(onRise).toHaveBeenCalledTimes(0)
     expect(onFall).toHaveBeenCalledTimes(0)
@@ -39,6 +43,10 @@ describe('Test the BinarySignal class in callback mode', () => {
     const onFall = mock(() => {})
 
     const bs = new BinarySignal(true, onRise, onFall)
+
+    expect(() => {
+      bs.consume()
+    }).toThrow()
 
     bs.update(true)
     expect(onRise).toHaveBeenCalledTimes(0)

@@ -50,7 +50,7 @@ export class BinarySignal {
 
   consume(): Optional<BinarySignal.Event> {
     if (this.onRise || this.onFall) {
-      throw new Error('Cannot consume if callbacks are set!')
+      throw new Error('Cannot call consume() if callbacks are set!')
     }
     return this.eventQueue.shift()
   }
