@@ -4,9 +4,9 @@
  */
 
 import { describe, expect, mock, test } from 'bun:test'
-import BinarySignal from 'lib/math/BinarySignal'
+import { BinarySignal } from 'lib/math/BinarySignal'
 
-describe('Test the BinarySignal edge detectors', () => {
+describe('Test the BinarySignal class in callback mode', () => {
   test('Low State Initialization', () => {
     const onRise = mock(() => {})
     const onFall = mock(() => {})
@@ -59,5 +59,45 @@ describe('Test the BinarySignal edge detectors', () => {
     bs.update(true)
     expect(onRise).toHaveBeenCalledTimes(1)
     expect(onFall).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('Test the BinarySignal class in event queue mode', () => {
+  test('Low State Initialization', () => {
+    const bs = new BinarySignal(false)
+
+    bs.update(false)
+    expect(bs.consume()).toBeUndefined()
+
+    bs.update(true)
+    expect(bs.consume()).toBe(BinarySignal.Event.RISE)
+
+    bs.update(true)
+    expect(bs.consume()).toBeUndefined()
+
+    bs.update(false)
+    expect(bs.consume()).toBe(BinarySignal.Event.FALL)
+
+    bs.update(false)
+    expect(bs.consume()).toBeUndefined()
+  })
+
+  test('High State Initialization', () => {
+    const bs = new BinarySignal(true)
+
+    bs.update(true)
+    expect(bs.consume()).toBeUndefined()
+
+    bs.update(false)
+    expect(bs.consume()).toBe(BinarySignal.Event.FALL)
+
+    bs.update(false)
+    expect(bs.consume()).toBeUndefined()
+
+    bs.update(true)
+    expect(bs.consume()).toBe(BinarySignal.Event.RISE)
+
+    bs.update(true)
+    expect(bs.consume()).toBeUndefined()
   })
 })
