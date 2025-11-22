@@ -16,7 +16,7 @@ type TriggerFn = () => void
  * If callbacks are set, it is an error to attempt to consume events.
  */
 export class BinarySignal {
-  previous: boolean = false
+  previousState: boolean = false
 
   // Populated if no callbacks are set
   eventQueue: BinarySignal.Event[] = []
@@ -26,26 +26,26 @@ export class BinarySignal {
   onFall: Nullable<TriggerFn>
 
   constructor(startingState: boolean, onRise?: TriggerFn, onFall?: TriggerFn) {
-    this.previous = startingState
+    this.previousState = startingState
     this.onRise = onRise ?? null
     this.onFall = onFall ?? null
   }
 
   update(state: boolean) {
-    if (this.previous && !state) {
+    if (this.previousState && !state) {
       if (this.onFall) {
         this.onFall()
       } else {
         this.eventQueue.push(BinarySignal.Event.FALL)
       }
-    } else if (!this.previous && state) {
+    } else if (!this.previousState && state) {
       if (this.onRise) {
         this.onRise()
       } else {
         this.eventQueue.push(BinarySignal.Event.RISE)
       }
     }
-    this.previous = state
+    this.previousState = state
   }
 
   consume(): Optional<BinarySignal.Event> {

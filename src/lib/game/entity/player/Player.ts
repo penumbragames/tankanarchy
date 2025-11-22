@@ -79,6 +79,7 @@ export default class Player extends Entity {
       this.tankAngle + (this.turnRate * updateFrame.deltaTime),
     )
 
+    this.ammo.update(updateFrame, services)
     this.powerups.update(updateFrame, services)
   }
 
