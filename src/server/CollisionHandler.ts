@@ -96,6 +96,9 @@ export default class CollisionHandler {
           case POWERUPS.HEALTH_PACK:
             this.services.playSound(SOUNDS.HEALTH_PACK, p.physics.position)
             break
+          case POWERUPS.SHIELD:
+            this.services.playSound(SOUNDS.SHIELD_POWERUP, p.physics.position)
+            break
           case POWERUPS.RAPIDFIRE:
           case POWERUPS.SHOTGUN:
             this.services.playSound(SOUNDS.GUN_POWERUP, p.physics.position)
