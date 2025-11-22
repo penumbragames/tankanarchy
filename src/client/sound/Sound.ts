@@ -16,9 +16,10 @@ export default class Sound {
     return new Sound(await loadResource(Audio, src))
   }
 
-  play(volume: number = 0.2) {
+  play(volume: number = 0.2): HTMLAudioElement {
     const clone: HTMLAudioElement = <HTMLAudioElement>this.sound.cloneNode()
     clone.volume = volume
     clone.play()
+    return clone
   }
 }

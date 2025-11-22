@@ -140,6 +140,7 @@ export default class CollisionHandler {
       // Powerup collisions
       e.handle(Powerup, Explosion, (po: Powerup, _e: Explosion) => {
         po.destroy(this.services)
+        this.services.addParticle(PARTICLES.EXPLOSION, po.physics.position, {})
       }) ||
       e.handle(Powerup, Powerup, noop) ||
       // Explosion collisions with each other

@@ -187,6 +187,7 @@ export default class Ammo implements IUpdateable {
       services.addEntity(
         Rocket.createFromPlayer(this.player, inputs.worldMouseCoords),
       )
+      services.playSound(SOUNDS.ROCKET_SHOT, this.player.physics.position)
       rocketPowerup.consume()
     }
   }

@@ -6,6 +6,7 @@
 import type { Ref } from 'lib/types'
 
 import { Exclude } from 'class-transformer'
+import SOUNDS from 'lib/enums/Sounds'
 import { IProjectile } from 'lib/game/component/Projectile'
 import { UpdateFrame } from 'lib/game/component/Updateable'
 import Entity from 'lib/game/entity/Entity'
@@ -73,11 +74,12 @@ export default class Rocket extends Entity implements IProjectile {
         services.updateFrame.currentTime,
       ),
     )
+    services.playSound(SOUNDS.EXPLOSION, this.physics.position)
     services.addExplosion(this.physics.position, {
       size: 100,
       spread: 25,
       density: 7,
-      delay: 400,
+      delay: 0,
     })
   }
 }

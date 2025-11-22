@@ -4,20 +4,25 @@
  * @author omgimanerd
  */
 
+import type { Nullable } from 'lib/types'
+
 import SOUND_MAP from 'client/sound/Sounds'
+import SOCKET_EVENTS from 'lib/socket/SocketEvents'
+
+import MathUtil from 'lib/math/MathUtil'
 import Vector from 'lib/math/Vector'
 import { SocketClient } from 'lib/socket/SocketClient'
-import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 import { SoundEvent } from 'lib/socket/SocketInterfaces'
 
 export default class SoundPlayer {
+  static readonly MAX_DISTANCE = 1000 // px
+
   socket: SocketClient
 
-  listenerPosition: Vector | null
+  listenerPosition: Nullable<Vector> = null
 
   constructor(socket: SocketClient) {
     this.socket = socket
-    this.listenerPosition = null
   }
 
   bindClientListener() {
@@ -25,7 +30,13 @@ export default class SoundPlayer {
   }
 
   clientCallback(data: SoundEvent) {
-    SOUND_MAP[data.type].play()
+    if (!this.listenerPosition) return
+    const d = Vector.sub(data.source, this.listenerPosition).mag
+    if (d > SoundPlayer.MAX_DISTANCE) return
+    // TODO, implement volume slider scaling
+    SOUND_MAP[data.type].play(
+      MathUtil.lerp(d, SoundPlayer.MAX_DISTANCE, 0, 0, 0.4),
+    )
   }
 
   update(position: Vector) {
