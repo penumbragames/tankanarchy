@@ -13,6 +13,7 @@ import {
   SocketData,
 } from './SocketInterfaces'
 
+// Socket server type
 export type SocketServer = Server<
   ClientToServerEvents,
   ServerToClientEvents,
@@ -20,6 +21,7 @@ export type SocketServer = Server<
   SocketData
 >
 
+// Client side socket type
 export type Socket = Socket_<
   ClientToServerEvents,
   ServerToClientEvents,
@@ -27,6 +29,8 @@ export type Socket = Socket_<
   SocketData
 >
 
+// Helper to get an initialized socket server from parent httpServer with the
+// correct event interfaces.
 export const getSocketServer = (httpServer: http.Server): SocketServer => {
   return new Server<
     ClientToServerEvents,
