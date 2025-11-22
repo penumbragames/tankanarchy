@@ -25,6 +25,10 @@ export class EventQueue<T> {
     // TODO: optimize later with a linked list or some shit
     return this.queue.shift()
   }
+
+  clear(): void {
+    this.queue = []
+  }
 }
 
 export namespace EventQueue {
