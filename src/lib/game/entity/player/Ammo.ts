@@ -11,7 +11,7 @@
  * @author omgimanerd
  */
 
-import type { Ref } from 'lib/types'
+import type { Ref } from 'lib/types/types'
 
 import { Exclude } from 'class-transformer'
 

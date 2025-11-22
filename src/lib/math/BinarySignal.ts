@@ -3,7 +3,8 @@
  * @author omgimanerd
  */
 
-import type { Nullable, Optional } from 'lib/types'
+import { EventQueue } from 'lib/types/EventQueue'
+import type { Nullable, Optional } from 'lib/types/types'
 
 type TriggerFn = () => void
 
@@ -19,7 +20,7 @@ export class BinarySignal {
   previousState: boolean = false
 
   // Populated if no callbacks are set
-  eventQueue: BinarySignal.Event[] = []
+  eventQueue: EventQueue<BinarySignal.Event> = new EventQueue()
 
   // Rising and falling edge callbacks
   onRise: Nullable<TriggerFn>
@@ -36,13 +37,13 @@ export class BinarySignal {
       if (this.onFall) {
         this.onFall()
       } else {
-        this.eventQueue.push(BinarySignal.Event.FALL)
+        this.eventQueue.add(BinarySignal.Event.FALL)
       }
     } else if (!this.previousState && state) {
       if (this.onRise) {
         this.onRise()
       } else {
-        this.eventQueue.push(BinarySignal.Event.RISE)
+        this.eventQueue.add(BinarySignal.Event.RISE)
       }
     }
     this.previousState = state
@@ -52,7 +53,7 @@ export class BinarySignal {
     if (this.onRise || this.onFall) {
       throw new Error('Cannot call consume() if callbacks are set!')
     }
-    return this.eventQueue.shift()
+    return this.eventQueue.consume()
   }
 }
 

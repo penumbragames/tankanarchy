@@ -3,7 +3,7 @@
  * @author omgimanerd
  */
 
-import type { Optional, Ref } from 'lib/types'
+import type { Optional, Ref } from 'lib/types/types'
 
 import POWERUPS from 'lib/enums/Powerups'
 

@@ -51,7 +51,7 @@ describe('Test serializing/deserializing basic class instances', () => {
         "{
           "x": 1,
           "y": 2,
-          "__type__": "Vector"
+          "__type": "Vector"
         }"
       `,
     )
@@ -96,7 +96,7 @@ describe('Test serializing/deserializing basic class instances', () => {
             "size": 10
           },
           "type": "HEALTH_PACK",
-          "__type__": "Powerup"
+          "__type": "Powerup"
         }"
       `,
     )
@@ -180,7 +180,7 @@ describe('Test serializing/deserializing basic class instances', () => {
               }
             }
           },
-          "__type__": "Player"
+          "__type": "Player"
         }"
       `,
     )

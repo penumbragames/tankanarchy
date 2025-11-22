@@ -4,7 +4,7 @@
  * @author omgimanerd
  */
 
-import type { Nullable } from 'lib/types'
+import type { Nullable } from 'lib/types/types'
 
 import SOUND_MAP from 'client/sound/Sounds'
 import SOCKET_EVENTS from 'lib/socket/SocketEvents'

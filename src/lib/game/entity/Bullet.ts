@@ -3,7 +3,7 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-import type { Ref } from 'lib/types'
+import type { Ref } from 'lib/types/types'
 
 import { Exclude } from 'class-transformer'
 import { IProjectile } from 'lib/game/component/Projectile'

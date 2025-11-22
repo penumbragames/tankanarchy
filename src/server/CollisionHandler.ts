@@ -14,7 +14,7 @@ import Explosion from 'lib/game/entity/Explosion'
 import Player from 'lib/game/entity/player/Player'
 import Powerup from 'lib/game/entity/Powerup'
 import Rocket from 'lib/game/entity/Rocket'
-import { Constructor } from 'lib/types'
+import { Constructor } from 'lib/types/types'
 import { GameServices } from 'server/GameServices'
 
 const noop = (_: Entity, __: Entity) => {}

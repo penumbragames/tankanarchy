@@ -16,7 +16,7 @@ import Powerup from 'lib/game/entity/Powerup'
 import Rocket from 'lib/game/entity/Rocket'
 import Vector from 'lib/math/Vector'
 
-const __type__ = '__type__'
+const __type = '__type'
 
 type SerializableTypes = {
   [key: string]: any
@@ -34,7 +34,7 @@ interface JSONReplacerReviver {
  * serialized into a JSON object and deserialized back into an instance of
  * themselves.
  *
- * The classes must not have a __type__ property defined since this will be
+ * The classes must not have a __type property defined since this will be
  * written into the object in order to preserve type information.
  *
  * @param types An object specifying the classes that the custom serialization
@@ -47,7 +47,7 @@ const getReplacerReviver = (types: SerializableTypes): JSONReplacerReviver => {
   return {
     replacer(_key: string, value: any): any {
       if (!value) return value
-      if (Object.prototype.hasOwnProperty.call(value, __type__)) {
+      if (Object.prototype.hasOwnProperty.call(value, __type)) {
         throw new Error(
           'Objects to be serialized cannot have a __typename__ property',
         )
@@ -64,9 +64,9 @@ const getReplacerReviver = (types: SerializableTypes): JSONReplacerReviver => {
         return value
       }
       // If so, serialize it with class-transformer's instanceToPlain and write
-      // the type into the __type__ field.
+      // the type into the __type field.
       const plainObject = instanceToPlain(value)
-      Object.defineProperty(plainObject, __type__, {
+      Object.defineProperty(plainObject, __type, {
         value: className,
         enumerable: true,
       })
@@ -74,18 +74,18 @@ const getReplacerReviver = (types: SerializableTypes): JSONReplacerReviver => {
     },
     reviver(_key: string, value: any): any {
       if (!value) return value
-      // Check if the object to deserialize has a __type__ field, with a
-      // __type__ that is registered.
-      const typenameProperty = Object.getOwnPropertyDescriptor(value, __type__)
+      // Check if the object to deserialize has a __type field, with a
+      // __type that is registered.
+      const typenameProperty = Object.getOwnPropertyDescriptor(value, __type)
       if (!typenameProperty || !typenameProperty.value) return value
       if (!(typenameProperty.value in types)) {
         throw new Error(
-          `Object to deserialize has a __type__ field with an unknown type ${typenameProperty.value}`,
+          `Object to deserialize has a __type field with an unknown type ${typenameProperty.value}`,
         )
       }
-      // Remove the __type__ field and deserialize it with class-transformer's
+      // Remove the __type field and deserialize it with class-transformer's
       // plainToInstance.
-      delete value[__type__]
+      delete value[__type]
       // plainToInstance will call the class constructor under the hood before
       // replacing its fields. If the constructor performs some initialization
       // on a field that is @Excluded, the initialized field will remain in the

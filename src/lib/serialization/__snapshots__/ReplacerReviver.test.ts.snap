@@ -79,7 +79,7 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
     "powerups": {
       "map": {}
     },
-    "__type__": "Player"
+    "__type": "Player"
   },
   "players": [],
   "entities": [
@@ -105,7 +105,7 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
       "angle": 3.141592653589793,
       "damage": 1,
       "distanceTraveled": 0,
-      "__type__": "Bullet"
+      "__type": "Bullet"
     },
     {
       "destroyed": false,
@@ -130,7 +130,7 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
       "damage": 3,
       "distanceTraveled": 0,
       "maxDistance": 5,
-      "__type__": "Rocket"
+      "__type": "Rocket"
     },
     {
       "destroyed": false,
@@ -152,7 +152,7 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
         "size": 10
       },
       "type": "HEALTH_PACK",
-      "__type__": "Powerup"
+      "__type": "Powerup"
     }
   ]
 }"
