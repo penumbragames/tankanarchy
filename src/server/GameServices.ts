@@ -7,12 +7,12 @@
 import random from 'random'
 
 import PARTICLES from 'lib/enums/Particles'
-import SOUNDS from 'lib/enums/Sounds'
 import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 
 import { UpdateFrame } from 'lib/game/component/Updateable'
 import Entity from 'lib/game/entity/Entity'
 import Vector from 'lib/math/Vector'
+import { SoundEvent } from 'lib/socket/SocketInterfaces'
 import { SocketServer } from 'lib/socket/SocketServer'
 import Game from 'server/Game'
 
@@ -47,11 +47,8 @@ export class GameServices {
     return this.game.gameLoop.updateFrame
   }
 
-  playSound(type: SOUNDS, source: Vector): void {
-    this.socket.sockets.emit(SOCKET_EVENTS.SOUND, {
-      type,
-      source,
-    })
+  playSound(e: SoundEvent): void {
+    this.socket.sockets.emit(SOCKET_EVENTS.SOUND, e)
   }
 
   addParticle(

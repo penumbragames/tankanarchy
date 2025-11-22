@@ -83,7 +83,10 @@ export default class CollisionHandler {
         if (b.source === p) return
         p.damage(b.damage, b.source)
         b.destroy(this.services)
-        this.services.playSound(SOUNDS.EXPLOSION, p.physics.position)
+        this.services.playSound({
+          type: SOUNDS.EXPLOSION,
+          source: p.physics.position,
+        })
       }) ||
       e.handle(Player, Explosion, (p: Player, e: Explosion) => {
         if (e.tryDamage(p)) {
@@ -93,7 +96,10 @@ export default class CollisionHandler {
       e.handle(Player, Powerup, (p: Player, po: Powerup) => {
         const powerupState = p.powerups.apply(po)
         if (powerupState.pickupSound) {
-          this.services.playSound(powerupState.pickupSound, p.physics.position)
+          this.services.playSound({
+            type: powerupState.pickupSound,
+            source: p.physics.position,
+          })
         }
         po.destroy(this.services)
       }) ||
@@ -102,7 +108,10 @@ export default class CollisionHandler {
         if (r.source === p) return
         p.damage(r.damage, r.source)
         r.destroy(this.services)
-        this.services.playSound(SOUNDS.EXPLOSION, p.physics.position)
+        this.services.playSound({
+          type: SOUNDS.EXPLOSION,
+          source: p.physics.position,
+        })
       }) ||
       // Bullet collisions
       e.handle(Bullet, Explosion, (b: Bullet, e: Explosion) => {
@@ -112,13 +121,19 @@ export default class CollisionHandler {
         if (b1.source === b2.source) return
         b1.destroy(this.services)
         b2.destroy(this.services)
-        this.services.playSound(SOUNDS.EXPLOSION, b1.physics.position)
+        this.services.playSound({
+          type: SOUNDS.EXPLOSION,
+          source: b1.physics.position,
+        })
         this.services.addParticle(PARTICLES.EXPLOSION, b1.physics.position, {})
       }) ||
       e.handle(Bullet, Powerup, (b: Bullet, po: Powerup) => {
         b.destroy(this.services)
         po.destroy(this.services)
-        this.services.playSound(SOUNDS.EXPLOSION, b.physics.position)
+        this.services.playSound({
+          type: SOUNDS.EXPLOSION,
+          source: b.physics.position,
+        })
         this.services.addParticle(PARTICLES.EXPLOSION, b.physics.position, {})
       }) ||
       // Rocket collisions

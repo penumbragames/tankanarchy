@@ -74,7 +74,10 @@ export default class Rocket extends Entity implements IProjectile {
         services.updateFrame.currentTime,
       ),
     )
-    services.playSound(SOUNDS.EXPLOSION, this.physics.position)
+    services.playSound({
+      type: SOUNDS.EXPLOSION,
+      source: this.physics.position,
+    })
     services.addExplosion(this.physics.position, {
       size: 100,
       spread: 25,

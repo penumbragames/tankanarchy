@@ -62,7 +62,10 @@ class CannonState extends State {
   ): State {
     if (inputs.mouseLeft && this.cooldown.trigger(updateFrame)) {
       services.addEntity(...this.ammo.getBullets())
-      services.playSound(SOUNDS.BULLET_SHOT, this.ammo.player.physics.position)
+      services.playSound({
+        type: SOUNDS.BULLET_SHOT,
+        source: this.ammo.player.physics.position,
+      })
     }
     this.ammo.player.turretAngle = inputs.turretAngle
     return this
@@ -187,7 +190,10 @@ export default class Ammo implements IUpdateable {
       services.addEntity(
         Rocket.createFromPlayer(this.player, inputs.worldMouseCoords),
       )
-      services.playSound(SOUNDS.ROCKET_SHOT, this.player.physics.position)
+      services.playSound({
+        type: SOUNDS.ROCKET_SHOT,
+        source: this.player.physics.position,
+      })
       rocketPowerup.consume()
     }
   }

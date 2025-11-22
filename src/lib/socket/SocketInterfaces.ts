@@ -56,10 +56,18 @@ export interface ParticleEvent {
   options?: Partial<ParticleDrawingOptions>
 }
 
+export enum SOUND_ACTION {
+  PLAY = 'PLAY',
+  PAUSE = 'PAUSE',
+  MOVE = 'MOVE',
+}
+
 /**
  * Server to client SOUND event which triggers a sound to play.
  */
 export interface SoundEvent {
+  action?: SOUND_ACTION
+  id?: string
   type: SOUNDS
   source: Vector
 }
