@@ -5,14 +5,17 @@
 
 import SOUNDS from 'lib/enums/Sounds'
 
-import Sound from 'client/sound/Sound'
+import SoundPrototype from 'client/sound/SoundPrototype'
 import { StrictEnumMapping } from 'lib/enums/EnumMapping'
 
 // Populated asynchronously
-let SOUND_MAP: Record<SOUNDS, Sound> = {} as Record<SOUNDS, Sound>
+let SOUND_MAP: Record<SOUNDS, SoundPrototype> = {} as Record<
+  SOUNDS,
+  SoundPrototype
+>
 
 const loadSound = async (soundEnum: SOUNDS, src: string) => {
-  SOUND_MAP[soundEnum] = await Sound.create(src)
+  SOUND_MAP[soundEnum] = await SoundPrototype.create(src)
 }
 
 /**
@@ -32,7 +35,7 @@ export const loadSounds = async () => {
     loadSound(SOUNDS.ROCKET_SHOT, '/sound/rocketShot.wav'),
     loadSound(SOUNDS.SHIELD_POWERUP, '/sound/shieldPowerup.mp3'),
   ])
-  StrictEnumMapping<Sound>(SOUNDS, SOUND_MAP)
+  StrictEnumMapping<SoundPrototype>(SOUNDS, SOUND_MAP)
 }
 
 export default SOUND_MAP
