@@ -13,7 +13,7 @@ import Sound from 'client/sound/Sound'
 import MathUtil from 'lib/math/MathUtil'
 import Vector from 'lib/math/Vector'
 import { SocketClient } from 'lib/socket/SocketClient'
-import { SOUND_ACTION, SoundEvent } from 'lib/socket/SocketInterfaces'
+import { SoundEvent } from 'lib/socket/SocketInterfaces'
 
 export default class SoundPlayer {
   static readonly MAX_DISTANCE = 1000 // px
@@ -35,30 +35,36 @@ export default class SoundPlayer {
   clientCallback(data: SoundEvent) {
     if (!this.listenerPosition) return
     const d = Vector.sub(data.source, this.listenerPosition).mag
-    const soundPrototype = SOUND_MAP[data.type]
+    const sound = SOUND_MAP[data.type].clone()
     const volume =
       d > SoundPlayer.MAX_DISTANCE
         ? 0
         : MathUtil.lerp(d, SoundPlayer.MAX_DISTANCE, 0, 0, 0.4)
 
+    console.log(data)
+
     switch (data.action) {
       case undefined: // an unset action defaults to playing the sound
-      case SOUND_ACTION.PLAY:
-        const sound = soundPrototype.play(volume) // clones the shit
+      case SoundEvent.ACTION.PLAY:
+        sound.play(volume)
         if (data.id) {
           this.activeSounds.set(data.id, sound)
         }
         break
-      case SOUND_ACTION.PAUSE:
+      case SoundEvent.ACTION.LOOP:
+        if (!data.id) break
+        this.activeSounds.set(data.id, sound.loop(volume))
+        break
+      case SoundEvent.ACTION.PAUSE:
         if (!data.id) break
         this.activeSounds.get(data.id)?.pause()
         break
-      case SOUND_ACTION.STOP:
+      case SoundEvent.ACTION.STOP:
         if (!data.id) break
         this.activeSounds.get(data.id)?.pause()
         this.activeSounds.delete(data.id)
         break
-      case SOUND_ACTION.MOVE:
+      case SoundEvent.ACTION.MOVE:
         if (!data.id) break
         const activeSound = this.activeSounds.get(data.id)
         if (activeSound) activeSound.volume = volume
@@ -66,7 +72,7 @@ export default class SoundPlayer {
     }
 
     for (const [id, sound] of this.activeSounds.entries()) {
-      if (sound.played) this.activeSounds.delete(id)
+      if (sound.played && !sound.looping) this.activeSounds.delete(id)
     }
   }
 

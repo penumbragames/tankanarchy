@@ -157,4 +157,8 @@ export default class Player extends Entity {
     this.health = PLAYER_CONSTANTS.MAX_HEALTH
     return this
   }
+
+  getUid(extra: string): string {
+    return `${this.socketID}:${extra}`
+  }
 }

@@ -56,21 +56,23 @@ export interface ParticleEvent {
   options?: Partial<ParticleDrawingOptions>
 }
 
-export enum SOUND_ACTION {
-  PLAY = 'PLAY',
-  PAUSE = 'PAUSE',
-  STOP = 'STOP',
-  MOVE = 'MOVE',
-}
-
 /**
  * Server to client SOUND event which triggers a sound to play.
  */
 export interface SoundEvent {
-  action?: SOUND_ACTION
+  action?: SoundEvent.ACTION
   id?: string
   type: SOUNDS
   source: Vector
+}
+export namespace SoundEvent {
+  export enum ACTION {
+    PLAY = 'PLAY',
+    LOOP = 'LOOP',
+    PAUSE = 'PAUSE',
+    STOP = 'STOP',
+    MOVE = 'MOVE',
+  }
 }
 
 // Interfaces used to define the client and server socket objects.

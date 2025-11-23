@@ -25,7 +25,7 @@ import Bullet from 'lib/game/entity/Bullet'
 import Player from 'lib/game/entity/player/Player'
 import Rocket from 'lib/game/entity/Rocket'
 import { BinarySignal } from 'lib/math/BinarySignal'
-import { PlayerInputs } from 'lib/socket/SocketInterfaces'
+import { PlayerInputs, SoundEvent } from 'lib/socket/SocketInterfaces'
 import { GameServices } from 'server/GameServices'
 
 /**
@@ -80,24 +80,51 @@ class CannonState extends State {
 }
 
 class LaserState extends State {
-  static readonly MIN_CHARGE_TIME = 2000 // ms
+  static readonly LASER_SOUND_ID = 'LASER_CHARGING'
+  static readonly MIN_CHARGE_TIME = 1000 // ms
 
   charging: BinarySignal = new BinarySignal(false)
+
+  // Since updateFromInput() is called less frequently than the actual game
+  // loop, we cannot use the deltaTime from the game loop's UpdateFrame.
+  // Therefore, we accumulate the updateTime between each updateFromInput() call
+  // and consume it when we call updateFromInput().
+  inputDeltaTime: number = 0
   chargeTime: number = 0
 
   override updateFromInput(
     inputs: PlayerInputs,
-    updateFrame: UpdateFrame,
+    _updateFrame: UpdateFrame,
     services: GameServices,
   ): State {
+    // Consume the stored input delta time
+    const deltaTime = this.inputDeltaTime
+    this.inputDeltaTime = 0
+
     // Update the BinarySignal state to see if we released the mouse button
     this.charging.update(inputs.mouseLeft)
     switch (this.charging.consume()) {
       case BinarySignal.Event.RISE:
+        services.playSound({
+          type: SOUNDS.LASER_CHARGE,
+          action: SoundEvent.ACTION.LOOP,
+          id: this.ammo.player.getUid(LaserState.LASER_SOUND_ID),
+          source: this.ammo.player.physics.position,
+        })
         break
       case BinarySignal.Event.FALL:
+        services.playSound({
+          type: SOUNDS.LASER_CHARGE,
+          action: SoundEvent.ACTION.STOP,
+          id: this.ammo.player.getUid(LaserState.LASER_SOUND_ID),
+          source: this.ammo.player.physics.position,
+        })
         if (this.chargeTime >= LaserState.MIN_CHARGE_TIME) {
           // Fire the laser
+          services.playSound({
+            type: SOUNDS.LASER_SHOT,
+            source: this.ammo.player.physics.position,
+          })
           this.chargeTime = 0
         }
         break
@@ -107,7 +134,7 @@ class LaserState extends State {
 
     // While we are charging the laser, the player's turret angle is locked.
     if (inputs.mouseLeft) {
-      this.chargeTime += updateFrame.deltaTime
+      this.chargeTime += deltaTime
     } else {
       this.chargeTime = 0
       this.ammo.player.turretAngle = inputs.turretAngle
@@ -115,11 +142,13 @@ class LaserState extends State {
     return this
   }
 
-  override update(_updateFrame: UpdateFrame, _services: GameServices): State {
-    // Stay in the powerup state until we stop firing.
+  override update(updateFrame: UpdateFrame, _services: GameServices): State {
+    // Accumulate the delta time between updateFromInput() calls.
+    this.inputDeltaTime += updateFrame.deltaTime
+    // Stay in the powerup state while charging, exiting after firing.
     if (
       !this.ammo.player.powerups.get(POWERUPS.LASER) &&
-      this.charging.previousState
+      this.chargeTime == 0
     ) {
       return new CannonState(this.ammo)
     }

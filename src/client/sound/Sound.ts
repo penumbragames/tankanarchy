@@ -6,6 +6,8 @@
 
 export default class Sound {
   sound: HTMLAudioElement
+
+  looping: boolean = false
   played: boolean = false
 
   constructor(sound: HTMLAudioElement) {
@@ -24,7 +26,15 @@ export default class Sound {
   }
 
   play(volume: number = 0.2): Sound {
-    this.sound.volume = volume
+    this.volume = volume
+    this.sound.play()
+    return this
+  }
+
+  loop(volume: number = 0.2): Sound {
+    this.volume = volume
+    this.looping = true
+    this.sound.loop = true
     this.sound.play()
     return this
   }
