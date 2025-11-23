@@ -21,7 +21,7 @@ export default class Debug implements IUpdateableClient {
   displayContainer: HTMLElement
 
   // Values to display on the debug dashboard.
-  display: Map<string, string> = new Map()
+  display: Map<string, any> = new Map()
 
   constructor(
     socket: SocketClient,
@@ -78,9 +78,13 @@ export default class Debug implements IUpdateableClient {
   }
 
   // Updates the display UI elements
-  update(_updateFrame: UpdateFrame) {}
+  update(_updateFrame: UpdateFrame) {
+    this.displayContainer.innerHTML = [...this.display.entries()]
+      .map((kv) => `${kv[0]}=${kv[1]}`)
+      .join('<br />')
+  }
 
-  setDisplayValue(key: string, value: string) {
+  setDisplayValue(key: string, value: any) {
     this.display.set(key, value)
   }
 }

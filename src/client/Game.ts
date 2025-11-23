@@ -185,7 +185,10 @@ export default class Game {
       this.renderer.drawBuffStatus(this.state.self)
       this.renderer.drawCrosshair(this.state.self, this.input)
 
-      Debug.get().update(this.updateAndRenderLoop.updateFrame)
+      const debug = Debug.get()
+      debug.update(this.updateAndRenderLoop.updateFrame)
+      debug.setDisplayValue('server ups', this.state.debug?.ups)
+      debug.setDisplayValue('client render fps', this.updateAndRenderLoop.ups)
     }
   }
 }

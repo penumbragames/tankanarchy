@@ -103,6 +103,11 @@ export default class Game {
         self: currentPlayer,
         players: players,
         entities: this.entities,
+        debug: DEBUG
+          ? {
+              ups: this.gameLoop.ups,
+            }
+          : undefined,
       })
     }
   }

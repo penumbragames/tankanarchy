@@ -3,7 +3,9 @@
  * @author omgimanerd
  */
 
+import RingBuffer from 'lib/datastructures/RingBuffer'
 import { UpdateFrame } from 'lib/game/component/Updateable'
+import MathUtil from 'lib/math/MathUtil'
 
 type GameLoopFunction = (updateFrame: UpdateFrame) => void
 
@@ -15,6 +17,8 @@ type GameLoopFunction = (updateFrame: UpdateFrame) => void
  * loop function at the target UPS.
  */
 export default class GameLoop {
+  static readonly UPS_RINGBUFFER_SIZE = 10
+
   targetUps: number
   targetUpdateInterval: number
 
@@ -22,9 +26,10 @@ export default class GameLoop {
   fn: GameLoopFunction
   useAnimationFrame: boolean
 
-  lastUpdateTime: number = 0
-  currentTime: number = 0
-  deltaTime: number = 0
+  updateTimes: RingBuffer = new RingBuffer(GameLoop.UPS_RINGBUFFER_SIZE)
+  lastUpdateTime: number = 0 // ms unixtime
+  currentTime: number = 0 // ms unixtime
+  deltaTime: number = 0 // ms
 
   constructor(
     targetUps: number,
@@ -53,6 +58,15 @@ export default class GameLoop {
     }
   }
 
+  get ups(): number {
+    return MathUtil.roundTo(
+      (GameLoop.UPS_RINGBUFFER_SIZE /
+        (this.updateTimes.tail - this.updateTimes.head)) *
+        1000,
+      2,
+    )
+  }
+
   start() {
     this.running = true
     this.lastUpdateTime = Date.now()
@@ -62,6 +76,7 @@ export default class GameLoop {
   run(): void {
     if (!this.running) return
     this.currentTime = Date.now()
+    this.updateTimes.push(this.currentTime)
     this.deltaTime = this.currentTime - this.lastUpdateTime
     this.lastUpdateTime = this.currentTime
     this.fn(this.updateFrame)

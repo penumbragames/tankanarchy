@@ -21,9 +21,15 @@ export interface ChatMessage {
   isNotification: boolean
 }
 
+// Client to server DEBUG event to trigger a command
 export interface DebugCommand {
   socketId: string
   applyPowerup?: POWERUPS
+}
+
+// Server to client debug info in the GameState
+export type DebugInfo = {
+  ups: number
 }
 
 // Server to client GAME_UPDATE event which contains the game state.
@@ -31,6 +37,7 @@ export interface GameState {
   self: Player
   players: Player[]
   entities: Entity[]
+  debug?: Partial<DebugInfo>
 }
 
 // Server to client PARTICLE event which triggers the client to render a
