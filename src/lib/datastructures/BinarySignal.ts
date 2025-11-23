@@ -3,7 +3,7 @@
  * @author omgimanerd
  */
 
-import { EventQueue } from 'lib/types/EventQueue'
+import { EventQueue } from 'lib/datastructures/EventQueue'
 import type { Nullable, Optional } from 'lib/types/types'
 
 type TriggerFn = () => void

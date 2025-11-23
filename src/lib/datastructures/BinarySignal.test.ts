@@ -5,7 +5,7 @@
 
 import { describe, expect, mock, test } from 'bun:test'
 
-import { BinarySignal } from 'lib/math/BinarySignal'
+import { BinarySignal } from 'lib/datastructures/BinarySignal'
 
 describe('Test the BinarySignal class in callback mode', () => {
   test('Low State Initialization', () => {

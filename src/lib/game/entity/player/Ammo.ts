@@ -19,12 +19,12 @@ import POWERUPS from 'lib/enums/Powerups'
 import SOUNDS from 'lib/enums/Sounds'
 import PLAYER_CONSTANTS from 'lib/game/entity/player/PlayerConstants'
 
+import { BinarySignal } from 'lib/datastructures/BinarySignal'
 import { IUpdateableServer, UpdateFrame } from 'lib/game/component/Updateable'
 import Cooldown from 'lib/game/Cooldown'
 import Bullet from 'lib/game/entity/Bullet'
 import Player from 'lib/game/entity/player/Player'
 import Rocket from 'lib/game/entity/Rocket'
-import { BinarySignal } from 'lib/math/BinarySignal'
 import { PlayerInputs, SoundEvent } from 'lib/socket/SocketInterfaces'
 import { GameServices } from 'server/GameServices'
 
