@@ -15,7 +15,7 @@ import { Socket } from 'socket.io'
 import { CHAT_TAG } from 'lib/Constants'
 import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 
-import { PlayerInputs } from 'lib/socket/SocketInterfaces'
+import { DebugCommand, PlayerInputs } from 'lib/socket/SocketInterfaces'
 import { getSocketServer } from 'lib/socket/SocketServer'
 import Game from 'server/Game'
 
@@ -41,6 +41,27 @@ app.use('/img/', express.static(path.join(DIRNAME, '../img/')))
 app.use('/sound', express.static(path.join(DIRNAME, '../sound/')))
 
 socketServer.on('connection', (socket: Socket) => {
+  socket.on(SOCKET_EVENTS.CHAT_SEND, (message: string) => {
+    socketServer.emit(SOCKET_EVENTS.CHAT_BROADCAST, {
+      name: game.players.getDisplayName(socket.id),
+      message: message,
+      isNotification: false,
+    })
+  })
+
+  socket.on(SOCKET_EVENTS.DEBUG, (data: DebugCommand) => {
+    game.triggerDebugCommand(data)
+  })
+
+  socket.on(SOCKET_EVENTS.DISCONNECT, () => {
+    const name = game.players.remove(socket.id)
+    socketServer.sockets.emit(SOCKET_EVENTS.CHAT_BROADCAST, {
+      name: CHAT_TAG,
+      message: ` ${name} has left the game.`,
+      isNotification: true,
+    })
+  })
+
   socket.on(SOCKET_EVENTS.NEW_PLAYER, (name: string, callback: () => void) => {
     game.players.add(name, socket)
     socketServer.emit(SOCKET_EVENTS.CHAT_BROADCAST, {
@@ -53,23 +74,6 @@ socketServer.on('connection', (socket: Socket) => {
 
   socket.on(SOCKET_EVENTS.PLAYER_ACTION, (data: PlayerInputs) => {
     game.updatePlayerOnInput(socket.id, data)
-  })
-
-  socket.on(SOCKET_EVENTS.CHAT_SEND, (message: string) => {
-    socketServer.emit(SOCKET_EVENTS.CHAT_BROADCAST, {
-      name: game.players.getDisplayName(socket.id),
-      message: message,
-      isNotification: false,
-    })
-  })
-
-  socket.on(SOCKET_EVENTS.DISCONNECT, () => {
-    const name = game.players.remove(socket.id)
-    socketServer.sockets.emit(SOCKET_EVENTS.CHAT_BROADCAST, {
-      name: CHAT_TAG,
-      message: ` ${name} has left the game.`,
-      isNotification: true,
-    })
   })
 })
 

@@ -9,6 +9,8 @@ enum SOCKET_EVENTS {
   CHAT_SEND = 'CHAT_SEND',
   // Server to client, broadcasts received chat messages
   CHAT_BROADCAST = 'CHAT_BROADCAST',
+  // Debug command sent by client to trigger behavior for debugging
+  DEBUG = 'DEBUG',
   // Client to server, sent automatically on socket disconnect
   DISCONNECT = 'disconnect', // BUILTIN SOCKET EVENT
   // Server to client, sends game state

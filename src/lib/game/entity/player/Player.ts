@@ -8,10 +8,10 @@
 import { Exclude, Type } from 'class-transformer'
 import random from 'random'
 
+import * as Constants from 'lib/Constants'
 import POWERUPS from 'lib/enums/Powerups'
 import PLAYER_CONSTANTS from 'lib/game/entity/player/PlayerConstants'
 
-import * as Constants from 'lib/Constants'
 import { UpdateFrame } from 'lib/game/component/Updateable'
 import Entity from 'lib/game/entity/Entity'
 import Ammo from 'lib/game/entity/player/Ammo'
@@ -22,7 +22,7 @@ import { PlayerInputs } from 'lib/socket/SocketInterfaces'
 import { GameServices } from 'server/GameServices'
 
 export default class Player extends Entity {
-  name: string
+  name: string // player display name, not unique
   // Also serves as the player UID. Required on the client side to distinguish
   // the 'self' player
   socketID: string

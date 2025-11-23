@@ -11,12 +11,12 @@ import POWERUPS from 'lib/enums/Powerups'
 import SOUNDS from 'lib/enums/Sounds'
 import PLAYER_CONSTANTS from 'lib/game/entity/player/PlayerConstants'
 
-import { IUpdateable, UpdateFrame } from 'lib/game/component/Updateable'
+import { IUpdateableServer, UpdateFrame } from 'lib/game/component/Updateable'
 
 /**
  * Base class for powerup states which modify the Player.
  */
-export abstract class PowerupState implements IUpdateable {
+export abstract class PowerupState implements IUpdateableServer {
   static readonly MIN_DURATION = 5000
   static readonly MAX_DURATION = 15000
 

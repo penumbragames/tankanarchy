@@ -10,6 +10,7 @@ import Game from 'client/Game'
 import loadSprites from 'client/graphics/Sprites'
 import { loadSounds } from 'client/sound/Sounds'
 import Chat from 'client/ui/Chat'
+import Debug from 'client/ui/Debug'
 import { getSocketClient, SocketClient } from 'lib/socket/SocketClient'
 import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 
@@ -19,6 +20,12 @@ window.onload = async () => {
 
   const socket: SocketClient = getSocketClient()
   const game = Game.create(socket, 'canvas', 'leaderboard')
+  Debug.init(
+    socket,
+    document.getElementById('debug-container')!,
+    document.getElementById('debug-powerup-buttons')!,
+    document.getElementById('debug-display')!,
+  )
 
   const nameInputElement = <HTMLInputElement>(
     document.getElementById('name-input')!

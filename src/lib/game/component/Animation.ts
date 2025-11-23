@@ -4,14 +4,14 @@
  * @author omgimanerd
  */
 
-import { IUpdateable, UpdateFrame } from 'lib/game/component/Updateable'
+import { IUpdateableServer, UpdateFrame } from 'lib/game/component/Updateable'
 
 export enum TYPE {
   SINGLE = 'SINGLE',
   LOOP = 'LOOP',
 }
 
-export class Animation implements IUpdateable {
+export class Animation implements IUpdateableServer {
   static readonly TIME_PER_FRAME = 50 // ms
 
   type: TYPE

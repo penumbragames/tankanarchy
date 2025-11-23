@@ -7,12 +7,14 @@ import { Type } from 'class-transformer'
 import * as Constants from 'lib/Constants'
 import { Hitbox, IHitbox } from 'lib/game/component/Hitbox'
 import { IPhysics, Physics } from 'lib/game/component/Physics'
-import { IUpdateable, UpdateFrame } from 'lib/game/component/Updateable'
+import { IUpdateableServer, UpdateFrame } from 'lib/game/component/Updateable'
 import MathUtil from 'lib/math/MathUtil'
 import Vector from 'lib/math/Vector'
 import { GameServices } from 'server/GameServices'
 
-export default abstract class Entity implements IPhysics, IHitbox, IUpdateable {
+export default abstract class Entity
+  implements IPhysics, IHitbox, IUpdateableServer
+{
   @Type(() => Physics) physics: Physics
   @Type(() => Hitbox) hitbox: Hitbox
 

@@ -40,9 +40,9 @@ export default class PowerupStateMap {
     return <PowerupTypeMap[T]>this.map.get(type)
   }
 
-  apply(powerup: Powerup): PowerupState {
-    const state = powerup.powerupState
-    this.map.set(powerup.type, state)
+  apply(arg: Powerup | PowerupState): PowerupState {
+    const state = arg instanceof Powerup ? arg.powerupState : arg
+    this.map.set(state.type, state)
     state.apply(this.player)
     return state
   }

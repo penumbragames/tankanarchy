@@ -5,11 +5,11 @@
 
 import Canvas from 'client/graphics/Canvas'
 import { IPhysics, Physics } from 'lib/game/component/Physics'
-import { IUpdateable, UpdateFrame } from 'lib/game/component/Updateable'
+import { IUpdateableClient, UpdateFrame } from 'lib/game/component/Updateable'
 import Player from 'lib/game/entity/player/Player'
 import Vector from 'lib/math/Vector'
 
-class Viewport implements IPhysics, IUpdateable {
+class Viewport implements IPhysics, IUpdateableClient {
   static readonly UNINITIALIZED = new Vector(-99999, -99999)
   static readonly STICKINESS = 0.005
 

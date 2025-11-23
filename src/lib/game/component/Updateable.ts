@@ -12,6 +12,10 @@ export type UpdateFrame = {
   deltaTime: number
 }
 
-export interface IUpdateable {
+export interface IUpdateableServer {
   update(updateFrame: UpdateFrame, services: GameServices): void
+}
+
+export interface IUpdateableClient {
+  update(updateFrame: UpdateFrame): void
 }

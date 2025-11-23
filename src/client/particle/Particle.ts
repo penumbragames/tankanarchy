@@ -7,11 +7,13 @@ import PARTICLES from 'lib/enums/Particles'
 import { PARTICLE_SPRITES } from 'client/graphics/Sprites'
 import { Animation, IAnimation, TYPE } from 'lib/game/component/Animation'
 import { IPhysics, Physics } from 'lib/game/component/Physics'
-import { IUpdateable, UpdateFrame } from 'lib/game/component/Updateable'
+import { IUpdateableClient, UpdateFrame } from 'lib/game/component/Updateable'
 import Vector from 'lib/math/Vector'
 import { ParticleDrawingOptions } from 'server/GameServices'
 
-export default class Particle implements IPhysics, IUpdateable, IAnimation {
+export default class Particle
+  implements IPhysics, IUpdateableClient, IAnimation
+{
   physics: Physics
 
   type: PARTICLES

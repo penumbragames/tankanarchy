@@ -7,9 +7,10 @@
 import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 
 import Entity from 'lib/game/entity/Entity'
+import { PowerupConstructors } from 'lib/game/entity/player/PowerupState'
 import Powerup from 'lib/game/entity/Powerup'
 import GameLoop from 'lib/game/GameLoop'
-import { PlayerInputs } from 'lib/socket/SocketInterfaces'
+import { DebugCommand, PlayerInputs } from 'lib/socket/SocketInterfaces'
 import { SocketServer } from 'lib/socket/SocketServer'
 import CollisionHandler from 'server/CollisionHandler'
 import { GameServices } from 'server/GameServices'
@@ -79,6 +80,15 @@ export default class Game {
     // Spawn new powerups.
     while (nPowerups++ < Powerup.MAX_COUNT) {
       this.entities.push(Powerup.create())
+    }
+  }
+
+  triggerDebugCommand(data: DebugCommand) {
+    if (!DEBUG) return
+    const player = this.players.getPlayer(data.socketId)
+    if (!player) return
+    if (data.applyPowerup) {
+      player.powerups.apply(new PowerupConstructors[data.applyPowerup]().init())
     }
   }
 

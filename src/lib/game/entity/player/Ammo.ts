@@ -19,7 +19,7 @@ import POWERUPS from 'lib/enums/Powerups'
 import SOUNDS from 'lib/enums/Sounds'
 import PLAYER_CONSTANTS from 'lib/game/entity/player/PlayerConstants'
 
-import { IUpdateable, UpdateFrame } from 'lib/game/component/Updateable'
+import { IUpdateableServer, UpdateFrame } from 'lib/game/component/Updateable'
 import Cooldown from 'lib/game/Cooldown'
 import Bullet from 'lib/game/entity/Bullet'
 import Player from 'lib/game/entity/player/Player'
@@ -33,7 +33,7 @@ import { GameServices } from 'server/GameServices'
  * Without any powerups, we just fire regular bullets. With the laser powerup,
  * we charge the laser with the left click.
  */
-abstract class State implements IUpdateable {
+abstract class State implements IUpdateableServer {
   ammo: Ammo // Parent object reference
 
   constructor(ammo: Ammo) {
@@ -162,7 +162,7 @@ class LaserState extends State {
  * Ammo is a component of the Player used to manage the player's shooting
  * cooldowns and state information.
  */
-export default class Ammo implements IUpdateable {
+export default class Ammo implements IUpdateableServer {
   // This field MUST be excluded from serialization since it is a circular
   // reference.
   @Exclude() player: Ref<Player>

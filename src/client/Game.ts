@@ -14,6 +14,7 @@ import Viewport from 'client/graphics/Viewport'
 import Input from 'client/Input'
 import Particle from 'client/particle/Particle'
 import SoundPlayer from 'client/sound/SoundPlayer'
+import Debug from 'client/ui/Debug'
 import Leaderboard from 'client/ui/Leaderboard'
 import GameLoop from 'lib/game/GameLoop'
 import Vector from 'lib/math/Vector'
@@ -183,6 +184,8 @@ export default class Game {
       this.particles.forEach(this.renderer.drawParticle.bind(this.renderer))
       this.renderer.drawBuffStatus(this.state.self)
       this.renderer.drawCrosshair(this.state.self, this.input)
+
+      Debug.get().update(this.updateAndRenderLoop.updateFrame)
     }
   }
 }

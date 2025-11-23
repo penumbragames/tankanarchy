@@ -1,0 +1,86 @@
+/**
+ * Debug is a singleton class hooked to a UI element that allows us to trigger
+ * debug commands from the client or display debug information.
+ * @author omgimanerd
+ */
+
+import type { Optional } from 'lib/types/types'
+
+import POWERUPS from 'lib/enums/Powerups'
+import { IUpdateableClient, UpdateFrame } from 'lib/game/component/Updateable'
+import { SocketClient } from 'lib/socket/SocketClient'
+import SOCKET_EVENTS from 'lib/socket/SocketEvents'
+
+export default class Debug implements IUpdateableClient {
+  static instance: Optional<Debug>
+
+  socket: SocketClient
+
+  container: HTMLElement
+  powerupButtonContainer: HTMLElement
+  displayContainer: HTMLElement
+
+  // Values to display on the debug dashboard.
+  display: Map<string, string> = new Map()
+
+  constructor(
+    socket: SocketClient,
+    container: HTMLElement,
+    powerupButtonContainer: HTMLElement,
+    displayContainer: HTMLElement,
+  ) {
+    this.socket = socket
+    this.container = container
+    this.powerupButtonContainer = powerupButtonContainer
+    this.displayContainer = displayContainer
+  }
+
+  static init(
+    socket: SocketClient,
+    container: HTMLElement,
+    powerupButtonContainer: HTMLElement,
+    displayContainer: HTMLElement,
+  ) {
+    Debug.instance = new Debug(
+      socket,
+      container,
+      powerupButtonContainer,
+      displayContainer,
+    )
+    if (DEBUG) {
+      Debug.instance.buildUI()
+    } else {
+      container.hidden = true
+    }
+  }
+
+  static get(): Debug {
+    if (!Debug.instance) {
+      throw new Error('Debug singleton has not been initialized.')
+    }
+    return Debug.instance
+  }
+
+  // Called once during initialization to populate the powerup buttons in the
+  // UI.
+  buildUI() {
+    for (const type of Object.keys(POWERUPS)) {
+      const button: HTMLButtonElement = document.createElement('button')
+      button.textContent = type
+      button.onclick = () => {
+        this.socket.emit(SOCKET_EVENTS.DEBUG, {
+          socketId: this.socket.id!,
+          applyPowerup: <POWERUPS>type,
+        })
+      }
+      this.powerupButtonContainer.appendChild(button)
+    }
+  }
+
+  // Updates the display UI elements
+  update(_updateFrame: UpdateFrame) {}
+
+  setDisplayValue(key: string, value: string) {
+    this.display.set(key, value)
+  }
+}
