@@ -7,6 +7,8 @@
 export default class Sound {
   sound: HTMLAudioElement
 
+  startTime: number = 0
+
   looping: boolean = false
   played: boolean = false
 
@@ -26,12 +28,14 @@ export default class Sound {
   }
 
   play(volume: number = 0.2): Sound {
+    this.startTime = Date.now()
     this.volume = volume
     this.sound.play()
     return this
   }
 
   loop(volume: number = 0.2): Sound {
+    this.startTime = Date.now()
     this.volume = volume
     this.looping = true
     this.sound.loop = true
