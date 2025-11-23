@@ -45,3 +45,15 @@ test('normalizeAngle()', () => {
   expect(MathUtil.normalizeAngle(Math.PI)).toBe(Math.PI)
   expect(MathUtil.normalizeAngle(MathUtil.TAU)).toBe(0)
 })
+
+test('roundTo()', () => {
+  expect(() => MathUtil.roundTo(3, -1)).toThrow()
+
+  expect(MathUtil.roundTo(3.14159)).toBe(3)
+  expect(MathUtil.roundTo(3.14159, 1)).toBe(3.1)
+  expect(MathUtil.roundTo(3.14159, 2)).toBe(3.14)
+  expect(MathUtil.roundTo(3.14159, 3)).toBe(3.142)
+  expect(MathUtil.roundTo(3.14159, 4)).toBe(3.1416)
+  expect(MathUtil.roundTo(3.14159, 5)).toBe(3.14159)
+  expect(MathUtil.roundTo(3.14159, 6)).toBe(3.14159)
+})

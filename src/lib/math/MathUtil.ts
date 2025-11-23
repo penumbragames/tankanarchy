@@ -53,10 +53,23 @@ const normalizeAngle = (angle: number): number => {
   return angle < 0 ? angle + Math.ceil(-angle / TAU) * TAU : angle % TAU
 }
 
+/**
+ * @param v The number to round
+ * @param digits The number of digits after the decimal points to keep
+ * @returns The rounded number
+ */
+const roundTo = (v: number, digits: number = 0) => {
+  if (digits < 0) throw new Error(`Invalid digits argument ${digits}`)
+  if (digits === 0) return Math.round(v)
+  const factor = Math.pow(10, digits)
+  return Math.round(v * factor) / factor
+}
+
 export default {
   TAU,
   clamp,
   inBound,
   lerp,
   normalizeAngle,
+  roundTo,
 }
