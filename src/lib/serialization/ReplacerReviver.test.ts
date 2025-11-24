@@ -167,6 +167,10 @@ describe('Test serializing/deserializing basic class instances', () => {
           "turretAngle": 0,
           "speed": 0.4,
           "health": 10,
+          "tankTrailCooldown": {
+            "lastUsage": 0,
+            "cooldown": 200
+          },
           "kills": 0,
           "deaths": 0,
           "powerups": {

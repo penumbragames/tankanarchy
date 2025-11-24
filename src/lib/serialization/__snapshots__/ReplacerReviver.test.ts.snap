@@ -42,6 +42,10 @@ Map {
   "socketID": "socket_id",
   "speed": 0.4,
   "tankAngle": 2,
+  "tankTrailCooldown": {
+    "cooldown": 200,
+    "lastUsage": 0,
+  },
   "turnRate": 0,
   "turretAngle": 0,
 }
@@ -74,6 +78,10 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
     "turretAngle": 0,
     "speed": 0.4,
     "health": 10,
+    "tankTrailCooldown": {
+      "lastUsage": 0,
+      "cooldown": 200
+    },
     "kills": 0,
     "deaths": 0,
     "powerups": {
@@ -267,6 +275,10 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
     "socketID": "socket_id",
     "speed": 0.4,
     "tankAngle": 2,
+    "tankTrailCooldown": {
+      "cooldown": 200,
+      "lastUsage": 0,
+    },
     "turnRate": 0,
     "turretAngle": 0,
   },

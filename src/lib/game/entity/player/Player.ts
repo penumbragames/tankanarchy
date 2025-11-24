@@ -13,6 +13,7 @@ import POWERUPS from 'lib/enums/Powerups'
 import PLAYER_CONSTANTS from 'lib/game/entity/player/PlayerConstants'
 
 import { UpdateFrame } from 'lib/game/component/Updateable'
+import Cooldown from 'lib/game/Cooldown'
 import Entity from 'lib/game/entity/Entity'
 import Ammo from 'lib/game/entity/player/Ammo'
 import PowerupStateMap from 'lib/game/entity/player/PowerupStateMap'
@@ -41,6 +42,9 @@ export default class Player extends Entity {
   // decorator.
   @Exclude() ammo!: Ammo
   @Type(() => PowerupStateMap) powerups: PowerupStateMap
+
+  // Whenever we move, leave a little tank trail behind the player.
+  tankTrailCooldown: Cooldown = new Cooldown(200 /* ms */)
 
   kills: number = 0
   deaths: number = 0

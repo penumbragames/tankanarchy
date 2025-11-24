@@ -218,6 +218,8 @@ export default class Renderer {
       position: canvasCoords,
       size: particle.options.size,
       centered: true,
+      angle: particle.options.angle,
+      opacity: particle.options.opacity,
       frame: particle.animation.frame,
     })
   }

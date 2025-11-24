@@ -19,6 +19,10 @@ import Game from 'server/Game'
 export type ParticleDrawingOptions = {
   // differs from particle to particle
   size: number
+
+  opacity: number
+
+  angle: number
 }
 
 export type ExplosionOptions = {

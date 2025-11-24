@@ -70,6 +70,7 @@ const loadSprites = async () => {
       StaticSprite,
       '/img/speedboost_powerup.png',
     ),
+    loadSprite(SPRITES.TANK_TRAIL, StaticSprite, '/img/tank_trail.png'),
     loadSprite(SPRITES.TILE, StaticSprite, '/img/tile.png'),
   ])
 
