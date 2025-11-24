@@ -3,11 +3,11 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
-class Vector {
+export default class Vector {
   x: number
   y: number
 
-  constructor(x = 0, y = 0) {
+  constructor(x: number, y: number) {
     this.x = x
     this.y = y
   }
@@ -101,6 +101,21 @@ class Vector {
     this.y -= other.y
     return this
   }
-}
 
-export default Vector
+  dot(other: Vector): number {
+    return this.x * other.x + this.y * other.y
+  }
+
+  /**
+   * Returns the vector projection of this Vector onto the argument Vector.
+   * @param other The Vector to project onto.
+   * @returns a new Vector containing the Vector projection.
+   */
+  proj(other: Vector): Vector {
+    return Vector.scale(other, this.dot(other) / other.mag2)
+  }
+
+  toString(): string {
+    return `<${this.x},${this.y}>`
+  }
+}
