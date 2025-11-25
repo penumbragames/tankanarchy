@@ -12,23 +12,15 @@ import Canvas from 'client/graphics/Canvas'
 import Renderer from 'client/graphics/Renderer'
 import Viewport from 'client/graphics/Viewport'
 import Input from 'client/Input'
-import Particle from 'client/particle/Particle'
+import { Particle } from 'client/particle/Particle'
 import SoundPlayer from 'client/sound/SoundPlayer'
 import Debug from 'client/ui/Debug'
 import Leaderboard from 'client/ui/Leaderboard'
 import GameLoop from 'lib/game/GameLoop'
 import Vector from 'lib/math/Vector'
 import { SocketClient } from 'lib/socket/SocketClient'
-import {
-  GameState,
-  ParticleDrawingLayer,
-  ParticleEvent,
-} from 'lib/socket/SocketInterfaces'
-
-type ParticleLayers = {
-  [ParticleDrawingLayer.PRE_ENTITY]: Particle[]
-  [ParticleDrawingLayer.POST_ENTITY]: Particle[]
-}
+import { GameState, ParticleEvent } from 'lib/socket/SocketInterfaces'
+import { ParticleDrawingLayer, ParticleLayers } from 'lib/types/Particle'
 
 export default class Game {
   static readonly INPUT_UPS = 30

@@ -12,12 +12,12 @@ import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 import { UpdateFrame } from 'lib/game/component/Updateable'
 import Entity from 'lib/game/entity/Entity'
 import Vector from 'lib/math/Vector'
+import { SoundEvent } from 'lib/socket/SocketInterfaces'
+import { SocketServer } from 'lib/socket/SocketServer'
 import {
   ParticleDrawingLayer,
   ParticleDrawingOptions,
-  SoundEvent,
-} from 'lib/socket/SocketInterfaces'
-import { SocketServer } from 'lib/socket/SocketServer'
+} from 'lib/types/Particle'
 import Game from 'server/Game'
 
 export type ExplosionOptions = {

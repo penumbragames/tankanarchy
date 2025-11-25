@@ -11,6 +11,7 @@ import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 import Entity from 'lib/game/entity/Entity'
 import Player from 'lib/game/entity/player/Player'
 import Vector from 'lib/math/Vector'
+import { ParticleDrawingOptions } from 'lib/types/Particle'
 
 // Server to client CHAT_SERVER_TO_CLIENT event to broadcast chat message to all
 // players.
@@ -37,21 +38,6 @@ export interface GameState {
   players: Player[]
   entities: Entity[]
   debug?: Partial<DebugInfo>
-}
-
-// Particle drawing options
-export enum ParticleDrawingLayer {
-  PRE_ENTITY,
-  POST_ENTITY,
-}
-export type ParticleDrawingOptions = {
-  layer: ParticleDrawingLayer
-  animated?: boolean
-  size?: number
-  angle?: number
-  fadeOut?: boolean
-  startTime?: number
-  expirationTime?: number
 }
 
 // Server to client PARTICLE event which triggers the client to render a

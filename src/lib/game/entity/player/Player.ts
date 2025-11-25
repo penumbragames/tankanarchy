@@ -22,7 +22,8 @@ import { Ammo } from 'lib/game/entity/player/Ammo'
 import PowerupStateMap from 'lib/game/entity/player/PowerupStateMap'
 import MathUtil from 'lib/math/MathUtil'
 import Vector from 'lib/math/Vector'
-import { ParticleDrawingLayer, PlayerInputs } from 'lib/socket/SocketInterfaces'
+import { PlayerInputs } from 'lib/socket/SocketInterfaces'
+import { ParticleDrawingLayer } from 'lib/types/Particle'
 import { GameServices } from 'server/GameServices'
 
 export default class Player extends Entity {
