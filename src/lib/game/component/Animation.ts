@@ -4,14 +4,16 @@
  * @author omgimanerd
  */
 
-import { IUpdateableServer, UpdateFrame } from 'lib/game/component/Updateable'
+import type { Nullable } from 'lib/types/types'
+
+import { IUpdateableClient, UpdateFrame } from 'lib/game/component/Updateable'
 
 export enum TYPE {
   SINGLE = 'SINGLE',
   LOOP = 'LOOP',
 }
 
-export class Animation implements IUpdateableServer {
+export class Animation implements IUpdateableClient {
   static readonly TIME_PER_FRAME = 50 // ms
 
   type: TYPE
@@ -48,5 +50,7 @@ export class Animation implements IUpdateableServer {
 }
 
 export interface IAnimation {
-  animation: Animation
+  // Awkward. Something is fucky about Particle. Refactor this when Particle is
+  // refactored.
+  animation: Nullable<Animation>
 }

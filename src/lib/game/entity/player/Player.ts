@@ -14,6 +14,7 @@ import * as Constants from 'lib/Constants'
 import POWERUPS from 'lib/enums/Powerups'
 import PLAYER_CONSTANTS from 'lib/game/entity/player/PlayerConstants'
 
+import PARTICLES from 'lib/enums/Particles'
 import { UpdateFrame } from 'lib/game/component/Updateable'
 import Cooldown from 'lib/game/Cooldown'
 import Entity from 'lib/game/entity/Entity'
@@ -21,10 +22,13 @@ import { Ammo } from 'lib/game/entity/player/Ammo'
 import PowerupStateMap from 'lib/game/entity/player/PowerupStateMap'
 import MathUtil from 'lib/math/MathUtil'
 import Vector from 'lib/math/Vector'
-import { PlayerInputs } from 'lib/socket/SocketInterfaces'
+import { ParticleDrawingLayer, PlayerInputs } from 'lib/socket/SocketInterfaces'
 import { GameServices } from 'server/GameServices'
 
 export default class Player extends Entity {
+  static readonly TANK_TRAIL_INTERVAL = 15 // ms
+  static readonly TANK_TRAIL_FADEOUT = 3000 // ms
+
   name: string // player display name, not unique
   // Also serves as the player UID. Required on the client side to distinguish
   // the 'self' player
@@ -46,7 +50,7 @@ export default class Player extends Entity {
   @Type(() => PowerupStateMap) powerups: Ref<PowerupStateMap>
 
   // Whenever we move, leave a little tank trail behind the player.
-  tankTrailCooldown: Cooldown = new Cooldown(200 /* ms */)
+  tankTrailCooldown: Cooldown = new Cooldown(Player.TANK_TRAIL_INTERVAL)
 
   kills: number = 0
   deaths: number = 0
@@ -87,6 +91,19 @@ export default class Player extends Entity {
 
     this.ammo.update(updateFrame, services)
     this.powerups.update(updateFrame, services)
+
+    if (
+      this.physics.velocity.mag2 > 0 &&
+      this.tankTrailCooldown.trigger(updateFrame)
+    ) {
+      services.addParticle(PARTICLES.TANK_TRAIL, this.physics.position, {
+        layer: ParticleDrawingLayer.PRE_ENTITY,
+        angle: this.tankAngle + Math.PI / 2,
+        fadeOut: true,
+        startTime: updateFrame.currentTime,
+        expirationTime: updateFrame.currentTime + Player.TANK_TRAIL_FADEOUT,
+      })
+    }
   }
 
   /**

@@ -1,4 +1,4 @@
 # TODO:
   - rockets animation
-  - lazor
-  - rendering layers
+  - lazor animation
+  - refactor particle to abstract class, smooth out interfaces

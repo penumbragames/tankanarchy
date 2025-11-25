@@ -72,6 +72,7 @@ export class GameServices {
       source: position,
       options: {
         layer: ParticleDrawingLayer.POST_ENTITY,
+        animated: true,
       },
     })
   }
@@ -91,6 +92,7 @@ export class GameServices {
           source: newPosition,
           options: {
             layer: ParticleDrawingLayer.POST_ENTITY,
+            animated: true,
             size: options.size,
           },
         })

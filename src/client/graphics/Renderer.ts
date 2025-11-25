@@ -219,8 +219,11 @@ export default class Renderer {
       size: particle.options.size,
       centered: true,
       angle: particle.options.angle,
-      opacity: particle.options.opacity,
-      frame: particle.animation.frame,
+      opacity: particle.opacity,
+      frame:
+        particle.options.animated && particle.animation
+          ? particle.animation.frame
+          : undefined,
     })
   }
 

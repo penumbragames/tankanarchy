@@ -170,7 +170,7 @@ describe('Test serializing/deserializing basic class instances', () => {
           "health": 10,
           "tankTrailCooldown": {
             "lastUsage": 0,
-            "cooldown": 200
+            "cooldown": 15
           },
           "kills": 0,
           "deaths": 0,

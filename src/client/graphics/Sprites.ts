@@ -86,6 +86,7 @@ const loadSprites = async () => {
   }
   PARTICLE_SPRITES = {
     [PARTICLES.EXPLOSION]: s[SPRITES.EXPLOSION],
+    [PARTICLES.TANK_TRAIL]: s[SPRITES.TANK_TRAIL],
   }
 }
 export default loadSprites

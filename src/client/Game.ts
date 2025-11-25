@@ -180,16 +180,22 @@ export default class Game {
       this.soundManager.update(this.state.self.physics.position)
 
       // Update particle system, which is only maintained client side
-      for (const layer of Object.values(ParticleDrawingLayer)) {
-        this.particles[<ParticleDrawingLayer>layer] = this.particles[
-          <ParticleDrawingLayer>layer
-        ]
-          .map((particle: Particle) => {
-            particle.update(this.updateAndRenderLoop.updateFrame)
-            return particle
-          })
-          .filter((particle: Particle) => !particle.destroyed)
-      }
+      this.particles[ParticleDrawingLayer.PRE_ENTITY] = this.particles[
+        ParticleDrawingLayer.PRE_ENTITY
+      ]
+        .map((particle: Particle) => {
+          particle.update(this.updateAndRenderLoop.updateFrame)
+          return particle
+        })
+        .filter((particle: Particle) => !particle.destroyed)
+      this.particles[ParticleDrawingLayer.POST_ENTITY] = this.particles[
+        ParticleDrawingLayer.POST_ENTITY
+      ]
+        .map((particle: Particle) => {
+          particle.update(this.updateAndRenderLoop.updateFrame)
+          return particle
+        })
+        .filter((particle: Particle) => !particle.destroyed)
 
       // Render Step
       this.renderer.clear()

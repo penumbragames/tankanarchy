@@ -46,9 +46,12 @@ export enum ParticleDrawingLayer {
 }
 export type ParticleDrawingOptions = {
   layer: ParticleDrawingLayer
-  size?: number // differs from particle to particle
-  opacity?: number
+  animated?: boolean
+  size?: number
   angle?: number
+  fadeOut?: boolean
+  startTime?: number
+  expirationTime?: number
 }
 
 // Server to client PARTICLE event which triggers the client to render a

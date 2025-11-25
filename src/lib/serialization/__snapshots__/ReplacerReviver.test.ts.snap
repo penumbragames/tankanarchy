@@ -59,7 +59,7 @@ Map {
   "speed": 0.4,
   "tankAngle": 2,
   "tankTrailCooldown": {
-    "cooldown": 200,
+    "cooldown": 15,
     "lastUsage": 0,
   },
   "turnRate": 0,
@@ -96,7 +96,7 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
     "health": 10,
     "tankTrailCooldown": {
       "lastUsage": 0,
-      "cooldown": 200
+      "cooldown": 15
     },
     "kills": 0,
     "deaths": 0,
@@ -322,7 +322,7 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
     "speed": 0.4,
     "tankAngle": 2,
     "tankTrailCooldown": {
-      "cooldown": 200,
+      "cooldown": 15,
       "lastUsage": 0,
     },
     "turnRate": 0,
