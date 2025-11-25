@@ -5,6 +5,8 @@
  * @author omgimanerd
  */
 
+import type { Ref } from 'lib/types/types'
+
 import { Exclude, Type } from 'class-transformer'
 import random from 'random'
 
@@ -15,7 +17,7 @@ import PLAYER_CONSTANTS from 'lib/game/entity/player/PlayerConstants'
 import { UpdateFrame } from 'lib/game/component/Updateable'
 import Cooldown from 'lib/game/Cooldown'
 import Entity from 'lib/game/entity/Entity'
-import Ammo from 'lib/game/entity/player/Ammo'
+import { Ammo } from 'lib/game/entity/player/Ammo'
 import PowerupStateMap from 'lib/game/entity/player/PowerupStateMap'
 import MathUtil from 'lib/math/MathUtil'
 import Vector from 'lib/math/Vector'
@@ -40,8 +42,8 @@ export default class Player extends Entity {
   // Player. They must be initialized in the factory method or they will be
   // included in the deserialized class even if they have the @Exclude
   // decorator.
-  @Exclude() ammo!: Ammo
-  @Type(() => PowerupStateMap) powerups: PowerupStateMap
+  @Type(() => Ammo) ammo!: Ref<Ammo>
+  @Type(() => PowerupStateMap) powerups: Ref<PowerupStateMap>
 
   // Whenever we move, leave a little tank trail behind the player.
   tankTrailCooldown: Cooldown = new Cooldown(200 /* ms */)
@@ -116,8 +118,7 @@ export default class Player extends Entity {
       this.turnRate = -PLAYER_CONSTANTS.TURN_RATE
     }
 
-    // The ammunition manager updates the player turn angle since charging a
-    // laser locks the player turret.
+    this.turretAngle = data.turretAngle
     this.ammo.updateFromInput(data, updateFrame, services)
   }
 

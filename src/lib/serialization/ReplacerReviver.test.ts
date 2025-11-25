@@ -10,6 +10,7 @@ import POWERUPS from 'lib/enums/Powerups'
 import { Hitbox } from 'lib/game/component/Hitbox'
 import { Physics } from 'lib/game/component/Physics'
 import Bullet from 'lib/game/entity/Bullet'
+import { Ammo, State } from 'lib/game/entity/player/Ammo'
 import Player from 'lib/game/entity/player/Player'
 import {
   HealthPowerup,
@@ -184,6 +185,20 @@ describe('Test serializing/deserializing basic class instances', () => {
               }
             }
           },
+          "ammo": {
+            "bulletCooldown": 800,
+            "bulletsPerShot": 1,
+            "rocketCooldown": {
+              "lastUsage": 0,
+              "cooldown": 1500
+            },
+            "leftClickState": {
+              "cooldown": {
+                "lastUsage": 0,
+                "cooldown": 800
+              }
+            }
+          },
           "__type": "Player"
         }"
       `,
@@ -199,6 +214,10 @@ describe('Test serializing/deserializing basic class instances', () => {
     expect(deserialized.hitbox).toBeInstanceOf(Hitbox)
     expect(deserialized.physics.position).toBeInstanceOf(Vector)
     expect(deserialized.physics.position.mag).toBe(5)
+
+    expect(deserialized.ammo).toBeInstanceOf(Ammo)
+    expect(deserialized.ammo.leftClickState).toBeInstanceOf(State)
+
     expect(deserialized.powerups).toBeInstanceOf(PowerupStateMap)
     const deserializedPowerup: PowerupState = deserialized.powerups.get(
       POWERUPS.HEALTH_PACK,

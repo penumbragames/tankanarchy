@@ -13,7 +13,7 @@
 
 import type { Ref } from 'lib/types/types'
 
-import { Exclude } from 'class-transformer'
+import { Exclude, Type } from 'class-transformer'
 
 import POWERUPS from 'lib/enums/Powerups'
 import SOUNDS from 'lib/enums/Sounds'
@@ -34,8 +34,8 @@ import { GameServices } from 'server/GameServices'
  * Without any powerups, we just fire regular bullets. With the laser powerup,
  * we charge the laser with the left click.
  */
-abstract class State implements IUpdateableServer {
-  ammo: Ammo // Parent object reference
+export abstract class State implements IUpdateableServer {
+  @Exclude() ammo: Ref<Ammo> // Parent object reference
 
   constructor(ammo: Ammo) {
     this.ammo = ammo
@@ -53,7 +53,7 @@ abstract class State implements IUpdateableServer {
 /**
  * Player's default shooting state.
  */
-class CannonState extends State {
+export class CannonState extends State {
   cooldown: Cooldown = new Cooldown(this.ammo.bulletCooldown)
 
   override updateFromInput(
@@ -68,7 +68,6 @@ class CannonState extends State {
         source: this.ammo.player.physics.position,
       })
     }
-    this.ammo.player.turretAngle = inputs.turretAngle
     return this
   }
 
@@ -80,7 +79,7 @@ class CannonState extends State {
   }
 }
 
-class LaserState extends State {
+export class LaserState extends State {
   static readonly SOUND_ID = 'LASER_CHARGING'
   static readonly WIDTH = 12 // px
   static readonly DAMAGE = 8 // px
@@ -94,7 +93,13 @@ class LaserState extends State {
   // Therefore, we accumulate the updateTime between each updateFromInput() call
   // and consume it when we call updateFromInput().
   inputDeltaTime: number = 0
+
   chargeTime: number = 0
+  chargeState: LaserState.State = LaserState.State.NONE
+
+  get charged() {
+    return this.chargeTime >= LaserState.MIN_CHARGE_TIME
+  }
 
   override updateFromInput(
     inputs: PlayerInputs,
@@ -123,7 +128,7 @@ class LaserState extends State {
           id: this.ammo.player.getUid(LaserState.SOUND_ID),
           source: this.ammo.player.physics.position,
         })
-        if (this.chargeTime >= LaserState.MIN_CHARGE_TIME) {
+        if (this.charged) {
           this.fire(services)
           services.playSound({
             type: SOUNDS.LASER_SHOT,
@@ -136,12 +141,16 @@ class LaserState extends State {
       // empty, which falls through
     }
 
-    // While we are charging the laser, the player's turret angle is locked.
     if (inputs.mouseLeft) {
       this.chargeTime += deltaTime
+      if (this.charged) {
+        this.chargeState = LaserState.State.CHARGED
+      } else {
+        this.chargeState = LaserState.State.CHARGING
+      }
     } else {
       this.chargeTime = 0
-      this.ammo.player.turretAngle = inputs.turretAngle
+      this.chargeState = LaserState.State.NONE
     }
     return this
   }
@@ -192,11 +201,23 @@ class LaserState extends State {
   }
 }
 
+export namespace LaserState {
+  /**
+   * Represents the state of the LaserState, which can be not charging,
+   * charging, or charged and ready to fire.
+   */
+  export enum State {
+    NONE = 'NONE',
+    CHARGING = 'CHARGING',
+    CHARGED = 'CHARGED',
+  }
+}
+
 /**
  * Ammo is a component of the Player used to manage the player's shooting
  * cooldowns and state information.
  */
-export default class Ammo implements IUpdateableServer {
+export class Ammo implements IUpdateableServer {
   // This field MUST be excluded from serialization since it is a circular
   // reference.
   @Exclude() player: Ref<Player>
@@ -206,8 +227,9 @@ export default class Ammo implements IUpdateableServer {
   bulletCooldown: number = PLAYER_CONSTANTS.BULLET_COOLDOWN
   bulletsPerShot: number = PLAYER_CONSTANTS.BULLETS_PER_SHOT
 
-  // Must be initialized after bulletCooldown
-  leftClickState: State = new CannonState(this)
+  // Must be initialized after bulletCooldown, state machine representing
+  // whether the player is shooting regular bullets or a chargeable laser.
+  @Type(() => State) leftClickState: State = new CannonState(this)
 
   rocketCooldown: Cooldown = new Cooldown(PLAYER_CONSTANTS.ROCKET_COOLDOWN)
 

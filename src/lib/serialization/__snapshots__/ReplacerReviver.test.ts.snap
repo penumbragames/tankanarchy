@@ -2,6 +2,22 @@
 
 exports[`Test serializing/deserializing basic class instances Player 2`] = `
 Player {
+  "ammo": Ammo {
+    "bulletCooldown": 800,
+    "bulletsPerShot": 1,
+    "leftClickState": State {
+      "ammo": undefined,
+      "cooldown": {
+        "cooldown": 800,
+        "lastUsage": 0,
+      },
+    },
+    "player": undefined,
+    "rocketCooldown": {
+      "cooldown": 1500,
+      "lastUsage": 0,
+    },
+  },
   "deaths": 0,
   "destroyed": false,
   "health": 10,
@@ -86,6 +102,20 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
     "deaths": 0,
     "powerups": {
       "map": {}
+    },
+    "ammo": {
+      "bulletCooldown": 800,
+      "bulletsPerShot": 1,
+      "rocketCooldown": {
+        "lastUsage": 0,
+        "cooldown": 1500
+      },
+      "leftClickState": {
+        "cooldown": {
+          "lastUsage": 0,
+          "cooldown": 800
+        }
+      }
     },
     "__type": "Player"
   },
@@ -245,6 +275,22 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
   ],
   "players": [],
   "self": Player {
+    "ammo": Ammo {
+      "bulletCooldown": 800,
+      "bulletsPerShot": 1,
+      "leftClickState": State {
+        "ammo": undefined,
+        "cooldown": {
+          "cooldown": 800,
+          "lastUsage": 0,
+        },
+      },
+      "player": undefined,
+      "rocketCooldown": {
+        "cooldown": 1500,
+        "lastUsage": 0,
+      },
+    },
     "deaths": 0,
     "destroyed": false,
     "health": 10,

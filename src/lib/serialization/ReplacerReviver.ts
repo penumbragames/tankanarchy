@@ -11,7 +11,6 @@ import { instanceToPlain, plainToInstance } from 'class-transformer'
 import Bullet from 'lib/game/entity/Bullet'
 import Explosion from 'lib/game/entity/Explosion'
 import Player from 'lib/game/entity/player/Player'
-import PowerupStateMap from 'lib/game/entity/player/PowerupStateMap'
 import Powerup from 'lib/game/entity/Powerup'
 import Rocket from 'lib/game/entity/Rocket'
 import Vector from 'lib/math/Vector'
@@ -96,13 +95,15 @@ const getReplacerReviver = (types: SerializableTypes): JSONReplacerReviver => {
 }
 
 // Export replacer and reviver functions for all the classes in this project
-// that we are sending over the wire.
+// that we are sending over the wire. Only the top level classes that we are
+// calling instanceToPlain on need to be registered here. If a class is composed
+// within another class and not sent on its own, it does not need to be
+// registered.
 export const { replacer, reviver } = getReplacerReviver({
   Bullet,
   Explosion,
   Player,
   Powerup,
-  PowerupStateMap,
   Rocket,
   Vector,
 })
