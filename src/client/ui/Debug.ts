@@ -22,6 +22,7 @@ export default class Debug implements IUpdateableClient {
 
   // Values to display on the debug dashboard.
   display: Map<string, any> = new Map()
+  debugHitboxes: boolean = false // toggled by UI element
 
   constructor(
     socket: SocketClient,
@@ -75,6 +76,20 @@ export default class Debug implements IUpdateableClient {
       }
       this.powerupButtonContainer.appendChild(button)
     }
+    this.powerupButtonContainer.appendChild(document.createElement('br'))
+
+    const hitboxToggle = document.createElement('input')
+    hitboxToggle.type = 'checkbox'
+    hitboxToggle.id = 'debug-hitboxes-toggle'
+    hitboxToggle.onchange = (e: Event) => {
+      this.debugHitboxes = (e.target as HTMLInputElement).checked
+    }
+    const hitboxToggleLabel = document.createElement('label')
+    hitboxToggleLabel.htmlFor = 'debug-hitboxes-toggle'
+    hitboxToggleLabel.textContent = 'Toggle Hitboxes'
+
+    this.powerupButtonContainer.appendChild(hitboxToggle)
+    this.powerupButtonContainer.appendChild(hitboxToggleLabel)
   }
 
   // Updates the display UI elements

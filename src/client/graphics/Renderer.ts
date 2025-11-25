@@ -19,6 +19,7 @@ import { newCanvasState } from 'client/graphics/Utils'
 import Viewport from 'client/graphics/Viewport'
 import Input from 'client/Input'
 import Particle from 'client/particle/Particle'
+import Debug from 'client/ui/Debug'
 import { Projectile } from 'lib/game/component/Projectile'
 import Bullet from 'lib/game/entity/Bullet'
 import Entity from 'lib/game/entity/Entity'
@@ -60,7 +61,7 @@ export default class Renderer {
   }
 
   drawDebugHitbox(e: Entity): void {
-    if (DEBUG && false) {
+    if (DEBUG && Debug.get().debugHitboxes) {
       this.context.beginPath()
       const canvasCoords = this.viewport.toCanvas(e.physics.position)
       this.context.arc(
