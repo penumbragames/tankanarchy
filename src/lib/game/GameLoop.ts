@@ -17,7 +17,7 @@ type GameLoopFunction = (updateFrame: UpdateFrame) => void
  * loop function at the target UPS.
  */
 export default class GameLoop {
-  static readonly UPS_RINGBUFFER_SIZE = 10
+  static readonly UPS_RINGBUFFER_SIZE = 120
 
   targetUps: number
   targetUpdateInterval: number
@@ -45,9 +45,10 @@ export default class GameLoop {
   }
 
   get delayToNextUpdate(): number {
-    return this.targetUpdateInterval === 0
-      ? 0
-      : Math.max(this.targetUpdateInterval - this.deltaTime, 0)
+    if (this.targetUpdateInterval === 0) return 0
+    // Look at how far ahead or behind we are using the previous deltatime and
+    // time the next update interval using it.
+    return Math.max(2 * this.targetUpdateInterval - this.deltaTime, 0)
   }
 
   get updateFrame(): UpdateFrame {
