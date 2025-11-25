@@ -4,7 +4,6 @@
  * @author omgimanerd
  */
 
-import PARTICLES from 'lib/enums/Particles'
 import SOUNDS from 'lib/enums/Sounds'
 
 import Bullet from 'lib/game/entity/Bullet'
@@ -125,7 +124,7 @@ export default class CollisionHandler {
           type: SOUNDS.EXPLOSION,
           source: b1.physics.position,
         })
-        this.services.addParticle(PARTICLES.EXPLOSION, b1.physics.position, {})
+        this.services.addExplosionParticle(b1.physics.position)
       }) ||
       e.handle(Bullet, Powerup, (b: Bullet, po: Powerup) => {
         b.destroy(this.services)
@@ -134,7 +133,7 @@ export default class CollisionHandler {
           type: SOUNDS.EXPLOSION,
           source: b.physics.position,
         })
-        this.services.addParticle(PARTICLES.EXPLOSION, b.physics.position, {})
+        this.services.addExplosionParticle(b.physics.position)
       }) ||
       // Rocket collisions
       e.handle(Rocket, Bullet, destroy(this.services)) ||
@@ -146,7 +145,7 @@ export default class CollisionHandler {
       // Powerup collisions
       e.handle(Powerup, Explosion, (po: Powerup, _e: Explosion) => {
         po.destroy(this.services)
-        this.services.addParticle(PARTICLES.EXPLOSION, po.physics.position, {})
+        this.services.addExplosionParticle(po.physics.position)
       }) ||
       e.handle(Powerup, Powerup, noop) ||
       // Explosion collisions with each other

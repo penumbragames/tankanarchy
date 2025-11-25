@@ -78,7 +78,7 @@ export default class Rocket extends Entity implements IProjectile {
       type: SOUNDS.EXPLOSION,
       source: this.physics.position,
     })
-    services.addExplosion(this.physics.position, {
+    services.addMultiExplosionParticles(this.physics.position, {
       size: 100,
       spread: 25,
       density: 7,

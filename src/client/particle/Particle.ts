@@ -9,7 +9,7 @@ import { Animation, IAnimation, TYPE } from 'lib/game/component/Animation'
 import { IPhysics, Physics } from 'lib/game/component/Physics'
 import { IUpdateableClient, UpdateFrame } from 'lib/game/component/Updateable'
 import Vector from 'lib/math/Vector'
-import { ParticleDrawingOptions } from 'server/GameServices'
+import { ParticleDrawingOptions } from 'lib/socket/SocketInterfaces'
 
 export default class Particle
   implements IPhysics, IUpdateableClient, IAnimation

@@ -19,7 +19,16 @@ import Leaderboard from 'client/ui/Leaderboard'
 import GameLoop from 'lib/game/GameLoop'
 import Vector from 'lib/math/Vector'
 import { SocketClient } from 'lib/socket/SocketClient'
-import { GameState, ParticleEvent } from 'lib/socket/SocketInterfaces'
+import {
+  GameState,
+  ParticleDrawingLayer,
+  ParticleEvent,
+} from 'lib/socket/SocketInterfaces'
+
+type ParticleLayers = {
+  [ParticleDrawingLayer.PRE_ENTITY]: Particle[]
+  [ParticleDrawingLayer.POST_ENTITY]: Particle[]
+}
 
 export default class Game {
   static readonly INPUT_UPS = 30
@@ -39,7 +48,10 @@ export default class Game {
 
   // Particle system, only created from socket messages, not maintained by
   // server.
-  particles: Particle[] = []
+  particles: ParticleLayers = {
+    [ParticleDrawingLayer.PRE_ENTITY]: [],
+    [ParticleDrawingLayer.POST_ENTITY]: [],
+  }
 
   // Separate game loops for sending input and rendering, input sends at a lower
   // rate than render, which attempts to do so as fast as possible.
@@ -126,7 +138,7 @@ export default class Game {
    * @param particle
    */
   onReceiveParticle(particle: ParticleEvent): void {
-    this.particles.push(
+    this.particles[particle.options.layer].push(
       new Particle(particle.type, particle.source, particle?.options),
     )
   }
@@ -163,25 +175,40 @@ export default class Game {
 
   updateAndRender(): void {
     if (this.state?.self) {
+      // Update step with the server state
       this.viewport.update(this.updateAndRenderLoop.updateFrame)
       this.soundManager.update(this.state.self.physics.position)
-      this.particles = this.particles
-        .map((particle: Particle) => {
-          particle.update(this.updateAndRenderLoop.updateFrame)
-          return particle
-        })
-        .filter((particle: Particle) => !particle.destroyed)
 
-      // Render
+      // Update particle system, which is only maintained client side
+      for (const layer of Object.values(ParticleDrawingLayer)) {
+        this.particles[<ParticleDrawingLayer>layer] = this.particles[
+          <ParticleDrawingLayer>layer
+        ]
+          .map((particle: Particle) => {
+            particle.update(this.updateAndRenderLoop.updateFrame)
+            return particle
+          })
+          .filter((particle: Particle) => !particle.destroyed)
+      }
+
+      // Render Step
       this.renderer.clear()
       this.renderer.drawTiles()
+
+      this.particles[ParticleDrawingLayer.PRE_ENTITY].forEach(
+        this.renderer.drawParticle.bind(this.renderer),
+      )
+
       this.state.entities.forEach(this.renderer.drawEntity.bind(this.renderer))
       this.renderer.drawTank(true, this.state.self)
       this.state.players
         .filter((player) => player.socketID !== this.state?.self?.socketID)
         .forEach((tank) => this.renderer.drawTank(false, tank))
 
-      this.particles.forEach(this.renderer.drawParticle.bind(this.renderer))
+      this.particles[ParticleDrawingLayer.POST_ENTITY].forEach(
+        this.renderer.drawParticle.bind(this.renderer),
+      )
+
       this.renderer.drawBuffStatus(this.state.self)
       this.renderer.drawCrosshair(this.state.self, this.input)
 

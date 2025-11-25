@@ -12,18 +12,13 @@ import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 import { UpdateFrame } from 'lib/game/component/Updateable'
 import Entity from 'lib/game/entity/Entity'
 import Vector from 'lib/math/Vector'
-import { SoundEvent } from 'lib/socket/SocketInterfaces'
+import {
+  ParticleDrawingLayer,
+  ParticleDrawingOptions,
+  SoundEvent,
+} from 'lib/socket/SocketInterfaces'
 import { SocketServer } from 'lib/socket/SocketServer'
 import Game from 'server/Game'
-
-export type ParticleDrawingOptions = {
-  // differs from particle to particle
-  size: number
-
-  opacity: number
-
-  angle: number
-}
 
 export type ExplosionOptions = {
   // dictates the size of the individual explosion particles that make up the
@@ -62,7 +57,7 @@ export class GameServices {
   addParticle(
     type: PARTICLES,
     position: Vector,
-    options: Partial<ParticleDrawingOptions>,
+    options: ParticleDrawingOptions,
   ): void {
     this.socket.sockets.emit(SOCKET_EVENTS.PARTICLE, {
       type,
@@ -71,7 +66,20 @@ export class GameServices {
     })
   }
 
-  addExplosion(position: Vector, options: ExplosionOptions): void {
+  addExplosionParticle(position: Vector): void {
+    this.socket.emit(SOCKET_EVENTS.PARTICLE, {
+      type: PARTICLES.EXPLOSION,
+      source: position,
+      options: {
+        layer: ParticleDrawingLayer.POST_ENTITY,
+      },
+    })
+  }
+
+  addMultiExplosionParticles(
+    position: Vector,
+    options: ExplosionOptions,
+  ): void {
     const spread = random.normal(0, options.spread)
     const delayFn = random.uniformInt(0, options.delay)
     for (let i = 0; i < options.density; ++i) {
@@ -82,6 +90,7 @@ export class GameServices {
           type: PARTICLES.EXPLOSION,
           source: newPosition,
           options: {
+            layer: ParticleDrawingLayer.POST_ENTITY,
             size: options.size,
           },
         })

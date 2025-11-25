@@ -11,7 +11,6 @@ import SOCKET_EVENTS from 'lib/socket/SocketEvents'
 import Entity from 'lib/game/entity/Entity'
 import Player from 'lib/game/entity/player/Player'
 import Vector from 'lib/math/Vector'
-import { ParticleDrawingOptions } from 'server/GameServices'
 
 // Server to client CHAT_SERVER_TO_CLIENT event to broadcast chat message to all
 // players.
@@ -40,12 +39,24 @@ export interface GameState {
   debug?: Partial<DebugInfo>
 }
 
+// Particle drawing options
+export enum ParticleDrawingLayer {
+  PRE_ENTITY,
+  POST_ENTITY,
+}
+export type ParticleDrawingOptions = {
+  layer: ParticleDrawingLayer
+  size?: number // differs from particle to particle
+  opacity?: number
+  angle?: number
+}
+
 // Server to client PARTICLE event which triggers the client to render a
 // particle effect.
 export interface ParticleEvent {
   type: PARTICLES
   source: Vector
-  options?: Partial<ParticleDrawingOptions>
+  options: ParticleDrawingOptions
 }
 
 // Client to server PLAYER_ACTION event, communicate a player's input state.
