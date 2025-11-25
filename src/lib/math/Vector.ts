@@ -46,6 +46,10 @@ export default class Vector {
     return new Vector(-this.x, -this.y)
   }
 
+  get norm(): Vector {
+    return this.copy().scale(1 / this.mag)
+  }
+
   copy(): Vector {
     return new Vector(this.x, this.y)
   }
@@ -115,7 +119,7 @@ export default class Vector {
     return Vector.scale(other, this.dot(other) / other.mag2)
   }
 
-  toString(): string {
-    return `<${this.x},${this.y}>`
+  toString(digits = 2): string {
+    return `<${this.x.toFixed(digits)},${this.y.toFixed(2)}>`
   }
 }

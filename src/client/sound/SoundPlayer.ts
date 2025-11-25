@@ -41,8 +41,6 @@ export default class SoundPlayer {
         ? 0
         : MathUtil.lerp(d, SoundPlayer.MAX_DISTANCE, 0, 0, 0.4)
 
-    console.log(data)
-
     switch (data.action) {
       case undefined: // an unset action defaults to playing the sound
       case SoundEvent.ACTION.PLAY:

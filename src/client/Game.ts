@@ -187,8 +187,11 @@ export default class Game {
 
       const debug = Debug.get()
       debug.update(this.updateAndRenderLoop.updateFrame)
-      debug.setDisplayValue('server ups', this.state.debug?.ups)
-      debug.setDisplayValue('client render fps', this.updateAndRenderLoop.ups)
+      debug.setDisplayValue('server ups', this.state.debug?.ups?.toFixed(2))
+      debug.setDisplayValue(
+        'client render fps',
+        this.updateAndRenderLoop.ups.toFixed(2),
+      )
     }
   }
 }

@@ -25,6 +25,7 @@ import Cooldown from 'lib/game/Cooldown'
 import Bullet from 'lib/game/entity/Bullet'
 import Player from 'lib/game/entity/player/Player'
 import Rocket from 'lib/game/entity/Rocket'
+import Vector from 'lib/math/Vector'
 import { PlayerInputs, SoundEvent } from 'lib/socket/SocketInterfaces'
 import { GameServices } from 'server/GameServices'
 
@@ -80,7 +81,10 @@ class CannonState extends State {
 }
 
 class LaserState extends State {
-  static readonly LASER_SOUND_ID = 'LASER_CHARGING'
+  static readonly SOUND_ID = 'LASER_CHARGING'
+  static readonly WIDTH = 12 // px
+  static readonly DAMAGE = 8 // px
+  static readonly MAX_RANGE = 500 // px
   static readonly MIN_CHARGE_TIME = 1000 // ms
 
   charging: BinarySignal = new BinarySignal(false)
@@ -108,7 +112,7 @@ class LaserState extends State {
         services.playSound({
           type: SOUNDS.LASER_CHARGE,
           action: SoundEvent.ACTION.LOOP,
-          id: this.ammo.player.getUid(LaserState.LASER_SOUND_ID),
+          id: this.ammo.player.getUid(LaserState.SOUND_ID),
           source: this.ammo.player.physics.position,
         })
         break
@@ -116,11 +120,11 @@ class LaserState extends State {
         services.playSound({
           type: SOUNDS.LASER_CHARGE,
           action: SoundEvent.ACTION.STOP,
-          id: this.ammo.player.getUid(LaserState.LASER_SOUND_ID),
+          id: this.ammo.player.getUid(LaserState.SOUND_ID),
           source: this.ammo.player.physics.position,
         })
         if (this.chargeTime >= LaserState.MIN_CHARGE_TIME) {
-          // Fire the laser
+          this.fire(services)
           services.playSound({
             type: SOUNDS.LASER_SHOT,
             source: this.ammo.player.physics.position,
@@ -155,7 +159,37 @@ class LaserState extends State {
     return this
   }
 
-  fire(services: GameServices) {}
+  fire(services: GameServices) {
+    // TODO spawn a laser particle
+    const position = this.ammo.player.physics.position
+    const turretVector = Vector.fromPolar(1000, this.ammo.player.turretAngle)
+    for (const entity of services.game.entities) {
+      if (entity === this.ammo.player) continue
+      const entityVector = Vector.sub(entity.physics.position, position)
+      // Project the entity vector onto the turret angle vector to find the
+      // how far entity is along the turret angle vector.
+      const proj = entityVector.proj(turretVector)
+      // Filter out entities outside of the laser's range
+      if (proj.mag > LaserState.MAX_RANGE) {
+        continue
+      }
+      // Filter out entities on the opposite side of the turret.
+      if (turretVector.dot(entityVector) < 1) {
+        continue
+      }
+      // Subtract the entity vector from the projection to find the entity's
+      // perpendicular distance to the turret vector. The entity is considered
+      // hit if half the laser width intersects its radial hitbox.
+      const perpVector = Vector.sub(entityVector, proj)
+      if (perpVector.mag < entity.hitbox.size + LaserState.WIDTH / 2) {
+        if (entity instanceof Player) {
+          entity.damage(LaserState.DAMAGE, this.ammo.player)
+        } else {
+          entity.destroy(services)
+        }
+      }
+    }
+  }
 }
 
 /**

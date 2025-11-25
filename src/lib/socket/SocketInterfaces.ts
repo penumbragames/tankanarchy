@@ -55,7 +55,7 @@ export interface PlayerInputs {
   right: boolean
   left: boolean
   worldMouseCoords: Vector
-  turretAngle: number
+  turretAngle: number // radians
   mouseLeft: boolean
   mouseRight: boolean
 }

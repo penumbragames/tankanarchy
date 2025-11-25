@@ -90,6 +90,6 @@ export class GameServices {
   }
 
   addEntity(...entities: Entity[]) {
-    this.game.entities.push(...entities)
+    this.game._entities.push(...entities)
   }
 }

@@ -11,7 +11,7 @@ import Vector from 'lib/math/Vector'
 
 export class Hitbox {
   @Exclude() body: Physics
-  size: number
+  size: number // radial hitbox size in px
 
   constructor(body: Physics, size: number) {
     this.body = body
