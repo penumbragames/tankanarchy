@@ -3,21 +3,14 @@
  * @author omgimanerd
  */
 
-import { Particle } from 'client/particle/Particle'
-
-export enum ParticleDrawingLayer {
+export enum PARTICLE_DRAWING_LAYER {
   PRE_ENTITY = 'PRE_ENTITY',
   POST_ENTITY = 'POST_ENTITY',
 }
 
-export type ParticleLayers = {
-  [ParticleDrawingLayer.PRE_ENTITY]: Particle[]
-  [ParticleDrawingLayer.POST_ENTITY]: Particle[]
-}
-
 // Particle drawing options
 export type ParticleDrawingOptions = {
-  layer: ParticleDrawingLayer
+  layer: PARTICLE_DRAWING_LAYER
   animated?: boolean
   size?: number
   angle?: number

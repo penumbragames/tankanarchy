@@ -23,7 +23,7 @@ import PowerupStateMap from 'lib/game/entity/player/PowerupStateMap'
 import MathUtil from 'lib/math/MathUtil'
 import Vector from 'lib/math/Vector'
 import { PlayerInputs } from 'lib/socket/SocketInterfaces'
-import { ParticleDrawingLayer } from 'lib/types/Particle'
+import { PARTICLE_DRAWING_LAYER } from 'lib/types/Particle'
 import { GameServices } from 'server/GameServices'
 
 export default class Player extends Entity {
@@ -98,7 +98,7 @@ export default class Player extends Entity {
       this.tankTrailCooldown.trigger(updateFrame)
     ) {
       services.addParticle(PARTICLES.TANK_TRAIL, this.physics.position, {
-        layer: ParticleDrawingLayer.PRE_ENTITY,
+        layer: PARTICLE_DRAWING_LAYER.PRE_ENTITY,
         angle: this.tankAngle + Math.PI / 2,
         fadeOut: true,
         startTime: updateFrame.currentTime,

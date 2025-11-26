@@ -12,7 +12,7 @@ import Canvas from 'client/graphics/Canvas'
 import Renderer from 'client/graphics/Renderer'
 import Viewport from 'client/graphics/Viewport'
 import Input from 'client/Input'
-import { Particle } from 'client/particle/Particle'
+import { Particle, ParticleConstructors } from 'client/particle/Particle'
 import SoundPlayer from 'client/sound/SoundPlayer'
 import Debug from 'client/ui/Debug'
 import Leaderboard from 'client/ui/Leaderboard'
@@ -20,7 +20,7 @@ import GameLoop from 'lib/game/GameLoop'
 import Vector from 'lib/math/Vector'
 import { SocketClient } from 'lib/socket/SocketClient'
 import { GameState, ParticleEvent } from 'lib/socket/SocketInterfaces'
-import { ParticleDrawingLayer } from 'lib/types/Particle'
+import { PARTICLE_DRAWING_LAYER } from 'lib/types/Particle'
 
 export default class Game {
   static readonly INPUT_UPS = 30
@@ -40,9 +40,9 @@ export default class Game {
 
   // Particle system, only created from socket messages, not maintained by
   // server.
-  particles: { [key in ParticleDrawingLayer]: Particle[] } = {
-    [ParticleDrawingLayer.PRE_ENTITY]: [],
-    [ParticleDrawingLayer.POST_ENTITY]: [],
+  particles: { [key in PARTICLE_DRAWING_LAYER]: Particle[] } = {
+    [PARTICLE_DRAWING_LAYER.PRE_ENTITY]: [],
+    [PARTICLE_DRAWING_LAYER.POST_ENTITY]: [],
   }
 
   // Separate game loops for sending input and rendering, input sends at a lower
@@ -131,7 +131,11 @@ export default class Game {
    */
   onReceiveParticle(particle: ParticleEvent): void {
     this.particles[particle.options.layer].push(
-      new Particle(particle.type, particle.source, particle?.options),
+      new ParticleConstructors[particle.type](
+        particle.type,
+        particle.source,
+        particle.options,
+      ),
     )
   }
 
@@ -172,7 +176,7 @@ export default class Game {
       this.soundManager.update(this.state.self.physics.position)
 
       // Update particle system. This is only maintained client side.
-      for (const layer of Object.values(ParticleDrawingLayer)) {
+      for (const layer of Object.values(PARTICLE_DRAWING_LAYER)) {
         this.particles[layer] = this.particles[layer]
           .map((particle: Particle) => {
             particle.update(this.updateAndRenderLoop.updateFrame)
@@ -185,7 +189,7 @@ export default class Game {
       this.renderer.clear()
       this.renderer.drawTiles()
 
-      this.particles[ParticleDrawingLayer.PRE_ENTITY].forEach(
+      this.particles[PARTICLE_DRAWING_LAYER.PRE_ENTITY].forEach(
         this.renderer.drawParticle.bind(this.renderer),
       )
 
@@ -195,7 +199,7 @@ export default class Game {
         .filter((player) => player.socketID !== this.state?.self?.socketID)
         .forEach((tank) => this.renderer.drawTank(false, tank))
 
-      this.particles[ParticleDrawingLayer.POST_ENTITY].forEach(
+      this.particles[PARTICLE_DRAWING_LAYER.POST_ENTITY].forEach(
         this.renderer.drawParticle.bind(this.renderer),
       )
 

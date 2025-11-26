@@ -3,7 +3,7 @@
  */
 
 import type Player from 'lib/game/entity/player/Player'
-import type { Nullable } from 'lib/types/types'
+import type { Constructor, Nullable } from 'lib/types/types'
 
 import random from 'random'
 
@@ -257,8 +257,9 @@ export class SpeedboostPowerup extends PowerupState {
   }
 }
 
-type PowerupConstructors_ = { [key in POWERUPS]: { new (): any } }
-export const PowerupConstructors: PowerupConstructors_ = {
+export const PowerupConstructors: {
+  [key in POWERUPS]: Constructor<PowerupState>
+} = {
   [POWERUPS.HEALTH_PACK]: HealthPowerup,
   [POWERUPS.LASER]: LaserPowerup,
   [POWERUPS.RAPIDFIRE]: RapidfirePowerup,

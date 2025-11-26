@@ -8,11 +8,7 @@ import POWERUPS from 'lib/enums/Powerups'
 import SPRITES from 'lib/enums/Sprites'
 import PLAYER_CONSTANTS from 'lib/game/entity/player/PlayerConstants'
 
-import {
-  PARTICLE_SPRITES,
-  POWERUP_SPRITES,
-  SPRITE_MAP,
-} from 'client/graphics/Sprites'
+import { POWERUP_SPRITES, SPRITE_MAP } from 'client/graphics/Sprites'
 
 import Canvas from 'client/graphics/Canvas'
 import { newCanvasState } from 'client/graphics/Utils'
@@ -214,18 +210,7 @@ export default class Renderer {
   }
 
   drawParticle(particle: Particle): void {
-    const canvasCoords = this.viewport.toCanvas(particle.physics.position)
-    PARTICLE_SPRITES[particle.type].draw(this.context, {
-      position: canvasCoords,
-      size: particle.options.size,
-      centered: true,
-      angle: particle.options.angle,
-      opacity: particle.opacity,
-      frame:
-        particle.options.animated && particle.animation
-          ? particle.animation.frame
-          : undefined,
-    })
+    particle.render(this.context, this.viewport)
   }
 
   drawCrosshair(self: Player, input: Input): void {

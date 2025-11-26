@@ -15,7 +15,7 @@ import Vector from 'lib/math/Vector'
 import { SoundEvent } from 'lib/socket/SocketInterfaces'
 import { SocketServer } from 'lib/socket/SocketServer'
 import {
-  ParticleDrawingLayer,
+  PARTICLE_DRAWING_LAYER,
   ParticleDrawingOptions,
 } from 'lib/types/Particle'
 import Game from 'server/Game'
@@ -71,7 +71,7 @@ export class GameServices {
       type: PARTICLES.EXPLOSION,
       source: position,
       options: {
-        layer: ParticleDrawingLayer.POST_ENTITY,
+        layer: PARTICLE_DRAWING_LAYER.POST_ENTITY,
         animated: true,
       },
     })
@@ -91,7 +91,7 @@ export class GameServices {
           type: PARTICLES.EXPLOSION,
           source: newPosition,
           options: {
-            layer: ParticleDrawingLayer.POST_ENTITY,
+            layer: PARTICLE_DRAWING_LAYER.POST_ENTITY,
             animated: true,
             size: options.size,
           },
