@@ -6,8 +6,8 @@
 import { Particle } from 'client/particle/Particle'
 
 export enum ParticleDrawingLayer {
-  PRE_ENTITY,
-  POST_ENTITY,
+  PRE_ENTITY = 'PRE_ENTITY',
+  POST_ENTITY = 'POST_ENTITY',
 }
 
 export type ParticleLayers = {

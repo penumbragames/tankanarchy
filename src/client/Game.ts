@@ -20,7 +20,7 @@ import GameLoop from 'lib/game/GameLoop'
 import Vector from 'lib/math/Vector'
 import { SocketClient } from 'lib/socket/SocketClient'
 import { GameState, ParticleEvent } from 'lib/socket/SocketInterfaces'
-import { ParticleDrawingLayer, ParticleLayers } from 'lib/types/Particle'
+import { ParticleDrawingLayer } from 'lib/types/Particle'
 
 export default class Game {
   static readonly INPUT_UPS = 30
@@ -40,7 +40,7 @@ export default class Game {
 
   // Particle system, only created from socket messages, not maintained by
   // server.
-  particles: ParticleLayers = {
+  particles: { [key in ParticleDrawingLayer]: Particle[] } = {
     [ParticleDrawingLayer.PRE_ENTITY]: [],
     [ParticleDrawingLayer.POST_ENTITY]: [],
   }
@@ -171,23 +171,15 @@ export default class Game {
       this.viewport.update(this.updateAndRenderLoop.updateFrame)
       this.soundManager.update(this.state.self.physics.position)
 
-      // Update particle system, which is only maintained client side
-      this.particles[ParticleDrawingLayer.PRE_ENTITY] = this.particles[
-        ParticleDrawingLayer.PRE_ENTITY
-      ]
-        .map((particle: Particle) => {
-          particle.update(this.updateAndRenderLoop.updateFrame)
-          return particle
-        })
-        .filter((particle: Particle) => !particle.destroyed)
-      this.particles[ParticleDrawingLayer.POST_ENTITY] = this.particles[
-        ParticleDrawingLayer.POST_ENTITY
-      ]
-        .map((particle: Particle) => {
-          particle.update(this.updateAndRenderLoop.updateFrame)
-          return particle
-        })
-        .filter((particle: Particle) => !particle.destroyed)
+      // Update particle system. This is only maintained client side.
+      for (const layer of Object.values(ParticleDrawingLayer)) {
+        this.particles[layer] = this.particles[layer]
+          .map((particle: Particle) => {
+            particle.update(this.updateAndRenderLoop.updateFrame)
+            return particle
+          })
+          .filter((particle: Particle) => !particle.destroyed)
+      }
 
       // Render Step
       this.renderer.clear()
