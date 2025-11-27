@@ -11,7 +11,7 @@
  * @author omgimanerd
  */
 
-import type { Ref } from 'lib/types/types'
+import type { Nullable, Ref } from 'lib/types/types'
 
 import { Exclude, Type } from 'class-transformer'
 
@@ -54,7 +54,21 @@ export abstract class State implements IUpdateableServer {
  * Player's default shooting state.
  */
 export class CannonState extends State {
-  cooldown: Cooldown = new Cooldown(this.ammo.bulletCooldown)
+  cooldown!: Cooldown
+
+  constructor(ammo: Ammo) {
+    super(ammo)
+    // DANGER: We cannot reference ammo.bulletCooldown directly because all
+    // serializable classes MUST support being constructed with no arguments due
+    // to how class-transformer works internally. If the constructor is called
+    // with no arguments and ammo is undefined, then ammo.bulletCooldown will
+    // throw a TypeError. This guard is ONLY used when the constructor is called
+    // from within class-transformer's code to convert an serialized object back
+    // to the class instance.
+    if (ammo !== undefined) {
+      this.cooldown = new Cooldown(this.ammo.bulletCooldown)
+    }
+  }
 
   override updateFromInput(
     inputs: PlayerInputs,
@@ -85,6 +99,10 @@ export class LaserState extends State {
   static readonly DAMAGE = 8 // px
   static readonly MAX_RANGE = 500 // px
   static readonly MIN_CHARGE_TIME = 1000 // ms
+
+  constructor(ammo: Ammo) {
+    super(ammo)
+  }
 
   charging: BinarySignal = new BinarySignal(false)
 
@@ -214,6 +232,15 @@ export namespace LaserState {
 }
 
 /**
+ * Polymorphic type mapping used by class-transformer to deserialize the state
+ * data back into the right subclass type.
+ */
+const StateTypeMap = [
+  { name: CannonState.name, value: CannonState },
+  { name: LaserState.name, value: LaserState },
+]
+
+/**
  * Ammo is a component of the Player used to manage the player's shooting
  * cooldowns and state information.
  */
@@ -227,14 +254,28 @@ export class Ammo implements IUpdateableServer {
   bulletCooldown: number = PLAYER_CONSTANTS.BULLET_COOLDOWN
   bulletsPerShot: number = PLAYER_CONSTANTS.BULLETS_PER_SHOT
 
+  // Type discriminator for class-transformer deserialization.
+  @Type(() => State, {
+    discriminator: {
+      property: '_type',
+      subTypes: StateTypeMap,
+    },
+  })
   // Must be initialized after bulletCooldown, state machine representing
   // whether the player is shooting regular bullets or a chargeable laser.
-  @Type(() => State) leftClickState: State = new CannonState(this)
+  leftClickState: State = new CannonState(this)
 
   rocketCooldown: Cooldown = new Cooldown(PLAYER_CONSTANTS.ROCKET_COOLDOWN)
 
   constructor(player: Player) {
     this.player = player
+  }
+
+  // Helper method used by the client side renderer
+  get laserChargeState(): Nullable<LaserState.State> {
+    return this.leftClickState instanceof LaserState
+      ? this.leftClickState?.chargeState
+      : null
   }
 
   update(updateFrame: UpdateFrame, services: GameServices) {

@@ -7,10 +7,10 @@
  */
 export const newCanvasState = (
   context: CanvasRenderingContext2D,
-  callback: () => void,
+  callback: (ctx: CanvasRenderingContext2D) => void,
 ) => {
   context.save()
-  callback()
+  callback(context)
   context.restore()
 }
 

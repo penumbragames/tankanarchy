@@ -101,7 +101,7 @@ export default class Player extends Entity {
         layer: PARTICLE_DRAWING_LAYER.PRE_ENTITY,
         angle: this.tankAngle + Math.PI / 2,
         fadeOut: true,
-        startTime: updateFrame.currentTime,
+        creationTime: updateFrame.currentTime,
         expirationTime: updateFrame.currentTime + Player.TANK_TRAIL_FADEOUT,
       })
     }

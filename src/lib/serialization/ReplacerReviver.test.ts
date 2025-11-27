@@ -10,7 +10,7 @@ import POWERUPS from 'lib/enums/Powerups'
 import { Hitbox } from 'lib/game/component/Hitbox'
 import { Physics } from 'lib/game/component/Physics'
 import Bullet from 'lib/game/entity/Bullet'
-import { Ammo, State } from 'lib/game/entity/player/Ammo'
+import { Ammo, CannonState, State } from 'lib/game/entity/player/Ammo'
 import Player from 'lib/game/entity/player/Player'
 import {
   HealthPowerup,
@@ -20,7 +20,11 @@ import PowerupStateMap from 'lib/game/entity/player/PowerupStateMap'
 import Powerup from 'lib/game/entity/Powerup'
 import Rocket from 'lib/game/entity/Rocket'
 import Vector from 'lib/math/Vector'
-import { replacer, reviver } from 'lib/serialization/ReplacerReviver'
+import {
+  replacer,
+  reviver,
+  SerializableTypes,
+} from 'lib/serialization/ReplacerReviver'
 import { GameState } from 'lib/socket/SocketInterfaces'
 
 const UNIXTIME_1 = new Date('1970-01-01T00:00:00.001Z')
@@ -196,7 +200,8 @@ describe('Test serializing/deserializing basic class instances', () => {
               "cooldown": {
                 "lastUsage": 0,
                 "cooldown": 800
-              }
+              },
+              "_type": "CannonState"
             }
           },
           "__type": "Player"
@@ -217,6 +222,9 @@ describe('Test serializing/deserializing basic class instances', () => {
 
     expect(deserialized.ammo).toBeInstanceOf(Ammo)
     expect(deserialized.ammo.leftClickState).toBeInstanceOf(State)
+    // Check that the we deserialized the polymorphic type back to the correct
+    // subclass type.
+    expect(deserialized.ammo.leftClickState).toBeInstanceOf(CannonState)
 
     expect(deserialized.powerups).toBeInstanceOf(PowerupStateMap)
     const deserializedPowerup: PowerupState = deserialized.powerups.get(
@@ -265,4 +273,20 @@ describe('Test serializing/deserializing complex objects', () => {
     const deserializedPowerup = deserialized.entities[2]
     expect(deserializedPowerup).toBeInstanceOf(Powerup)
   })
+})
+
+describe('Test that serializable classes can be safely constructed', () => {
+  // All the serializable classes registered in ReplacerReviver must be able
+  // to support being constructed with no arguments since that is how
+  // class-transformer will convert them back into a class instance under the
+  // hood.
+
+  for (const type of Object.values(SerializableTypes)) {
+    expect(() => {
+      // The arguments for the object constructors will not match, but we must
+      // be able to construct the class types without exploding.
+      // @ts-expect-error
+      new type()
+    }).not.toThrow()
+  }
 })

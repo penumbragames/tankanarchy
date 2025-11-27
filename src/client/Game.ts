@@ -194,10 +194,20 @@ export default class Game {
       )
 
       this.state.entities.forEach(this.renderer.drawEntity.bind(this.renderer))
-      this.renderer.drawTank(true, this.state.self)
+      this.renderer.drawTank(
+        true,
+        this.state.self,
+        this.updateAndRenderLoop.updateFrame,
+      )
       this.state.players
         .filter((player) => player.socketID !== this.state?.self?.socketID)
-        .forEach((tank) => this.renderer.drawTank(false, tank))
+        .forEach((tank) =>
+          this.renderer.drawTank(
+            false,
+            tank,
+            this.updateAndRenderLoop.updateFrame,
+          ),
+        )
 
       this.particles[PARTICLE_DRAWING_LAYER.POST_ENTITY].forEach(
         this.renderer.drawParticle.bind(this.renderer),
@@ -206,13 +216,16 @@ export default class Game {
       this.renderer.drawBuffStatus(this.state.self)
       this.renderer.drawCrosshair(this.state.self, this.input)
 
-      const debug = Debug.get()
-      debug.update(this.updateAndRenderLoop.updateFrame)
-      debug.setDisplayValue('server ups', this.state.debug?.ups?.toFixed(2))
-      debug.setDisplayValue(
-        'client render fps',
-        this.updateAndRenderLoop.ups.toFixed(2),
-      )
+      // Update debugging information.
+      if (DEBUG) {
+        const debug = Debug.get()
+        debug.update(this.updateAndRenderLoop.updateFrame)
+        debug.setDisplayValue('server ups', this.state.debug?.ups?.toFixed(2))
+        debug.setDisplayValue(
+          'client render fps',
+          this.updateAndRenderLoop.ups.toFixed(2),
+        )
+      }
     }
   }
 }

@@ -10,6 +10,7 @@ import { instanceToPlain, plainToInstance } from 'class-transformer'
 // All possible serializable classes.
 import Bullet from 'lib/game/entity/Bullet'
 import Explosion from 'lib/game/entity/Explosion'
+import { CannonState, LaserState } from 'lib/game/entity/player/Ammo'
 import Player from 'lib/game/entity/player/Player'
 import Powerup from 'lib/game/entity/Powerup'
 import Rocket from 'lib/game/entity/Rocket'
@@ -99,11 +100,14 @@ const getReplacerReviver = (types: SerializableTypes): JSONReplacerReviver => {
 // calling instanceToPlain on need to be registered here. If a class is composed
 // within another class and not sent on its own, it does not need to be
 // registered.
-export const { replacer, reviver } = getReplacerReviver({
+export const SerializableTypes = {
   Bullet,
+  CannonState,
   Explosion,
+  LaserState,
   Player,
   Powerup,
   Rocket,
   Vector,
-})
+}
+export const { replacer, reviver } = getReplacerReviver(SerializableTypes)

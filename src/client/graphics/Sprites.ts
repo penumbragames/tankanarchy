@@ -10,7 +10,7 @@ import SPRITES from 'lib/enums/Sprites'
 import AnimatedSprite from 'client/graphics/AnimatedSprite'
 import { Sprite } from 'client/graphics/Sprite'
 import StaticSprite from 'client/graphics/StaticSprite'
-import { StrictEnumMapping } from 'lib/enums/EnumMapping'
+import { LooseEnumMapping, StrictEnumMapping } from 'lib/enums/EnumMapping'
 
 // Global sprite object stores, populated asynchronously
 export let SPRITE_MAP: Record<SPRITES, Sprite> = {} as Record<SPRITES, Sprite>
@@ -18,10 +18,8 @@ export let POWERUP_SPRITES: Record<POWERUPS, Sprite> = {} as Record<
   POWERUPS,
   Sprite
 >
-export let PARTICLE_SPRITES: Record<PARTICLES, Sprite> = {} as Record<
-  PARTICLES,
-  Sprite
->
+// Some particles are rendered programmatically and do not have an image asset.
+export let PARTICLE_SPRITES: { [key in PARTICLES]?: Sprite } = {}
 
 // All Sprite subclasses should have an async create method.
 interface Creatable<T extends Sprite> {
@@ -75,7 +73,7 @@ const loadSprites = async () => {
   ])
 
   const s = StrictEnumMapping<Sprite>(SPRITES, SPRITE_MAP)
-  POWERUP_SPRITES = {
+  POWERUP_SPRITES = StrictEnumMapping<Sprite>(POWERUPS, {
     [POWERUPS.HEALTH_PACK]: s[SPRITES.HEALTH_PACK_POWERUP],
     [POWERUPS.LASER]: s[SPRITES.LASER_POWERUP],
     [POWERUPS.RAPIDFIRE]: s[SPRITES.RAPIDFIRE_POWERUP],
@@ -83,10 +81,11 @@ const loadSprites = async () => {
     [POWERUPS.SHIELD]: s[SPRITES.SHIELD_POWERUP],
     [POWERUPS.SHOTGUN]: s[SPRITES.SHOTGUN_POWERUP],
     [POWERUPS.SPEEDBOOST]: s[SPRITES.SPEEDBOOST_POWERUP],
-  }
-  PARTICLE_SPRITES = {
+  })
+  PARTICLE_SPRITES = LooseEnumMapping<Sprite>(PARTICLES, {
     [PARTICLES.EXPLOSION]: s[SPRITES.EXPLOSION],
+    // PARTICLES.LASER_BEAM does not have an image asset
     [PARTICLES.TANK_TRAIL]: s[SPRITES.TANK_TRAIL],
-  }
+  })
 }
 export default loadSprites

@@ -17,12 +17,15 @@ import Input from 'client/Input'
 import { Particle } from 'client/particle/Particle'
 import Debug from 'client/ui/Debug'
 import { Projectile } from 'lib/game/component/Projectile'
+import { UpdateFrame } from 'lib/game/component/Updateable'
 import Bullet from 'lib/game/entity/Bullet'
 import Entity from 'lib/game/entity/Entity'
 import Explosion from 'lib/game/entity/Explosion'
+import { LaserState } from 'lib/game/entity/player/Ammo'
 import Player from 'lib/game/entity/player/Player'
 import Powerup from 'lib/game/entity/Powerup'
 import Rocket from 'lib/game/entity/Rocket'
+import MathUtil from 'lib/math/MathUtil'
 import Vector from 'lib/math/Vector'
 
 export default class Renderer {
@@ -80,8 +83,9 @@ export default class Renderer {
    *   to denote the player's tank. Otherwise a red tank will be drawn to
    *   denote an enemy tank.
    * @param {Player} player The player object to draw.
+   * @param {UpdateFrame} updateFrame The current render loop update frame.
    */
-  drawTank(isSelf: boolean, player: Player): void {
+  drawTank(isSelf: boolean, player: Player, updateFrame: UpdateFrame): void {
     this.context.save()
     const canvasCoords = this.viewport.toCanvas(player.physics.position)
     // The canvas is already translated to the center of the player coordinate,
@@ -111,6 +115,30 @@ export default class Renderer {
     turretSprite.draw(this.context, {
       centered: true,
       angle: player.turretAngle,
+    })
+
+    // Drawing a bloopy on the player's turret indicating charge state.
+    newCanvasState(this.context, (ctx: CanvasRenderingContext2D) => {
+      const turretVector = Vector.fromPolar(25, player.turretAngle)
+      ctx.translate(turretVector.x, turretVector.y)
+      const radius = 2 * (Math.sin(updateFrame.currentTime / 80) + 1.5)
+      switch (player.ammo.laserChargeState) {
+        case null:
+        case LaserState.State.NONE:
+          break
+        case LaserState.State.CHARGING:
+          ctx.beginPath()
+          ctx.arc(0, 0, radius, 0, MathUtil.TAU, true)
+          ctx.fillStyle = '#4dc4ccff'
+          ctx.fill()
+          break
+        case LaserState.State.CHARGED:
+          ctx.beginPath()
+          ctx.arc(0, 0, radius, 0, MathUtil.TAU, true)
+          ctx.fillStyle = '#281dc9fb'
+          ctx.fill()
+          break
+      }
     })
 
     if (player.powerups.get(POWERUPS.SHIELD)) {

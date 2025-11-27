@@ -5,7 +5,7 @@ Player {
   "ammo": Ammo {
     "bulletCooldown": 800,
     "bulletsPerShot": 1,
-    "leftClickState": State {
+    "leftClickState": CannonState {
       "ammo": undefined,
       "cooldown": {
         "cooldown": 800,
@@ -114,7 +114,8 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
         "cooldown": {
           "lastUsage": 0,
           "cooldown": 800
-        }
+        },
+        "_type": "CannonState"
       }
     },
     "__type": "Player"
@@ -278,7 +279,7 @@ exports[`Test serializing/deserializing complex objects Fake GameState object wi
     "ammo": Ammo {
       "bulletCooldown": 800,
       "bulletsPerShot": 1,
-      "leftClickState": State {
+      "leftClickState": CannonState {
         "ammo": undefined,
         "cooldown": {
           "cooldown": 800,

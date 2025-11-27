@@ -12,9 +12,12 @@ export enum PARTICLE_DRAWING_LAYER {
 export type ParticleDrawingOptions = {
   layer: PARTICLE_DRAWING_LAYER
   animated?: boolean
+
   size?: number
   angle?: number
+
   fadeOut?: boolean
-  startTime?: number
+
+  creationTime?: number
   expirationTime?: number
 }
