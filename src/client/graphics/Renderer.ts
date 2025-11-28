@@ -139,21 +139,21 @@ export default class Renderer {
           // Draw laser frills spread normally about the radius, with a standard
           // deviation of 4, offset by 2px from the radius.
           const fn = random.normal(radius + 2, 4)
-          // Draw 15 laser frills
+          // Draw 8 laser frills
           for (let i = 0; i < 8; ++i) {
             const startDistance = fn()
             // Spread the laser frills roughly in the direction of the turret.
             const angle = random.float(
-              player.turretAngle - Math.PI / 4,
-              player.turretAngle + Math.PI / 4,
+              player.turretAngle - Math.PI / 3,
+              player.turretAngle + Math.PI / 3,
             )
             const start = Vector.fromPolar(startDistance, angle)
-            // Each of the laser frills is 8 px long.
-            const end = Vector.fromPolar(startDistance + 8, angle)
+            // The laser frills get shorter as we charge up.
+            const end = Vector.fromPolar(startDistance + radius, angle)
             ctx.moveTo(start.x, start.y)
             ctx.lineTo(end.x, end.y)
           }
-          ctx.strokeStyle = '#58dae49f'
+          ctx.strokeStyle = '#a0e650d7'
           ctx.lineWidth = 2
           ctx.stroke()
           break

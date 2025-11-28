@@ -20,6 +20,7 @@ import SOUNDS from 'lib/enums/Sounds'
 import PLAYER_CONSTANTS from 'lib/game/entity/player/PlayerConstants'
 
 import { BinarySignal } from 'lib/datastructures/BinarySignal'
+import PARTICLES from 'lib/enums/Particles'
 import { IUpdateableServer, UpdateFrame } from 'lib/game/component/Updateable'
 import Cooldown from 'lib/game/Cooldown'
 import Bullet from 'lib/game/entity/Bullet'
@@ -27,6 +28,7 @@ import Player from 'lib/game/entity/player/Player'
 import Rocket from 'lib/game/entity/Rocket'
 import Vector from 'lib/math/Vector'
 import { PlayerInputs, SoundEvent } from 'lib/socket/SocketInterfaces'
+import { PARTICLE_DRAWING_LAYER } from 'lib/types/Particle'
 import { GameServices } from 'server/GameServices'
 
 /**
@@ -97,7 +99,7 @@ export class LaserState extends State {
   static readonly SOUND_ID = 'LASER_CHARGING'
   static readonly WIDTH = 12 // px
   static readonly DAMAGE = 8 // px
-  static readonly MAX_RANGE = 500 // px
+  static readonly MAX_RANGE = 900 // px
   static readonly MIN_CHARGE_TIME = 1000 // ms
 
   constructor(ammo: Ammo) {
@@ -191,9 +193,14 @@ export class LaserState extends State {
   }
 
   fire(services: GameServices) {
-    // TODO spawn a laser particle
     const position = this.ammo.player.physics.position
     const turretVector = Vector.fromPolar(1000, this.ammo.player.turretAngle)
+    services.addParticle(PARTICLES.LASER_BEAM, position, {
+      layer: PARTICLE_DRAWING_LAYER.POST_ENTITY,
+      creationTime: services.updateFrame.currentTime,
+      angle: this.ammo.player.turretAngle,
+    })
+    // Compute collision of the laser against all the game entities.
     for (const entity of services.game.entities) {
       if (entity === this.ammo.player) continue
       const entityVector = Vector.sub(entity.physics.position, position)

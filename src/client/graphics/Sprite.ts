@@ -69,7 +69,6 @@ export abstract class Sprite {
     const drawX = options.centered ? -width / 2 : 0
     const drawY = options.centered ? -height / 2 : 0
     newCanvasState(context, () => {
-      const oldOpacity = context.globalAlpha
       if (options.opacity) {
         context.globalAlpha = options.opacity
       }
@@ -86,10 +85,6 @@ export abstract class Sprite {
         width, // dWidth
         height, // dHeight
       )
-      // Reset the opacity only if we changed it.
-      if (options.opacity) {
-        context.globalAlpha = oldOpacity
-      }
     })
   }
 }
