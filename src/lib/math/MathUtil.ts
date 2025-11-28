@@ -4,6 +4,8 @@
  */
 
 const TAU = 2 * Math.PI
+const DEG_TO_RAD = Math.PI / 180
+const RAD_TO_DEG = 180 / Math.PI
 
 /**
  * Clamps a number to the given minimum and maximum, inclusive of both
@@ -67,6 +69,8 @@ const roundTo = (v: number, digits: number = 0) => {
 
 export default {
   TAU,
+  DEG_TO_RAD,
+  RAD_TO_DEG,
   clamp,
   inBound,
   lerp,

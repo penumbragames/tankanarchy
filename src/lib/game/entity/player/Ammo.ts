@@ -113,6 +113,9 @@ export class LaserState extends State {
   inputDeltaTime: number = 0
 
   chargeTime: number = 0
+  // time that we started charging the current laser, used by the client side as
+  // a unique random seed for spawning the particles
+  chargeStartTime: number = 0
   chargeState: LaserState.State = LaserState.State.NONE
 
   get charged() {
@@ -121,7 +124,7 @@ export class LaserState extends State {
 
   override updateFromInput(
     inputs: PlayerInputs,
-    _updateFrame: UpdateFrame,
+    updateFrame: UpdateFrame,
     services: GameServices,
   ): State {
     // Consume the stored input delta time
@@ -168,6 +171,7 @@ export class LaserState extends State {
       }
     } else {
       this.chargeTime = 0
+      this.chargeStartTime = updateFrame.currentTime
       this.chargeState = LaserState.State.NONE
     }
     return this
@@ -271,11 +275,26 @@ export class Ammo implements IUpdateableServer {
     this.player = player
   }
 
-  // Helper method used by the client side renderer
+  // Helper methods used by the client side renderer
   get laserChargeState(): Nullable<LaserState.State> {
     return this.leftClickState instanceof LaserState
       ? this.leftClickState?.chargeState
       : null
+  }
+  get laserChargeTime(): number {
+    if (this.leftClickState instanceof LaserState) {
+      return Math.min(
+        this.leftClickState.chargeTime,
+        LaserState.MIN_CHARGE_TIME,
+      )
+    }
+    throw new Error('Cannot be called if not in LaserState!')
+  }
+  get laserChargeStartTime(): number {
+    if (this.leftClickState instanceof LaserState) {
+      return this.leftClickState.chargeStartTime
+    }
+    throw new Error('Cannot be called if not in LaserState!')
   }
 
   update(updateFrame: UpdateFrame, services: GameServices) {

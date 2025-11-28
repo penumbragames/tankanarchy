@@ -3,12 +3,13 @@
  * @author kennethli.3470@gmail.com (Kenneth Li)
  */
 
+import { Random } from 'random'
+
+import { POWERUP_SPRITES, SPRITE_MAP } from 'client/graphics/Sprites'
 import * as Constants from 'lib/Constants'
 import POWERUPS from 'lib/enums/Powerups'
 import SPRITES from 'lib/enums/Sprites'
 import PLAYER_CONSTANTS from 'lib/game/entity/player/PlayerConstants'
-
-import { POWERUP_SPRITES, SPRITE_MAP } from 'client/graphics/Sprites'
 
 import Canvas from 'client/graphics/Canvas'
 import { newCanvasState } from 'client/graphics/Utils'
@@ -119,23 +120,48 @@ export default class Renderer {
 
     // Drawing a bloopy on the player's turret indicating charge state.
     newCanvasState(this.context, (ctx: CanvasRenderingContext2D) => {
-      const turretVector = Vector.fromPolar(25, player.turretAngle)
+      const turretVector = Vector.fromPolar(24, player.turretAngle)
       ctx.translate(turretVector.x, turretVector.y)
-      const radius = 2 * (Math.sin(updateFrame.currentTime / 80) + 1.5)
+      let radius: number
       switch (player.ammo.laserChargeState) {
         case null:
         case LaserState.State.NONE:
           break
         case LaserState.State.CHARGING:
           ctx.beginPath()
+          // The numbers used here are all magic numbers to get the desired
+          // visual effect. 100 is derived from the target radius of 10 px
+          // divided by 1000 milliseconds to seconds
+          radius =
+            (LaserState.MIN_CHARGE_TIME - player.ammo.laserChargeTime!) / 100
           ctx.arc(0, 0, radius, 0, MathUtil.TAU, true)
-          ctx.fillStyle = '#4dc4ccff'
-          ctx.fill()
+          const random = new Random(player.ammo.laserChargeStartTime)
+          // Draw laser frills spread normally about the radius, with a standard
+          // deviation of 4, offset by 2px from the radius.
+          const fn = random.normal(radius + 2, 4)
+          // Draw 15 laser frills
+          for (let i = 0; i < 8; ++i) {
+            const startDistance = fn()
+            // Spread the laser frills roughly in the direction of the turret.
+            const angle = random.float(
+              player.turretAngle - Math.PI / 4,
+              player.turretAngle + Math.PI / 4,
+            )
+            const start = Vector.fromPolar(startDistance, angle)
+            // Each of the laser frills is 8 px long.
+            const end = Vector.fromPolar(startDistance + 8, angle)
+            ctx.moveTo(start.x, start.y)
+            ctx.lineTo(end.x, end.y)
+          }
+          ctx.strokeStyle = '#58dae49f'
+          ctx.lineWidth = 2
+          ctx.stroke()
           break
         case LaserState.State.CHARGED:
           ctx.beginPath()
+          radius = 1.5 * (Math.sin(updateFrame.currentTime / 80) + 2)
           ctx.arc(0, 0, radius, 0, MathUtil.TAU, true)
-          ctx.fillStyle = '#281dc9fb'
+          ctx.fillStyle = '#4dc4ccff'
           ctx.fill()
           break
       }
