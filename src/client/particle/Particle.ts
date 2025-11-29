@@ -1,5 +1,6 @@
 /**
- * Subclasses for particles to render from sprites or from programmatic drawing.
+ * Class for various client side particles. Particles are rendered, updateable,
+ * possibly animated entities with physics but no hitbox.
  * @author omgimanerd
  */
 
@@ -141,6 +142,9 @@ export class AnimatedParticle extends Particle implements IAnimation {
   }
 }
 
+/**
+ * Custom particle for when a laser beam is fired, has custom rendering logic.
+ */
 export class LaserBeamParticle extends Particle {
   static readonly LIFETIME = 2000 // ms
 

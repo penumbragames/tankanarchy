@@ -3,9 +3,37 @@
  * @author alvin@omgimanerd.tech (Alvin Lin)
  */
 
+import Vector from 'lib/math/Vector'
+
 const TAU = 2 * Math.PI
 const DEG_TO_RAD = Math.PI / 180
 const RAD_TO_DEG = 180 / Math.PI
+
+/**
+ * Returns a function that can be called with argument t to compute the point
+ * along a bezier curve composed of the given control points.
+ *
+ * https://en.wikipedia.org/wiki/De_Casteljau%27s_algorithm
+ *
+ * @param points List of bezier control points
+ * @returns a function that takes argument t in [0, 1] to compute any point
+ * along the bezier curve.
+ */
+const bezier = (points: Vector[]): ((t: number) => Vector) => {
+  // Bernstein basis polynomial.
+  const bernstein = (i: number, n: number, t: number) => {
+    return nCr(n, i) * Math.pow(1 - t, n - i) * Math.pow(t, i)
+  }
+  return (t: number): Vector => {
+    return points
+      .map((point: Vector, index: number) => {
+        return Vector.scale(point, bernstein(index + 1, points.length, t))
+      })
+      .reduce((prev: Vector, current: Vector) => {
+        return prev.add(current)
+      }, Vector.zero())
+  }
+}
 
 /**
  * Clamps a number to the given minimum and maximum, inclusive of both
@@ -48,6 +76,19 @@ const lerp = (
 }
 
 /**
+ * nCr(n, r) = n!/(n - r)!r!
+ *           = nCr(n - 1, r) + nCr(n - 1, r - 1)
+ */
+const nCr = (n: number, r: number): number => {
+  if (n <= 0 || r <= 0) {
+    throw new Error(`Invalid call: nCr(${n}, ${r})`)
+  }
+  if (n === r) return 1
+  if (r === 1) return n
+  return nCr(n - 1, r) + nCr(n - 1, r - 1)
+}
+
+/**
  * Given an angle in radians, this function normalizes the angle to the range
  * 0 to TAU (exclusive) and returns the normalized angle.
  */
@@ -71,9 +112,11 @@ export default {
   TAU,
   DEG_TO_RAD,
   RAD_TO_DEG,
+  bezier,
   clamp,
   inBound,
   lerp,
   normalizeAngle,
+  nCr,
   roundTo,
 }
