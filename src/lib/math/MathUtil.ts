@@ -27,7 +27,7 @@ const bezier = (points: Vector[]): ((t: number) => Vector) => {
   return (t: number): Vector => {
     return points
       .map((point: Vector, index: number) => {
-        return Vector.scale(point, bernstein(index + 1, points.length, t))
+        return Vector.scale(point, bernstein(index, points.length - 1, t))
       })
       .reduce((prev: Vector, current: Vector) => {
         return prev.add(current)
@@ -80,10 +80,11 @@ const lerp = (
  *           = nCr(n - 1, r) + nCr(n - 1, r - 1)
  */
 const nCr = (n: number, r: number): number => {
-  if (n <= 0 || r <= 0) {
+  if (n < 0 || r < 0) {
     throw new Error(`Invalid call: nCr(${n}, ${r})`)
   }
-  if (n === r) return 1
+  if (n === r || r === 0) return 1
+  if (n > 0 && r === 0) return 0
   if (r === 1) return n
   return nCr(n - 1, r) + nCr(n - 1, r - 1)
 }

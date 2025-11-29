@@ -147,6 +147,13 @@ export class AnimatedParticle extends Particle implements IAnimation {
  */
 export class LaserBeamParticle extends Particle {
   static readonly LIFETIME = 2000 // ms
+  // the opacity of the laser is determined by a bezier curve, this returns a
+  // point given t in [0, 1], for which we care about the y coordinate
+  static readonly OPACITY_FN = MathUtil.bezier([
+    new Vector(0, 1),
+    new Vector(0.75, 1.1),
+    new Vector(1, 0),
+  ])
 
   creationTime: number
   currentTime: number
@@ -165,6 +172,7 @@ export class LaserBeamParticle extends Particle {
     this.currentTime = this.creationTime
     this.lifeTime = 0
     this.expirationTime = this.creationTime + LaserBeamParticle.LIFETIME
+
     this.random = new Random(this.creationTime)
   }
 
@@ -185,13 +193,9 @@ export class LaserBeamParticle extends Particle {
       ctx.lineTo(laser.x, laser.y)
       ctx.lineWidth = LaserState.WIDTH
       ctx.strokeStyle = '#0f9bb4ff'
-      ctx.globalAlpha = MathUtil.lerp(
-        this.lifeTime,
-        0,
-        LaserBeamParticle.LIFETIME,
-        1,
-        0,
-      )
+      ctx.globalAlpha = LaserBeamParticle.OPACITY_FN(
+        MathUtil.lerp(this.lifeTime, 0, LaserBeamParticle.LIFETIME, 0, 1),
+      ).y
       ctx.stroke()
     })
   }
