@@ -62,19 +62,14 @@ export default class Renderer {
 
   drawDebugHitbox(e: Entity): void {
     if (DEBUG && Debug.get().debugHitboxes) {
-      this.context.beginPath()
-      const canvasCoords = this.viewport.toCanvas(e.physics.position)
-      this.context.arc(
-        canvasCoords.x,
-        canvasCoords.y,
-        e.hitbox.size,
-        0,
-        2 * Math.PI,
-        false,
-      )
-      this.context.strokeStyle = 'red'
-      this.context.lineWidth = 3
-      this.context.stroke()
+      newCanvasState(this.context, (ctx) => {
+        ctx.beginPath()
+        const canvasCoords = this.viewport.toCanvas(e.physics.position)
+        ctx.arc(canvasCoords.x, canvasCoords.y, e.hitbox.size, 0, MathUtil.TAU)
+        ctx.strokeStyle = 'red'
+        ctx.lineWidth = 3
+        ctx.stroke()
+      })
     }
   }
 
@@ -268,40 +263,38 @@ export default class Renderer {
   }
 
   drawCrosshair(self: Player, input: Input): void {
-    newCanvasState(this.context, () => {
-      this.context.translate(input.mouseCoords.x, input.mouseCoords.y)
-      this.context.beginPath()
-      this.context.arc(
+    newCanvasState(this.context, (ctx) => {
+      ctx.translate(input.mouseCoords.x, input.mouseCoords.y)
+      ctx.beginPath()
+      ctx.arc(
         0, // x
         0, // y
         10, // radius
         0, // startAngle
-        2 * Math.PI, // endAngle
-        false,
+        MathUtil.TAU, // endAngle
       )
-      this.context.moveTo(0, 20)
-      this.context.lineTo(0, -20)
-      this.context.moveTo(-20, 0)
-      this.context.lineTo(20, 0)
-
-      this.context.strokeStyle = 'black'
-      this.context.lineWidth = 1
-      this.context.stroke()
+      ctx.moveTo(0, 20)
+      ctx.lineTo(0, -20)
+      ctx.moveTo(-20, 0)
+      ctx.lineTo(20, 0)
+      ctx.strokeStyle = 'black'
+      ctx.lineWidth = 1
+      ctx.stroke()
 
       // Draw the number of rockets left to fire
-      this.context.translate(20, 20)
+      ctx.translate(20, 20)
       for (
         let i = 0;
         i < (self.powerups.get(POWERUPS.ROCKET)?.rockets ?? 0);
         ++i
       ) {
-        SPRITE_MAP[SPRITES.ROCKET].draw(this.context, {
+        SPRITE_MAP[SPRITES.ROCKET].draw(ctx, {
           width: 20,
           height: 4,
           centered: true,
           angle: -Math.PI / 2,
         })
-        this.context.translate(7, 0)
+        ctx.translate(7, 0)
       }
     })
   }
