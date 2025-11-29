@@ -20,4 +20,8 @@ just start
 - Alvin Lin (omgimanerd)
 - Kenneth Li (noobbyte)
 
+# Attributions:
+Sound effects courtesy of ZapSplat.
+Icons from Google and Mayor Icons.
+
 &copy; 2015 Penumbra Games

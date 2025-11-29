@@ -9,6 +9,7 @@ import 'reflect-metadata'
 import Game from 'client/Game'
 import loadSprites from 'client/graphics/Sprites'
 import { loadSounds } from 'client/sound/Sounds'
+import VolumeControl from 'client/sound/VolumeControl'
 import Chat from 'client/ui/Chat'
 import Debug from 'client/ui/Debug'
 import { getSocketClient, SocketClient } from 'lib/socket/SocketClient'
@@ -26,6 +27,7 @@ window.onload = async () => {
     document.getElementById('debug-powerup-buttons')!,
     document.getElementById('debug-display')!,
   )
+  VolumeControl.init('settings-container')
 
   const nameInputElement = <HTMLInputElement>(
     document.getElementById('name-input')!

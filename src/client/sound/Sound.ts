@@ -4,6 +4,8 @@
  * @author omgimanerd
  */
 
+import VolumeControl from 'client/sound/VolumeControl'
+
 export default class Sound {
   sound: HTMLAudioElement
 
@@ -29,14 +31,14 @@ export default class Sound {
 
   play(volume: number = 0.2): Sound {
     this.startTime = Date.now()
-    this.volume = volume
+    this.volume = volume * VolumeControl.get().volume
     this.sound.play()
     return this
   }
 
   loop(volume: number = 0.2): Sound {
     this.startTime = Date.now()
-    this.volume = volume
+    this.volume = volume * VolumeControl.get().volume
     this.looping = true
     this.sound.loop = true
     this.sound.play()

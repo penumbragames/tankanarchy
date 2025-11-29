@@ -118,6 +118,26 @@ html, body {
   }
 }
 
+#settings-container {
+  height: auto;
+  left: calc(max(10%, 50ch) + 3rem);
+  z-index: 2;
+
+  padding: 1rem;
+
+  * {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0;
+    height: 22px;
+  }
+
+  img {
+    aspect-ratio: initial;
+    margin-right: 4px;
+  }
+}
+
 #canvas-container {
   width: max(100vw, 800px);
   height: max(100vh, 600px);
