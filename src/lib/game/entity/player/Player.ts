@@ -28,7 +28,7 @@ import { GameServices } from 'server/GameServices'
 
 export default class Player extends Entity {
   static readonly TANK_TRAIL_INTERVAL = 15 // ms
-  static readonly TANK_TRAIL_FADEOUT = 3000 // ms
+  static readonly TANK_TRAIL_FADEOUT = 5000 // ms
 
   name: string // player display name, not unique
   // Also serves as the player UID. Required on the client side to distinguish

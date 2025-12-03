@@ -11,7 +11,7 @@ import Vector from 'lib/math/Vector'
 
 class Viewport implements IPhysics, IUpdateableClient {
   static readonly UNINITIALIZED = new Vector(-99999, -99999)
-  static readonly STICKINESS = 0.005
+  static readonly STICKINESS = 0.002
 
   physics: Physics
 
