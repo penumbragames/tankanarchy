@@ -79,14 +79,15 @@ export default class GameLoop {
     this.currentTime = Date.now()
     this.updateTimes.push(this.currentTime)
     this.deltaTime = this.currentTime - this.lastUpdateTime
+    this.lastUpdateTime = this.currentTime
     if (
       this.targetUpdateInterval > 0 &&
       this.deltaTime > 4 * this.targetUpdateInterval
     ) {
       console.warn(`Game loop update tick took ${this.deltaTime}ms!`)
+    } else {
+      this.fn(this.updateFrame)
     }
-    this.lastUpdateTime = this.currentTime
-    this.fn(this.updateFrame)
     if (this.useAnimationFrame) {
       window.requestAnimationFrame(this.run.bind(this))
     } else {

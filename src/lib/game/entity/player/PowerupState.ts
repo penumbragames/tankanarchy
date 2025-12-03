@@ -229,7 +229,7 @@ export class ShotgunPowerup extends PowerupState {
 
 export class SpeedboostPowerup extends PowerupState {
   static readonly MIN_MODIFIER = 1.3
-  static readonly MAX_MODIFIER = 2
+  static readonly MAX_MODIFIER = 1.6
 
   modifier: number = 0
 
