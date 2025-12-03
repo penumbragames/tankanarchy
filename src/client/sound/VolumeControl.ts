@@ -3,6 +3,8 @@
  * @author omgimanerd
  */
 
+import Dom from 'client/ui/Dom'
+
 export default class VolumeControl {
   static readonly MAX = 100
   static readonly MIN = 0
@@ -27,28 +29,33 @@ export default class VolumeControl {
     const savedVolume = localStorage.getItem('volume') ?? '50'
     VolumeControl.instance = new VolumeControl(container)
     VolumeControl.instance._volume = parseInt(savedVolume, 10)
+
     const label = document.createElement('label')
-    const icon = document.createElement('img')
-    label.appendChild(icon)
-    icon.src = '/img/volume.png'
-    const slider = document.createElement('input')
-    slider.id = 'volume-slider'
-    slider.type = 'range'
-    slider.min = VolumeControl.MIN.toString()
-    slider.max = VolumeControl.MAX.toString()
-    slider.step = '1'
-    slider.value = savedVolume
-    slider.onchange = (e: Event) => {
-      const volume = (<HTMLInputElement>e.target).value
-      VolumeControl.instance._volume = parseInt(volume, 10)
-      localStorage.setItem('volume', volume)
-      if (volume === '0') {
-        icon.src = '/img/volume_mute.png'
-      } else {
-        icon.src = '/img/volume.png'
-      }
-    }
     container.appendChild(label)
+
+    const icon = Dom.createElement('img', {
+      src: '/img/volume.png',
+    })
+    label.appendChild(icon)
+
+    const slider = Dom.createElement('input', {
+      id: 'volume-slider',
+      type: 'range',
+      min: VolumeControl.MIN.toString(),
+      max: VolumeControl.MAX.toString(),
+      step: '1',
+      value: savedVolume,
+      onchange: (e: Event) => {
+        const volume = (<HTMLInputElement>e.target).value
+        VolumeControl.instance._volume = parseInt(volume, 10)
+        localStorage.setItem('volume', volume)
+        if (volume === '0') {
+          icon.src = '/img/volume_mute.png'
+        } else {
+          icon.src = '/img/volume.png'
+        }
+      },
+    })
     container.appendChild(slider)
   }
 

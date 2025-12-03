@@ -6,6 +6,7 @@
 
 import type { Optional } from 'lib/types/types'
 
+import Dom from 'client/ui/Dom'
 import POWERUPS from 'lib/enums/Powerups'
 import { IUpdateableClient, UpdateFrame } from 'lib/game/component/Updateable'
 import { SocketClient } from 'lib/socket/SocketClient'
@@ -66,27 +67,30 @@ export default class Debug implements IUpdateableClient {
   // UI.
   buildUI() {
     for (const type of Object.keys(POWERUPS)) {
-      const button: HTMLButtonElement = document.createElement('button')
-      button.textContent = type
-      button.onclick = () => {
-        this.socket.emit(SOCKET_EVENTS.DEBUG, {
-          socketId: this.socket.id!,
-          applyPowerup: <POWERUPS>type,
-        })
-      }
+      const button = Dom.createElement('button', {
+        textContent: type,
+        onclick: () => {
+          this.socket.emit(SOCKET_EVENTS.DEBUG, {
+            socketId: this.socket.id!,
+            applyPowerup: <POWERUPS>type,
+          })
+        },
+      })
       this.powerupButtonContainer.appendChild(button)
     }
     this.powerupButtonContainer.appendChild(document.createElement('br'))
 
-    const hitboxToggle = document.createElement('input')
-    hitboxToggle.type = 'checkbox'
-    hitboxToggle.id = 'debug-hitboxes-toggle'
-    hitboxToggle.onchange = (e: Event) => {
-      this.debugHitboxes = (e.target as HTMLInputElement).checked
-    }
-    const hitboxToggleLabel = document.createElement('label')
-    hitboxToggleLabel.htmlFor = 'debug-hitboxes-toggle'
-    hitboxToggleLabel.textContent = 'Toggle Hitboxes'
+    const hitboxToggle = Dom.createElement('input', {
+      id: 'debug-hitboxes-toggle',
+      type: 'checkbox',
+      onchange: (e: Event) => {
+        this.debugHitboxes = (e.target as HTMLInputElement).checked
+      },
+    })
+    const hitboxToggleLabel = Dom.createElement('label', {
+      htmlFor: 'debug-hitboxes-toggle',
+      textContent: 'Toggle Hitboxes',
+    })
 
     this.powerupButtonContainer.appendChild(hitboxToggle)
     this.powerupButtonContainer.appendChild(hitboxToggleLabel)
