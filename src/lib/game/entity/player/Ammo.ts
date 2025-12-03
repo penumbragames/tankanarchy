@@ -224,6 +224,7 @@ export class LaserState extends State {
           entity.damage(LaserState.DAMAGE, this.ammo.player)
         } else {
           entity.destroy(services)
+          services.addExplosionParticle(entity.physics.position)
         }
       }
     }
