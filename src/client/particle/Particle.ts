@@ -189,6 +189,7 @@ export class LaserBeamParticle extends Particle {
       Vector.fromPolar(LaserState.MAX_RANGE, this.options.angle ?? 0),
     )
     newCanvasState(context, (ctx) => {
+      ctx.beginPath()
       ctx.moveTo(canvasPosition.x, canvasPosition.y)
       ctx.lineTo(laser.x, laser.y)
       ctx.lineWidth = LaserState.WIDTH
