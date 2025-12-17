@@ -275,7 +275,7 @@ describe('Test serializing/deserializing complex objects', () => {
   })
 })
 
-describe('Test that serializable classes can be safely constructed', () => {
+test('Test that serializable classes can be safely constructed', () => {
   // All the serializable classes registered in ReplacerReviver must be able
   // to support being constructed with no arguments since that is how
   // class-transformer will convert them back into a class instance under the
